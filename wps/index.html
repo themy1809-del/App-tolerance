@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="app.css">
 </head>
 <body>
+<script src="gate.js?v=1"></script>
   <header class="appbar">
     <a class="back" href="../" title="Về trang chủ">←</a>
     <div class="logo">WPS</div>
@@ -96,6 +97,8 @@
       <span id="ftrTxt">DaiDung Metallic — App Tra cứu Dung sai &amp; WPS</span>
       ·
       <a href="../">← Trang chủ</a>
+      ·
+      <a href="#" onclick="localStorage.removeItem('wps_auth_v1');sessionStorage.removeItem('wps_auth_v1');location.reload();return false">🔒 Khoá lại</a>
     </div>
   </main>
 

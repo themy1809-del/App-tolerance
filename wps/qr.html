@@ -46,6 +46,7 @@
 </style>
 </head>
 <body>
+<script src="gate.js?v=1"></script>
 
 <header class="appbar">
   <a class="back" href="index.html">← Thư viện</a>
@@ -141,8 +142,7 @@ function render(){
     </div>`;
   }).join('');
 }
-
-function esc(s){ return String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<'function esc(s){ return String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function esc(s){ return String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 function short(m){ return (m||'').split(/[→\(]/)[0].trim().slice(0,40); }
 </script>
 
