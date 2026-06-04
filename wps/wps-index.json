@@ -23,7 +23,8 @@
       "page": "Page number in source PDF (if known)",
       "tags": "Free-form tags",
       "page_end": "Trang cuối của WPS trong PDF (nếu có)",
-      "sketches": "Mảng tên file PNG trong sketches/ — gallery sketch hiển thị trong modal"
+      "sketches": "Mảng tên file PNG trong sketches/ — gallery sketch hiển thị trong modal",
+      "params": "Thông số kỹ thuật trích từ form WPS (amps, volts, travel, heat_input, preheat, interpass, gas, gas_flow, current, transfer, pwht)"
     }
   },
   "projects": [
@@ -89,7 +90,17 @@
         "WPS-DD-GTAW-304-2.png",
         "WPS-DD-GTAW-304-3.png",
         "WPS-DD-GTAW-304-4.png"
-      ]
+      ],
+      "params": {
+        "amps": "90 - 180",
+        "volts": "11 - 14",
+        "travel": "85 - 130",
+        "heat_input": "1.4",
+        "preheat": "15°C (Ambient)",
+        "gas": "99.9% Argon",
+        "gas_flow": "14 - 25",
+        "current": "DCEN"
+      }
     },
     {
       "id": "WPS-DD-FCAW-308",
@@ -117,7 +128,17 @@
         "WPS-DD-FCAW-308-2.png",
         "WPS-DD-FCAW-308-3.png",
         "WPS-DD-FCAW-308-4.png"
-      ]
+      ],
+      "params": {
+        "amps": "100 - 180",
+        "volts": "26 -30",
+        "travel": "110 - 470",
+        "heat_input": "2.28",
+        "preheat": "15°C (Ambient)",
+        "gas": "99.8% CO2",
+        "gas_flow": "15 - 25",
+        "current": "DCEP"
+      }
     },
     {
       "id": "WPS-DD-FCAW-333",
@@ -146,7 +167,17 @@
         "WPS-DD-FCAW-333-2.png",
         "WPS-DD-FCAW-333-3.png",
         "WPS-DD-FCAW-333-4.png"
-      ]
+      ],
+      "params": {
+        "amps": "100 - 180",
+        "volts": "24 -31",
+        "travel": "110 - 530",
+        "heat_input": "1.92",
+        "preheat": "15°C (Ambient)",
+        "gas": "99.8% CO2",
+        "gas_flow": "15 - 25",
+        "current": "DCEP"
+      }
     },
     {
       "id": "WPS-DD-FCAW-334",
@@ -175,7 +206,17 @@
         "WPS-DD-FCAW-334-2.png",
         "WPS-DD-FCAW-334-3.png",
         "WPS-DD-FCAW-334-4.png"
-      ]
+      ],
+      "params": {
+        "amps": "130 - 180",
+        "volts": "23 -30",
+        "travel": "130 - 460",
+        "heat_input": "1.92",
+        "preheat": "15°C (Ambient)",
+        "gas": "99.8% CO2",
+        "gas_flow": "15 - 25",
+        "current": "DCEP"
+      }
     },
     {
       "id": "WPS-DD-FCAW-324",
@@ -230,7 +271,19 @@
         "WPS-DD-GMAW-325-2.png",
         "WPS-DD-GMAW-325-3.png",
         "WPS-DD-GMAW-325-4.png"
-      ]
+      ],
+      "params": {
+        "amps": "77 - 104",
+        "volts": "17 - 21",
+        "travel": "172 - 183",
+        "heat_input": "1 1 1",
+        "preheat": "See Note 3",
+        "interpass": "250°C",
+        "gas": "CO2 (20-25%) + Ar (balance)",
+        "gas_flow": "18 - 29",
+        "current": "DCEP",
+        "transfer": "Globular"
+      }
     },
     {
       "id": "WPS-DD-FCAW-283",
@@ -259,7 +312,17 @@
         "WPS-DD-FCAW-283-1.png",
         "WPS-DD-FCAW-283-2.png",
         "WPS-DD-FCAW-283-3.png"
-      ]
+      ],
+      "params": {
+        "amps": "110 - 185",
+        "volts": "18 - 22",
+        "travel": "137 - 325",
+        "preheat": "See NOTES* below",
+        "interpass": "250 °C",
+        "gas": "99.8% CO2",
+        "gas_flow": "16 - 25",
+        "current": "DCEP"
+      }
     },
     {
       "id": "WPS-DD-FCAW-284",
@@ -287,7 +350,17 @@
         "WPS-DD-FCAW-284-1.png",
         "WPS-DD-FCAW-284-2.png",
         "WPS-DD-FCAW-284-3.png"
-      ]
+      ],
+      "params": {
+        "amps": "110 - 185",
+        "volts": "19 - 24",
+        "travel": "137 - 325",
+        "preheat": "See NOTES* below",
+        "interpass": "250 °C",
+        "gas": "99.8% CO2",
+        "gas_flow": "16 - 28",
+        "current": "DCEP"
+      }
     },
     {
       "id": "WPS-DD-FCAW-407.BW",

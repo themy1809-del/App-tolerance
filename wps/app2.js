@@ -27,6 +27,7 @@ function openDetail(x){
   if (x.tags && x.tags.length){
     kv.insertAdjacentHTML('beforeend', `<div class="k">${t.kv.tags}</div><div class="v"><div class="tagchips">${x.tags.map(tg=>`<span class="tagchip">${esc(tg)}</span>`).join('')}</div></div>`);
   }
+  renderSummary(x);
   // Sketch gallery (form pages with embedded joint sketch)
   const sketchWrap = document.getElementById('dSketches');
   if (x.sketches && x.sketches.length){
@@ -237,3 +238,46 @@ function closeSketchZoom(){
 }
 function szNext(){ if (zoomState.i<zoomState.imgs.length-1){ zoomState.i++; openSketchZoom(zoomState.imgs, zoomState.i); } }
 function szPrev(){ if (zoomState.i>0){ zoomState.i--; openSketchZoom(zoomState.imgs, zoomState.i); } }
+
+/* ============ Tóm tắt nhanh tiếng Việt ============ */
+function renderSummary(x){
+  const w = document.getElementById('dSum'); if (!w) return;
+  const procName = ({
+    FCAW:'FCAW (dây lõi thuốc)', GMAW:'GMAW/MIG (dây đặc)',
+    GTAW:'GTAW/TIG (điện cực vonfram)', SMAW:'SMAW (que hàn)',
+    SAW:'SAW (hồ quang chìm)'
+  })[normProc(x.process)] || x.process || '—';
+  const procIc = ({FCAW:'🔥', GMAW:'⚡', GTAW:'✨', SMAW:'🔌', SAW:'🌊'})[normProc(x.process)] || '🔧';
+  const posVi = (x.position||'').replace(/Uphill/gi,'hàn LÊN').replace(/Downhill/gi,'hàn XUỐNG').replace(/All/gi,'mọi tư thế');
+  const mats = (x.base_metal||'').split('→').map(s=>s.trim()).filter(Boolean);
+  const matsHtml = mats.length>1 ? `${esc(mats[0])} <span style="color:#aa4322;font-weight:800">↔</span> ${esc(mats[1])}` : esc(mats[0]||'—');
+  const fillerShort = (x.filler||'').replace(/AWS\s+/,'').split(/\s+/)[0] + (x.size?` · ${x.size}`:'');
+  const tiles = [
+    {ic:procIc, lb:'Quy trình', val:esc(procName)},
+    {ic:'📦', lb:'Vật liệu hàn', val:matsHtml || '—'},
+    {ic:'↗', lb:'Tư thế', val:esc(posVi||'—')},
+    {ic:'🧵', lb:'Dây/Que hàn', val:esc(fillerShort||'—')},
+    {ic:'📏', lb:'Chiều dày (mm)', val:esc(x.thickness||'—')},
+    {ic:'📋', lb:'Tiêu chuẩn', val:esc(x.code||'—')}
+  ];
+  let html = `<div class="sm-h">📋 Tóm tắt nhanh cho công nhân</div><div class="sm-grid">` +
+    tiles.map(t=>`<div class="sm-tile"><div class="sm-ic">${t.ic}</div><div class="sm-lb">${t.lb}</div><div class="sm-val">${t.val}</div></div>`).join('') +
+    `</div>`;
+  // Welding parameters (if extracted from PDF)
+  if (x.params){
+    const p = x.params;
+    const polarityVi = ({DCEN:'DCEN (cực âm)', DCEP:'DCEP (cực dương)', AC:'AC (xoay chiều)'})[p.current] || p.current || '';
+    const paramTiles = [
+      p.amps      && {ic:'⚡', lb:'Ampe (A)', val:esc(p.amps), hi:1},
+      p.volts     && {ic:'🔌', lb:'Vôn (V)', val:esc(p.volts), hi:1},
+      p.travel    && {ic:'🏃', lb:'Tốc độ (mm/min)', val:esc(p.travel)},
+      p.heat_input&& {ic:'🔥', lb:'Nhiệt MAX (kJ/mm)', val:esc(p.heat_input)},
+      p.preheat   && {ic:'🌡️', lb:'Tiền nhiệt MIN', val:esc(p.preheat)},
+      p.interpass && {ic:'♨️', lb:'Interpass MAX', val:esc(p.interpass)},
+      p.gas       && {ic:'💨', lb:'Khí bảo vệ', val:esc(p.gas)},
+      p.gas_flow  && {ic:'⏱️', lb:'Lưu lượng (LPM)', val:esc(p.gas_flow)},
+      polarityVi  && {ic:'⚙️', lb:'Loại dòng', val:esc(polarityVi)},
+      p.transfer  && {ic:'💎', lb:'Truyền kim loại', val:esc(p.transfer)}
+    ].filter(Boolean);
+    if (paramTiles.length){
+      html += `<div class="sm-h" style=

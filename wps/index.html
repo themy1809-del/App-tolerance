@@ -107,9 +107,11 @@
           <div class="sm" id="dSub">—</div>
         </div>
         <button class="mstar" id="dStar" title="Yêu thích">☆</button>
+        <button class="mstar" id="dGloss" title="Cẩm nang thuật ngữ" onclick="openGlossary()">📖</button>
         <button class="x" onclick="closeModal()">✕</button>
       </div>
       <div class="mbody">
+        <div class="sm-wrap" id="dSum" style="display:none"></div>
         <div class="kv" id="dKv"></div>
         <div class="sk-wrap" id="dSketches" style="display:none"></div>
         <div class="btnrow">
@@ -140,6 +142,22 @@
     </div>
   </div>
 
+  <div class="ovl" id="govl" style="display:none" onclick="if(event.target===this)closeGlossary()">
+    <div class="modal">
+      <div class="mhead">
+        <div class="ti">
+          <h3>📖 Cẩm nang thuật ngữ WPS</h3>
+          <div class="sm">Tra cứu nhanh ký hiệu kỹ thuật → giải thích tiếng Việt</div>
+        </div>
+        <button class="x" onclick="closeGlossary()">✕</button>
+      </div>
+      <div style="padding:12px 16px 6px;background:#fff;position:sticky;top:62px;z-index:2;border-bottom:1px solid var(--line)">
+        <input id="gSearch" type="search" placeholder="Tìm: P-No, Uphill, DCEN, CJP, PWHT…" oninput="renderGlossary(this.value)" style="width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:15px;background:#fff;font-family:inherit">
+      </div>
+      <div class="mbody g-body" id="gBody"></div>
+    </div>
+  </div>
+
   <div class="szwrap" id="szWrap" onclick="if(event.target===this)closeSketchZoom()">
     <button class="sz-x" onclick="closeSketchZoom()">✕</button>
     <button class="sz-nav sz-prev" id="szPrev" onclick="szPrev()">◀</button>
@@ -161,7 +179,8 @@
   </div>
 
 <script src="wps-index.js?v=5"></script>
-<script src="app2.js?v=5"></script>
-<script src="app.js?v=5"></script>
+<script src="glossary.js?v=6"></script>
+<script src="app2.js?v=6"></script>
+<script src="app.js?v=6"></script>
 </body>
 </html>
