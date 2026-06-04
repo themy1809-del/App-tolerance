@@ -1,9 +1,8 @@
-/* Service worker — offline + tự cập nhật khi online (network-first) */
-const CACHE = "tol-cache-v3";
-const ASSETS = [
-  "./", "index.html", "tolerances-data.js", "manifest.webmanifest",
-  "icons/icon-192.png", "icons/icon-512.png", "icons/icon-180.png", "icons/maskable-512.png"
-];
+/* Launcher service worker — caches the chooser page only */
+const CACHE = "launcher-v1";
+const ASSETS = ["./", "index.html", "manifest.webmanifest",
+  "icons/icon-192.png", "icons/icon-512.png", "icons/icon-180.png", "icons/maskable-512.png"];
+
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
 });
@@ -13,14 +12,16 @@ self.addEventListener("activate", e => {
       .then(() => self.clients.claim())
   );
 });
-/* Network-first: luôn lấy bản mới khi có mạng, offline thì dùng cache */
 self.addEventListener("fetch", e => {
   if (e.request.method !== "GET") return;
+  const u = new URL(e.request.url);
+  // Only handle launcher root + own assets — let sub-apps handle their own scopes
+  if (u.pathname.startsWith('/dungsai/') || u.pathname.startsWith('/wps/')) return;
   e.respondWith(
-    fetch(e.request).then(resp => {
-      const cp = resp.clone();
+    fetch(e.request).then(r => {
+      const cp = r.clone();
       caches.open(CACHE).then(c => c.put(e.request, cp));
-      return resp;
-    }).catch(() => caches.match(e.request).then(r => r || caches.match("index.html")))
+      return r;
+    }).catch(() => caches.match(e.request))
   );
 });

@@ -1,0 +1,1986 @@
+/* Auto-generated from wps-index.json — for offline file:// usage */
+window.WPS_DB = {
+ "_meta": {
+  "version": "1.0",
+  "updated": "2026-06-04",
+  "note_vi": "Chỉ mục thư viện WPS — thêm WPS mới: bỏ file PDF vào webapp/wps/files/ và thêm 1 entry vào mảng items.",
+  "note_en": "WPS library index — to add new WPS: drop PDF in webapp/wps/files/ and append one entry to items array.",
+  "fields": {
+   "id": "WPS number (key)",
+   "rev": "Revision",
+   "code": "Welding code/standard (AWS D1.1, ASME IX, ISO 15614 …)",
+   "process": "Welding process — SMAW(111) | GMAW(135) | FCAW(136) | GTAW/TIG(141) | SAW(121) | combo",
+   "position": "Welding position (1G, 2G, 3G, 4G, 5G, 6G, 6GR, 1F-4F, PA-PF, …)",
+   "base_metal": "Base metal spec/grade",
+   "material_group": "Material group (P-No, M-No, ISO/TR 15608 …)",
+   "thickness": "Qualified thickness range (mm)",
+   "diameter": "Qualified diameter (mm)",
+   "filler": "AWS class / filler designation",
+   "f_no": "F-No.",
+   "size": "Wire/electrode diameter",
+   "pqr": "Supporting PQR",
+   "project": "Project/source",
+   "file": "PDF filename in files/",
+   "page": "Page number in source PDF (if known)",
+   "tags": "Free-form tags",
+   "page_end": "Trang cuối của WPS trong PDF (nếu có)",
+   "sketches": "Mảng tên file PNG trong sketches/ — gallery sketch hiển thị trong modal"
+  }
+ },
+ "projects": [
+  {
+   "code": "APF",
+   "name_vi": "Trung tâm Hội nghị APEC – Hệ mái nhôm (S3)",
+   "name_en": "APEC Conference Center – Aluminum roof (S3)",
+   "file": "DDC-QAQC-APF26-WPS-001 Rev 0.pdf",
+   "register_doc": "DDC-QAQC-APF26-WPS-001 Rev.00",
+   "date": "2026-05-08"
+  },
+  {
+   "code": "PHD",
+   "name_vi": "Mở rộng CHK Quốc tế Phú Quốc – Sàn Decking T2",
+   "name_en": "Phu Quoc Int'l Airport Expansion – T2 Decking Floor",
+   "file": "DDC-QAQC-PHD26-WPS-001 Rev 0.pdf",
+   "register_doc": "DDC-QAQC-PHD26-WPS-001 Rev 0",
+   "date": "2026-03-28"
+  },
+  {
+   "code": "SAN",
+   "name_vi": "Dự án SAN – Kết cấu thép",
+   "name_en": "SAN Project – Steel structure",
+   "file": "DDC-QAQC-SAN26-WPS-001 REV 00.pdf",
+   "register_doc": "DDC-QAQC-SAN26-WPS-001 Rev 00",
+   "date": "2026-02-06"
+  },
+  {
+   "code": "VEC",
+   "name_vi": "Viola Energy Center – Condensate Tank (Evapco/Kiewit)",
+   "name_en": "Viola Energy Center – Condensate Tank (Evapco/Kiewit)",
+   "file": "DDC-QAQC-VEC26-WPS-001 Rev.00.pdf",
+   "register_doc": "DDC-QAQC-VEC26-WPS-001_Rev.0",
+   "date": "2026-03-26"
+  }
+ ],
+ "items": [
+  {
+   "id": "WPS-DD-GTAW-304",
+   "rev": "0",
+   "code": "AWS D1.6:2017",
+   "process": "GTAW",
+   "position": "2G",
+   "base_metal": "ASTM A240 304",
+   "material_group": "M-8 Group I → M-8 Group I",
+   "thickness": "2–20",
+   "diameter": "All",
+   "filler": "AWS A5.9 ER308L",
+   "f_no": "6",
+   "size": "Ø2.4",
+   "pqr": "PQR-DD-GTAW-304",
+   "project": "APF",
+   "file": "DDC-QAQC-APF26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "stainless",
+    "T,Corner,Lap",
+    "Fillet"
+   ],
+   "page": 2,
+   "page_end": 17,
+   "sketches": [
+    "WPS-DD-GTAW-304-1.png",
+    "WPS-DD-GTAW-304-2.png",
+    "WPS-DD-GTAW-304-3.png",
+    "WPS-DD-GTAW-304-4.png"
+   ]
+  },
+  {
+   "id": "WPS-DD-FCAW-308",
+   "rev": "0",
+   "code": "AWS D1.6:2017",
+   "process": "FCAW",
+   "position": "2G",
+   "base_metal": "ASTM A240 304",
+   "material_group": "M-8 Group I → M-8 Group I",
+   "thickness": "2–20",
+   "diameter": "All",
+   "filler": "AWS A5.22 E308LT1-1/-4",
+   "f_no": "6",
+   "size": "Ø1.2",
+   "pqr": "PQR-DD-FCAW-308",
+   "project": "APF",
+   "file": "DDC-QAQC-APF26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "stainless"
+   ],
+   "page": 18,
+   "page_end": 32,
+   "sketches": [
+    "WPS-DD-FCAW-308-1.png",
+    "WPS-DD-FCAW-308-2.png",
+    "WPS-DD-FCAW-308-3.png",
+    "WPS-DD-FCAW-308-4.png"
+   ]
+  },
+  {
+   "id": "WPS-DD-FCAW-333",
+   "rev": "0",
+   "code": "AWS D1.6:2017",
+   "process": "FCAW",
+   "position": "2F",
+   "base_metal": "ASTM A240 304 → JIS G3101 SS400",
+   "material_group": "M-1 Group I → M-8 Group I",
+   "thickness": "2–20",
+   "diameter": "All",
+   "filler": "AWS A5.22 E309LT1-1/-4",
+   "f_no": "6",
+   "size": "Ø1.2",
+   "pqr": "PQR-DD-FCAW-333",
+   "project": "APF",
+   "file": "DDC-QAQC-APF26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "dissimilar",
+    "stainless-to-carbon"
+   ],
+   "page": 33,
+   "page_end": 48,
+   "sketches": [
+    "WPS-DD-FCAW-333-1.png",
+    "WPS-DD-FCAW-333-2.png",
+    "WPS-DD-FCAW-333-3.png",
+    "WPS-DD-FCAW-333-4.png"
+   ]
+  },
+  {
+   "id": "WPS-DD-FCAW-334",
+   "rev": "0",
+   "code": "AWS D1.6:2017",
+   "process": "FCAW",
+   "position": "2F",
+   "base_metal": "ASTM A240 304 → ASTM A36",
+   "material_group": "M-1 Group I → M-8 Group I",
+   "thickness": "2–20",
+   "diameter": "All",
+   "filler": "AWS A5.22 E309LT1-1/-4",
+   "f_no": "6",
+   "size": "Ø1.2",
+   "pqr": "PQR-DD-FCAW-334",
+   "project": "APF",
+   "file": "DDC-QAQC-APF26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "dissimilar",
+    "stainless-to-carbon"
+   ],
+   "page": 49,
+   "page_end": 64,
+   "sketches": [
+    "WPS-DD-FCAW-334-1.png",
+    "WPS-DD-FCAW-334-2.png",
+    "WPS-DD-FCAW-334-3.png",
+    "WPS-DD-FCAW-334-4.png"
+   ]
+  },
+  {
+   "id": "WPS-DD-FCAW-324",
+   "rev": "0",
+   "code": "AWS D1.3:2018",
+   "process": "FCAW",
+   "position": "1G; 2G; 1F; 2F",
+   "base_metal": "JIS G3101 SS400",
+   "material_group": "SS400 / ASTM A36 (Any Group I, II)",
+   "thickness": "1–4",
+   "diameter": "All",
+   "filler": "AWS A5.20 E71T-1C/-9C",
+   "f_no": "6",
+   "size": "Ø1.2",
+   "pqr": "PQR-DD-FCAW-324",
+   "project": "APF",
+   "file": "DDC-QAQC-APF26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "sheet-steel"
+   ],
+   "page": 65,
+   "page_end": 103,
+   "sketches": [
+    "WPS-DD-FCAW-324-1.png",
+    "WPS-DD-FCAW-324-2.png",
+    "WPS-DD-FCAW-324-3.png"
+   ]
+  },
+  {
+   "id": "WPS-DD-GMAW-325",
+   "rev": "0",
+   "code": "AWS D1.3:2018",
+   "process": "GMAW",
+   "position": "1G; 2G; 2F; 3F",
+   "base_metal": "JIS G3101 SS400",
+   "material_group": "SS400 / ASTM A36",
+   "thickness": "1–4",
+   "diameter": "All",
+   "filler": "AWS A.18 ER70S-6",
+   "f_no": "6",
+   "size": "Ø0.8",
+   "pqr": "PQR-DD-GMAW-325",
+   "project": "APF",
+   "file": "DDC-QAQC-APF26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "sheet-steel"
+   ],
+   "page": 104,
+   "page_end": 143,
+   "sketches": [
+    "WPS-DD-GMAW-325-1.png",
+    "WPS-DD-GMAW-325-2.png",
+    "WPS-DD-GMAW-325-3.png",
+    "WPS-DD-GMAW-325-4.png"
+   ]
+  },
+  {
+   "id": "WPS-DD-FCAW-283",
+   "rev": "1",
+   "code": "AWS D1.1:2020",
+   "process": "FCAW",
+   "position": "6G",
+   "base_metal": "JIS G3444 STK 400",
+   "material_group": "STK400 / SS400",
+   "thickness": "3–20 (Square Groove 3–10)",
+   "diameter": "O.D. ≥ 26.7 mm CJP; any O.D. PJP/Fillet",
+   "filler": "AWS A5.20 E71T-1C",
+   "f_no": "6",
+   "size": "Ø1.2",
+   "pqr": "PQR-DD-FCAW-283.1 & 283.2",
+   "project": "APF",
+   "file": "DDC-QAQC-APF26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "pipe",
+    "tubular",
+    "6G"
+   ],
+   "page": 144,
+   "page_end": 169,
+   "sketches": [
+    "WPS-DD-FCAW-283-1.png",
+    "WPS-DD-FCAW-283-2.png",
+    "WPS-DD-FCAW-283-3.png"
+   ]
+  },
+  {
+   "id": "WPS-DD-FCAW-284",
+   "rev": "1",
+   "code": "AWS D1.1:2020",
+   "process": "FCAW",
+   "position": "6G",
+   "base_metal": "ASTM A53 Gr B",
+   "material_group": "Any Group I",
+   "thickness": "3–20 (Square Groove 3–10)",
+   "diameter": "O.D. ≥ 26.7 mm CJP; any O.D. PJP/Fillet",
+   "filler": "AWS A5.20 E71T-1C",
+   "f_no": "6",
+   "size": "Ø1.2",
+   "pqr": "PQR-DD-FCAW-284.1 & 284.2",
+   "project": "APF",
+   "file": "DDC-QAQC-APF26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "pipe",
+    "6G"
+   ],
+   "page": 170,
+   "page_end": 194,
+   "sketches": [
+    "WPS-DD-FCAW-284-1.png",
+    "WPS-DD-FCAW-284-2.png",
+    "WPS-DD-FCAW-284-3.png"
+   ]
+  },
+  {
+   "id": "WPS-DD-FCAW-407.BW",
+   "rev": "0",
+   "code": "ISO 15609-1:2019 / ISO 15614-1:2017",
+   "process": "FCAW (136)",
+   "position": "BW (PC, PF)",
+   "base_metal": "EN 10025-2 S355J2",
+   "material_group": "ISO/TR 15608 Group 1.2 (Re ≤ 355 N/mm²)",
+   "thickness": "6–15.6 (single runs)",
+   "diameter": "J-L045 pipe",
+   "filler": "EN ISO 17632-A-T 42 2 P C1 1 H10/H5",
+   "f_no": "",
+   "size": "",
+   "pqr": "WPQR-DD-FCAW-407.1 & 407.2",
+   "project": "PHD",
+   "file": "DDC-QAQC-PHD26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "butt",
+    "impact",
+    "-20°C",
+    "Min 27J"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-407_DOT_BW-1.png",
+    "WPS-DD-FCAW-407_DOT_BW-2.png"
+   ],
+   "page": 4
+  },
+  {
+   "id": "WPS-DD-FCAW-407.FW",
+   "rev": "0",
+   "code": "ISO 15609-1:2019 / ISO 15614-1:2017",
+   "process": "FCAW (136)",
+   "position": "PC, PF",
+   "base_metal": "EN 10025-2 S355J2",
+   "material_group": "ISO/TR 15608 Group 1.2",
+   "thickness": "6–15.6",
+   "diameter": "J-L045 pipe",
+   "filler": "EN ISO 17632-A-T 42 2 P C1 1 H10/H5",
+   "f_no": "",
+   "size": "",
+   "pqr": "WPQR-DD-FCAW-407.1 & 407.2",
+   "project": "PHD",
+   "file": "DDC-QAQC-PHD26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "fillet"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-407_DOT_FW-1.png",
+    "WPS-DD-FCAW-407_DOT_FW-2.png"
+   ],
+   "page": 4
+  },
+  {
+   "id": "WPS-DD-FCAW-408.BW",
+   "rev": "0",
+   "code": "ISO 15609-1:2019 / ISO 15614-1:2017",
+   "process": "FCAW (136)",
+   "position": "BW (PC, PF)",
+   "base_metal": "EN 10025-2 S355J2",
+   "material_group": "ISO/TR 15608 Group 1.2",
+   "thickness": "12.5–27.5 (multi-runs)",
+   "diameter": "OD > 500 mm / all OD rotated",
+   "filler": "EN ISO 17632-A-T 42 2 P C1 1 H10/H5",
+   "f_no": "",
+   "size": "",
+   "pqr": "WPQR-DD-FCAW-408.1 & 408.2",
+   "project": "PHD",
+   "file": "DDC-QAQC-PHD26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "butt",
+    "-20°C"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-408_DOT_BW-1.png",
+    "WPS-DD-FCAW-408_DOT_BW-2.png"
+   ],
+   "page": 50
+  },
+  {
+   "id": "WPS-DD-FCAW-408.FW",
+   "rev": "0",
+   "code": "ISO 15609-1:2019 / ISO 15614-1:2017",
+   "process": "FCAW (136)",
+   "position": "PA",
+   "base_metal": "EN 10025-2 S355J2",
+   "material_group": "ISO/TR 15608 Group 1.2",
+   "thickness": "12.5–27.5",
+   "diameter": "All",
+   "filler": "EN ISO 17632-A-T 42 2 P C1 1 H10/H5",
+   "f_no": "",
+   "size": "",
+   "pqr": "WPQR-DD-FCAW-408.1 & 408.2",
+   "project": "PHD",
+   "file": "DDC-QAQC-PHD26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "fillet"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-408_DOT_FW-1.png",
+    "WPS-DD-FCAW-408_DOT_FW-2.png"
+   ],
+   "page": 50
+  },
+  {
+   "id": "WPS-DD-FCAW-437.BW",
+   "rev": "0",
+   "code": "ISO 15609-1:2019",
+   "process": "FCAW (136)",
+   "position": "BW",
+   "base_metal": "EN 10025-2 S355J2",
+   "material_group": "ISO/TR 15608 Group 1.2",
+   "thickness": "4–10.4 (single)",
+   "diameter": "",
+   "filler": "EN ISO 17632-A-T 42 2 P C1 1 H10/H5",
+   "f_no": "",
+   "size": "",
+   "pqr": "",
+   "project": "PHD",
+   "file": "DDC-QAQC-PHD26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "butt"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-437_DOT_BW-1.png",
+    "WPS-DD-FCAW-437_DOT_BW-2.png"
+   ],
+   "page": 102
+  },
+  {
+   "id": "WPS-DD-FCAW-437.FW",
+   "rev": "0",
+   "code": "ISO 15609-1:2019",
+   "process": "FCAW (136)",
+   "position": "PA",
+   "base_metal": "EN 10025-2 S355J2",
+   "material_group": "ISO/TR 15608 Group 1.2",
+   "thickness": "",
+   "diameter": "",
+   "filler": "EN ISO 17632-A-T 42 2 P C1 1 H10/H5",
+   "f_no": "",
+   "size": "",
+   "pqr": "",
+   "project": "PHD",
+   "file": "DDC-QAQC-PHD26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "fillet"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-437_DOT_FW-1.png",
+    "WPS-DD-FCAW-437_DOT_FW-2.png"
+   ],
+   "page": 102
+  },
+  {
+   "id": "WPS-DD-FCAW-438.FW",
+   "rev": "0",
+   "code": "ISO 15609-1:2019",
+   "process": "FCAW (136)",
+   "position": "PA",
+   "base_metal": "EN 10025-2 S355J2",
+   "material_group": "ISO/TR 15608 Group 1.2",
+   "thickness": "",
+   "diameter": "",
+   "filler": "EN ISO 17632-A-T 42 2 P C1 1",
+   "f_no": "",
+   "size": "",
+   "pqr": "",
+   "project": "PHD",
+   "file": "DDC-QAQC-PHD26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "fillet"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-438_DOT_FW-1.png",
+    "WPS-DD-FCAW-438_DOT_FW-2.png"
+   ],
+   "page": 132
+  },
+  {
+   "id": "WPS-DD-FCAW-439.FW",
+   "rev": "0",
+   "code": "ISO 15609-1:2019",
+   "process": "FCAW (136)",
+   "position": "",
+   "base_metal": "EN 10025-2 S355J2",
+   "material_group": "ISO/TR 15608 Group 1.2",
+   "thickness": "",
+   "diameter": "",
+   "filler": "EN ISO 17632-A-T 42 2 P C1 1",
+   "f_no": "",
+   "size": "",
+   "pqr": "",
+   "project": "PHD",
+   "file": "DDC-QAQC-PHD26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "fillet"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-439_DOT_FW-1.png",
+    "WPS-DD-FCAW-439_DOT_FW-2.png"
+   ],
+   "page": 154
+  },
+  {
+   "id": "WPS-DD-FCAW-444.BW",
+   "rev": "0",
+   "code": "ISO 15609-1:2019 / ISO 15614-1:2017",
+   "process": "FCAW (136)",
+   "position": "BW",
+   "base_metal": "EN 10025-2 S355J2",
+   "material_group": "ISO/TR 15608 Group 1.2",
+   "thickness": "4–10.4 (single)",
+   "diameter": "",
+   "filler": "EN ISO 17632-A-T 42 2 P C1 1 H10/H5",
+   "f_no": "",
+   "size": "",
+   "pqr": "",
+   "project": "PHD",
+   "file": "DDC-QAQC-PHD26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "butt",
+    "-20°C",
+    "Min 34J"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-444_DOT_BW-1.png",
+    "WPS-DD-FCAW-444_DOT_BW-2.png"
+   ],
+   "page": 177
+  },
+  {
+   "id": "WPS-DD-FCAW-444.FW",
+   "rev": "0",
+   "code": "ISO 15609-1:2019 / ISO 15614-1:2017",
+   "process": "FCAW (136)",
+   "position": "",
+   "base_metal": "EN 10025-2 S355J2",
+   "material_group": "ISO/TR 15608 Group 1.2",
+   "thickness": "",
+   "diameter": "",
+   "filler": "EN ISO 17632-A-T 42 2 P C1 1 H10/H5",
+   "f_no": "",
+   "size": "",
+   "pqr": "",
+   "project": "PHD",
+   "file": "DDC-QAQC-PHD26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "fillet"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-444_DOT_FW-1.png",
+    "WPS-DD-FCAW-444_DOT_FW-2.png"
+   ],
+   "page": 177
+  },
+  {
+   "id": "WPS-DD-FCAW-445",
+   "rev": "0",
+   "code": "ISO 15609-1:2019",
+   "process": "FCAW (136)",
+   "position": "PH",
+   "base_metal": "Q355D",
+   "material_group": "ISO/TR 15608 Group 1.2",
+   "thickness": "3–36",
+   "diameter": "in T, Corner; PA position",
+   "filler": "Kuangtai KFX-71T",
+   "f_no": "",
+   "size": "Max 1.6",
+   "pqr": "WPQR-DD-FCAW-408.1 &",
+   "project": "PHD",
+   "file": "DDC-QAQC-PHD26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "fillet",
+    "Q355D"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-445-1.png",
+    "WPS-DD-FCAW-445-2.png"
+   ],
+   "page": 215
+  },
+  {
+   "id": "WPS-DD-FCAW-446",
+   "rev": "0",
+   "code": "ISO 15609-1:2019",
+   "process": "FCAW (136)",
+   "position": "PH",
+   "base_metal": "Q355D",
+   "material_group": "ISO/TR 15608 Group 1.2",
+   "thickness": "3–36",
+   "diameter": "in T, Corner; PA position",
+   "filler": "Kuangtai KFX-71T",
+   "f_no": "",
+   "size": "Max 1.6",
+   "pqr": "WPQR-DD-FCAW-408.1 &",
+   "project": "PHD",
+   "file": "DDC-QAQC-PHD26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "fillet",
+    "Q355D"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-446-1.png",
+    "WPS-DD-FCAW-446-2.png"
+   ],
+   "page": 242
+  },
+  {
+   "id": "WPS-DD-FCAW-455.BU",
+   "rev": "0",
+   "code": "ISO 15614-1:2017",
+   "process": "FCAW (136)",
+   "position": "BW",
+   "base_metal": "EN 10025-2 S355J2/S355JR",
+   "material_group": "ISO/TR 15608 Group 1.1; 1.2",
+   "thickness": "9–36",
+   "diameter": "",
+   "filler": "EN ISO 17632-A-T 42 2 P C1 1 H10/H5",
+   "f_no": "",
+   "size": "",
+   "pqr": "",
+   "project": "PHD",
+   "file": "DDC-QAQC-PHD26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "butt-up",
+    "-20°C",
+    "Min 34J"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-455_DOT_BU-1.png",
+    "WPS-DD-FCAW-455_DOT_BU-2.png"
+   ],
+   "page": 270
+  },
+  {
+   "id": "WPS-DD-FCAW-455.BW",
+   "rev": "0",
+   "code": "ISO 15614-1:2017",
+   "process": "FCAW (136)",
+   "position": "BW",
+   "base_metal": "EN 10025-2 S355J2/S355JR",
+   "material_group": "ISO/TR 15608 Group 1.1; 1.2",
+   "thickness": "9–19.8 (single)",
+   "diameter": "",
+   "filler": "EN ISO 17632-A-T 42 2 P C1 1 H10/H5",
+   "f_no": "",
+   "size": "",
+   "pqr": "",
+   "project": "PHD",
+   "file": "DDC-QAQC-PHD26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "butt",
+    "-20°C",
+    "Min 34J"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-455_DOT_BW-1.png",
+    "WPS-DD-FCAW-455_DOT_BW-2.png"
+   ],
+   "page": 270
+  },
+  {
+   "id": "WPS-DD-FCAW-455.FW",
+   "rev": "0",
+   "code": "ISO 15614-1:2017",
+   "process": "FCAW (136)",
+   "position": "",
+   "base_metal": "EN 10025-2 S355J2/S355JR",
+   "material_group": "ISO/TR 15608 Group 1.1; 1.2",
+   "thickness": "",
+   "diameter": "",
+   "filler": "EN ISO 17632-A-T 42 2 P C1 1 H10/H5",
+   "f_no": "",
+   "size": "",
+   "pqr": "",
+   "project": "PHD",
+   "file": "DDC-QAQC-PHD26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "fillet"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-455_DOT_FW-1.png",
+    "WPS-DD-FCAW-455_DOT_FW-2.png"
+   ],
+   "page": 270
+  },
+  {
+   "id": "WPS-DD-FCAW-458.BU",
+   "rev": "0",
+   "code": "ISO 15609-1:2019",
+   "process": "FCAW (136)",
+   "position": "BW (PC, PF)",
+   "base_metal": "EN 10025-2 S355J2 / ASTM A572 Gr50",
+   "material_group": "ISO/TR 15608 Group 1.2 (Re ≤ 355)",
+   "thickness": "3–16",
+   "diameter": "OD ≥ 150 mm or all OD rotated",
+   "filler": "EN ISO 17632-A-T 42 2 P C1 1 (H10)",
+   "f_no": "",
+   "size": "",
+   "pqr": "WPQR-DD-FCAW-458.1 &",
+   "project": "PHD",
+   "file": "DDC-QAQC-PHD26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "butt-up",
+    "-20°C"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-458_DOT_BU-1.png",
+    "WPS-DD-FCAW-458_DOT_BU-2.png"
+   ],
+   "page": 320
+  },
+  {
+   "id": "WPS-DD-FCAW-459.BU",
+   "rev": "0",
+   "code": "ISO 15609-1:2019",
+   "process": "FCAW (136)",
+   "position": "",
+   "base_metal": "EN 10025-2 S355J2 / ASTM A572 Gr50",
+   "material_group": "ISO/TR 15608 Group 1.2",
+   "thickness": "",
+   "diameter": "OD ≥ 150 mm or all OD rotated",
+   "filler": "Recommend H10",
+   "f_no": "",
+   "size": "",
+   "pqr": "",
+   "project": "PHD",
+   "file": "DDC-QAQC-PHD26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "butt-up"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-459_DOT_BU-1.png",
+    "WPS-DD-FCAW-459_DOT_BU-2.png"
+   ],
+   "page": 348
+  },
+  {
+   "id": "WPS-DD-FCAW-459.BW",
+   "rev": "0",
+   "code": "ISO 15609-1:2019",
+   "process": "FCAW (136)",
+   "position": "BW",
+   "base_metal": "EN 10025-2 S355J2 / ASTM A572 Gr50",
+   "material_group": "ISO/TR 15608 Group 1.2",
+   "thickness": "",
+   "diameter": "",
+   "filler": "",
+   "f_no": "",
+   "size": "",
+   "pqr": "",
+   "project": "PHD",
+   "file": "DDC-QAQC-PHD26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "butt"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-459_DOT_BW-1.png",
+    "WPS-DD-FCAW-459_DOT_BW-2.png"
+   ],
+   "page": 348
+  },
+  {
+   "id": "WPS-DD-TIG-441.BW",
+   "rev": "0",
+   "code": "ISO 15609-1:2019",
+   "process": "GTAW (141)",
+   "position": "H-L045",
+   "base_metal": "Q355D",
+   "material_group": "ISO/TR 15608 Group 1.2",
+   "thickness": "",
+   "diameter": "position PA for PG, PJ",
+   "filler": "Recommend",
+   "f_no": "",
+   "size": "2.0–3.2",
+   "pqr": "WPQR-DD-TIG-441",
+   "project": "PHD",
+   "file": "DDC-QAQC-PHD26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "butt",
+    "TIG",
+    "Q355D"
+   ],
+   "sketches": [
+    "WPS-DD-TIG-441_DOT_BW-1.png",
+    "WPS-DD-TIG-441_DOT_BW-2.png"
+   ],
+   "page": 422
+  },
+  {
+   "id": "WPS-DD-TIG-442.BW",
+   "rev": "0",
+   "code": "ISO 15609-1:2019",
+   "process": "GTAW (141)",
+   "position": "H-L045",
+   "base_metal": "Q355D",
+   "material_group": "ISO/TR 15608 Group 1.2",
+   "thickness": "",
+   "diameter": "position PA for PG, PJ",
+   "filler": "Recommend",
+   "f_no": "",
+   "size": "2.0–3.2",
+   "pqr": "WPQR-DD-TIG-442",
+   "project": "PHD",
+   "file": "DDC-QAQC-PHD26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "butt",
+    "TIG",
+    "Q355D"
+   ],
+   "sketches": [
+    "WPS-DD-TIG-442_DOT_BW-1.png",
+    "WPS-DD-TIG-442_DOT_BW-2.png"
+   ],
+   "page": 449
+  },
+  {
+   "id": "WPS-DD-SAW-409.BW",
+   "rev": "0",
+   "code": "ISO 15609-1:2019 / ISO 15614-1:2017",
+   "process": "SAW (121)",
+   "position": "BW (PA)",
+   "base_metal": "EN 10025-2 S355J2",
+   "material_group": "ISO/TR 15608 Group 1.2",
+   "thickness": "12.5–27.5 (single)",
+   "diameter": "OD > 500 mm / any OD rotated",
+   "filler": "Kuangtai JF-B + ISO 14171-A-S 42 2 S2Si / ISO 14174 S A AB 1",
+   "f_no": "",
+   "size": "",
+   "pqr": "",
+   "project": "PHD",
+   "file": "DDC-QAQC-PHD26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "butt",
+    "-20°C",
+    "Min 27J"
+   ],
+   "sketches": [
+    "WPS-DD-SAW-409_DOT_BW-1.png",
+    "WPS-DD-SAW-409_DOT_BW-2.png"
+   ],
+   "page": 483
+  },
+  {
+   "id": "WPS-DD-SAW-409.FW",
+   "rev": "0",
+   "code": "ISO 15609-1:2019 / ISO 15614-1:2017",
+   "process": "SAW (121)",
+   "position": "PA",
+   "base_metal": "EN 10025-2 S355J2",
+   "material_group": "ISO/TR 15608 Group 1.2",
+   "thickness": "",
+   "diameter": "",
+   "filler": "Kuangtai JF-B + ISO 14171-A-S 42 2 S2Si",
+   "f_no": "",
+   "size": "",
+   "pqr": "",
+   "project": "PHD",
+   "file": "DDC-QAQC-PHD26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "fillet"
+   ],
+   "sketches": [
+    "WPS-DD-SAW-409_DOT_FW-1.png",
+    "WPS-DD-SAW-409_DOT_FW-2.png"
+   ],
+   "page": 483
+  },
+  {
+   "id": "WPS-DD-SAW-447",
+   "rev": "0",
+   "code": "ISO 15609-1:2019",
+   "process": "SAW (121)",
+   "position": "PA",
+   "base_metal": "EN 10025-2 S355J2",
+   "material_group": "ISO/TR 15608 Group 1.2",
+   "thickness": "4–10.4",
+   "diameter": "OD > 500 mm / any OD rotated",
+   "filler": "Kuangtai JF-B + ISO 14171-A-S 42 2 S2Si",
+   "f_no": "",
+   "size": "",
+   "pqr": "",
+   "project": "PHD",
+   "file": "DDC-QAQC-PHD26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "butt",
+    "-20°C"
+   ],
+   "sketches": [
+    "WPS-DD-SAW-447-1.png",
+    "WPS-DD-SAW-447-2.png"
+   ],
+   "page": 516
+  },
+  {
+   "id": "WPS-DD-SAW-448.BW",
+   "rev": "0",
+   "code": "ISO 15609-1:2019",
+   "process": "SAW (121)",
+   "position": "BW (PA)",
+   "base_metal": "EN 10025-2 S355J2",
+   "material_group": "ISO/TR 15608 Group 1.2",
+   "thickness": "25–100 (multi)",
+   "diameter": "",
+   "filler": "Kuangtai JF-B",
+   "f_no": "",
+   "size": "Max 4.8",
+   "pqr": "WPQR-DD-SAW-448",
+   "project": "PHD",
+   "file": "DDC-QAQC-PHD26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "butt",
+    "thick"
+   ],
+   "sketches": [
+    "WPS-DD-SAW-448_DOT_BW-1.png",
+    "WPS-DD-SAW-448_DOT_BW-2.png"
+   ],
+   "page": 541
+  },
+  {
+   "id": "WPS-DD-SAW-448.FW",
+   "rev": "0",
+   "code": "ISO 15609-1:2019",
+   "process": "SAW (121)",
+   "position": "PA",
+   "base_metal": "EN 10025-2 S355J2",
+   "material_group": "ISO/TR 15608 Group 1.2",
+   "thickness": "in T, Corner",
+   "diameter": "",
+   "filler": "Kuangtai JF-B",
+   "f_no": "",
+   "size": "Max 4.8",
+   "pqr": "",
+   "project": "PHD",
+   "file": "DDC-QAQC-PHD26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "fillet"
+   ],
+   "sketches": [
+    "WPS-DD-SAW-448_DOT_FW-1.png",
+    "WPS-DD-SAW-448_DOT_FW-2.png"
+   ],
+   "page": 541
+  },
+  {
+   "id": "WPS-DD-SAW-449.FW",
+   "rev": "0",
+   "code": "ISO 15609-1:2019",
+   "process": "SAW (121)",
+   "position": "FW (PB)",
+   "base_metal": "EN 10025-2 S355J2",
+   "material_group": "ISO/TR 15608 Group 1.2",
+   "thickness": "",
+   "diameter": "",
+   "filler": "Kuangtai JF-B",
+   "f_no": "",
+   "size": "Max 4.8",
+   "pqr": "",
+   "project": "PHD",
+   "file": "DDC-QAQC-PHD26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "fillet"
+   ],
+   "sketches": [
+    "WPS-DD-SAW-449_DOT_FW-1.png",
+    "WPS-DD-SAW-449_DOT_FW-2.png"
+   ],
+   "page": 576
+  },
+  {
+   "id": "WPS-DD-SAW-456",
+   "rev": "0",
+   "code": "ISO 15609-1:2019",
+   "process": "SAW (121)",
+   "position": "BW (PA)",
+   "base_metal": "EN 10025-2 S355J2",
+   "material_group": "ISO/TR 15608 Group 1.2",
+   "thickness": "",
+   "diameter": "",
+   "filler": "Kuangtai JF-B",
+   "f_no": "",
+   "size": "Max 4.8",
+   "pqr": "WPQR-DD-SAW-4456",
+   "project": "PHD",
+   "file": "DDC-QAQC-PHD26-WPS-001 Rev 0.pdf",
+   "tags": [
+    "butt"
+   ],
+   "sketches": [
+    "WPS-DD-SAW-456-1.png",
+    "WPS-DD-SAW-456-2.png"
+   ],
+   "page": 601
+  },
+  {
+   "id": "WPS-DD-FCAW-443 B",
+   "rev": "0",
+   "code": "AWS D1.1:2025",
+   "process": "FCAW",
+   "position": "6GR",
+   "base_metal": "GB/T 8183 Q345D",
+   "material_group": "",
+   "thickness": "PJP 3–Unlimited; 3–Unlimited",
+   "diameter": "",
+   "filler": "AWS A5.20 E71T-1C",
+   "f_no": "",
+   "size": "",
+   "pqr": "PQR-DD-FCAW-443A",
+   "project": "SAN",
+   "file": "DDC-QAQC-SAN26-WPS-001 REV 00.pdf",
+   "tags": [
+    "pipe",
+    "6GR"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-443_B-1.png",
+    "WPS-DD-FCAW-443_B-2.png"
+   ],
+   "page": 4
+  },
+  {
+   "id": "WPS-DD-SAW-225B",
+   "rev": "",
+   "code": "AWS D1.1",
+   "process": "SAW",
+   "position": "",
+   "base_metal": "GB/T 1591 Q355B/C/D",
+   "material_group": "",
+   "thickness": "",
+   "diameter": "O.D. ≥ 610 for CJP, PJP",
+   "filler": "",
+   "f_no": "",
+   "size": "",
+   "pqr": "",
+   "project": "SAN",
+   "file": "DDC-QAQC-SAN26-WPS-001 REV 00.pdf",
+   "tags": [],
+   "sketches": [
+    "WPS-DD-SAW-225B-1.png",
+    "WPS-DD-SAW-225B-2.png"
+   ],
+   "page": 35
+  },
+  {
+   "id": "WPS-DD-SAW-463",
+   "rev": "0",
+   "code": "AWS D1.1:2025",
+   "process": "SAW",
+   "position": "1G",
+   "base_metal": "GB/T 1591 Q355B",
+   "material_group": "",
+   "thickness": "3–Unlimited",
+   "diameter": "",
+   "filler": "AWS A5.17 F7A0-EM12K",
+   "f_no": "",
+   "size": "Max Ø4.8",
+   "pqr": "PQR-DD-SAW-463",
+   "project": "SAN",
+   "file": "DDC-QAQC-SAN26-WPS-001 REV 00.pdf",
+   "tags": [
+    "F"
+   ],
+   "sketches": [
+    "WPS-DD-SAW-463-1.png",
+    "WPS-DD-SAW-463-2.png"
+   ],
+   "page": 55
+  },
+  {
+   "id": "WPS-DD-FCAW-118",
+   "rev": "1",
+   "code": "AWS D1.1:2020",
+   "process": "FCAW",
+   "position": "6GR",
+   "base_metal": "ASTM A992",
+   "material_group": "",
+   "thickness": "3–Unlimited",
+   "diameter": "",
+   "filler": "AWS A5.20 Without CVN: E71T-9C/1C",
+   "f_no": "6",
+   "size": "Max Ø1.2",
+   "pqr": "PQR-DD-FCAW-118",
+   "project": "SAN",
+   "file": "DDC-QAQC-SAN26-WPS-001 REV 00.pdf",
+   "tags": [
+    "pipe",
+    "6GR"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-118-1.png",
+    "WPS-DD-FCAW-118-2.png"
+   ],
+   "page": 74
+  },
+  {
+   "id": "WPS-DD-FCAW-151",
+   "rev": "1",
+   "code": "AWS D1.1:2020",
+   "process": "FCAW",
+   "position": "6GR",
+   "base_metal": "ASTM A992",
+   "material_group": "",
+   "thickness": "3–Unlimited",
+   "diameter": "",
+   "filler": "AWS A5.20 Without CVN: E71T-9C/1C",
+   "f_no": "6",
+   "size": "Max Ø1.2",
+   "pqr": "PQR-DD-FCAW-151",
+   "project": "SAN",
+   "file": "DDC-QAQC-SAN26-WPS-001 REV 00.pdf",
+   "tags": [
+    "pipe",
+    "6GR"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-151-1.png",
+    "WPS-DD-FCAW-151-2.png"
+   ],
+   "page": 97
+  },
+  {
+   "id": "WPS-DD-FCAW-462.1 B",
+   "rev": "0",
+   "code": "AWS D1.1:2025",
+   "process": "FCAW",
+   "position": "1G",
+   "base_metal": "ASTM A572 Gr.50",
+   "material_group": "Any Group I, II",
+   "thickness": "3–Unlimited",
+   "diameter": "≥ 610 for CJP, PJP",
+   "filler": "AWS A5.20 E71T-1C",
+   "f_no": "",
+   "size": "Max Ø1.6",
+   "pqr": "PQR-DD-FCAW-462.1",
+   "project": "SAN",
+   "file": "DDC-QAQC-SAN26-WPS-001 REV 00.pdf",
+   "tags": [
+    "F"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-462.1_B-1.png",
+    "WPS-DD-FCAW-462.1_B-2.png"
+   ],
+   "page": 1
+  },
+  {
+   "id": "WPS-DD-FCAW-462.2 B",
+   "rev": "0",
+   "code": "AWS D1.1:2025",
+   "process": "FCAW",
+   "position": "2G",
+   "base_metal": "ASTM A572 Gr.50",
+   "material_group": "Any Group I, II",
+   "thickness": "3–Unlimited",
+   "diameter": "",
+   "filler": "AWS A5.20 E71T-1C",
+   "f_no": "",
+   "size": "Max Ø1.6",
+   "pqr": "PQR-DD-FCAW-462.2",
+   "project": "SAN",
+   "file": "DDC-QAQC-SAN26-WPS-001 REV 00.pdf",
+   "tags": [
+    "F,H"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-462.2_B-1.png",
+    "WPS-DD-FCAW-462.2_B-2.png"
+   ],
+   "page": 1
+  },
+  {
+   "id": "WPS-DD-FCAW-462.3 B",
+   "rev": "0",
+   "code": "AWS D1.1:2025",
+   "process": "FCAW",
+   "position": "3G",
+   "base_metal": "ASTM A572 Gr.50",
+   "material_group": "Any Group I, II",
+   "thickness": "3–Unlimited",
+   "diameter": "",
+   "filler": "AWS A5.20 E71T-1C",
+   "f_no": "",
+   "size": "Max Ø1.6",
+   "pqr": "PQR-DD-FCAW-462.3",
+   "project": "SAN",
+   "file": "DDC-QAQC-SAN26-WPS-001 REV 00.pdf",
+   "tags": [
+    "V uphill"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-462.3_B-1.png",
+    "WPS-DD-FCAW-462.3_B-2.png"
+   ],
+   "page": 1
+  },
+  {
+   "id": "WPS-DD-SAW-457 B",
+   "rev": "0",
+   "code": "AWS D1.1:2025",
+   "process": "SAW",
+   "position": "1G",
+   "base_metal": "ASTM A572 Gr.50",
+   "material_group": "",
+   "thickness": "3–Unlimited",
+   "diameter": "",
+   "filler": "AWS A5.17 F7A0-EM12K",
+   "f_no": "",
+   "size": "Max Ø4.8",
+   "pqr": "PQR-DD-SAW-457",
+   "project": "SAN",
+   "file": "DDC-QAQC-SAN26-WPS-001 REV 00.pdf",
+   "tags": [
+    "F"
+   ],
+   "sketches": [
+    "WPS-DD-SAW-457_B-1.png",
+    "WPS-DD-SAW-457_B-2.png"
+   ],
+   "page": 1
+  },
+  {
+   "id": "WPS-DD-SAW-356",
+   "rev": "",
+   "code": "AWS D1.1",
+   "process": "SAW",
+   "position": "",
+   "base_metal": "ASTM A572 Gr.50",
+   "material_group": "Any Group I, II",
+   "thickness": "",
+   "diameter": "O.D. ≥ 610 for CJP, PJP",
+   "filler": "",
+   "f_no": "",
+   "size": "",
+   "pqr": "",
+   "project": "SAN",
+   "file": "DDC-QAQC-SAN26-WPS-001 REV 00.pdf",
+   "tags": [],
+   "sketches": [
+    "WPS-DD-SAW-356-1.png",
+    "WPS-DD-SAW-356-2.png"
+   ],
+   "page": 192
+  },
+  {
+   "id": "WPS-DD-FCAW-470 B",
+   "rev": "0",
+   "code": "AWS D1.1:2025",
+   "process": "FCAW",
+   "position": "6GR",
+   "base_metal": "ASTM A500 Gr B",
+   "material_group": "Any Group I",
+   "thickness": "PJP 3–Unlimited; 3–Unlimited",
+   "diameter": "",
+   "filler": "AWS A5.20 E71T-1C",
+   "f_no": "",
+   "size": "",
+   "pqr": "PQR-DD-FCAW-470",
+   "project": "SAN",
+   "file": "DDC-QAQC-SAN26-WPS-001 REV 00.pdf",
+   "tags": [
+    "pipe",
+    "6GR"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-470_B-1.png",
+    "WPS-DD-FCAW-470_B-2.png"
+   ],
+   "page": 212
+  },
+  {
+   "id": "WPS-DD-FCAW-284 (SAN)",
+   "rev": "1",
+   "code": "AWS D1.1:2020",
+   "process": "FCAW",
+   "position": "6G",
+   "base_metal": "ASTM A53 Gr B",
+   "material_group": "Any Group I",
+   "thickness": "3–Unlimited",
+   "diameter": "CJP any O.D. for PJP",
+   "filler": "AWS A5.20 E71T-1C",
+   "f_no": "",
+   "size": "Ø1.2",
+   "pqr": "",
+   "project": "SAN",
+   "file": "DDC-QAQC-SAN26-WPS-001 REV 00.pdf",
+   "tags": [
+    "pipe",
+    "6G"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-284_SAN-1.png",
+    "WPS-DD-FCAW-284_SAN-2.png"
+   ],
+   "page": 245
+  },
+  {
+   "id": "WPS-DD-FCAW-467.1 B",
+   "rev": "1",
+   "code": "AWS D1.1:2025",
+   "process": "FCAW",
+   "position": "1G",
+   "base_metal": "EN 10025-2 S355J2 (J2+N, J2+M)",
+   "material_group": "",
+   "thickness": "3–Unlimited",
+   "diameter": "≥ 610 for CJP, PJP",
+   "filler": "AWS A5.20 E71T-1C",
+   "f_no": "",
+   "size": "Max Ø1.6",
+   "pqr": "PQR-DD-FCAW-467.1",
+   "project": "SAN",
+   "file": "DDC-QAQC-SAN26-WPS-001 REV 00.pdf",
+   "tags": [
+    "F"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-467.1_B-1.png",
+    "WPS-DD-FCAW-467.1_B-2.png"
+   ],
+   "page": 268
+  },
+  {
+   "id": "WPS-DD-FCAW-467.2 B",
+   "rev": "1",
+   "code": "AWS D1.1:2025",
+   "process": "FCAW",
+   "position": "2G",
+   "base_metal": "EN 10025-2 S355J2 (J2+N, J2+M)",
+   "material_group": "",
+   "thickness": "3–Unlimited",
+   "diameter": "",
+   "filler": "AWS A5.20 E71T-1C",
+   "f_no": "",
+   "size": "Max Ø1.6",
+   "pqr": "PQR-DD-FCAW-467.2",
+   "project": "SAN",
+   "file": "DDC-QAQC-SAN26-WPS-001 REV 00.pdf",
+   "tags": [
+    "F,H"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-467.2_B-1.png",
+    "WPS-DD-FCAW-467.2_B-2.png"
+   ],
+   "page": 269
+  },
+  {
+   "id": "WPS-DD-FCAW-467.3 B",
+   "rev": "1",
+   "code": "AWS D1.1:2025",
+   "process": "FCAW",
+   "position": "3G",
+   "base_metal": "EN 10025-2 S355J2 (J2+N, J2+M)",
+   "material_group": "",
+   "thickness": "3–Unlimited",
+   "diameter": "",
+   "filler": "AWS A5.20 E71T-1C",
+   "f_no": "",
+   "size": "Max Ø1.6",
+   "pqr": "PQR-DD-FCAW-467.3",
+   "project": "SAN",
+   "file": "DDC-QAQC-SAN26-WPS-001 REV 00.pdf",
+   "tags": [
+    "V uphill"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-467.3_B-1.png",
+    "WPS-DD-FCAW-467.3_B-2.png"
+   ],
+   "page": 2
+  },
+  {
+   "id": "WPS-DD-SAW-271",
+   "rev": "1",
+   "code": "AWS D1.1:2020",
+   "process": "SAW",
+   "position": "1G",
+   "base_metal": "EN 10025-2 S355J2",
+   "material_group": "",
+   "thickness": "3–Unlimited",
+   "diameter": "",
+   "filler": "AWS A5.17 F7A6/A4/A2/A0-EM12K",
+   "f_no": "",
+   "size": "Max Ø4.0",
+   "pqr": "PQR-DD-SAW-271",
+   "project": "SAN",
+   "file": "DDC-QAQC-SAN26-WPS-001 REV 00.pdf",
+   "tags": [
+    "F"
+   ],
+   "sketches": [
+    "WPS-DD-SAW-271-1.png",
+    "WPS-DD-SAW-271-2.png"
+   ],
+   "page": 306
+  },
+  {
+   "id": "WPS-DD-SAW-278",
+   "rev": "",
+   "code": "AWS D1.1",
+   "process": "SAW",
+   "position": "",
+   "base_metal": "EN 10025-2",
+   "material_group": "",
+   "thickness": "",
+   "diameter": "O.D. ≥ 610 for CJP, PJP",
+   "filler": "",
+   "f_no": "",
+   "size": "",
+   "pqr": "",
+   "project": "SAN",
+   "file": "DDC-QAQC-SAN26-WPS-001 REV 00.pdf",
+   "tags": [],
+   "sketches": [
+    "WPS-DD-SAW-278-1.png",
+    "WPS-DD-SAW-278-2.png"
+   ],
+   "page": 326
+  },
+  {
+   "id": "WPS-DD-FCAW-283 (SAN)",
+   "rev": "1",
+   "code": "AWS D1.1:2020",
+   "process": "FCAW",
+   "position": "6G",
+   "base_metal": "",
+   "material_group": "",
+   "thickness": "3–Unlimited",
+   "diameter": "CJP any O.D. for PJP",
+   "filler": "AWS A5.20 E71T-1C",
+   "f_no": "",
+   "size": "Ø1.2",
+   "pqr": "",
+   "project": "SAN",
+   "file": "DDC-QAQC-SAN26-WPS-001 REV 00.pdf",
+   "tags": [
+    "pipe",
+    "6G"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-283_SAN-1.png",
+    "WPS-DD-FCAW-283_SAN-2.png"
+   ],
+   "page": 347
+  },
+  {
+   "id": "WPS-DD-FCAW-329",
+   "rev": "01",
+   "code": "AWS D1.1:2020",
+   "process": "FCAW",
+   "position": "1G; 2G; 3G",
+   "base_metal": "JIS G3101 SS400",
+   "material_group": "JIS G3101 SS400",
+   "thickness": "3–Unlimited (without CVN)",
+   "diameter": "",
+   "filler": "AWS A5.20 E71T-1C",
+   "f_no": "",
+   "size": "Max Ø1.6",
+   "pqr": "PQR-DD-FCAW-329.1/.2/.3",
+   "project": "SAN",
+   "file": "DDC-QAQC-SAN26-WPS-001 REV 00.pdf",
+   "tags": [
+    "F,H,V"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-329-1.png",
+    "WPS-DD-FCAW-329-2.png"
+   ],
+   "page": 371
+  },
+  {
+   "id": "WPS-DD-SAW-464",
+   "rev": "0",
+   "code": "AWS D1.1:2025",
+   "process": "SAW",
+   "position": "1G",
+   "base_metal": "JIS G3101 SS400",
+   "material_group": "JIS G3101 SS400",
+   "thickness": "3–Unlimited",
+   "diameter": "",
+   "filler": "AWS A5.17 F7A0-EM12K",
+   "f_no": "",
+   "size": "Max Ø4.8",
+   "pqr": "PQR-DD-SAW-464",
+   "project": "SAN",
+   "file": "DDC-QAQC-SAN26-WPS-001 REV 00.pdf",
+   "tags": [
+    "F"
+   ],
+   "sketches": [
+    "WPS-DD-SAW-464-1.png",
+    "WPS-DD-SAW-464-2.png"
+   ],
+   "page": 410
+  },
+  {
+   "id": "WPS-DD-FCAW-350",
+   "rev": "01",
+   "code": "AWS D1.1:2020",
+   "process": "FCAW",
+   "position": "1G; 2G; 3G",
+   "base_metal": "",
+   "material_group": "",
+   "thickness": "3–Unlimited (without CVN)",
+   "diameter": "",
+   "filler": "AWS A5.20 E71T-1C",
+   "f_no": "",
+   "size": "Max Ø1.6",
+   "pqr": "PQR-DD-FCAW-350.1/.2/.3",
+   "project": "SAN",
+   "file": "DDC-QAQC-SAN26-WPS-001 REV 00.pdf",
+   "tags": [
+    "F,H,V"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-350-1.png",
+    "WPS-DD-FCAW-350-2.png"
+   ],
+   "page": 428
+  },
+  {
+   "id": "WPS-DD-FCAW-431 B1",
+   "rev": "0",
+   "code": "AWS D1.1:2025",
+   "process": "FCAW",
+   "position": "F",
+   "base_metal": "",
+   "material_group": "",
+   "thickness": "3–Unlimited",
+   "diameter": "",
+   "filler": "AWS A5.20 E71T-1C",
+   "f_no": "",
+   "size": "",
+   "pqr": "",
+   "project": "SAN",
+   "file": "DDC-QAQC-SAN26-WPS-001 REV 00.pdf",
+   "tags": [
+    "F"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-431_B1-1.png",
+    "WPS-DD-FCAW-431_B1-2.png"
+   ],
+   "page": 466
+  },
+  {
+   "id": "WPS-DD-FCAW-431 B2",
+   "rev": "0",
+   "code": "AWS D1.1:2025",
+   "process": "FCAW",
+   "position": "1F, 2F, 3F",
+   "base_metal": "",
+   "material_group": "",
+   "thickness": "3–Unlimited",
+   "diameter": "",
+   "filler": "AWS A5.20 E71T-1C",
+   "f_no": "",
+   "size": "",
+   "pqr": "",
+   "project": "SAN",
+   "file": "DDC-QAQC-SAN26-WPS-001 REV 00.pdf",
+   "tags": [
+    "fillet"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-431_B2-1.png",
+    "WPS-DD-FCAW-431_B2-2.png"
+   ],
+   "page": 467
+  },
+  {
+   "id": "WPS-DD-FCAW-251",
+   "rev": "1",
+   "code": "ASME IX:2023",
+   "process": "FCAW",
+   "position": "All, Uphill",
+   "base_metal": "ASME SA516 Gr.70+N (A105, EN 10025 S355J2, ...)",
+   "material_group": "P-No.1 Group No. 2",
+   "thickness": "8–16",
+   "diameter": "All",
+   "filler": "AWS A5.20 E71T-1C/-9C",
+   "f_no": "6",
+   "size": "1.2–1.6 (Max.16)",
+   "pqr": "PQR-DD-FCAW-251",
+   "project": "VEC",
+   "file": "DDC-QAQC-VEC26-WPS-001 Rev.00.pdf",
+   "tags": [
+    "pressure-vessel",
+    "shell long. seam",
+    "circumferential",
+    "nozzle",
+    "weldolet"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-251-1.png",
+    "WPS-DD-FCAW-251-2.png"
+   ],
+   "page": 5
+  },
+  {
+   "id": "WPS-DD-FCAW+SAW-252",
+   "rev": "2",
+   "code": "ASME IX:2023",
+   "process": "FCAW + SAW",
+   "position": "All uphill (FCAW); 1G, 1F (SAW)",
+   "base_metal": "ASME SA516 Gr.70+N",
+   "material_group": "P-No.1 Group No. 2",
+   "thickness": "8–16",
+   "diameter": "All",
+   "filler": "FCAW: AWS A5.20 E71T-1C/-9C; SAW: A5.17 EM12K-F7A6",
+   "f_no": "6",
+   "size": "FCAW max 1.6; SAW max 3.2",
+   "pqr": "PQR-DD-FCAW+SAW-252",
+   "project": "VEC",
+   "file": "DDC-QAQC-VEC26-WPS-001 Rev.00.pdf",
+   "tags": [
+    "combo",
+    "shell"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-PLUS-SAW-252-1.png",
+    "WPS-DD-FCAW-PLUS-SAW-252-2.png"
+   ],
+   "page": 21
+  },
+  {
+   "id": "WPS-DD-FCAW+SAW-378",
+   "rev": "0",
+   "code": "ASME IX:2025",
+   "process": "FCAW + SAW",
+   "position": "All uphill (FCAW); 1G, 1F (SAW)",
+   "base_metal": "ASME SA516 Gr.70+N",
+   "material_group": "P-No.1 Group No. 2",
+   "thickness": "10–20",
+   "diameter": "All",
+   "filler": "FCAW: A5.20 E71T-1C/-9C; SAW: A5.17 EM12K-F7A6",
+   "f_no": "6",
+   "size": "FCAW max 1.6; SAW max 4.0",
+   "pqr": "PQR-DD-FCAW+SAW-378",
+   "project": "VEC",
+   "file": "DDC-QAQC-VEC26-WPS-001 Rev.00.pdf",
+   "tags": [
+    "combo",
+    "shell"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-PLUS-SAW-378-1.png",
+    "WPS-DD-FCAW-PLUS-SAW-378-2.png"
+   ],
+   "page": 38
+  },
+  {
+   "id": "WPS-DD-FCAW-253",
+   "rev": "2",
+   "code": "ASME IX:2023",
+   "process": "FCAW",
+   "position": "All, Uphill",
+   "base_metal": "ASTM A572 Gr.50 to ASME SA516 Gr.70+N",
+   "material_group": "P-No.1 Group 1 → Group 2",
+   "thickness": "8–40",
+   "diameter": "All",
+   "filler": "AWS A5.20 E71T-1C/-9C",
+   "f_no": "6",
+   "size": "1.2–1.6 (Max.38)",
+   "pqr": "PQR-DD-FCAW-253",
+   "project": "VEC",
+   "file": "DDC-QAQC-VEC26-WPS-001 Rev.00.pdf",
+   "tags": [
+    "lifting-lug",
+    "saddle",
+    "stiffener"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-253-1.png",
+    "WPS-DD-FCAW-253-2.png"
+   ],
+   "page": 56
+  },
+  {
+   "id": "WPS-DD-FCAW-253.1",
+   "rev": "0",
+   "code": "ASME IX:2023",
+   "process": "FCAW",
+   "position": "All, Uphill",
+   "base_metal": "ASTM A572 Gr.50 to ASME SA516 Gr.70+N",
+   "material_group": "P-No.1 Group 1 → Group 2",
+   "thickness": "All",
+   "diameter": "All",
+   "filler": "AWS A5.20 E71T-1C/-9C",
+   "f_no": "6",
+   "size": "1.2–1.6 (Max.38)",
+   "pqr": "PQR-DD-FCAW-253",
+   "project": "VEC",
+   "file": "DDC-QAQC-VEC26-WPS-001 Rev.00.pdf",
+   "tags": [
+    "lifting-lug",
+    "saddle"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-253.1-1.png",
+    "WPS-DD-FCAW-253.1-2.png"
+   ],
+   "page": 60
+  },
+  {
+   "id": "WPS-DD-GTAW-254",
+   "rev": "0",
+   "code": "ASME IX:2023",
+   "process": "GTAW",
+   "position": "All, Uphill",
+   "base_metal": "ASME SA53M Gr.B (A53, A106 GrB, A134, A36, A234 WPB, A572 Gr.50, …)",
+   "material_group": "P-No.1 Group No.1",
+   "thickness": "3–12",
+   "diameter": "All",
+   "filler": "AWS A5.18 ER70S-6",
+   "f_no": "6",
+   "size": "2.4",
+   "pqr": "PQR-DD-GTAW-254",
+   "project": "VEC",
+   "file": "DDC-QAQC-VEC26-WPS-001 Rev.00.pdf",
+   "tags": [
+    "nozzle-to-shell",
+    "pipe-to-fitting"
+   ],
+   "sketches": [
+    "WPS-DD-GTAW-254-1.png",
+    "WPS-DD-GTAW-254-2.png"
+   ],
+   "page": 88
+  },
+  {
+   "id": "WPS-DD-FCAW-134",
+   "rev": "0",
+   "code": "ASME IX 2019, 2023",
+   "process": "FCAW",
+   "position": "All, Uphill",
+   "base_metal": "ASTM A572 Gr.50 (A53, A106 GrB, A134, A36, A234 WPB)",
+   "material_group": "P-No.1 Group No.1",
+   "thickness": "8–16",
+   "diameter": "All",
+   "filler": "AWS A5.20 E71T-1C/-9C",
+   "f_no": "6",
+   "size": "1.2–1.6 (Max.16)",
+   "pqr": "PQR-DD-FCAW-134",
+   "project": "VEC",
+   "file": "DDC-QAQC-VEC26-WPS-001 Rev.00.pdf",
+   "tags": [
+    "reinforcement-pad",
+    "lifting-lug"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-134-1.png",
+    "WPS-DD-FCAW-134-2.png"
+   ],
+   "page": 102
+  },
+  {
+   "id": "WPS-DD-FCAW-134/251",
+   "rev": "0",
+   "code": "ASME IX 2019, 2023",
+   "process": "FCAW",
+   "position": "All, Uphill",
+   "base_metal": "ASTM A572 Gr.50 to ASME SA516 Gr.70+N",
+   "material_group": "P-No.1 Group 1 → Group 2",
+   "thickness": "8–16",
+   "diameter": "All",
+   "filler": "AWS A5.20 E71T-1C/-9C",
+   "f_no": "6",
+   "size": "1.2–1.6 (Max.16)",
+   "pqr": "PQR-DD-FCAW-134 & FCAW-251",
+   "project": "VEC",
+   "file": "DDC-QAQC-VEC26-WPS-001 Rev.00.pdf",
+   "tags": [
+    "weldolet",
+    "lifting-lug",
+    "stiffener"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-134_251-1.png",
+    "WPS-DD-FCAW-134_251-2.png"
+   ],
+   "page": 124
+  },
+  {
+   "id": "WPS-DD-GTAW+FCAW-196",
+   "rev": "1",
+   "code": "ASME IX 2021",
+   "process": "GTAW + FCAW",
+   "position": "All, Uphill",
+   "base_metal": "S355J2 / SA516 (A53, A106 GrB, A134, A36, A234 WPB, A572)",
+   "material_group": "P-No.1 Group 1/2",
+   "thickness": "1.5–16",
+   "diameter": "All",
+   "filler": "GTAW: A5.18 ER70S-6 (1.6–2.4); FCAW: A5.20 E71T-1C/-9C (1.2–1.6)",
+   "f_no": "6",
+   "size": "GTAW: max 6; FCAW: max 10",
+   "pqr": "PQR-DD-GTAW+FCAW-196",
+   "project": "VEC",
+   "file": "DDC-QAQC-VEC26-WPS-001 Rev.00.pdf",
+   "tags": [
+    "combo",
+    "weldolet",
+    "reinforcement-pad"
+   ],
+   "sketches": [
+    "WPS-DD-GTAW-PLUS-FCAW-196-1.png",
+    "WPS-DD-GTAW-PLUS-FCAW-196-2.png"
+   ],
+   "page": 159
+  },
+  {
+   "id": "WPS-DD-GTAW+FCAW-197",
+   "rev": "1",
+   "code": "ASME IX 2021",
+   "process": "GTAW + FCAW",
+   "position": "All, Uphill",
+   "base_metal": "S355J2 to ASTM A572 / SA516",
+   "material_group": "P-No.1 Group 1/2",
+   "thickness": "5–50",
+   "diameter": "All",
+   "filler": "GTAW: A5.18 ER70S-6 (1.6–2.4); FCAW: A5.20 E71T-1C/-9C (1.2–1.6)",
+   "f_no": "6",
+   "size": "GTAW: max 10; FCAW: max 40",
+   "pqr": "PQR-DD-GTAW+FCAW-197",
+   "project": "VEC",
+   "file": "DDC-QAQC-VEC26-WPS-001 Rev.00.pdf",
+   "tags": [
+    "combo",
+    "weldolet",
+    "thick"
+   ],
+   "sketches": [
+    "WPS-DD-GTAW-PLUS-FCAW-197-1.png",
+    "WPS-DD-GTAW-PLUS-FCAW-197-2.png"
+   ],
+   "page": 176
+  },
+  {
+   "id": "WPS-DD-FCAW+SAW-79",
+   "rev": "0",
+   "code": "ASME IX 2019",
+   "process": "FCAW + SAW",
+   "position": "All (FCAW); 1G (SAW)",
+   "base_metal": "SS400 to A572/A53/A106/A500 (without impact test)",
+   "material_group": "",
+   "thickness": "5–50",
+   "diameter": "All",
+   "filler": "FCAW: A5.20 E71T-1C/-9C; SAW: 3.2–4.0",
+   "f_no": "6",
+   "size": "FCAW max 24",
+   "pqr": "PQR-DD-FCAW+SAW-79",
+   "project": "VEC",
+   "file": "DDC-QAQC-VEC26-WPS-001 Rev.00.pdf",
+   "tags": [
+    "combo",
+    "support"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-PLUS-SAW-79-1.png",
+    "WPS-DD-FCAW-PLUS-SAW-79-2.png"
+   ],
+   "page": 196
+  },
+  {
+   "id": "WPS-DD-FCAW-79.2",
+   "rev": "0",
+   "code": "ASME IX 2019",
+   "process": "FCAW",
+   "position": "All, Uphill",
+   "base_metal": "SS400 to A572/A53/A106/A500 (without impact test)",
+   "material_group": "",
+   "thickness": "5–24",
+   "diameter": "All",
+   "filler": "AWS A5.20 E71T-1C/-9C",
+   "f_no": "6",
+   "size": "1.2–1.6 (Max.24)",
+   "pqr": "PQR-DD-FCAW+SAW-79",
+   "project": "VEC",
+   "file": "DDC-QAQC-VEC26-WPS-001 Rev.00.pdf",
+   "tags": [
+    "support-attachment"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-79.2-1.png",
+    "WPS-DD-FCAW-79.2-2.png"
+   ],
+   "page": 199
+  },
+  {
+   "id": "WPS-DD-GTAW-133.1",
+   "rev": "0",
+   "code": "ASME IX 2019",
+   "process": "GTAW",
+   "position": "All, Uphill",
+   "base_metal": "A240 Gr.304 to (S355, SA516, A105, A36, A572, A53, A106, A500)",
+   "material_group": "",
+   "thickness": "1.5–8",
+   "diameter": "All",
+   "filler": "AWS A5.9 ER309L",
+   "f_no": "6",
+   "size": "2.4 (Max.8)",
+   "pqr": "PQR-DD-GTAW+FCAW-133",
+   "project": "VEC",
+   "file": "DDC-QAQC-VEC26-WPS-001 Rev.00.pdf",
+   "tags": [
+    "dissimilar",
+    "sliding-support"
+   ],
+   "sketches": [
+    "WPS-DD-GTAW-133.1-1.png",
+    "WPS-DD-GTAW-133.1-2.png"
+   ],
+   "page": 217
+  },
+  {
+   "id": "WPS-DD-FCAW-133.2",
+   "rev": "0",
+   "code": "ASME IX 2019",
+   "process": "FCAW",
+   "position": "All, Uphill",
+   "base_metal": "A240 Gr.304 to (S355, SA516, A105, A36, A572, A53, A106, A500)",
+   "material_group": "",
+   "thickness": "1.5–12",
+   "diameter": "All",
+   "filler": "AWS A5.22 E309LT1-1/-4",
+   "f_no": "6",
+   "size": "1.2–1.6 (Max.12)",
+   "pqr": "PQR-DD-GTAW+FCAW-133",
+   "project": "VEC",
+   "file": "DDC-QAQC-VEC26-WPS-001 Rev.00.pdf",
+   "tags": [
+    "dissimilar",
+    "sliding-support"
+   ],
+   "sketches": [
+    "WPS-DD-FCAW-133.2-1.png",
+    "WPS-DD-FCAW-133.2-2.png"
+   ],
+   "page": 220
+  },
+  {
+   "id": "WPS-DD-GTAW-121",
+   "rev": "0",
+   "code": "ASME IX 2019",
+   "process": "GTAW",
+   "position": "All, Uphill",
+   "base_metal": "A312 TP304/316 (A240 Gr.304 without impact test)",
+   "material_group": "",
+   "thickness": "1.5–11.4",
+   "diameter": "All",
+   "filler": "AWS A5.9 ER308L",
+   "f_no": "6",
+   "size": "2.4 (Max.11.4)",
+   "pqr": "",
+   "project": "VEC",
+   "file": "DDC-QAQC-VEC26-WPS-001 Rev.00.pdf",
+   "tags": [
+    "stainless",
+    "sliding-support"
+   ],
+   "sketches": [
+    "WPS-DD-GTAW-121-1.png",
+    "WPS-DD-GTAW-121-2.png"
+   ],
+   "page": 233
+  },
+  {
+   "id": "WPS-DD-GTAW-240",
+   "rev": "0",
+   "code": "ASME IX",
+   "process": "GTAW",
+   "position": "All, Uphill",
+   "base_metal": "ASME SA516 Gr.70",
+   "material_group": "P-No.1 Group 2",
+   "thickness": "1.5–16",
+   "diameter": "All",
+   "filler": "AWS A5.18 ER70S-6",
+   "f_no": "6",
+   "size": "2.4 (Max.16)",
+   "pqr": "",
+   "project": "VEC",
+   "file": "DDC-QAQC-VEC26-WPS-001 Rev.00.pdf",
+   "tags": [
+    "weldolet"
+   ],
+   "sketches": [
+    "WPS-DD-GTAW-240-1.png",
+    "WPS-DD-GTAW-240-2.png"
+   ],
+   "page": 246
+  }
+ ]
+};

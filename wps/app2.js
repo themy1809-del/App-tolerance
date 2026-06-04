@@ -1,0 +1,239 @@
+/* WPS Library — Part 2: detail modal + PDF viewer + wizard */
+
+function refreshDStar(){
+  const btn = document.getElementById('dStar');
+  const on = currentDetailId && FAV.includes(currentDetailId);
+  btn.textContent = on?'★':'☆';
+  btn.classList.toggle('on', !!on);
+}
+
+function openDetail(x){
+  currentDetailId = x.id;
+  pushRecent(x.id);
+  const t = T[LANG];
+  const proj = DB.projects.find(p => p.code===x.project);
+  document.getElementById('dId').textContent = x.id;
+  document.getElementById('dSub').textContent = (x.code||'') + (x.rev?` • Rev ${x.rev}`:'');
+  refreshDStar();
+  const kv = document.getElementById('dKv');
+  const rows = [
+    ['code', x.code], ['process', x.process], ['position', x.position],
+    ['base_metal', x.base_metal], ['material_group', x.material_group],
+    ['thickness', x.thickness], ['diameter', x.diameter],
+    ['filler', x.filler], ['f_no', x.f_no], ['size', x.size],
+    ['pqr', x.pqr], ['project', proj?`${x.project} — ${LANG==='vi'?proj.name_vi:proj.name_en}`:x.project]
+  ].filter(([_,v]) => v && v!=='-');
+  kv.innerHTML = rows.map(([k,v])=>`<div class="k">${t.kv[k]||k}</div><div class="v">${esc(v)}</div>`).join('');
+  if (x.tags && x.tags.length){
+    kv.insertAdjacentHTML('beforeend', `<div class="k">${t.kv.tags}</div><div class="v"><div class="tagchips">${x.tags.map(tg=>`<span class="tagchip">${esc(tg)}</span>`).join('')}</div></div>`);
+  }
+  // Sketch gallery (form pages with embedded joint sketch)
+  const sketchWrap = document.getElementById('dSketches');
+  if (x.sketches && x.sketches.length){
+    sketchWrap.style.display = 'block';
+    sketchWrap.innerHTML = `<div class="sk-h">📐 ${LANG==='vi'?'Hình phác / Form WPS':'Sketches / WPS form'} <span class="sk-ct">${x.sketches.length}</span></div>
+      <div class="sk-scroll">` +
+      x.sketches.map((s,i)=>`<img class="sk-img" src="sketches/${encodeURIComponent(s)}" alt="sketch ${i+1}" loading="lazy" data-i="${i}">`).join('') +
+      `</div>`;
+    sketchWrap.querySelectorAll('.sk-img').forEach(img => {
+      img.addEventListener('click', () => openSketchZoom(x.sketches, parseInt(img.dataset.i)));
+    });
+  } else { sketchWrap.style.display = 'none'; sketchWrap.innerHTML = ''; }
+  const fileHref = 'files/' + encodeURIComponent(x.file);
+  document.getElementById('dOpen').onclick = () => openPdf(x, fileHref);
+  document.getElementById('dDl').href = fileHref;
+  document.getElementById('dDl').download = x.file;
+  const pageInfo = x.page ? (x.page_end && x.page_end!==x.page ? ` · ${LANG==='vi'?'trang':'pages'} ${x.page}–${x.page_end}` : ` · ${LANG==='vi'?'trang':'page'} ${x.page}`) : '';
+  document.getElementById('dSrc').innerHTML = proj
+    ? `<b>${esc(proj.code)}</b> — ${esc(LANG==='vi'?proj.name_vi:proj.name_en)}<br>📄 ${esc(x.file)}${pageInfo}<br><span style="color:var(--muted)">${esc(proj.register_doc||'')}${proj.date?` · ${esc(proj.date)}`:''}</span>`
+    : esc(x.file);
+  // Skip HEAD check on file:// (CORS blocks it); only check via HTTP
+  if (location.protocol.startsWith('http')) {
+    fetch(fileHref, { method:'HEAD' })
+      .then(r => {
+        const miss = document.getElementById('dMiss');
+        if (!r.ok){ miss.innerHTML = `<b>${t.missTitle}</b><br>${t.missBody(x.file)}`; miss.style.display = 'block'; }
+        else { miss.style.display = 'none'; }
+      }).catch(() => {});
+  } else { document.getElementById('dMiss').style.display = 'none'; }
+  document.getElementById('ovl').style.display = 'flex';
+  const u = new URL(location.href); u.searchParams.set('id', x.id); history.replaceState(null, '', u.toString());
+}
+
+function closeModal(){
+  document.getElementById('ovl').style.display='none';
+  currentDetailId = null;
+  const u = new URL(location.href); u.searchParams.delete('id'); history.replaceState(null, '', u.toString());
+  if (isIdle()) render();
+}
+
+/* ============ Wizard ============ */
+const WIZ_MATS = [
+  {v:'A572', em:'🇺🇸', tt:'ASTM A572 Gr.50', match:/A572/i},
+  {v:'A36', em:'📄', tt:'ASTM A36', match:/A36/i},
+  {v:'A992', em:'🏗️', tt:'ASTM A992', match:/A992/i},
+  {v:'A53', em:'🛢️', tt:'ASTM A53/A106', match:/A53|A106/i},
+  {v:'A500', em:'⬜', tt:'ASTM A500', match:/A500/i},
+  {v:'SA516', em:'🛢️', tt:'ASME SA516 Gr.70', match:/SA516/i},
+  {v:'A240-304', em:'✨', tt:'A240-304 (Stainless)', match:/A240.*304|TP304|304/i},
+  {v:'A240-316', em:'✨', tt:'A240-316 (Stainless)', match:/A240.*316|TP316|316/i},
+  {v:'S355', em:'🇪🇺', tt:'EN 10025-2 S355J2', match:/S355/i},
+  {v:'Q355', em:'🇨🇳', tt:'GB Q355B/C/D', match:/Q3[45]5/i},
+  {v:'Q345', em:'🇨🇳', tt:'GB Q345D', match:/Q345/i},
+  {v:'SS400', em:'📄', tt:'JIS SS400', match:/SS400|G3101/i},
+  {v:'STK400', em:'🚰', tt:'JIS STK400', match:/STK400|G3444/i}
+];
+
+const POS_ICONS = {
+  '1G':'<svg viewBox="0 0 40 40"><rect x="6" y="20" width="28" height="6" fill="#0c447c"/><line x1="20" y1="14" x2="20" y2="20" stroke="#0c447c" stroke-width="2"/></svg>',
+  '2G':'<svg viewBox="0 0 40 40"><rect x="17" y="6" width="6" height="28" fill="#0c447c"/><line x1="11" y1="20" x2="17" y2="20" stroke="#0c447c" stroke-width="2"/></svg>',
+  '3G':'<svg viewBox="0 0 40 40"><rect x="17" y="6" width="6" height="28" fill="#0c447c"/><path d="M11 28 L17 22 L17 28 Z" fill="#0c447c"/></svg>',
+  '4G':'<svg viewBox="0 0 40 40"><rect x="6" y="14" width="28" height="6" fill="#0c447c"/><line x1="20" y1="20" x2="20" y2="26" stroke="#0c447c" stroke-width="2"/></svg>',
+  '5G':'<svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="10" fill="none" stroke="#0c447c" stroke-width="4"/></svg>',
+  '6G':'<svg viewBox="0 0 40 40"><g transform="rotate(45 20 20)"><circle cx="20" cy="20" r="10" fill="none" stroke="#0c447c" stroke-width="4"/></g></svg>',
+  '6GR':'<svg viewBox="0 0 40 40"><g transform="rotate(45 20 20)"><circle cx="20" cy="20" r="10" fill="none" stroke="#0c447c" stroke-width="4"/></g><circle cx="32" cy="20" r="3" fill="#aa4322"/></svg>',
+  '1F':'<svg viewBox="0 0 40 40"><rect x="6" y="22" width="28" height="4" fill="#0c447c"/><polygon points="16,18 20,18 20,22" fill="#0c447c"/></svg>',
+  '2F':'<svg viewBox="0 0 40 40"><rect x="6" y="22" width="28" height="4" fill="#0c447c"/><rect x="18" y="8" width="4" height="14" fill="#0c447c"/></svg>',
+  '3F':'<svg viewBox="0 0 40 40"><rect x="18" y="6" width="4" height="28" fill="#0c447c"/></svg>',
+  '4F':'<svg viewBox="0 0 40 40"><rect x="6" y="14" width="28" height="4" fill="#0c447c"/><rect x="18" y="18" width="4" height="14" fill="#0c447c"/></svg>',
+  'PA':'<svg viewBox="0 0 40 40"><rect x="6" y="20" width="28" height="6" fill="#0c447c"/><text x="20" y="16" text-anchor="middle" font-size="9" fill="#0c447c" font-weight="700">PA</text></svg>',
+  'PC':'<svg viewBox="0 0 40 40"><rect x="17" y="6" width="6" height="28" fill="#0c447c"/><text x="32" y="22" text-anchor="middle" font-size="9" fill="#0c447c" font-weight="700">PC</text></svg>',
+  'PF':'<svg viewBox="0 0 40 40"><rect x="17" y="6" width="6" height="28" fill="#0c447c"/><text x="32" y="22" text-anchor="middle" font-size="9" fill="#0c447c" font-weight="700">PF</text></svg>',
+  'All':'<svg viewBox="0 0 40 40"><text x="20" y="26" text-anchor="middle" font-size="13" fill="#0c447c" font-weight="800">All</text></svg>'
+};
+const WIZ_POS = ['1G','2G','3G','4G','5G','6G','6GR','1F','2F','3F','4F','PA','PC','PF','All'];
+const WIZ_JOINTS = [
+  {v:'butt', em:'═', tt:'Butt / Groove', match:/groove|butt|BW|BU/i},
+  {v:'fillet', em:'⌐', tt:'Fillet / T', match:/fillet|FW|^[1-4]?F$/i},
+  {v:'corner', em:'┐', tt:'Corner / Lap', match:/corner|lap/i},
+  {v:'any', em:'＊', tt:'Any', match:/.*/}
+];
+
+let WZ = { step:1, matA:null, matB:null, pos:null, joint:null, thk:null };
+function openWiz(){
+  WZ = { step:1, matA:null, matB:null, pos:null, joint:null, thk:null };
+  document.getElementById('wovl').style.display='flex';
+  renderWizStep();
+}
+function closeWiz(){ document.getElementById('wovl').style.display='none'; }
+
+function renderWizStep(){
+  const t = T[LANG].wz;
+  document.getElementById('wzTitle').textContent = t.title;
+  document.getElementById('wzStepLbl').textContent = t.step(WZ.step);
+  document.getElementById('wzSteps').innerHTML = Array.from({length:5},(_,i)=>`<div class="st ${i<WZ.step?'on':''}"></div>`).join('');
+  const body = document.getElementById('wzBody');
+  let html = '';
+  if (WZ.step===1){
+    html = `<div class="wiztitle">${t.s1t}</div><div class="wizsub">${t.s1s}</div><div class="wizgrid">`+
+      WIZ_MATS.map(m=>`<div class="wizopt ${WZ.matA===m.v?'on':''}" data-v="${m.v}"><div class="icx">${m.em}</div>${esc(m.tt)}</div>`).join('') + `</div>`;
+  } else if (WZ.step===2){
+    html = `<div class="wiztitle">${t.s2t}</div><div class="wizsub">${t.s2s}</div><div class="wizgrid">`+
+      `<div class="wizopt ${WZ.matB==='none'?'on':''}" data-v="none"><div class="icx">↔</div>${esc(t.none)}</div>` +
+      WIZ_MATS.map(m=>`<div class="wizopt ${WZ.matB===m.v?'on':''}" data-v="${m.v}"><div class="icx">${m.em}</div>${esc(m.tt)}</div>`).join('') + `</div>`;
+  } else if (WZ.step===3){
+    html = `<div class="wiztitle">${t.s3t}</div><div class="wizsub">${t.s3s}</div><div class="wizgrid">`+
+      WIZ_POS.map(p=>`<div class="wizopt ${WZ.pos===p?'on':''}" data-v="${p}"><div class="icx">${POS_ICONS[p]||p}</div>${p}</div>`).join('') + `</div>`;
+  } else if (WZ.step===4){
+    html = `<div class="wiztitle">${t.s4t}</div><div class="wizgrid">`+
+      WIZ_JOINTS.map(j=>`<div class="wizopt ${WZ.joint===j.v?'on':''}" data-v="${j.v}"><div class="icx" style="font-size:28px">${j.em}</div>${esc(j.tt)}</div>`).join('') + `</div>`;
+  } else if (WZ.step===5){
+    html = `<div class="wiztitle">${t.s5t}</div><div class="wizsub">${t.s5s}</div>`+
+      `<input class="inp" type="number" id="wzThk" min="0" step="0.1" placeholder="mm" value="${WZ.thk||''}" style="font-size:18px;padding:13px;text-align:center" autofocus>`;
+  }
+  const showBack = WZ.step>1;
+  const last = WZ.step===5;
+  html += `<div class="wizfoot">${showBack?`<button class="btn ghost" id="wzBack">${t.back}</button>`:''}<button class="btn" id="wzNext">${last?t.go:t.next}</button></div>`;
+  body.innerHTML = html;
+  body.querySelectorAll('.wizopt').forEach(o=>{
+    o.addEventListener('click', ()=>{
+      const v = o.dataset.v;
+      if (WZ.step===1) WZ.matA = v;
+      else if (WZ.step===2) WZ.matB = v;
+      else if (WZ.step===3) WZ.pos = v;
+      else if (WZ.step===4) WZ.joint = v;
+      body.querySelectorAll('.wizopt').forEach(x=>x.classList.toggle('on', x===o));
+    });
+  });
+  if (showBack) document.getElementById('wzBack').addEventListener('click', ()=>{ WZ.step--; renderWizStep(); });
+  document.getElementById('wzNext').addEventListener('click', ()=>{
+    if (WZ.step===5){ const v = document.getElementById('wzThk').value; WZ.thk = v?parseFloat(v):null; runWizard(); }
+    else { WZ.step++; renderWizStep(); }
+  });
+}
+
+function runWizard(){
+  const matA = WIZ_MATS.find(m=>m.v===WZ.matA);
+  const matB = WZ.matB && WZ.matB!=='none' ? WIZ_MATS.find(m=>m.v===WZ.matB) : null;
+  const joint = WIZ_JOINTS.find(j=>j.v===WZ.joint);
+  const scored = DB.items.map(x => {
+    let s = 0, pass = true;
+    if (matA){ if (matA.match.test(x.base_metal||'')) s += 2; else pass = false; }
+    if (matB){ if (matB.match.test(x.base_metal||'')) s += 1; }
+    if (WZ.pos && WZ.pos!=='All'){
+      const posList = splitPos(x.position);
+      if (posList.includes(WZ.pos) || posList.some(p=>p.includes(WZ.pos))) s += 1;
+      else if (!posList.length || posList.includes('All')) {}
+      else pass = false;
+    }
+    if (joint && joint.v!=='any'){
+      if (joint.match.test(x.position||'') || (x.tags||[]).some(tg=>joint.match.test(tg))) s += 1;
+    }
+    if (WZ.thk && !thicknessOK(x.thickness, WZ.thk)) pass = false;
+    return pass ? { x, s } : null;
+  }).filter(Boolean).sort((a,b) => b.s - a.s);
+  const results = scored.map(r => ({ ...r.x, _matchScore: r.s }));
+  closeWiz();
+  resetAll();
+  document.getElementById('countWrap').style.display='flex';
+  document.getElementById('countTxt').textContent = results.length ? T[LANG].wz.done(results.length) : T[LANG].wz.none_found;
+  document.getElementById('favSect').style.display='none';
+  document.getElementById('recSect').style.display='none';
+  document.getElementById('catSect').style.display='none';
+  showList(results);
+}
+
+/* ============ PDF viewer + page navigation within a WPS range ============ */
+let pdfState = { href:null, page:1, start:1, end:1, hasRange:false };
+function openPdf(x, href){
+  document.getElementById('pdfNm').textContent = x.id + ' — ' + x.file;
+  const start = x.page || 1;
+  const end = x.page_end || start;
+  pdfState = { href, page:start, start, end, hasRange: !!x.page };
+  loadPdfPage();
+  document.getElementById('pdfDl').href = href;
+  document.getElementById('pdfDl').download = x.file;
+  const showPager = pdfState.hasRange && end > start;
+  document.getElementById('pdfPrev').style.display = showPager?'inline-block':'none';
+  document.getElementById('pdfNext').style.display = showPager?'inline-block':'none';
+  document.getElementById('pdfPg').style.display = showPager?'inline-block':'none';
+  document.getElementById('pdfw').classList.add('open');
+}
+function loadPdfPage(){
+  const url = pdfState.href + '#page=' + pdfState.page + '&zoom=page-fit';
+  document.getElementById('pdfFr').src = url;
+  if (pdfState.hasRange) document.getElementById('pdfPg').textContent = `${pdfState.page} / ${pdfState.end}`;
+}
+function pdfPrev(){ if (pdfState.page > pdfState.start) { pdfState.page--; loadPdfPage(); } }
+function pdfNext(){ if (pdfState.page < pdfState.end) { pdfState.page++; loadPdfPage(); } }
+function closePdf(){
+  document.getElementById('pdfw').classList.remove('open');
+  document.getElementById('pdfFr').src = 'about:blank';
+}
+
+/* ============ Sketch zoom (fullscreen image viewer) ============ */
+let zoomState = { imgs:[], i:0 };
+function openSketchZoom(imgs, i){
+  zoomState = { imgs, i };
+  document.getElementById('szImg').src = 'sketches/' + encodeURIComponent(imgs[i]);
+  document.getElementById('szCt').textContent = (i+1) + ' / ' + imgs.length;
+  document.getElementById('szPrev').style.display = imgs.length>1?'inline-block':'none';
+  document.getElementById('szNext').style.display = imgs.length>1?'inline-block':'none';
+  document.getElementById('szWrap').classList.add('open');
+}
+function closeSketchZoom(){
+  document.getElementById('szWrap').classList.remove('open');
+  document.getElementById('szImg').src = '';
+}
+function szNext(){ if (zoomState.i<zoomState.imgs.length-1){ zoomState.i++; openSketchZoom(zoomState.imgs, zoomState.i); } }
+function szPrev(){ if (zoomState.i>0){ zoomState.i--; openSketchZoom(zoomState.imgs, zoomState.i); } }

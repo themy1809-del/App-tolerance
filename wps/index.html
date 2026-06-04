@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0c447c">
+<title>Thư Viện WPS – Welding Procedure Specifications</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/icon-180.png">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <header class="appbar">
+    <a class="back" href="../" title="Về trang chủ">←</a>
+    <div class="logo">WPS</div>
+    <div>
+      <h1 id="aTitle">Thư Viện WPS</h1>
+      <div class="sub" id="aSub">Welding Procedure Specifications</div>
+    </div>
+    <div class="sp"></div>
+    <div class="lang" role="tablist">
+      <button id="lvi" class="on" data-lang="vi">VI</button>
+      <button id="len" data-lang="en">EN</button>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="hero">
+      <h2 id="hHd">Tra cứu nhanh WPS đã có</h2>
+      <p id="hSub">Không cần nhớ số WPS — bấm "Tìm theo công việc" hoặc chọn nhóm bên dưới.</p>
+    </div>
+
+    <div class="acts">
+      <button class="act primary" id="bWizard">
+        <div class="ic">🧰</div>
+        <div class="nm" id="aWiz">Tìm theo công việc</div>
+        <div class="ds" id="aWizD">Trả lời 4 câu → ra WPS</div>
+      </button>
+      <a class="act" href="qr.html" target="_blank" rel="noopener">
+        <div class="ic">🔳</div>
+        <div class="nm" id="aQr">In QR cho WPS</div>
+        <div class="ds" id="aQrD">Dán lên bản vẽ / phiếu</div>
+      </a>
+      <button class="act" id="bAll">
+        <div class="ic">📚</div>
+        <div class="nm" id="aAll">Xem toàn bộ</div>
+        <div class="ds" id="aAllD">74 WPS</div>
+      </button>
+    </div>
+
+    <div class="search">
+      <span class="mag">🔍</span>
+      <input id="q" type="search" placeholder="Tìm WPS… (số, vật liệu, PQR, code…)" autocomplete="off">
+      <button class="clr" id="qClear" style="display:none">✕</button>
+    </div>
+
+    <div class="filters" id="procRow"></div>
+
+    <details class="more">
+      <summary id="moreLabel">Bộ lọc nâng cao</summary>
+      <div class="body">
+        <div><label class="fld" id="lProj">Dự án</label><select id="fProj"><option value="">— Tất cả —</option></select></div>
+        <div><label class="fld" id="lCode">Code / Tiêu chuẩn</label><select id="fCode"><option value="">— Tất cả —</option></select></div>
+        <div><label class="fld" id="lPos">Tư thế</label><select id="fPos"><option value="">— Tất cả —</option></select></div>
+        <div><label class="fld" id="lMat">Vật liệu cơ bản</label><select id="fMat"><option value="">— Tất cả —</option></select></div>
+        <div><label class="fld" id="lThk">Chiều dày (mm)</label><input id="fThk" class="inp" type="number" min="0" step="0.1" placeholder="vd: 10"></div>
+      </div>
+    </details>
+
+    <div class="count" id="countWrap" style="display:none">
+      <span id="countTxt">0 kết quả</span>
+      <span class="reset" id="resetBtn">Đặt lại bộ lọc</span>
+    </div>
+
+    <div class="section" id="favSect" style="display:none">
+      <h3>★ <span id="lFav">Yêu thích</span> <span class="ct" id="ctFav">0</span></h3>
+      <div class="grid" id="favGrid"></div>
+    </div>
+    <div class="section" id="recSect" style="display:none">
+      <h3>🕘 <span id="lRec">Mở gần đây</span> <span class="ct" id="ctRec">0</span></h3>
+      <div class="grid" id="recGrid"></div>
+    </div>
+
+    <div class="section" id="catSect">
+      <h3>📂 <span id="lCat">Mục lục theo nhóm</span></h3>
+      <div class="mosaic" id="catGrid"></div>
+    </div>
+
+    <div class="grid" id="results" style="display:none"></div>
+    <div class="empty" id="empty" style="display:none">
+      <div class="lg">🗂️</div>
+      <div id="emptyTxt">Không tìm thấy WPS phù hợp.</div>
+    </div>
+
+    <div class="ftr">
+      <span id="ftrTxt">DaiDung Metallic — App Tra cứu Dung sai &amp; WPS</span>
+      ·
+      <a href="../">← Trang chủ</a>
+    </div>
+  </main>
+
+  <div class="ovl" id="ovl" style="display:none" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <div class="mhead">
+        <div class="ti">
+          <h3 id="dId">WPS</h3>
+          <div class="sm" id="dSub">—</div>
+        </div>
+        <button class="mstar" id="dStar" title="Yêu thích">☆</button>
+        <button class="x" onclick="closeModal()">✕</button>
+      </div>
+      <div class="mbody">
+        <div class="kv" id="dKv"></div>
+        <div class="sk-wrap" id="dSketches" style="display:none"></div>
+        <div class="btnrow">
+          <button class="btn" id="dOpen">📄 <span id="bOpen">Xem PDF</span></button>
+          <a class="btn alt" id="dDl" download>⬇ <span id="bDl">Tải về</span></a>
+          <button class="btn ghost" id="dShare">🔗 <span id="bShare">Chép link</span></button>
+        </div>
+        <div class="miss" id="dMiss" style="display:none"></div>
+        <div class="src">
+          <div class="h" id="bSrc">NGUỒN / SOURCE</div>
+          <div id="dSrc"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ovl" id="wovl" style="display:none" onclick="if(event.target===this)closeWiz()">
+    <div class="modal wiz">
+      <div class="mhead">
+        <div class="ti">
+          <h3 id="wzTitle">Tìm WPS theo công việc</h3>
+          <div class="sm" id="wzStepLbl">Bước 1 / 5</div>
+        </div>
+        <button class="x" onclick="closeWiz()">✕</button>
+      </div>
+      <div class="wizsteps" id="wzSteps"></div>
+      <div class="wizbody" id="wzBody"></div>
+    </div>
+  </div>
+
+  <div class="szwrap" id="szWrap" onclick="if(event.target===this)closeSketchZoom()">
+    <button class="sz-x" onclick="closeSketchZoom()">✕</button>
+    <button class="sz-nav sz-prev" id="szPrev" onclick="szPrev()">◀</button>
+    <button class="sz-nav sz-next" id="szNext" onclick="szNext()">▶</button>
+    <span class="sz-ct" id="szCt">1 / 1</span>
+    <img id="szImg" alt="sketch">
+  </div>
+
+  <div class="pdfwrap" id="pdfw">
+    <div class="pdfbar">
+      <button class="pb" onclick="closePdf()">← <span id="bBack">Đóng</span></button>
+      <div class="nm" id="pdfNm">—</div>
+      <button class="pb" id="pdfPrev" title="Trang trước" style="display:none">◀</button>
+      <span class="pb" id="pdfPg" style="display:none">—</span>
+      <button class="pb" id="pdfNext" title="Trang sau" style="display:none">▶</button>
+      <a class="pb" id="pdfDl" download>⬇</a>
+    </div>
+    <iframe id="pdfFr" title="PDF"></iframe>
+  </div>
+
+<script src="wps-index.js?v=5"></script>
+<script src="app2.js?v=5"></script>
+<script src="app.js?v=5"></script>
+</body>
+</html>

@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0c447c">
+<title>Tra Cứu Dung Sai Kết Cấu Thép</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/icon-180.png">
+<style>
+  :root{
+    --bg:#eef1f5; --card:#fff; --ink:#1b2430; --muted:#5f6b7a; --line:#dfe5ec;
+    --brand:#0c447c; --brand2:#185fa5; --soft:#e6f1fb;
+    --pass:#0f6e56; --pass-soft:#e3f6ee; --fail:#aa4322; --fail-soft:#fbeae2;
+    --warn:#8a5a00; --warn-soft:#fdf3e2; --chip:#eef1f5;
+    --r:14px; --sh:0 1px 2px rgba(20,30,45,.07),0 6px 20px rgba(20,30,45,.06);
+    --navh:62px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.5}
+  button{font-family:inherit;cursor:pointer;border:0;background:none}
+  input,select,textarea{font-family:inherit}
+  /* app bar */
+  .appbar{position:sticky;top:0;z-index:40;background:linear-gradient(180deg,#0c447c,#0a3a6b);color:#fff;
+    padding:max(10px,env(safe-area-inset-top)) 14px 10px;display:flex;align-items:center;gap:10px}
+  .appbar .logo{width:30px;height:30px;border-radius:8px;flex:none}
+  .appbar h1{font-size:16px;margin:0;font-weight:700;line-height:1.15}
+  .appbar .sub{font-size:11px;opacity:.8}
+  .appbar .sp{flex:1}
+  .lang{display:flex;background:rgba(255,255,255,.16);border-radius:8px;overflow:hidden}
+  .lang button{color:#fff;padding:6px 11px;font-size:13px;font-weight:700;opacity:.65}
+  .lang button.on{background:#fff;color:var(--brand);opacity:1}
+  /* container */
+  .main{max-width:1180px;margin:0 auto;padding:12px 14px calc(var(--navh) + 24px)}
+  @media(min-width:980px){ .main{padding-bottom:28px} }
+  /* nav */
+  .nav{position:fixed;bottom:0;left:0;right:0;z-index:40;background:#fff;border-top:1px solid var(--line);
+    display:flex;justify-content:space-around;padding:6px 4px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(0,0,0,.05)}
+  .nav button{display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--muted);font-size:11px;font-weight:600;padding:4px 10px;border-radius:10px;flex:1}
+  .nav button .ic{font-size:20px;line-height:1}
+  .nav button.on{color:var(--brand)}
+  .nav button.on .ic{transform:translateY(-1px)}
+  @media(min-width:980px){
+    .nav{position:static;max-width:1180px;margin:10px auto 0;border:1px solid var(--line);border-radius:12px;justify-content:flex-start;gap:4px;padding:6px;box-shadow:var(--sh)}
+    .nav button{flex:none;flex-direction:row;gap:7px;font-size:14px;padding:9px 16px}
+    .nav button .ic{font-size:17px}
+    .nav button.on{background:var(--soft)}
+    body{order:0}
+  }
+  /* search */
+  .search{position:relative;margin:12px 0 10px}
+  .search input{width:100%;padding:13px 14px 13px 42px;border:1px solid var(--line);border-radius:12px;font-size:16px;background:#fff;box-shadow:var(--sh)}
+  .search .mag{position:absolute;left:14px;top:50%;transform:translateY(-50%);opacity:.5;font-size:17px}
+  .filters{display:flex;gap:7px;overflow-x:auto;padding:2px 0 8px;-webkit-overflow-scrolling:touch}
+  .filters::-webkit-scrollbar{display:none}
+  .chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 13px;font-size:13px;font-weight:600;color:#33404e;white-space:nowrap;flex:none}
+  .chip.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+  details.more{margin:0 0 10px;border:1px solid var(--line);border-radius:12px;background:#fff;box-shadow:var(--sh)}
+  details.more>summary{padding:11px 14px;font-weight:600;font-size:13.5px;color:var(--brand);cursor:pointer;list-style:none}
+  details.more>summary::-webkit-details-marker{display:none}
+  details.more>summary::after{content:"▾";float:right;opacity:.6}
+  details.more[open]>summary::after{content:"▴"}
+  .more .body{padding:0 14px 14px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media(max-width:560px){.more .body{grid-template-columns:1fr}}
+  label.fld{display:block;font-size:11.5px;font-weight:700;color:var(--muted);margin:0 0 4px;text-transform:uppercase;letter-spacing:.3px}
+  select,.inp{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;font-size:16px;background:#fff;color:var(--ink)}
+  /* lookup grid */
+  .lookgrid{display:block}
+  @media(min-width:980px){ .lookgrid{display:grid;grid-template-columns:390px 1fr;gap:16px;align-items:start} }
+  .count{font-size:12.5px;color:var(--muted);margin:2px 2px 8px}
+  .cards{display:flex;flex-direction:column;gap:10px}
+  .rcard{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:13px 14px;box-shadow:var(--sh);cursor:pointer;transition:.12s}
+  .rcard:active{transform:scale(.99)}
+  .rcard.on{outline:2px solid var(--brand);background:var(--soft)}
+  .rcard .t{font-weight:700;font-size:14.5px;margin-bottom:5px}
+  .rcard .m{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;color:var(--muted)}
+  .badge{font-size:10.5px;font-weight:800;padding:2px 7px;border-radius:6px;background:var(--soft);color:var(--brand)}
+  .region{font-size:10px;font-weight:800;padding:2px 6px;border-radius:5px;background:#eef1f5;color:#4a5663}
+  .tagf{font-size:11.5px;font-weight:600;color:#445}
+  .warnpill{font-size:10.5px;font-weight:800;color:var(--warn);background:var(--warn-soft);padding:2px 7px;border-radius:6px}
+  .empty{color:var(--muted);text-align:center;padding:46px 18px}
+  /* detail */
+  .detail-pane{}
+  @media(min-width:980px){ .detail-pane{position:sticky;top:74px} }
+  @media(max-width:979px){
+    .detail-pane{position:fixed;inset:0;z-index:50;background:var(--bg);transform:translateX(100%);transition:transform .22s ease;overflow:auto;padding:0}
+    body.detail-open .detail-pane{transform:translateX(0)}
+    body.detail-open{overflow:hidden}
+  }
+  .dhead{display:none}
+  @media(max-width:979px){ .dhead{display:flex;align-items:center;gap:10px;position:sticky;top:0;background:var(--brand);color:#fff;padding:max(10px,env(safe-area-inset-top)) 14px 10px;z-index:2}
+    .dhead button{color:#fff;font-size:15px;font-weight:700;display:flex;align-items:center;gap:6px}
+    .dpad{padding:14px} }
+  @media(min-width:980px){ .dpad{padding:0} }
+  .card{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:14px}
+  .card h2{font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:0;padding:13px 16px 0}
+  .card .cbody{padding:14px 16px}
+  .kv{display:grid;grid-template-columns:120px 1fr;gap:5px 12px;font-size:13.5px}
+  .kv .k{color:var(--muted);font-weight:600}
+  .formula{font-family:Consolas,monospace;background:#0c2238;color:#bfe0ff;padding:3px 8px;border-radius:6px;font-size:13px;display:inline-block}
+  .accept{background:#f4faf7;border:1px solid #cfe8df;border-left:4px solid var(--pass);border-radius:10px;padding:11px 13px;font-size:13.5px;margin-top:12px}
+  .cond{font-size:13px;color:#445;margin-top:10px}
+  .note{font-size:12.5px;color:var(--muted);margin-top:9px}
+  .warn{background:var(--warn-soft);border:1px solid #f0d9a8;border-left:4px solid var(--warn);border-radius:10px;padding:10px 12px;font-size:12.5px;color:#6b4700;margin-top:10px}
+  .evidence{background:#fbfdff;border:1px dashed var(--brand2);border-radius:12px;padding:12px 14px;margin-top:14px}
+  .evidence .h{font-size:11px;font-weight:800;letter-spacing:.5px;color:var(--brand);text-transform:uppercase}
+  .quote{font-style:italic;color:#33404e;border-left:3px solid var(--soft);padding-left:10px;margin-top:8px;font-size:12.5px}
+  /* calculator */
+  .inrow{display:flex;gap:10px;align-items:center;margin:8px 0}
+  .inrow .lab{font-size:12px;color:var(--muted);min-width:120px}
+  .inrow input{flex:1}
+  .res{background:#0c2238;color:#fff;border-radius:12px;padding:14px;text-align:center;margin-top:12px}
+  .res .lbl{font-size:11px;text-transform:uppercase;letter-spacing:.5px;opacity:.7}
+  .res .big{font-size:30px;font-weight:800;margin-top:2px}
+  .res .ex{font-size:12px;opacity:.78;margin-top:3px;font-family:Consolas,monospace;word-break:break-word}
+  .verdict{border-radius:12px;padding:16px;text-align:center;margin-top:12px;font-weight:800;font-size:21px}
+  .verdict.pass{background:var(--pass-soft);color:var(--pass);border:1px solid #b7e0d2}
+  .verdict.fail{background:var(--fail-soft);color:var(--fail);border:1px solid #f0c4b3}
+  .verdict.na{background:#eef1f5;color:#4a5663;border:1px solid var(--line);font-size:15px;font-weight:700}
+  .verdict .sm{display:block;font-weight:600;font-size:13px;margin-top:4px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;background:var(--brand);color:#fff;border-radius:11px;padding:11px 14px;font-size:13.5px;font-weight:700}
+  .btn.alt{background:#fff;color:var(--brand);border:1px solid var(--brand2)}
+  .btn.ghost{background:#eef1f5;color:#33404e}
+  .btn.danger{background:#fbeae2;color:var(--fail)}
+  .btn.block{width:100%}
+  .btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  /* tables */
+  table.t{width:100%;border-collapse:collapse;font-size:13px}
+  table.t th,table.t td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+  table.t th{background:#eef4fa;color:var(--brand);font-size:12px}
+  table.t tr:nth-child(even) td{background:#fafcfe}
+  .grid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+  .stdcard{border:1px solid var(--line);border-radius:12px;padding:14px;background:#fff;box-shadow:var(--sh)}
+  .stdcard .c{font-weight:800;font-size:14px}
+  .stdcard .d{font-size:12.5px;color:var(--muted);margin-top:3px}
+  .sectitle{font-size:18px;font-weight:800;margin:6px 2px 12px}
+  .lead{color:var(--muted);font-size:13.5px;margin:0 2px 12px}
+  /* modal */
+  .ovl{position:fixed;inset:0;z-index:60;background:rgba(15,22,32,.5);display:flex;align-items:flex-end;justify-content:center}
+  @media(min-width:760px){.ovl{align-items:center}}
+  .modal{background:#fff;width:100%;max-width:680px;max-height:92vh;overflow:auto;border-radius:18px 18px 0 0;padding:18px}
+  @media(min-width:760px){.modal{border-radius:18px}}
+  .modal h3{margin:0 0 12px;font-size:18px}
+  .modal label.fld{margin-top:12px}
+  .modal .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .crumb{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#fff;border:1px solid var(--line);border-radius:12px;padding:9px 12px;box-shadow:var(--sh);margin-bottom:12px}
+  .crumb-lab{font-size:13.5px;color:var(--ink)}
+  .crumb-btn{margin-left:auto;background:var(--soft);color:var(--brand);border-radius:9px;padding:8px 13px;font-size:13px;font-weight:700}
+  .hero{text-align:center;padding:10px 0 2px}
+  .hero-t{font-size:22px;font-weight:800;color:var(--brand)}
+  .hero-s{font-size:14px;color:var(--muted);margin:8px auto 0;max-width:660px;line-height:1.5}
+  .grp-h{font-size:12.5px;font-weight:800;color:var(--muted);margin:18px 2px 9px;display:flex;align-items:center;gap:8px;letter-spacing:.4px}
+  .stdpick{background:#fff;border:1px solid var(--line);border-left:5px solid var(--brand);border-radius:12px;padding:13px 14px;box-shadow:var(--sh);cursor:pointer;transition:transform .1s}
+  .stdpick:active{transform:scale(.99)}
+  .stdpick .sp-c{font-weight:800;font-size:15.5px;color:var(--brand)}
+  .stdpick .sp-t{font-size:12.5px;color:var(--muted);margin-top:3px}
+  .stdpick .sp-n{font-size:12px;font-weight:700;color:var(--ink);margin-top:9px}
+  .diagram{background:#fbfdff;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:12px}
+  .diagram .dgh{font-size:11px;font-weight:800;letter-spacing:.4px;color:var(--brand);text-transform:uppercase;margin-bottom:6px}
+  .diagram svg{width:100%;max-width:330px;height:auto;display:block;margin:0 auto}
+  #credit{position:fixed;right:9px;bottom:5px;z-index:30;font-size:10px;color:rgba(27,36,48,0.4);pointer-events:none}
+  @media(max-width:560px){
+    .main{padding-left:10px;padding-right:10px}
+    .appbar h1{font-size:15px}
+    .inrow{flex-direction:column-reverse;align-items:stretch;gap:3px}
+    .inrow .lab{min-width:auto}
+    .inrow input{width:100%}
+    .modal .row2{grid-template-columns:1fr}
+    .modal{padding:14px}
+    .res .big{font-size:26px}
+    .verdict{font-size:19px}
+    .rcard .t{font-size:15px}
+  }
+  @media(max-width:979px){ #credit{bottom:calc(var(--navh) + 6px);background:rgba(255,255,255,0.74);padding:1px 7px;border-radius:7px;color:rgba(27,36,48,0.6)} }
+  @media print{ #credit{display:none} }
+  textarea.inp{min-height:74px;resize:vertical;font-family:Consolas,monospace;font-size:13px}
+  .pin{font-size:26px;letter-spacing:8px;text-align:center}
+  .footer{font-size:11.5px;color:var(--muted);margin-top:18px;padding:12px 2px;border-top:1px solid var(--line)}
+  .hideprint{}
+  #report{display:none}
+  @media print{ .appbar,.nav,.hideprint,.footer,.detail-pane .dhead{display:none!important} body{background:#fff} #report{display:block!important} #app{display:none!important} }
+</style>
+</head>
+<body>
+<div class="appbar"><a href="../" class="dhome" title="Trang chủ" style="color:#fff;font-size:14px;font-weight:600;padding:6px 10px;border-radius:8px;background:rgba(255,255,255,.12);margin-right:8px;text-decoration:none">←</a>
+  <img class="logo" src="../icons/icon-192.png" alt="">
+  <div>
+    <h1 id="abTitle">Tra Cứu Dung Sai</h1>
+    <div class="sub" id="abSub">Steel Tolerance · QC</div>
+  </div>
+  <div class="sp"></div>
+  <div class="lang"><button id="lvi" class="on" onclick="setLang('vi')">VI</button><button id="len" onclick="setLang('en')">EN</button></div>
+</div>
+
+<div id="app" class="main"></div>
+<nav class="nav" id="nav"></nav>
+<div id="credit">Tác giả: Thế Mỹ</div>
+<svg id="svgdefs" width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="stl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f7fa"/><stop offset="0.5" stop-color="#cdd6df"/><stop offset="1" stop-color="#9aa7b3"/></linearGradient><linearGradient id="stlH" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#f4f7fa"/><stop offset="0.5" stop-color="#cdd6df"/><stop offset="1" stop-color="#9aa7b3"/></linearGradient><linearGradient id="wld" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f0c14b"/><stop offset="1" stop-color="#a9781a"/></linearGradient><linearGradient id="cnc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9e2d6"/><stop offset="1" stop-color="#c7bda6"/></linearGradient><pattern id="hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="7" stroke="#8b97a3" stroke-width="0.8" opacity="0.5"/></pattern></defs></svg>
+
+<div id="modalRoot"></div>
+<div id="report" class="main"></div>
+
+<script src="tolerances-data.js"></script>
+<script>
+/* ===== i18n ===== */
+const I18N={
+  nav:{lookup:{vi:"Tra cứu",en:"Lookup"},compare:{vi:"So sánh",en:"Compare"},standards:{vi:"Tiêu chuẩn",en:"Standards"},admin:{vi:"Quản trị",en:"Admin"}},
+  searchPh:{vi:"Tìm: cột, plumb, h/300, undercut…",en:"Search: column, plumb, h/300, undercut…"},
+  moreFilters:{vi:"Bộ lọc nâng cao",en:"More filters"},
+  standard:{vi:"Tiêu chuẩn",en:"Standard"},category:{vi:"Nhóm",en:"Category"},element:{vi:"Cấu kiện",en:"Element"},feature:{vi:"Đặc trưng",en:"Feature"},
+  all:{vi:"Tất cả",en:"All"},results:{vi:"kết quả",en:"results"},
+  pickRule:{vi:"Chọn một dòng dung sai để xem chi tiết và tính toán.",en:"Pick a tolerance to see details and calculate."},
+  noResult:{vi:"Không có dòng nào khớp.",en:"No match."},back:{vi:"Quay lại",en:"Back"},
+  calc:{vi:"Tính & Đánh giá",en:"Calculate & Judge"},inputs:{vi:"Nhập kích thước",en:"Input dimensions"},
+  selClass:{vi:"Cấp dung sai / Class",en:"Tolerance class"},permitted:{vi:"Dung sai cho phép",en:"Permitted"},
+  measured:{vi:"Giá trị đo (sai lệch)",en:"Measured deviation"},enterAll:{vi:"Nhập đủ kích thước",en:"Enter all dimensions"},
+  pass:{vi:"ĐẠT",en:"PASS"},fail:{vi:"KHÔNG ĐẠT",en:"FAIL"},na:{vi:"Tham chiếu định tính",en:"Qualitative reference"},
+  margin:{vi:"Biên độ dư",en:"Margin"},exceed:{vi:"Vượt",en:"Exceeds by"},
+  acceptance:{vi:"Tiêu chí chấp nhận",en:"Acceptance criteria"},conditions:{vi:"Điều kiện áp dụng",en:"Conditions"},
+  evidence:{vi:"Dẫn chứng (truy xuất tiêu chuẩn)",en:"Evidence (traceability)"},clause:{vi:"Điều khoản / Bảng",en:"Clause / Table"},page:{vi:"Trang",en:"Page"},
+  addCmp:{vi:"Thêm so sánh",en:"Add to compare"},printRep:{vi:"In / PDF",en:"Print / PDF"},
+  cmpHint:{vi:"So dung sai cùng một đặc trưng giữa các tiêu chuẩn.",en:"Compare a feature across standards."},
+  cmpEmpty:{vi:"Chưa có dòng nào. Vào Tra cứu → mở 1 dòng → “Thêm so sánh”.",en:"Empty. Lookup → open a row → “Add to compare”."},
+  clear:{vi:"Xóa hết",en:"Clear"},expCsv:{vi:"Xuất CSV",en:"Export CSV"},
+  appIntro:{vi:"Chọn loại dự án để biết cần tham chiếu tiêu chuẩn nào.",en:"Pick a project type to see which standards to reference."},
+  catalogue:{vi:"Danh mục tiêu chuẩn",en:"Standards catalogue"},rows:{vi:"dòng dung sai",en:"tolerance rows"},view:{vi:"Xem",en:"View"},
+  needVerify:{vi:"⚠ Cần đối chiếu bản gốc tiêu chuẩn trước khi nghiệm thu.",en:"⚠ Verify against the original standard before acceptance."},
+  disclaimer:{vi:"Kết quả chỉ mang tính tra cứu. Khi nghiệm thu, ưu tiên execution specification / hợp đồng và bản tiêu chuẩn gốc có kiểm soát.",en:"For reference only. For acceptance, the execution specification / contract and the controlled original standard prevail."},
+  /* admin */
+  adminTitle:{vi:"Quản trị dữ liệu dung sai",en:"Tolerance data admin"},
+  adminLead:{vi:"Khu vực dành cho người cập nhật tiêu chuẩn. Thêm/sửa/xoá, rồi “Xuất dữ liệu” để cập nhật cho cả đội.",en:"For the data maintainer. Add/edit/delete, then “Export data” to update everyone."},
+  setPin:{vi:"Tạo mã PIN quản trị (4 số)",en:"Create admin PIN (4 digits)"},enterPin:{vi:"Nhập mã PIN quản trị",en:"Enter admin PIN"},
+  unlock:{vi:"Mở khoá",en:"Unlock"},wrongPin:{vi:"Sai PIN",en:"Wrong PIN"},lock:{vi:"Khoá",en:"Lock"},changePin:{vi:"Đổi PIN",en:"Change PIN"},
+  addRule:{vi:"＋ Thêm dòng",en:"＋ Add row"},edit:{vi:"Sửa",en:"Edit"},del:{vi:"Xoá",en:"Delete"},save:{vi:"Lưu",en:"Save"},cancel:{vi:"Huỷ",en:"Cancel"},
+  saveDevice:{vi:"💾 Lưu vào máy",en:"💾 Save to device"},exportData:{vi:"⬇ Xuất dữ liệu (.js)",en:"⬇ Export data (.js)"},importData:{vi:"⬆ Nhập dữ liệu",en:"⬆ Import data"},resetData:{vi:"↺ Khôi phục gốc",en:"↺ Reset to original"},
+  savedOk:{vi:"Đã lưu vào máy này.",en:"Saved on this device."},
+  ruleTitleVi:{vi:"Tiêu đề (VI)",en:"Title (VI)"},ruleTitleEn:{vi:"Tiêu đề (EN)",en:"Title (EN)"},
+  elVi:{vi:"Cấu kiện (VI)",en:"Element (VI)"},elEn:{vi:"Cấu kiện (EN)",en:"Element (EN)"},
+  accVi:{vi:"Tiêu chí chấp nhận (VI)",en:"Acceptance (VI)"},accEn:{vi:"Acceptance (EN)",en:"Acceptance (EN)"},
+  condVi:{vi:"Điều kiện (VI)",en:"Conditions (VI)"},
+  kind:{vi:"Loại dung sai",en:"Tolerance kind"},expr:{vi:"Biểu thức / Giá trị",en:"Expression / Value"},unit:{vi:"Đơn vị",en:"Unit"},
+  varsLab:{vi:"Biến (mỗi dòng: ký_hiệu|nhãn VI|nhãn EN|đơn vị|mặc định)",en:"Variables (per line: symbol|label VI|label EN|unit|default)"},
+  tableJson:{vi:"Cấu hình bảng (JSON của permitted)",en:"Table config (permitted JSON)"},
+  clauseNum:{vi:"Số điều khoản / bảng (bắt buộc)",en:"Clause / table no. (required)"},clausePage:{vi:"Trang",en:"Page"},clauseQuote:{vi:"Trích dẫn",en:"Quote"},
+  verifyChk:{vi:"Đánh dấu cần đối chiếu bản gốc (⚠)",en:"Mark needs verification (⚠)"},
+  reqWarn:{vi:"Cần điền: Tiêu chuẩn, Tiêu đề VI, Tiêu chí VI, Số điều khoản.",en:"Required: Standard, Title VI, Acceptance VI, Clause number."},
+  delConfirm:{vi:"Xoá dòng này?",en:"Delete this row?"},
+  reportTitle:{vi:"BIÊN BẢN TRA CỨU DUNG SAI",en:"TOLERANCE CHECK RECORD"},date:{vi:"Ngày",en:"Date"},result:{vi:"Kết quả",en:"Result"},inspector:{vi:"Người kiểm",en:"Inspector"},signature:{vi:"Ký tên",en:"Signature"},
+  installed:{vi:"Đã sẵn sàng dùng offline.",en:"Ready to use offline."}
+};
+const FEATURES={LENGTH:{vi:"Kích thước",en:"Length",ic:"📏"},STRAIGHTNESS:{vi:"Độ thẳng",en:"Straightness",ic:"📐"},FLATNESS:{vi:"Độ phẳng",en:"Flatness",ic:"🧱"},
+  SQUARENESS:{vi:"Vuông góc",en:"Squareness",ic:"⊾"},PLUMB:{vi:"Thẳng đứng",en:"Plumb",ic:"🗼"},CAMBER:{vi:"Độ vồng",en:"Camber",ic:"〰️"},
+  POSITION:{vi:"Vị trí",en:"Position",ic:"🎯"},ANGULAR:{vi:"Góc",en:"Angular",ic:"📐"},PARALLELISM:{vi:"Song song",en:"Parallelism",ic:"🛤️"},
+  TWIST:{vi:"Độ vặn",en:"Twist",ic:"🌀"},GAP:{vi:"Khe hở",en:"Gap",ic:"↔️"},ROUNDNESS:{vi:"Độ tròn",en:"Roundness",ic:"⭕"},WELD:{vi:"Mối hàn",en:"Weld",ic:"🔥"}};
+const CATEGORIES={MANUFACTURING:{vi:"Chế tạo",en:"Manufacturing"},FABRICATION:{vi:"Gia công",en:"Fabrication"},ERECTION:{vi:"Lắp dựng",en:"Erection"},
+  ESSENTIAL:{vi:"Thiết yếu",en:"Essential"},FUNCTIONAL:{vi:"Chức năng",en:"Functional"},GENERAL:{vi:"Chung",en:"General"},WELD:{vi:"Mối hàn",en:"Weld"}};
+/* Sơ đồ vị trí đo theo đặc trưng — điểm đỏ = chỗ đo (symbol-only, song ngữ) */
+const DIAGRAMS={
+ LENGTH:`<svg viewBox="0 0 300 120"><rect x="35" y="42" width="210" height="30" fill="#cdd6df" stroke="#5A6B7B"/><line x1="35" y1="90" x2="245" y2="90" stroke="#8b97a3"/><path d="M35 86v8M245 86v8" stroke="#8b97a3"/><text x="140" y="106" text-anchor="middle" font-size="13" fill="#1b2430">L</text><circle cx="245" cy="57" r="6" fill="#d62828"/><text x="252" y="38" font-size="13" fill="#d62828">Δ</text></svg>`,
+ STRAIGHTNESS:`<svg viewBox="0 0 300 120"><path d="M30 58 Q150 38 270 58" fill="none" stroke="#5A6B7B" stroke-width="6"/><line x1="30" y1="58" x2="270" y2="58" stroke="#8b97a3" stroke-dasharray="5 4"/><line x1="150" y1="48" x2="150" y2="58" stroke="#d62828" stroke-width="2"/><circle cx="150" cy="47" r="6" fill="#d62828"/><text x="158" y="44" font-size="13" fill="#d62828">Δ</text><line x1="30" y1="92" x2="270" y2="92" stroke="#8b97a3"/><path d="M30 88v8M270 88v8" stroke="#8b97a3"/><text x="150" y="108" text-anchor="middle" font-size="12" fill="#1b2430">L</text></svg>`,
+ FLATNESS:`<svg viewBox="0 0 300 120"><line x1="30" y1="46" x2="270" y2="46" stroke="#8b97a3" stroke-dasharray="5 4"/><path d="M30 70 q30 -24 60 0 t60 0 t60 0 t60 0" fill="none" stroke="#5A6B7B" stroke-width="5"/><line x1="90" y1="46" x2="90" y2="58" stroke="#d62828" stroke-width="2"/><circle cx="90" cy="46" r="6" fill="#d62828"/><text x="98" y="42" font-size="13" fill="#d62828">Δ</text></svg>`,
+ SQUARENESS:`<svg viewBox="0 0 300 120"><line x1="55" y1="100" x2="245" y2="100" stroke="#5A6B7B" stroke-width="6"/><line x1="131" y1="100" x2="131" y2="16" stroke="#8b97a3" stroke-dasharray="5 4"/><path d="M120 100 L120 24 L150 20 L150 100 Z" fill="#cdd6df" stroke="#5A6B7B"/><line x1="135" y1="22" x2="153" y2="24" stroke="#d62828" stroke-width="2"/><circle cx="153" cy="24" r="6" fill="#d62828"/><text x="160" y="22" font-size="13" fill="#d62828">Δ</text></svg>`,
+ PLUMB:`<svg viewBox="0 0 300 125"><line x1="82" y1="112" x2="82" y2="18" stroke="#8b97a3" stroke-dasharray="5 4"/><path d="M72 112 L72 24 L102 18 L102 106 Z" fill="#cdd6df" stroke="#5A6B7B"/><line x1="40" y1="112" x2="260" y2="112" stroke="#5A6B7B" stroke-width="4"/><line x1="82" y1="18" x2="92" y2="18" stroke="#d62828" stroke-width="2"/><circle cx="92" cy="18" r="6" fill="#d62828"/><text x="100" y="20" font-size="13" fill="#d62828">Δ</text><text x="112" y="70" font-size="13" fill="#1b2430">h</text></svg>`,
+ CAMBER:`<svg viewBox="0 0 300 120"><path d="M30 80 Q150 40 270 80" fill="none" stroke="#5A6B7B" stroke-width="6"/><line x1="30" y1="80" x2="270" y2="80" stroke="#8b97a3" stroke-dasharray="5 4"/><line x1="150" y1="58" x2="150" y2="80" stroke="#d62828" stroke-width="2"/><circle cx="150" cy="57" r="6" fill="#d62828"/><text x="158" y="54" font-size="13" fill="#d62828">f</text><text x="150" y="102" text-anchor="middle" font-size="12" fill="#1b2430">L</text></svg>`,
+ POSITION:`<svg viewBox="0 0 300 120"><circle cx="150" cy="60" r="34" fill="none" stroke="#8b97a3" stroke-dasharray="4 4"/><line x1="150" y1="18" x2="150" y2="102" stroke="#8b97a3"/><line x1="108" y1="60" x2="192" y2="60" stroke="#8b97a3"/><line x1="150" y1="60" x2="174" y2="44" stroke="#d62828" stroke-width="2"/><circle cx="174" cy="44" r="6" fill="#d62828"/><text x="182" y="40" font-size="13" fill="#d62828">Δ</text></svg>`,
+ ANGULAR:`<svg viewBox="0 0 300 120"><line x1="60" y1="100" x2="240" y2="100" stroke="#5A6B7B" stroke-width="6"/><line x1="90" y1="100" x2="200" y2="30" stroke="#5A6B7B" stroke-width="6"/><line x1="90" y1="100" x2="212" y2="40" stroke="#8b97a3" stroke-dasharray="5 4"/><circle cx="200" cy="30" r="6" fill="#d62828"/><text x="146" y="74" font-size="13" fill="#d62828">Δα</text></svg>`,
+ PARALLELISM:`<svg viewBox="0 0 300 120"><line x1="40" y1="42" x2="260" y2="42" stroke="#5A6B7B" stroke-width="5"/><line x1="40" y1="84" x2="260" y2="72" stroke="#5A6B7B" stroke-width="5"/><line x1="40" y1="84" x2="260" y2="84" stroke="#8b97a3" stroke-dasharray="5 4"/><line x1="256" y1="72" x2="256" y2="84" stroke="#d62828" stroke-width="2"/><circle cx="256" cy="72" r="6" fill="#d62828"/><text x="236" y="64" font-size="13" fill="#d62828">Δ</text></svg>`,
+ TWIST:`<svg viewBox="0 0 300 120"><path d="M40 48 L240 38 L240 72 L40 92 Z" fill="#cdd6df" stroke="#5A6B7B"/><line x1="240" y1="55" x2="240" y2="38" stroke="#d62828" stroke-width="2"/><circle cx="240" cy="38" r="6" fill="#d62828"/><text x="248" y="40" font-size="13" fill="#d62828">Δ</text><text x="140" y="110" text-anchor="middle" font-size="12" fill="#1b2430">L</text></svg>`,
+ GAP:`<svg viewBox="0 0 300 120"><rect x="40" y="42" width="100" height="46" fill="#cdd6df" stroke="#5A6B7B"/><rect x="160" y="42" width="100" height="46" fill="#cdd6df" stroke="#5A6B7B"/><line x1="140" y1="36" x2="160" y2="36" stroke="#d62828" stroke-width="2"/><circle cx="150" cy="65" r="6" fill="#d62828"/><text x="150" y="28" text-anchor="middle" font-size="13" fill="#d62828">g</text></svg>`,
+ ROUNDNESS:`<svg viewBox="0 0 300 130"><circle cx="150" cy="66" r="44" fill="none" stroke="#8b97a3" stroke-dasharray="4 4"/><ellipse cx="150" cy="66" rx="54" ry="36" fill="none" stroke="#5A6B7B" stroke-width="4"/><line x1="96" y1="66" x2="204" y2="66" stroke="#d62828" stroke-width="2"/><line x1="150" y1="30" x2="150" y2="102" stroke="#d62828" stroke-width="2"/><circle cx="204" cy="66" r="5" fill="#d62828"/><circle cx="150" cy="30" r="5" fill="#d62828"/><text x="206" y="60" font-size="11" fill="#d62828">d max</text><text x="156" y="26" font-size="11" fill="#d62828">d min</text></svg>`,
+ WELD:`<svg viewBox="0 0 300 120"><rect x="40" y="62" width="120" height="40" fill="#cdd6df" stroke="#5A6B7B"/><rect x="120" y="12" width="40" height="90" fill="#cdd6df" stroke="#5A6B7B"/><path d="M120 62 L160 62 L120 102 Z" fill="#9aa7b3" stroke="#5A6B7B"/><circle cx="120" cy="62" r="6" fill="#d62828"/><text x="88" y="52" font-size="12" fill="#d62828">Δ</text></svg>`
+};
+/* Sơ đồ CHUYÊN BIỆT theo từng dạng đo (điểm đỏ = chỗ đo) */
+const DIAG={
+ depth:`<svg viewBox="0 0 300 130"><rect x="86" y="30" width="128" height="14" fill="url(#stlH)" stroke="#5A6B7B"/><rect x="86" y="92" width="128" height="14" fill="url(#stlH)" stroke="#5A6B7B"/><rect x="143" y="44" width="14" height="48" fill="url(#stl)" stroke="#5A6B7B"/><line x1="64" y1="30" x2="80" y2="30" stroke="#9aa7b3"/><line x1="64" y1="106" x2="80" y2="106" stroke="#9aa7b3"/><line x1="70" y1="32" x2="70" y2="104" stroke="#5b6b7b"/><path d="M70 30l-3 7h6z" fill="#5b6b7b"/><path d="M70 106l-3 -7h6z" fill="#5b6b7b"/><text x="50" y="72" font-size="13" fill="#1b2430">h</text><circle cx="150" cy="32" r="5.5" fill="#d62828" stroke="#fff" stroke-width="1.5"/><circle cx="150" cy="104" r="5.5" fill="#d62828" stroke="#fff" stroke-width="1.5"/></svg>`,
+ flangew:`<svg viewBox="0 0 300 130"><rect x="70" y="46" width="160" height="15" fill="url(#stlH)" stroke="#5A6B7B"/><rect x="143" y="61" width="14" height="46" fill="url(#stl)" stroke="#5A6B7B"/><rect x="70" y="107" width="160" height="14" fill="url(#stlH)" stroke="#5A6B7B"/><line x1="70" y1="44" x2="70" y2="30" stroke="#9aa7b3"/><line x1="230" y1="44" x2="230" y2="30" stroke="#9aa7b3"/><line x1="72" y1="34" x2="228" y2="34" stroke="#5b6b7b"/><path d="M70 34l7 -3v6z" fill="#5b6b7b"/><path d="M230 34l-7 -3v6z" fill="#5b6b7b"/><text x="150" y="28" text-anchor="middle" font-size="13" fill="#1b2430">b</text><circle cx="70" cy="53" r="5.5" fill="#d62828" stroke="#fff" stroke-width="1.5"/><circle cx="230" cy="53" r="5.5" fill="#d62828" stroke="#fff" stroke-width="1.5"/></svg>`,
+ webecc:`<svg viewBox="0 0 300 130"><rect x="70" y="40" width="160" height="14" fill="url(#stlH)" stroke="#5A6B7B"/><rect x="168" y="54" width="14" height="52" fill="url(#stl)" stroke="#5A6B7B"/><line x1="150" y1="36" x2="150" y2="112" stroke="#8b97a3" stroke-dasharray="4 4"/><line x1="150" y1="100" x2="175" y2="100" stroke="#d62828" stroke-width="2"/><path d="M175 100l-7 -3v6z" fill="#d62828"/><circle cx="175" cy="60" r="5.5" fill="#d62828" stroke="#fff" stroke-width="1.5"/><text x="156" y="120" font-size="12" fill="#d62828">e</text><text x="118" y="34" font-size="11" fill="#1b2430">b/2</text></svg>`,
+ flange_sq:`<svg viewBox="0 0 300 130"><rect x="143" y="34" width="14" height="74" fill="url(#stl)" stroke="#5A6B7B"/><polygon points="78,44 222,26 222,40 78,58" fill="url(#stlH)" stroke="#5A6B7B"/><line x1="78" y1="44" x2="240" y2="44" stroke="#8b97a3" stroke-dasharray="4 4"/><line x1="222" y1="26" x2="222" y2="44" stroke="#d62828" stroke-width="2"/><path d="M222 26l-3 7h6z" fill="#d62828"/><circle cx="222" cy="26" r="5.5" fill="#d62828" stroke="#fff" stroke-width="1.5"/><text x="227" y="24" font-size="12" fill="#d62828">Δ</text><text x="150" y="123" text-anchor="middle" font-size="11" fill="#5A6B7B">nghiêng cánh</text></svg>`,
+ flange_cup:`<svg viewBox="0 0 300 130"><rect x="143" y="46" width="14" height="62" fill="url(#stl)" stroke="#5A6B7B"/><path d="M78 34 Q150 56 222 34" fill="none" stroke="#7d8a97" stroke-width="7" stroke-linecap="round"/><line x1="78" y1="34" x2="222" y2="34" stroke="#8b97a3" stroke-dasharray="4 4"/><line x1="150" y1="34" x2="150" y2="49" stroke="#d62828" stroke-width="2"/><path d="M150 49l-3 -7h6z" fill="#d62828"/><circle cx="150" cy="49" r="5.5" fill="#d62828" stroke="#fff" stroke-width="1.5"/><text x="158" y="46" font-size="12" fill="#d62828">Δ</text><text x="150" y="123" text-anchor="middle" font-size="11" fill="#5A6B7B">cụp cánh</text></svg>`,
+ web_vert:`<svg viewBox="0 0 300 130"><rect x="70" y="96" width="160" height="13" fill="url(#stlH)" stroke="#5A6B7B"/><line x1="150" y1="96" x2="150" y2="26" stroke="#8b97a3" stroke-dasharray="4 4"/><polygon points="144,96 156,96 172,28 160,28" fill="url(#stl)" stroke="#5A6B7B"/><line x1="150" y1="28" x2="166" y2="28" stroke="#d62828" stroke-width="2"/><path d="M166 28l-7 -3v6z" fill="#d62828"/><circle cx="166" cy="28" r="5.5" fill="#d62828" stroke="#fff" stroke-width="1.5"/><text x="172" y="28" font-size="12" fill="#d62828">Δ</text></svg>`,
+ plate_curv:`<svg viewBox="0 0 300 130"><path d="M150 22 Q180 65 150 108" fill="none" stroke="#7d8a97" stroke-width="8" stroke-linecap="round"/><line x1="150" y1="22" x2="150" y2="108" stroke="#8b97a3" stroke-dasharray="5 4"/><line x1="150" y1="65" x2="167" y2="65" stroke="#d62828" stroke-width="2"/><path d="M167 65l-7 -3v6z" fill="#d62828"/><circle cx="168" cy="65" r="5.5" fill="#d62828" stroke="#fff" stroke-width="1.5"/><text x="173" y="62" font-size="12" fill="#d62828">Δ</text><text x="120" y="68" font-size="11" fill="#1b2430">b</text></svg>`,
+ plate_oop:`<svg viewBox="0 0 300 130"><rect x="50" y="36" width="200" height="64" fill="url(#stl)" stroke="#5A6B7B"/><line x1="62" y1="48" x2="238" y2="48" stroke="#caa64b" stroke-width="4"/><path d="M92 48 Q150 28 208 48" fill="none" stroke="#5A6B7B" stroke-width="3" stroke-dasharray="5 3"/><line x1="150" y1="48" x2="150" y2="32" stroke="#d62828" stroke-width="2"/><path d="M150 32l-3 7h6z" fill="#d62828"/><circle cx="150" cy="32" r="5.5" fill="#d62828" stroke="#fff" stroke-width="1.5"/><text x="158" y="30" font-size="12" fill="#d62828">Δ</text><text x="244" y="51" font-size="10" fill="#b8860b">thước</text></svg>`,
+ web_dist:`<svg viewBox="0 0 300 130"><line x1="40" y1="54" x2="260" y2="54" stroke="#caa64b" stroke-width="4"/><path d="M40 54 L108 54 Q150 32 192 54 L260 54" fill="none" stroke="#7d8a97" stroke-width="5"/><line x1="150" y1="54" x2="150" y2="40" stroke="#d62828" stroke-width="2"/><path d="M150 40l-3 7h6z" fill="#d62828"/><circle cx="150" cy="40" r="5.5" fill="#d62828" stroke="#fff" stroke-width="1.5"/><text x="158" y="38" font-size="12" fill="#d62828">Δ</text><line x1="108" y1="82" x2="192" y2="82" stroke="#5b6b7b"/><path d="M108 82l7 -3v6z" fill="#5b6b7b"/><path d="M192 82l-7 -3v6z" fill="#5b6b7b"/><text x="150" y="98" text-anchor="middle" font-size="11" fill="#1b2430">L</text></svg>`,
+ member_str:`<svg viewBox="0 0 300 130"><rect x="30" y="34" width="240" height="8" fill="#f3d27a" stroke="#b8860b"/><line x1="66" y1="36" x2="66" y2="42" stroke="#b8860b"/><line x1="102" y1="36" x2="102" y2="42" stroke="#b8860b"/><line x1="138" y1="36" x2="138" y2="42" stroke="#b8860b"/><line x1="174" y1="36" x2="174" y2="42" stroke="#b8860b"/><line x1="210" y1="36" x2="210" y2="42" stroke="#b8860b"/><line x1="246" y1="36" x2="246" y2="42" stroke="#b8860b"/><path d="M30 50 Q150 78 270 50" fill="none" stroke="#7d8a97" stroke-width="8"/><line x1="150" y1="42" x2="150" y2="68" stroke="#d62828" stroke-width="2"/><path d="M150 68l-3 -7h6z" fill="#d62828"/><circle cx="150" cy="68" r="5.5" fill="#d62828" stroke="#fff" stroke-width="1.5"/><text x="156" y="60" font-size="12" fill="#d62828">Δ</text><line x1="30" y1="98" x2="270" y2="98" stroke="#5b6b7b"/><path d="M30 98l7 -3v6z" fill="#5b6b7b"/><path d="M270 98l-7 -3v6z" fill="#5b6b7b"/><text x="150" y="114" text-anchor="middle" font-size="12" fill="#1b2430">L</text></svg>`,
+ length:`<svg viewBox="0 0 300 130"><rect x="35" y="48" width="210" height="30" fill="url(#stlH)" stroke="#5A6B7B"/><line x1="35" y1="86" x2="35" y2="100" stroke="#9aa7b3"/><line x1="245" y1="86" x2="245" y2="100" stroke="#9aa7b3"/><line x1="37" y1="94" x2="243" y2="94" stroke="#5b6b7b"/><path d="M35 94l7 -3v6z" fill="#5b6b7b"/><path d="M245 94l-7 -3v6z" fill="#5b6b7b"/><text x="140" y="110" text-anchor="middle" font-size="13" fill="#1b2430">L</text><circle cx="35" cy="63" r="5.5" fill="#d62828" stroke="#fff" stroke-width="1.5"/><circle cx="245" cy="63" r="5.5" fill="#d62828" stroke="#fff" stroke-width="1.5"/></svg>`,
+ camber:`<svg viewBox="0 0 300 130"><path d="M30 84 Q150 40 270 84" fill="none" stroke="#7d8a97" stroke-width="8"/><line x1="30" y1="84" x2="270" y2="84" stroke="#8b97a3" stroke-dasharray="5 4"/><line x1="150" y1="84" x2="150" y2="60" stroke="#d62828" stroke-width="2"/><path d="M150 60l-3 7h6z" fill="#d62828"/><circle cx="150" cy="60" r="5.5" fill="#d62828" stroke="#fff" stroke-width="1.5"/><text x="158" y="58" font-size="13" fill="#d62828">f</text><line x1="30" y1="100" x2="270" y2="100" stroke="#5b6b7b"/><path d="M30 100l7 -3v6z" fill="#5b6b7b"/><path d="M270 100l-7 -3v6z" fill="#5b6b7b"/><text x="150" y="116" text-anchor="middle" font-size="12" fill="#1b2430">L</text></svg>`,
+ twist:`<svg viewBox="0 0 300 130"><polygon points="40,44 240,34 240,80 40,98" fill="url(#stlH)" stroke="#5A6B7B"/><line x1="40" y1="71" x2="240" y2="57" stroke="#9aa7b3" stroke-dasharray="3 3"/><line x1="240" y1="57" x2="240" y2="34" stroke="#d62828" stroke-width="2"/><path d="M240 34l-3 7h6z" fill="#d62828"/><circle cx="240" cy="34" r="5.5" fill="#d62828" stroke="#fff" stroke-width="1.5"/><text x="246" y="34" font-size="12" fill="#d62828">Δ</text><text x="135" y="120" text-anchor="middle" font-size="11" fill="#5A6B7B">vặn (twist)</text></svg>`,
+ end_sq:`<svg viewBox="0 0 300 130"><rect x="40" y="50" width="178" height="36" fill="url(#stlH)" stroke="#5A6B7B"/><polygon points="218,50 240,42 240,94 218,86" fill="url(#stl)" stroke="#5A6B7B"/><line x1="218" y1="42" x2="218" y2="96" stroke="#8b97a3" stroke-dasharray="4 4"/><path d="M210 50h8v8" fill="none" stroke="#1b2430"/><line x1="218" y1="44" x2="240" y2="42" stroke="#d62828" stroke-width="2"/><path d="M240 42l-7 -1l1 6z" fill="#d62828"/><circle cx="240" cy="42" r="5.5" fill="#d62828" stroke="#fff" stroke-width="1.5"/><text x="246" y="40" font-size="12" fill="#d62828">Δ</text><text x="248" y="74" font-size="11" fill="#1b2430">D</text></svg>`,
+ bearing_gap:`<svg viewBox="0 0 300 130"><rect x="50" y="68" width="200" height="34" fill="url(#stlH)" stroke="#5A6B7B"/><rect x="48" y="56" width="204" height="7" fill="#f3d27a" stroke="#b8860b"/><path d="M118 63 Q150 73 182 63" fill="#fff" stroke="#5A6B7B" stroke-dasharray="2 2"/><line x1="150" y1="63" x2="150" y2="71" stroke="#d62828" stroke-width="2"/><circle cx="150" cy="71" r="5.5" fill="#d62828" stroke="#fff" stroke-width="1.5"/><text x="158" y="68" font-size="12" fill="#d62828">Δ</text><text x="244" y="60" font-size="10" fill="#b8860b">thước</text></svg>`,
+ box_dim:`<svg viewBox="0 0 300 130"><rect x="90" y="36" width="120" height="64" fill="url(#stl)" stroke="#5A6B7B" stroke-width="2"/><rect x="104" y="50" width="92" height="36" fill="#eef2f6" stroke="#5A6B7B"/><line x1="90" y1="32" x2="90" y2="20" stroke="#9aa7b3"/><line x1="210" y1="32" x2="210" y2="20" stroke="#9aa7b3"/><line x1="92" y1="24" x2="208" y2="24" stroke="#5b6b7b"/><path d="M90 24l7 -3v6z" fill="#5b6b7b"/><path d="M210 24l-7 -3v6z" fill="#5b6b7b"/><text x="150" y="18" text-anchor="middle" font-size="12" fill="#1b2430">b</text><circle cx="90" cy="42" r="5.5" fill="#d62828" stroke="#fff" stroke-width="1.5"/><circle cx="210" cy="42" r="5.5" fill="#d62828" stroke="#fff" stroke-width="1.5"/></svg>`,
+ box_diag:`<svg viewBox="0 0 300 130"><rect x="90" y="28" width="120" height="74" fill="url(#stl)" stroke="#5A6B7B" stroke-width="2"/><line x1="90" y1="28" x2="210" y2="102" stroke="#5b6b7b" stroke-dasharray="4 3"/><line x1="210" y1="28" x2="90" y2="102" stroke="#d62828" stroke-width="2"/><text x="112" y="56" font-size="11" fill="#1b2430">d1</text><text x="176" y="56" font-size="11" fill="#d62828">d2</text><circle cx="90" cy="28" r="5" fill="#d62828" stroke="#fff" stroke-width="1.3"/><circle cx="210" cy="102" r="5" fill="#d62828" stroke="#fff" stroke-width="1.3"/></svg>`,
+ presbrake_int:`<svg viewBox="0 0 300 130"><path d="M80 28 L80 100 L220 100 L220 28" fill="none" stroke="#7d8a97" stroke-width="9" stroke-linejoin="round"/><line x1="88" y1="76" x2="212" y2="76" stroke="#5b6b7b"/><path d="M86 76l7 -3v6z" fill="#5b6b7b"/><path d="M214 76l-7 -3v6z" fill="#5b6b7b"/><text x="150" y="70" text-anchor="middle" font-size="12" fill="#1b2430">A</text><circle cx="86" cy="92" r="5.5" fill="#d62828" stroke="#fff" stroke-width="1.5"/><circle cx="214" cy="92" r="5.5" fill="#d62828" stroke="#fff" stroke-width="1.5"/></svg>`,
+ presbrake_out:`<svg viewBox="0 0 300 130"><path d="M80 28 L80 100 L220 100 L220 28" fill="none" stroke="#7d8a97" stroke-width="9" stroke-linejoin="round"/><line x1="62" y1="28" x2="62" y2="100" stroke="#5b6b7b"/><path d="M62 28l-3 7h6z" fill="#5b6b7b"/><path d="M62 100l-3 -7h6z" fill="#5b6b7b"/><text x="48" y="68" font-size="12" fill="#1b2430">B</text><circle cx="80" cy="34" r="5.5" fill="#d62828" stroke="#fff" stroke-width="1.5"/></svg>`,
+ hole_pos:`<svg viewBox="0 0 300 130"><line x1="84" y1="66" x2="216" y2="66" stroke="#8b97a3" stroke-dasharray="4 3"/><line x1="150" y1="26" x2="150" y2="106" stroke="#8b97a3" stroke-dasharray="4 3"/><circle cx="174" cy="50" r="27" fill="#eef2f6" stroke="#5A6B7B" stroke-width="2"/><line x1="150" y1="66" x2="174" y2="50" stroke="#d62828" stroke-width="2"/><circle cx="174" cy="50" r="4.5" fill="#d62828" stroke="#fff" stroke-width="1.3"/><text x="180" y="46" font-size="12" fill="#d62828">Δ</text></svg>`,
+ hole_edge:`<svg viewBox="0 0 300 130"><rect x="40" y="34" width="220" height="64" fill="url(#stl)" stroke="#5A6B7B"/><line x1="60" y1="34" x2="60" y2="98" stroke="#5A6B7B" stroke-width="3"/><circle cx="124" cy="66" r="18" fill="#eef2f6" stroke="#5A6B7B" stroke-width="2"/><line x1="60" y1="84" x2="124" y2="84" stroke="#d62828" stroke-width="2"/><path d="M60 84l7 -3v6z" fill="#d62828"/><path d="M124 84l-7 -3v6z" fill="#d62828"/><text x="86" y="80" font-size="12" fill="#d62828">a</text><circle cx="124" cy="66" r="4.5" fill="#d62828" stroke="#fff" stroke-width="1.3"/></svg>`,
+ hole_oval:`<svg viewBox="0 0 300 130"><rect x="40" y="30" width="220" height="72" fill="url(#stl)" stroke="#5A6B7B"/><ellipse cx="150" cy="66" rx="56" ry="30" fill="#eef2f6" stroke="#5A6B7B" stroke-width="2"/><line x1="96" y1="66" x2="204" y2="66" stroke="#d62828" stroke-width="2"/><path d="M96 66l7 -3v6z" fill="#d62828"/><path d="M204 66l-7 -3v6z" fill="#d62828"/><line x1="150" y1="38" x2="150" y2="94" stroke="#d62828" stroke-width="2"/><text x="150" y="60" text-anchor="middle" font-size="11" fill="#d62828">L1</text><text x="156" y="92" font-size="11" fill="#d62828">L2</text></svg>`,
+ col_splice_ecc:`<svg viewBox="0 0 300 130"><rect x="128" y="22" width="32" height="46" fill="url(#stl)" stroke="#5A6B7B"/><rect x="142" y="68" width="32" height="46" fill="url(#stl)" stroke="#5A6B7B"/><line x1="116" y1="68" x2="200" y2="68" stroke="#5A6B7B" stroke-width="2"/><line x1="144" y1="16" x2="144" y2="116" stroke="#8b97a3" stroke-dasharray="4 4"/><line x1="144" y1="92" x2="158" y2="92" stroke="#d62828" stroke-width="2"/><path d="M158 92l-7 -3v6z" fill="#d62828"/><circle cx="158" cy="68" r="5" fill="#d62828" stroke="#fff" stroke-width="1.3"/><text x="162" y="100" font-size="12" fill="#d62828">e</text></svg>`,
+ baseplate_ecc:`<svg viewBox="0 0 300 130"><rect x="40" y="100" width="220" height="14" fill="url(#cnc)" stroke="#5A6B7B"/><rect x="88" y="88" width="124" height="13" fill="url(#stlH)" stroke="#5A6B7B"/><rect x="160" y="32" width="18" height="56" fill="url(#stl)" stroke="#5A6B7B"/><line x1="150" y1="24" x2="150" y2="100" stroke="#8b97a3" stroke-dasharray="4 4"/><line x1="150" y1="52" x2="169" y2="52" stroke="#d62828" stroke-width="2"/><path d="M169 52l-7 -3v6z" fill="#d62828"/><circle cx="169" cy="52" r="5" fill="#d62828" stroke="#fff" stroke-width="1.3"/><text x="173" y="48" font-size="12" fill="#d62828">e</text></svg>`,
+ plate_misalign:`<svg viewBox="0 0 300 130"><rect x="40" y="52" width="112" height="26" fill="url(#stlH)" stroke="#5A6B7B"/><rect x="148" y="62" width="112" height="26" fill="url(#stlH)" stroke="#5A6B7B"/><line x1="152" y1="48" x2="152" y2="92" stroke="#d62828" stroke-width="2"/><path d="M152 50l-3 6h6z" fill="#d62828"/><path d="M152 90l-3 -6h6z" fill="#d62828"/><circle cx="152" cy="56" r="4.5" fill="#d62828" stroke="#fff" stroke-width="1.3"/><text x="158" y="48" font-size="12" fill="#d62828">e</text></svg>`,
+ roundness:`<svg viewBox="0 0 300 130"><circle cx="150" cy="64" r="44" fill="none" stroke="#8b97a3" stroke-dasharray="4 4"/><ellipse cx="150" cy="64" rx="56" ry="36" fill="url(#stl)" fill-opacity="0.5" stroke="#5A6B7B" stroke-width="3"/><line x1="94" y1="64" x2="206" y2="64" stroke="#d62828" stroke-width="2"/><path d="M94 64l7 -3v6z" fill="#d62828"/><path d="M206 64l-7 -3v6z" fill="#d62828"/><line x1="150" y1="28" x2="150" y2="100" stroke="#d62828" stroke-width="2"/><text x="150" y="22" text-anchor="middle" font-size="11" fill="#d62828">d min</text><text x="206" y="62" font-size="11" fill="#d62828">d max</text></svg>`,
+ lattice:`<svg viewBox="0 0 300 130"><line x1="30" y1="48" x2="270" y2="48" stroke="#7d8a97" stroke-width="6"/><line x1="30" y1="96" x2="270" y2="96" stroke="#7d8a97" stroke-width="6"/><path d="M30 96 L70 48 L110 96 L150 48 L190 96 L230 48 L270 96" fill="none" stroke="#7d8a97" stroke-width="4"/><line x1="150" y1="48" x2="150" y2="32" stroke="#d62828" stroke-width="2"/><path d="M150 32l-3 7h6z" fill="#d62828"/><circle cx="150" cy="48" r="5" fill="#d62828" stroke="#fff" stroke-width="1.3"/><text x="156" y="32" font-size="12" fill="#d62828">Δ</text></svg>`,
+ col_plumb:`<svg viewBox="0 0 300 130"><rect x="30" y="110" width="240" height="10" fill="url(#cnc)" stroke="#5A6B7B"/><path d="M32 120l9 7M58 120l9 7M84 120l9 7M110 120l9 7M136 120l9 7M162 120l9 7M188 120l9 7M214 120l9 7M240 120l9 7" stroke="#9aa7b3"/><line x1="80" y1="110" x2="80" y2="22" stroke="#8b97a3" stroke-dasharray="5 4"/><path d="M70 110 L70 28 L100 22 L100 104 Z" fill="url(#stl)" stroke="#5A6B7B"/><line x1="80" y1="22" x2="92" y2="22" stroke="#d62828" stroke-width="2"/><path d="M92 22l-7 -3v6z" fill="#d62828"/><circle cx="80" cy="106" r="5" fill="#d62828" stroke="#fff" stroke-width="1.3"/><text x="97" y="22" font-size="12" fill="#d62828">Δ</text><text x="108" y="70" font-size="12" fill="#1b2430">h</text><g stroke="#3a4654" stroke-width="2" fill="#4a5666"><rect x="206" y="74" width="26" height="13" rx="2"/><line x1="232" y1="80" x2="246" y2="80"/><circle cx="248" cy="80" r="2.5" fill="#3a4654" stroke="none"/><line x1="212" y1="87" x2="206" y2="110"/><line x1="219" y1="87" x2="219" y2="110"/><line x1="226" y1="87" x2="232" y2="110"/></g><text x="206" y="124" font-size="9" fill="#5A6B7B">máy kinh vĩ</text></svg>`,
+ bldg_plumb:`<svg viewBox="0 0 300 130"><rect x="30" y="112" width="240" height="10" fill="url(#cnc)" stroke="#5A6B7B"/><path d="M34 122l8 7M64 122l8 7M94 122l8 7M124 122l8 7M154 122l8 7M184 122l8 7M214 122l8 7M244 122l8 7" stroke="#9aa7b3"/><line x1="60" y1="112" x2="82" y2="20" stroke="#7d8a97" stroke-width="7"/><line x1="240" y1="112" x2="262" y2="20" stroke="#7d8a97" stroke-width="7"/><line x1="71" y1="66" x2="251" y2="66" stroke="#7d8a97" stroke-width="5"/><line x1="82" y1="20" x2="262" y2="20" stroke="#7d8a97" stroke-width="5"/><line x1="60" y1="112" x2="60" y2="14" stroke="#8b97a3" stroke-dasharray="4 4"/><line x1="60" y1="18" x2="82" y2="18" stroke="#d62828" stroke-width="2"/><path d="M82 18l-7 -3v6z" fill="#d62828"/><circle cx="82" cy="20" r="5" fill="#d62828" stroke="#fff" stroke-width="1.3"/><text x="88" y="16" font-size="12" fill="#d62828">Δ</text><text x="42" y="68" font-size="11" fill="#1b2430">H</text></svg>`,
+ beam_level:`<svg viewBox="0 0 300 130"><line x1="40" y1="56" x2="260" y2="56" stroke="#8b97a3" stroke-dasharray="4 4"/><rect x="60" y="62" width="180" height="18" fill="url(#stlH)" stroke="#5A6B7B"/><rect x="118" y="46" width="64" height="13" rx="3" fill="#f3d27a" stroke="#b8860b"/><rect x="142" y="48" width="16" height="9" rx="4" fill="#bfe3ff" stroke="#5A6B7B"/><circle cx="150" cy="52" r="2.6" fill="#fff" stroke="#5A6B7B"/><line x1="240" y1="56" x2="240" y2="70" stroke="#d62828" stroke-width="2"/><circle cx="240" cy="70" r="5" fill="#d62828" stroke="#fff" stroke-width="1.3"/><text x="246" y="66" font-size="12" fill="#d62828">Δ</text><text x="118" y="96" font-size="9" fill="#b8860b">nivô</text></svg>`,
+ anchor_h:`<svg viewBox="0 0 300 130"><rect x="40" y="74" width="220" height="42" fill="url(#cnc)" stroke="#5A6B7B"/><rect x="40" y="74" width="220" height="42" fill="url(#hatch)" stroke="none"/><rect x="146" y="22" width="9" height="58" fill="url(#stl)" stroke="#5A6B7B"/><path d="M146 30h9M146 36h9M146 42h9M146 48h9" stroke="#8b97a3" stroke-width="0.7"/><line x1="150" y1="16" x2="150" y2="74" stroke="#8b97a3" stroke-dasharray="4 4"/><line x1="150" y1="28" x2="168" y2="28" stroke="#d62828" stroke-width="2"/><path d="M168 28l-7 -3v6z" fill="#d62828"/><circle cx="150" cy="24" r="5" fill="#d62828" stroke="#fff" stroke-width="1.3"/><text x="172" y="26" font-size="12" fill="#d62828">Δ</text></svg>`,
+ weld_undercut:`<svg viewBox="0 0 300 130"><rect x="34" y="68" width="120" height="42" fill="url(#stlH)" stroke="#5A6B7B"/><rect x="34" y="68" width="120" height="42" fill="url(#hatch)" stroke="none"/><rect x="116" y="16" width="38" height="94" fill="url(#stl)" stroke="#5A6B7B"/><rect x="116" y="16" width="38" height="94" fill="url(#hatch)" stroke="none"/><path d="M116 66 L116 108 L154 108 Q126 90 116 66 Z" fill="url(#wld)" stroke="#8a6d1e"/><path d="M120 102 Q132 98 142 106 M124 96 Q134 94 141 100" fill="none" stroke="#8a6d1e" stroke-width="0.7" opacity="0.7"/><path d="M116 66 q-6 4 -2 9" fill="#fff" stroke="#d62828" stroke-width="1.6"/><circle cx="115" cy="65" r="4.5" fill="#d62828" stroke="#fff" stroke-width="1.3"/><circle cx="234" cy="52" r="34" fill="#fff" stroke="#5A6B7B"/><line x1="138" y1="60" x2="202" y2="46" stroke="#9aa7b3" stroke-dasharray="3 3"/><path d="M216 70 L216 40 L228 40 q-3 8 7 11" fill="none" stroke="#8a6d1e" stroke-width="2.5"/><path d="M228 40 q-7 4 -1 11" fill="none" stroke="#d62828" stroke-width="2"/><text x="206" y="88" font-size="10" fill="#d62828">undercut</text></svg>`,
+ weld_reinf:`<svg viewBox="0 0 300 130"><rect x="36" y="64" width="104" height="34" fill="url(#stlH)" stroke="#5A6B7B"/><rect x="36" y="64" width="104" height="34" fill="url(#hatch)" stroke="none"/><rect x="160" y="64" width="104" height="34" fill="url(#stlH)" stroke="#5A6B7B"/><rect x="160" y="64" width="104" height="34" fill="url(#hatch)" stroke="none"/><path d="M140 64 L160 64 L160 98 L140 98 Z" fill="url(#wld)"/><path d="M138 64 Q150 42 162 64 Z" fill="url(#wld)" stroke="#8a6d1e"/><path d="M141 60 Q150 48 159 60" fill="none" stroke="#8a6d1e" stroke-width="0.7" opacity="0.7"/><line x1="150" y1="64" x2="150" y2="44" stroke="#d62828" stroke-width="2"/><path d="M150 44l-3 7h6z" fill="#d62828"/><circle cx="150" cy="44" r="5" fill="#d62828" stroke="#fff" stroke-width="1.3"/><text x="156" y="42" font-size="11" fill="#d62828">h</text></svg>`,
+ weld_root:`<svg viewBox="0 0 300 130"><rect x="36" y="44" width="104" height="32" fill="url(#stlH)" stroke="#5A6B7B"/><rect x="36" y="44" width="104" height="32" fill="url(#hatch)" stroke="none"/><rect x="160" y="44" width="104" height="32" fill="url(#stlH)" stroke="#5A6B7B"/><rect x="160" y="44" width="104" height="32" fill="url(#hatch)" stroke="none"/><path d="M140 44 L160 44 L160 76 L140 76 Z" fill="url(#wld)"/><path d="M140 44 Q150 30 160 44" fill="url(#wld)" stroke="#8a6d1e"/><path d="M140 76 Q150 92 160 76" fill="#fff" stroke="#d62828" stroke-width="2"/><circle cx="150" cy="86" r="5" fill="#d62828" stroke="#fff" stroke-width="1.3"/><text x="156" y="100" font-size="11" fill="#d62828">root</text></svg>`,
+ weld_fillet:`<svg viewBox="0 0 300 130"><rect x="34" y="68" width="120" height="42" fill="url(#stlH)" stroke="#5A6B7B"/><rect x="34" y="68" width="120" height="42" fill="url(#hatch)" stroke="none"/><rect x="116" y="16" width="38" height="94" fill="url(#stl)" stroke="#5A6B7B"/><rect x="116" y="16" width="38" height="94" fill="url(#hatch)" stroke="none"/><path d="M116 66 L116 108 L158 108 Q132 88 116 66 Z" fill="url(#wld)" stroke="#8a6d1e"/><path d="M120 104 Q134 100 144 108" fill="none" stroke="#8a6d1e" stroke-width="0.7" opacity="0.7"/><line x1="116" y1="66" x2="116" y2="108" stroke="#d62828" stroke-width="2"/><path d="M116 66l-3 6h6z" fill="#d62828"/><path d="M116 108l-3 -6h6z" fill="#d62828"/><circle cx="116" cy="87" r="4.5" fill="#d62828" stroke="#fff" stroke-width="1.3"/><line x1="116" y1="108" x2="158" y2="108" stroke="#d62828" stroke-width="2"/><text x="98" y="100" font-size="12" fill="#d62828">a</text></svg>`,
+ butt_misalign:`<svg viewBox="0 0 300 130"><rect x="36" y="50" width="110" height="26" fill="url(#stlH)" stroke="#5A6B7B"/><rect x="36" y="50" width="110" height="26" fill="url(#hatch)" stroke="none"/><rect x="154" y="60" width="110" height="26" fill="url(#stlH)" stroke="#5A6B7B"/><rect x="154" y="60" width="110" height="26" fill="url(#hatch)" stroke="none"/><path d="M146 50 L154 60 L154 86 L146 76 Z" fill="url(#wld)" stroke="#8a6d1e"/><line x1="146" y1="46" x2="146" y2="62" stroke="#d62828" stroke-width="2"/><path d="M146 46l-3 5h6z" fill="#d62828"/><path d="M146 62l-3 -5h6z" fill="#d62828"/><circle cx="146" cy="54" r="4.5" fill="#d62828" stroke="#fff" stroke-width="1.3"/><text x="151" y="44" font-size="12" fill="#d62828">e</text></svg>`,
+ sheet_depth:`<svg viewBox="0 0 300 130"><path d="M28 86 L58 44 L108 44 L138 86 L188 86 L218 44 L268 44" fill="none" stroke="#7d8a97" stroke-width="6" stroke-linejoin="round"/><line x1="44" y1="44" x2="44" y2="86" stroke="#5b6b7b"/><path d="M44 44l-3 7h6z" fill="#5b6b7b"/><path d="M44 86l-3 -7h6z" fill="#5b6b7b"/><text x="28" y="68" font-size="12" fill="#1b2430">h</text><circle cx="58" cy="44" r="5" fill="#d62828" stroke="#fff" stroke-width="1.3"/><circle cx="138" cy="86" r="5" fill="#d62828" stroke="#fff" stroke-width="1.3"/></svg>`,
+ sheet_pitch:`<svg viewBox="0 0 300 130"><path d="M28 86 L58 44 L108 44 L138 86 L188 86 L218 44 L268 44" fill="none" stroke="#7d8a97" stroke-width="6" stroke-linejoin="round"/><line x1="58" y1="44" x2="58" y2="104" stroke="#9aa7b3" stroke-dasharray="3 3"/><line x1="218" y1="44" x2="218" y2="104" stroke="#9aa7b3" stroke-dasharray="3 3"/><line x1="58" y1="100" x2="218" y2="100" stroke="#5b6b7b"/><path d="M58 100l7 -3v6z" fill="#5b6b7b"/><path d="M218 100l-7 -3v6z" fill="#5b6b7b"/><text x="138" y="116" text-anchor="middle" font-size="12" fill="#1b2430">br</text><circle cx="58" cy="44" r="5" fill="#d62828" stroke="#fff" stroke-width="1.3"/><circle cx="218" cy="44" r="5" fill="#d62828" stroke="#fff" stroke-width="1.3"/></svg>`,
+ bend_radius:`<svg viewBox="0 0 300 130"><path d="M86 108 L86 56 Q86 32 110 32 L214 32" fill="none" stroke="#7d8a97" stroke-width="10" stroke-linejoin="round"/><path d="M93 56 Q93 39 110 39" fill="none" stroke="#d62828" stroke-width="2"/><line x1="93" y1="56" x2="110" y2="39" stroke="#d62828" stroke-dasharray="2 2"/><circle cx="93" cy="56" r="2.5" fill="#d62828"/><circle cx="101" cy="47" r="5" fill="#d62828" stroke="#fff" stroke-width="1.3"/><text x="104" y="64" font-size="12" fill="#d62828">r</text></svg>`
+};
+const DIAMAP={
+ iso_linear:"length",iso_straight:"member_str",
+ en2_b1_depth:"depth",en2_b1_flangew:"flangew",en2_b1_webecc:"webecc",en2_b1_webecc_brg:"webecc",en2_b1_flsq:"flange_sq",en2_b1_flsq_brg:"flange_sq",en2_b1_flflat:"flange_cup",en2_b1_flflat_brg:"flange_cup",en2_b1_websq:"web_vert",en2_b1_platecurv:"plate_curv",en2_b1_webdist:"web_dist",en2_b1_webund:"web_dist",
+ en2_b2_intw_t1:"presbrake_int",en2_b2_intw_t2:"presbrake_int",en2_b2_outw_mill:"presbrake_out",en2_b2_outw_shear:"presbrake_out",en2_b2_straight:"member_str",
+ en2_b3_fldist:"flange_cup",en2_b3_flund:"flange_cup",en2_b3_straight:"member_str",
+ en2_b4_secdim:"box_dim",en2_b4_twist:"twist",en2_b4_oop_gen:"plate_oop",en2_b4_oop_spec:"plate_oop",en2_b4_squareness:"box_diag",
+ en2_b6_len_gen:"length",en2_b6_len_brg:"length",en2_b6_len_comp:"length",en2_b6_straight:"member_str",en2_b6_camber:"camber",en2_b6_bearing:"bearing_gap",en2_b6_endsq_brg:"end_sq",en2_b6_endsq_nobrg:"end_sq",en2_b6_twist:"twist",
+ en2_b7_crosslvl:"beam_level",
+ en2_b8_holepos:"hole_pos",en2_b8_holeedge_near:"hole_edge",en2_b8_holeedge_far:"hole_edge",en2_b8_holegrouppos:"hole_pos",en2_b8_holespacing_gen:"hole_pos",en2_b8_holespacing_two:"hole_pos",en2_b8_holetwist:"hole_pos",en2_b8_ovalisation:"hole_oval",en2_b8_notch_depth:"hole_edge",en2_b8_notch_len:"hole_edge",
+ en2_b10_splice:"col_splice_ecc",en2_b10_baseplate:"baseplate_ecc",
+ en2_b11_roundness:"roundness",en2_b11_misalign:"plate_misalign",
+ en2_b12_straightcamber:"lattice",en2_b12_panel_indiv:"lattice",en2_b12_panel_cum:"lattice",en2_b12_bracing:"member_str",en2_b12_crossdim:"box_dim",en2_b12_intersect:"lattice",en2_b12_gap:"lattice",
+ en_colplumb:"col_plumb",en_pos:"hole_pos",en_bearing:"bearing_gap",
+ en_erect_bldg_plumb:"bldg_plumb",en_erect_colbase_level:"beam_level",en_erect_colsplice:"col_splice_ecc",en_erect_rellevel:"beam_level",en_erect_connlevel:"beam_level",en_erect_col1s:"col_plumb",en_erect_col_portal:"col_plumb",en_erect_col_mean:"col_plumb",en_erect_crane:"col_plumb",en_erect_beam_spacing:"beam_level",en_erect_beam_loc:"hole_pos",en_erect_beam_level:"beam_level",
+ en4_depth:"sheet_depth",en4_pitch:"sheet_pitch",en4_bend:"bend_radius",
+ aisc_len_brg:"length",aisc_len_other:"length",aisc_str_comp:"member_str",aisc_str_other:"member_str",aisc_curved:"camber",aisc_camber_beam:"camber",aisc_camber_truss:"lattice",aisc_anchor_vert:"anchor_h",aisc_anchor_horiz:"anchor_h",aisc_brgelev:"beam_level",aisc_plumb:"col_plumb",aisc_col_elev:"hole_pos",aisc_col_ext:"hole_pos",aisc_col_env:"hole_pos",aisc_beam_splice:"beam_level",aisc_member_align:"member_str",aisc_cantilever:"col_plumb",aisc_adj_vert:"beam_level",aisc_adj_horiz:"hole_pos",aisc_adj_align:"hole_pos",aisc_mill:"member_str",aisc_mill_depth:"depth",aisc_mill_flangew:"flangew",aisc_mill_halfflange:"webecc",aisc_mill_flangetilt:"flange_sq",aisc_wp_base:"hole_pos",
+ aws_undercut:"weld_undercut",aws_reinf:"weld_reinf",aws_rootcc:"weld_root",aws_camber:"camber",
+ mbma_erect:"col_plumb",mbma_fab:"length",
+ jass6_beam_len:"length",jass6_col_len:"length",jass6_story_fab:"length",jass6_beam_curv:"member_str",jass6_webdisloc:"webecc",jass6_conn_len:"length",jass6_fillet_clear:"weld_fillet",jass6_butt_misalign:"butt_misalign",jass6_undercut:"weld_undercut",jass6_bolt_offset:"hole_pos",jass6_bolt_pitch:"hole_pos",jass6_bolt_misalign:"hole_pos",jass6_bldg_incl:"bldg_plumb",jass6_bldg_curv:"member_str",jass6_anchor_a:"anchor_h",jass6_anchor_b:"anchor_h",jass6_colbase_lvl:"beam_level",jass6_story_site:"length",jass6_beam_level:"beam_level"
+};
+function diagramBlock(r){ const svg=DIAG[DIAMAP[r.id]]||DIAGRAMS[r.feature]; if(!svg) return "";
+  return `<div class="diagram"><div class="dgh">📍 ${LANG==='vi'?'Vị trí đo — điểm đỏ ●':'Where to measure — red dot ●'}</div>${svg}</div>`; }
+
+/* ===== data load/save ===== */
+function baseData(){ return (window.APP_DATA)?JSON.parse(JSON.stringify(window.APP_DATA)):{standards:[],applicability:[],tolerances:[]}; }
+let DATA;
+try{ const s=localStorage.getItem("tol_data"); DATA = s?JSON.parse(s):baseData(); }catch(e){ DATA=baseData(); }
+function STDS(){ return DATA.standards||[]; }
+function TOLS(){ return DATA.tolerances||[]; }
+function APPL(){ return DATA.applicability||[]; }
+function saveData(){ try{ localStorage.setItem("tol_data",JSON.stringify(DATA)); }catch(e){} }
+function resetData(){ try{ localStorage.removeItem("tol_data"); }catch(e){} DATA=baseData(); }
+
+/* ===== engine ===== */
+function evalExpr(expr,vars){ if(typeof expr!=="string") return NaN;
+  if(!/^[0-9a-zA-Z_+\-*/^(),.\s±<>=?:]*$/.test(expr)) throw new Error("bad expr");
+  let e=expr.replace(/±/g,"").replace(/\^/g,"**").replace(/\b(min|max|abs|round|sqrt|floor|ceil)\b/gi,m=>"Math."+m.toLowerCase());
+  const n=Object.keys(vars||{}); const fn=new Function(...n,"return ("+e+");"); const r=fn(...n.map(k=>vars[k]));
+  if(typeof r!=="number"||!isFinite(r)) throw new Error("non-finite"); return r; }
+function rangeIndex(ranges,x){ for(let i=0;i<ranges.length;i++){ const r=ranges[i]; if(i===0){ if(x<=r.to) return i; } else if(x>r.from && x<=r.to) return i; } return ranges.length-1; }
+function evalCell(cell,vars,unit){ // cell: "expr" (±) | ["lo","hi"] | ["lo",null] | [null,"hi"] | null(NR)
+  if(cell==null) return {na:true};
+  if(Array.isArray(cell)){ const lo=cell[0]==null?null:evalExpr(cell[0],vars); const hi=cell[1]==null?null:evalExpr(cell[1],vars);
+    let expr; if(lo!=null&&hi!=null) expr=fmt(lo)+" … "+(hi>=0?"+":"")+fmt(hi)+" "+unit;
+      else if(lo!=null) expr="≥ "+fmt(lo)+" "+unit; else expr="≤ "+(hi>=0?"+":"")+fmt(hi)+" "+unit;
+    return {lo:lo,hi:hi,asym:true,expr:expr}; }
+  const v=evalExpr(cell,vars); const showF=(typeof cell==="string"&&/[a-zA-Z]/.test(cell));
+  return {value:v,expr:"±"+fmt(v)+" "+unit+(showF?"  (= "+cell+")":"")}; }
+function computePermitted(rule,vars,cls){ const p=rule.permitted; try{
+  if(p.kind==="REF") return {na:true,expr:p.expression};
+  if(p.kind==="FIXED"){ const v=evalExpr(p.expression,{}); return {value:v,expr:"±"+fmt(v)+" "+p.unit}; }
+  if(p.kind==="FORMULA"){ const v=evalExpr(p.expression,vars); return {value:v,expr:"±"+fmt(v)+" "+p.unit+"  (= "+p.expression+")"}; }
+  if(p.kind==="TABLE"){ const c=cls||p.classes[0]; const bv=vars[p.bandVar]; if(bv==null||isNaN(bv)) return {need:1};
+    const idx=rangeIndex(p.ranges,bv); const cell=p.cells[c][idx]; const v=evalExpr(cell,vars);
+    return {value:v,expr:"±"+fmt(v)+" "+p.unit,rangeLabel:p.ranges[idx].l,cls:c}; }
+  if(p.kind==="MULTI"){ const setKey=cls||(p.sets[0]&&p.sets[0].key); const set=p.sets.find(s=>s.key===setKey)||p.sets[0];
+    let idx=0,rangeLabel=null;
+    if(p.bands&&p.bands.length){ const bv=vars[p.bandVar]; if(bv==null||isNaN(bv)) return {need:1,set:set.key,setLabel:set.label}; idx=rangeIndex(p.bands,bv); rangeLabel=p.bands[idx].l; }
+    const r=evalCell(set.cells[idx],vars,p.unit); r.rangeLabel=rangeLabel; r.set=set.key; r.setLabel=set.label; return r; }
+}catch(err){ return {error:String(err.message||err)}; } return {error:"?"}; }
+function judge(p,m){ if(p==null||isNaN(m)) return {status:"NA"}; const a=Math.abs(m); return {status:a<=p+1e-9?"PASS":"FAIL",margin:p-a}; }
+function verdictOf(cp,m){ if(isNaN(m)||cp==null||cp.na||cp.error||cp.need) return null;
+  if(cp.asym){ const okLo=cp.lo==null||m>=cp.lo-1e-9, okHi=cp.hi==null||m<=cp.hi+1e-9;
+    let margin; if(cp.lo!=null&&cp.hi!=null) margin=Math.min(m-cp.lo,cp.hi-m); else if(cp.lo!=null) margin=m-cp.lo; else margin=cp.hi-m;
+    return {status:(okLo&&okHi)?"PASS":"FAIL",margin:margin}; }
+  if(cp.value!=null){ const a=Math.abs(m); return {status:a<=cp.value+1e-9?"PASS":"FAIL",margin:cp.value-a}; }
+  return null; }
+function fmt(n){ if(n==null||isNaN(n)) return "—"; return (Math.round(n*100)/100).toString(); }
+
+/* ===== state ===== */
+let LANG="vi",VIEW="lookup";
+let F={std:"",cat:"",el:"",feat:"",q:""};
+let selectedId=null,calcVars={},calcClass=null,measured="";
+let compare=[];
+let browseAll=false;
+let admin={unlocked:false}, modal=null;
+let repInfo={project:"",inspector:"",method:""};
+
+/* ===== helpers ===== */
+function T(k){ const o=I18N[k]; return o?(o[LANG]||o.en):k; }
+function tx(o){ if(!o) return ""; if(typeof o==="string") return o; return o[LANG]||o.en||o.vi||""; }
+function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
+function featName(f){ const o=FEATURES[f]; return o?(o.ic+" "+(o[LANG]||o.en)):f; }
+function catName(c){ const o=CATEGORIES[c]; return o?(o[LANG]||o.en):c; }
+function ruleById(id){ return TOLS().find(r=>r.id===id); }
+function filtered(){ return TOLS().filter(r=>{
+  if(F.std&&r.standard!==F.std) return false; if(F.cat&&r.category!==F.cat) return false;
+  if(F.el&&tx(r.element)!==F.el) return false; if(F.feat&&r.feature!==F.feat) return false;
+  if(F.q){ const q=F.q.toLowerCase(); const h=(tx(r.title)+" "+tx(r.element)+" "+r.standard+" "+tx(r.acceptance)+" "+(r.clause?r.clause.number:"")).toLowerCase(); if(h.indexOf(q)<0) return false; }
+  return true; }); }
+function uniqueElements(){ const s=new Set(); TOLS().forEach(r=>{ if(!F.std||r.standard===F.std) s.add(tx(r.element)); }); return [...s].sort(); }
+
+/* ===== render ===== */
+function setLang(l){ LANG=l; document.getElementById("lvi").classList.toggle("on",l==="vi"); document.getElementById("len").classList.toggle("on",l==="en"); document.documentElement.lang=l; render(); }
+function setView(v){ VIEW=v; if(v!=="lookup"){ document.body.classList.remove("detail-open"); } render(); }
+function render(){
+  document.getElementById("abTitle").textContent=LANG==="vi"?"Tra Cứu Dung Sai":"Tolerance Lookup";
+  document.getElementById("abSub").textContent=LANG==="vi"?"Kết cấu thép · QC":"Steel structures · QC";
+  // nav
+  const items=[["lookup","🔍"],["compare","⚖️"],["standards","📚"],["admin","🛠️"]];
+  document.getElementById("nav").innerHTML=items.map(([k,ic])=>`<button class="${VIEW===k?'on':''}" onclick="setView('${k}')"><span class="ic">${ic}</span><span>${esc(tx(I18N.nav[k]))}</span></button>`).join("");
+  const app=document.getElementById("app");
+  if(VIEW==="lookup") app.innerHTML=viewLookup();
+  else if(VIEW==="compare") app.innerHTML=viewCompare();
+  else if(VIEW==="standards") app.innerHTML=viewStandards();
+  else if(VIEW==="admin") app.innerHTML=viewAdmin();
+  renderModal();
+}
+
+function viewLookup(){
+  if(!(F.std || F.q || browseAll)) return viewChooser();
+  const list=filtered();
+  const scoped=TOLS().filter(r=>!F.std||r.standard===F.std);
+  const feats=[...new Set(scoped.map(r=>r.feature))];
+  const cats=[...new Set(scoped.map(r=>r.category))];
+  const stdLabel = F.std ? F.std : (LANG==='vi'?'Tất cả tiêu chuẩn':'All standards');
+  let h=`<div class="crumb"><span class="crumb-lab">${LANG==='vi'?'Đang xem':'Viewing'}: <b>${esc(stdLabel)}</b></span><button class="crumb-btn" onclick="resetChooser()">↺ ${LANG==='vi'?'Đổi tiêu chuẩn':'Change'}</button></div>`;
+  h+=`<div class="search"><span class="mag">🔍</span><input class="inp" type="text" value="${esc(F.q)}" oninput="F.q=this.value;refreshList()" placeholder="${esc(T('searchPh'))}"></div>`;
+  h+=`<div class="filters"><span class="chip ${F.feat===''?'on':''}" onclick="F.feat='';render()">${esc(T('all'))}</span>`+
+    feats.map(f=>`<span class="chip ${F.feat===f?'on':''}" onclick="F.feat='${f}';render()">${esc(featName(f))}</span>`).join("")+`</div>`;
+  h+=`<details class="more"><summary>${esc(T('moreFilters'))}</summary><div class="body">
+    <div><label class="fld">${esc(T('category'))}</label><select onchange="F.cat=this.value;render()"><option value="">${esc(T('all'))}</option>`+
+      cats.map(c=>`<option ${F.cat===c?'selected':''} value="${c}">${esc(catName(c))}</option>`).join("")+`</select></div>
+    <div><label class="fld">${esc(T('element'))}</label><select onchange="F.el=this.value;render()"><option value="">${esc(T('all'))}</option>`+
+      uniqueElements().map(e=>`<option ${F.el===e?'selected':''} value="${esc(e)}">${esc(e)}</option>`).join("")+`</select></div>
+    </div></details>`;
+  h+=`<div class="lookgrid"><div class="list-pane">
+      <div class="count">${list.length} ${esc(T('results'))}</div>
+      <div class="cards" id="cards">${renderCards(list)}</div></div>
+      <div class="detail-pane" id="detailPane">${renderDetail()}</div></div>`;
+  h+=`<div class="footer hideprint"><strong>${LANG==='vi'?'Lưu ý':'Note'}:</strong> ${esc(T('disclaimer'))} · ${LANG==='vi'?'Tác giả':'Author'}: Thế Mỹ</div>`;
+  return h;
+}
+function viewChooser(){
+  let h=`<div class="hero"><div class="hero-t">${LANG==='vi'?'Chọn tiêu chuẩn để bắt đầu':'Choose a standard to start'}</div>`;
+  h+=`<div class="hero-s">${LANG==='vi'?'Chọn 1 bộ tiêu chuẩn để chỉ xem dung sai của bộ đó — gọn, đỡ rối. Hoặc “Xem tất cả” để tra cứu &amp; tìm toàn bộ.':'Pick one standard to view only its tolerances, or “Browse all”.'}</div></div>`;
+  const regions=[["EU",LANG==='vi'?"Châu Âu":"Europe"],["ISO","ISO"],["US",LANG==='vi'?"Mỹ (US)":"USA"],["JP",LANG==='vi'?"Nhật (JP)":"Japan"]];
+  const rc={EU:"14406B",ISO:"0E7C86",US:"9C3D2E",JP:"6D4AA6"};
+  regions.forEach(g=>{ const ls=STDS().filter(s=>s.region===g[0]); if(!ls.length) return;
+    h+=`<div class="grp-h"><span class="region" style="background:#${rc[g[0]]};color:#fff">${g[0]}</span> ${esc(g[1])}</div><div class="grid2">`+
+      ls.map(s=>{ const n=TOLS().filter(r=>r.standard===s.code).length;
+        return `<div class="stdpick" style="border-left-color:#${rc[g[0]]}" onclick="pickStd('${esc(s.code)}')">
+          <div class="sp-c">${esc(s.code)} ${s.code.indexOf('MBMA')>=0?'⚠':''}</div>
+          <div class="sp-t">${esc(tx(s.title))}</div>
+          <div class="sp-n">${n} ${LANG==='vi'?'tiêu chí':'criteria'}  ›</div></div>`; }).join("")+`</div>`;
+  });
+  h+=`<div class="btnrow" style="margin-top:18px;justify-content:center;flex-wrap:wrap">
+    <button class="btn ghost" onclick="browseAll=true;selectedId=null;render()">${LANG==='vi'?'🔎 Xem tất cả tiêu chí':'Browse all'}</button>
+    <button class="btn alt" onclick="setView('standards')">${LANG==='vi'?'Gợi ý theo loại dự án':'By project type'}</button></div>`;
+  h+=`<div class="footer hideprint">${esc(T('disclaimer'))} · ${LANG==='vi'?'Tác giả':'Author'}: Thế Mỹ</div>`;
+  return h;
+}
+function pickStd(code){ F.std=code; browseAll=false; F.q=""; F.feat=""; F.cat=""; F.el=""; selectedId=null; document.body.classList.remove('detail-open'); render(); }
+function resetChooser(){ F.std=""; browseAll=false; F.q=""; F.feat=""; F.cat=""; F.el=""; selectedId=null; document.body.classList.remove('detail-open'); render(); }
+function renderCards(list){ if(!list) list=filtered(); if(!list.length) return `<div class="empty">${esc(T('noResult'))}</div>`;
+  return list.map(r=>`<div class="rcard ${r.id===selectedId?'on':''}" onclick="selectRule('${r.id}')">
+    <div class="t">${esc(tx(r.title))} ${r.needsVerify?'⚠':''}</div>
+    <div class="m"><span class="badge">${esc(r.standard)}</span><span class="region">${r.region}</span>
+      <span class="tagf">${esc(featName(r.feature))}</span><span>· ${esc(tx(r.element))}</span></div></div>`).join(""); }
+function refreshList(){ const c=document.getElementById("cards"); if(c) c.innerHTML=renderCards(filtered());
+  const cnt=document.querySelector("#app .count"); if(cnt) cnt.textContent=`${filtered().length} ${T('results')}`; }
+
+function selectRule(id){ selectedId=id; calcVars={}; calcClass=null; measured=""; const r=ruleById(id); const p=r.permitted;
+  if(p.variables) p.variables.forEach(v=>calcVars[v.symbol]=v.def!=null?v.def:"");
+  if(p.kind==="TABLE"){ calcClass=p.classes[0]; const r0=p.ranges[0]; calcVars[p.bandVar]=r0.to>1e8?1000:Math.round((Math.max(r0.from,1)+r0.to)/2); }
+  if(p.kind==="MULTI"){ calcClass=p.sets[0].key; if(p.vars) p.vars.forEach(v=>calcVars[v.symbol]=v.def!=null?v.def:""); }
+  document.body.classList.add("detail-open"); render();
+  const dp=document.getElementById("detailPane"); if(dp) dp.scrollTop=0;
+}
+function closeDetail(){ document.body.classList.remove("detail-open"); selectedId=null; render(); }
+
+function renderDetail(){
+  if(!selectedId) return `<div class="card"><div class="empty">${esc(T('pickRule'))}</div></div>`;
+  const r=ruleById(selectedId);
+  let h=`<div class="dhead"><button onclick="closeDetail()">‹ ${esc(T('back'))}</button></div><div class="dpad">`;
+  h+=`<div class="card"><h2>${esc(r.standard)} · ${esc(catName(r.category))}</h2><div class="cbody">
+      <div style="font-size:17px;font-weight:800;margin-bottom:8px">${esc(tx(r.title))} ${r.needsVerify?'⚠':''}</div>
+      <div class="kv"><div class="k">${esc(T('element'))}</div><div>${esc(tx(r.element))}</div>
+        <div class="k">${esc(T('feature'))}</div><div>${esc(featName(r.feature))}</div>
+        <div class="k">${esc(T('permitted'))}</div><div>${permittedSummary(r)}</div></div>`;
+  h+=diagramBlock(r);
+  if(r.conditions) h+=`<div class="cond"><strong>${esc(T('conditions'))}:</strong> ${esc(tx(r.conditions))}</div>`;
+  h+=`<div class="accept">✔ <strong>${esc(T('acceptance'))}:</strong> ${esc(tx(r.acceptance))}</div>`;
+  if(r.needsVerify) h+=`<div class="warn">${esc(T('needVerify'))}</div>`;
+  if(r.notes&&r.notes.length) h+=`<div class="note">📌 ${r.notes.map(n=>esc(tx(n))).join("<br>")}</div>`;
+  h+=`<div class="evidence"><div class="h">📑 ${esc(T('evidence'))}</div>
+      <div class="kv" style="margin-top:8px"><div class="k">${esc(T('clause'))}</div><div><strong>${esc(r.clause.number)}</strong></div>`;
+  if(r.clause.page) h+=`<div class="k">${esc(T('page'))}</div><div>${r.clause.page}</div>`;
+  h+=`</div>`; if(r.clause.quote) h+=`<div class="quote">“${esc(r.clause.quote)}”</div>`;
+  h+=`</div></div></div>`;
+  h+=renderCalc(r);
+  h+=`</div>`;
+  return h;
+}
+function permittedSummary(r){ const p=r.permitted;
+  if(p.kind==="REF") return `<em>${esc(p.expression)}</em>`;
+  if(p.kind==="FIXED") return `<span class="formula">±${esc(p.expression)} ${esc(p.unit)}</span>`;
+  if(p.kind==="FORMULA") return `<span class="formula">Δ = ±${esc(p.expression)} ${esc(p.unit)}</span>`;
+  if(p.kind==="MULTI") return `<span class="formula">Essential + Functional C1/C2</span>`;
+  return `<span class="formula">${LANG==='vi'?'tra bảng theo':'table by'} ${esc(p.bandVar)} × Class</span>`; }
+function renderCalc(r){ const p=r.permitted;
+  let h=`<div class="card"><h2>🧮 ${esc(T('calc'))}</h2><div class="cbody">`;
+  if(p.kind==="REF"){ h+=`<div class="verdict na">${esc(T('na'))}</div><div class="note">${esc(tx(r.acceptance))}</div>`;
+    h+=calcButtons(r); return h+`</div></div>`; }
+  let chips=null, chipLabel=(k)=>esc(k);
+  if(p.kind==="TABLE"&&p.classes.length>1){ chips=p.classes; }
+  if(p.kind==="MULTI"&&p.sets.length>1){ chips=p.sets.map(s=>s.key); chipLabel=(k)=>{const s=p.sets.find(x=>x.key===k);return esc(s?tx(s.label):k);}; }
+  if(chips){ h+=`<label class="fld">${p.kind==="MULTI"?(LANG==='vi'?'Loại dung sai':'Tolerance type'):esc(T('selClass'))}</label><div class="filters" id="calcClassChips">`+
+    chips.map(c=>`<span class="chip ${calcClass===c?'on':''}" data-cls="${esc(c)}" onclick="selectClass('${esc(c)}')">${chipLabel(c)}</span>`).join("")+`</div>`; }
+  let inputs=[];
+  if(p.kind==="TABLE") inputs.push([p.bandVar,tx(p.bandLabel)||p.bandVar,"mm"]);
+  if(p.kind==="MULTI"&&p.vars) p.vars.forEach(v=>inputs.push([v.symbol,tx(v.label)+" ("+v.symbol+")",v.unit||p.unit]));
+  if(p.variables) p.variables.forEach(v=>inputs.push([v.symbol,tx(v.label)+" ("+v.symbol+")",v.unit]));
+  if(inputs.length){ h+=`<label class="fld">${esc(T('inputs'))}</label>`; inputs.forEach(a=>{ h+=inRow(a[0],a[1],a[2],calcVars[a[0]]); }); }
+  const cp=computePermitted(r,numVars(),calcClass);
+  h+=`<div id="calcRes">${calcResHtml(r,cp)}</div>`;
+  h+=`<label class="fld" style="margin-top:12px">${esc(T('measured'))} (${esc(p.unit)})</label>
+      <input class="inp" type="number" step="any" value="${esc(measured)}" oninput="setMeasured(this.value)" placeholder="${LANG==='vi'?'nhập giá trị đo':'enter measured'}">`;
+  h+=`<div id="calcVerdict">${calcVerdictHtml(r,cp)}</div>`;
+  h+=calcButtons(r); return h+`</div></div>`; }
+/* result + verdict rendered separately so typing never rebuilds the inputs (keeps cursor) */
+function calcResHtml(r,cp){ const p=r.permitted;
+  const tag=`${cp.rangeLabel?` · ${esc(cp.rangeLabel)}`:''}${cp.setLabel?` · ${esc(tx(cp.setLabel))}`:(cp.cls?' · '+esc(cp.cls):'')}`;
+  let h=`<div class="res"><div class="lbl">${esc(T('permitted'))}${tag}</div>`;
+  if(cp.error||cp.need) h+=`<div class="big">—</div><div class="ex">${esc(T('enterAll'))}</div>`;
+  else if(cp.na) h+=`<div class="big" style="font-size:17px">${LANG==='vi'?'Không yêu cầu':'No requirement'}</div>`;
+  else if(cp.asym) h+=`<div class="big" style="font-size:20px">${esc(cp.expr)}</div>`;
+  else h+=`<div class="big">±${esc(fmt(cp.value))} <span style="font-size:15px">${esc(p.unit)}</span></div><div class="ex">${esc(cp.expr)}</div>`;
+  return h+`</div>`; }
+function calcVerdictHtml(r,cp){ const p=r.permitted; const m=parseFloat(measured);
+  const j=verdictOf(cp,m); if(!j) return "";
+  if(j.status==="PASS") return `<div class="verdict pass">✅ ${esc(T('pass'))}<span class="sm">${esc(T('margin'))}: ${fmt(j.margin)} ${esc(p.unit)}</span></div>`;
+  let pct=""; if(cp.value!=null&&cp.value>0){ const pv=Math.round(Math.abs(j.margin)/cp.value*1000)/10; pct=` (${pv}% ${LANG==='vi'?'quá dung sai':'over tolerance'})`; }
+  return `<div class="verdict fail">❌ ${esc(T('fail'))}<span class="sm">${esc(T('exceed'))}: ${fmt(Math.abs(j.margin))} ${esc(p.unit)}${pct}</span></div>`; }
+function patchCalcOut(){ if(!selectedId) return; const r=ruleById(selectedId); const cp=computePermitted(r,numVars(),calcClass);
+  const res=document.getElementById('calcRes'); if(res) res.innerHTML=calcResHtml(r,cp);
+  const v=document.getElementById('calcVerdict'); if(v) v.innerHTML=calcVerdictHtml(r,cp); }
+function setVar(sym,val){ calcVars[sym]=val; patchCalcOut(); }
+function setMeasured(val){ measured=val; if(!selectedId) return; const r=ruleById(selectedId); const cp=computePermitted(r,numVars(),calcClass);
+  const v=document.getElementById('calcVerdict'); if(v) v.innerHTML=calcVerdictHtml(r,cp); }
+function selectClass(c){ calcClass=c;
+  document.querySelectorAll('#calcClassChips .chip').forEach(el=>el.classList.toggle('on', el.getAttribute('data-cls')===c));
+  patchCalcOut(); }
+function inRow(sym,label,unit,val){ return `<div class="inrow"><input class="inp" type="number" step="any" value="${val===''||val==null?'':esc(val)}" oninput="setVar('${esc(sym)}',this.value)" placeholder="${esc(label)}"><div class="lab">${esc(label)} <em>[${esc(unit)}]</em></div></div>`; }
+function numVars(){ const o={}; for(const k in calcVars){ const n=parseFloat(calcVars[k]); o[k]=isNaN(n)?NaN:n; } return o; }
+function calcButtons(r){ return `<div class="btnrow"><button class="btn alt" onclick="addCompare('${r.id}')">＋ ${esc(T('addCmp'))}</button>
+  <button class="btn" onclick="openReport()">🖨 ${esc(T('printRep'))}</button></div>`; }
+
+/* compare */
+function addCompare(id){ if(!compare.includes(id)) compare.push(id); setView('compare'); }
+function viewCompare(){ let h=`<div class="sectitle">${esc(tx(I18N.nav.compare))}</div><p class="lead">${esc(T('cmpHint'))}</p>`;
+  if(!compare.length) return h+`<div class="card"><div class="empty">${esc(T('cmpEmpty'))}</div></div>`;
+  h+=`<div class="btnrow hideprint" style="margin-bottom:12px"><button class="btn ghost" onclick="compare=[];render()">🗑 ${esc(T('clear'))}</button>
+      <button class="btn alt" onclick="exportCompareCsv()">⬇ ${esc(T('expCsv'))}</button></div>`;
+  h+=`<div class="card"><div class="cbody" style="overflow:auto"><table class="t"><thead><tr>
+      <th>${esc(T('standard'))}</th><th>${esc(T('feature'))}</th><th>${esc(T('element'))}</th><th>${esc(T('permitted'))}</th><th>${esc(T('acceptance'))}</th><th>${esc(T('clause'))}</th></tr></thead><tbody>`;
+  compare.forEach(id=>{ const r=ruleById(id); if(!r) return; h+=`<tr><td>${esc(r.standard)} <span class="region">${r.region}</span></td>
+    <td>${esc(featName(r.feature))}</td><td>${esc(tx(r.element))}</td><td>${permittedSummary(r)} ${r.needsVerify?'⚠':''}</td>
+    <td>${esc(tx(r.acceptance))}</td><td><strong>${esc(r.clause.number)}</strong></td></tr>`; });
+  return h+`</tbody></table></div></div>`; }
+
+/* standards */
+function viewStandards(){ let h=`<div class="sectitle">${esc(tx(I18N.nav.standards))}</div><p class="lead">${esc(T('appIntro'))}</p>`;
+  APPL().forEach(a=>{ h+=`<div class="stdcard" style="margin-bottom:12px"><div class="c">${esc(tx(a.label))}</div><div class="d">${esc(tx(a.note))}</div>
+    <div class="filters" style="margin-top:8px">`+a.stds.map(s=>`<span class="chip" onclick="F.std='${esc(s)}';setView('lookup')">${esc(s)}</span>`).join("")+`</div></div>`; });
+  h+=`<div class="sectitle" style="margin-top:18px">${esc(T('catalogue'))}</div><div class="grid2">`+
+    STDS().map(s=>{ const n=TOLS().filter(r=>r.standard===s.code).length;
+      return `<div class="stdcard"><div class="c">${esc(s.code)} <span class="region">${s.region}</span></div><div class="d">${esc(tx(s.title))}</div>
+        <div class="d" style="margin-top:6px"><strong>${n}</strong> ${esc(T('rows'))}</div>
+        <button class="btn alt" style="margin-top:10px" onclick="F.std='${esc(s.code)}';setView('lookup')">${esc(T('view'))}</button></div>`; }).join("")+`</div>`;
+  return h; }
+
+/* ===== admin ===== */
+function getPin(){ try{ return localStorage.getItem("tol_admin_pin")||""; }catch(e){ return ""; } }
+function viewAdmin(){
+  let h=`<div class="sectitle">${esc(T('adminTitle'))}</div><p class="lead">${esc(T('adminLead'))}</p>`;
+  if(!admin.unlocked){
+    const has=getPin();
+    h+=`<div class="card" style="max-width:420px"><div class="cbody">
+      <label class="fld">${esc(has?T('enterPin'):T('setPin'))}</label>
+      <input class="inp pin" id="pinInput" type="password" inputmode="numeric" maxlength="4" placeholder="••••">
+      <button class="btn block" style="margin-top:12px" onclick="tryUnlock()">${esc(T('unlock'))}</button>
+      <div id="pinMsg" class="note" style="color:var(--fail)"></div>
+    </div></div>`;
+    return h;
+  }
+  h+=`<div class="btnrow" style="margin-bottom:12px">
+    <button class="btn" onclick="openRuleModal(null)">${esc(T('addRule'))}</button>
+    <button class="btn ghost" onclick="saveData();toast('${esc(T('savedOk'))}')">${esc(T('saveDevice'))}</button>
+    <button class="btn alt" onclick="exportDataFile()">${esc(T('exportData'))}</button>
+    <button class="btn alt" onclick="document.getElementById('importFile').click()">${esc(T('importData'))}</button>
+    <button class="btn ghost" onclick="changePin()">${esc(T('changePin'))}</button>
+    <button class="btn danger" onclick="if(confirm('${esc(T('resetData'))}?')){resetData();render()}">${esc(T('resetData'))}</button>
+    <button class="btn ghost" onclick="admin.unlocked=false;render()">🔒 ${esc(T('lock'))}</button>
+    <input id="importFile" type="file" accept=".js,.json,application/json,text/javascript" style="display:none" onchange="importDataFile(this)">
+  </div>`;
+  // grouped list
+  const byStd={}; TOLS().forEach(r=>{ (byStd[r.standard]=byStd[r.standard]||[]).push(r); });
+  Object.keys(byStd).forEach(std=>{ h+=`<div class="card"><h2>${esc(std)} · ${byStd[std].length}</h2><div class="cbody" style="padding-top:6px">`;
+    byStd[std].forEach(r=>{ h+=`<div style="display:flex;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)">
+      <div style="flex:1"><div style="font-weight:600;font-size:13.5px">${esc(tx(r.title))} ${r.needsVerify?'⚠':''}</div>
+        <div class="m" style="font-size:11.5px;color:var(--muted)">${esc(featName(r.feature))} · ${esc(catName(r.category))} · ${esc(r.clause.number)}</div></div>
+      <button class="btn ghost" onclick="openRuleModal('${r.id}')">${esc(T('edit'))}</button>
+      <button class="btn danger" onclick="delRule('${r.id}')">${esc(T('del'))}</button></div>`; });
+    h+=`</div></div>`; });
+  return h;
+}
+function tryUnlock(){ const v=(document.getElementById("pinInput")||{}).value||""; const has=getPin();
+  if(!has){ if(/^\d{4}$/.test(v)){ try{localStorage.setItem("tol_admin_pin",v);}catch(e){} admin.unlocked=true; render(); } else { document.getElementById("pinMsg").textContent=LANG==='vi'?"PIN phải 4 số":"PIN must be 4 digits"; } return; }
+  if(v===has){ admin.unlocked=true; render(); } else { document.getElementById("pinMsg").textContent=T('wrongPin'); } }
+function changePin(){ const np=prompt(LANG==='vi'?"PIN mới (4 số):":"New PIN (4 digits):"); if(np&&/^\d{4}$/.test(np)){ try{localStorage.setItem("tol_admin_pin",np);}catch(e){} toast("OK"); } }
+function delRule(id){ if(!confirm(T('delConfirm'))) return; DATA.tolerances=TOLS().filter(r=>r.id!==id); saveData(); render(); }
+
+/* rule modal */
+function openRuleModal(id){ modal={type:"rule",id}; renderModal();
+  setTimeout(()=>{ const el=document.getElementById("m_kind"); if(el) toggleKindFields(); },0); }
+function renderModal(){ const root=document.getElementById("modalRoot"); if(!modal){ root.innerHTML=""; return; }
+  if(modal.type==="rule"){ root.innerHTML=ruleModalHtml(modal.id); }
+  else if(modal.type==="report"){ root.innerHTML=reportModalHtml(); }
+}
+function ruleModalHtml(id){
+  const r= id?ruleById(id):null; const p=r?r.permitted:{kind:"FORMULA",unit:"mm"};
+  const cats=Object.keys(CATEGORIES), feats=Object.keys(FEATURES);
+  const val=(x)=>x==null?"":x;
+  const varsTxt = (p.variables||[]).map(v=>`${v.symbol}|${v.label?v.label.vi:''}|${v.label?v.label.en:''}|${v.unit||''}|${v.def!=null?v.def:''}`).join("\n");
+  const permJson = JSON.stringify(p,null,2);
+  return `<div class="ovl" onclick="if(event.target===this)closeModal()"><div class="modal">
+    <h3>${id?esc(T('edit')):esc(T('addRule'))}</h3>
+    <div class="row2">
+      <div><label class="fld">${esc(T('standard'))}</label><input class="inp" id="m_std" list="stdList" value="${esc(val(r&&r.standard))}">
+        <datalist id="stdList">${STDS().map(s=>`<option value="${esc(s.code)}">`).join("")}</datalist></div>
+      <div><label class="fld">${esc(T('category'))}</label><select class="inp" id="m_cat">${cats.map(c=>`<option value="${c}" ${r&&r.category===c?'selected':''}>${esc(catName(c))}</option>`).join("")}</select></div>
+    </div>
+    <div class="row2">
+      <div><label class="fld">${esc(T('feature'))}</label><select class="inp" id="m_feat">${feats.map(f=>`<option value="${f}" ${r&&r.feature===f?'selected':''}>${esc(featName(f))}</option>`).join("")}</select></div>
+      <div><label class="fld">Region</label><input class="inp" id="m_region" value="${esc(val(r&&r.region)||'EU')}"></div>
+    </div>
+    <div class="row2">
+      <div><label class="fld">${esc(T('elVi'))}</label><input class="inp" id="m_elvi" value="${esc(r&&r.element?r.element.vi:'')}"></div>
+      <div><label class="fld">${esc(T('elEn'))}</label><input class="inp" id="m_elen" value="${esc(r&&r.element?r.element.en:'')}"></div>
+    </div>
+    <div class="row2">
+      <div><label class="fld">${esc(T('ruleTitleVi'))}</label><input class="inp" id="m_tvi" value="${esc(r&&r.title?r.title.vi:'')}"></div>
+      <div><label class="fld">${esc(T('ruleTitleEn'))}</label><input class="inp" id="m_ten" value="${esc(r&&r.title?r.title.en:'')}"></div>
+    </div>
+    <label class="fld">${esc(T('kind'))}</label>
+    <select class="inp" id="m_kind" onchange="toggleKindFields()">
+      ${["FORMULA","FIXED","REF","TABLE"].map(k=>`<option value="${k}" ${p.kind===k?'selected':''}>${k}</option>`).join("")}</select>
+    <div id="kf_simple">
+      <div class="row2">
+        <div><label class="fld">${esc(T('expr'))}</label><input class="inp" id="m_expr" value="${esc(p.expression||'')}" placeholder="vd: h/300 hoặc 6"></div>
+        <div><label class="fld">${esc(T('unit'))}</label><input class="inp" id="m_unit" value="${esc(p.unit||'mm')}"></div>
+      </div>
+      <div id="kf_vars"><label class="fld">${esc(T('varsLab'))}</label><textarea class="inp" id="m_vars" placeholder="h|Chiều cao tầng|Storey height|mm|3600">${esc(varsTxt)}</textarea></div>
+    </div>
+    <div id="kf_table"><label class="fld">${esc(T('tableJson'))}</label><textarea class="inp" id="m_pjson" style="min-height:150px">${esc(permJson)}</textarea></div>
+    <label class="fld">${esc(T('condVi'))}</label><input class="inp" id="m_condvi" value="${esc(r&&r.conditions?r.conditions.vi:'')}">
+    <div class="row2">
+      <div><label class="fld">${esc(T('accVi'))}</label><textarea class="inp" id="m_accvi" style="font-family:inherit">${esc(r&&r.acceptance?r.acceptance.vi:'')}</textarea></div>
+      <div><label class="fld">${esc(T('accEn'))}</label><textarea class="inp" id="m_accen" style="font-family:inherit">${esc(r&&r.acceptance?r.acceptance.en:'')}</textarea></div>
+    </div>
+    <div class="row2">
+      <div><label class="fld">${esc(T('clauseNum'))}</label><input class="inp" id="m_cnum" value="${esc(r&&r.clause?r.clause.number:'')}"></div>
+      <div><label class="fld">${esc(T('clausePage'))}</label><input class="inp" id="m_cpage" type="number" value="${esc(r&&r.clause&&r.clause.page?r.clause.page:'')}"></div>
+    </div>
+    <label class="fld">${esc(T('clauseQuote'))}</label><input class="inp" id="m_cquote" value="${esc(r&&r.clause?(r.clause.quote||''):'')}">
+    <label style="display:flex;gap:8px;align-items:center;margin-top:12px;font-size:13.5px"><input type="checkbox" id="m_verify" ${r&&r.needsVerify?'checked':''}> ${esc(T('verifyChk'))}</label>
+    <div id="m_msg" class="note" style="color:var(--fail)"></div>
+    <div class="btnrow" style="margin-top:14px"><button class="btn" onclick="saveRule('${id||''}')">${esc(T('save'))}</button>
+      <button class="btn ghost" onclick="closeModal()">${esc(T('cancel'))}</button></div>
+  </div></div>`;
+}
+function toggleKindFields(){ const k=(document.getElementById("m_kind")||{}).value;
+  const simple=document.getElementById("kf_simple"), table=document.getElementById("kf_table"), vars=document.getElementById("kf_vars");
+  if(!simple) return;
+  table.style.display = k==="TABLE"?"block":"none";
+  simple.style.display = k==="TABLE"?"none":"block";
+  vars.style.display = k==="FORMULA"?"block":"none";
+}
+function closeModal(){ modal=null; renderModal(); }
+function openReport(){ if(!selectedId) return; modal={type:"report"}; renderModal(); }
+function reportModalHtml(){
+  const methods=["Total station","Theodolite (kinh vĩ)","Máy thuỷ bình (Level)","Laser","Thước thép","Thước kẹp","Dưỡng đo (gauge)","Nivô / ống bọt","Khác"];
+  return `<div class="ovl" onclick="if(event.target===this)closeModal()"><div class="modal">
+    <h3>${LANG==='vi'?'Lập biên bản kiểm tra':'Create inspection record'}</h3>
+    <label class="fld">${LANG==='vi'?'Dự án / Hạng mục':'Project / Item'}</label><input class="inp" id="rp_proj" value="${esc(repInfo.project)}">
+    <label class="fld">${LANG==='vi'?'Người kiểm tra':'Inspector'}</label><input class="inp" id="rp_insp" value="${esc(repInfo.inspector)}">
+    <label class="fld">${LANG==='vi'?'Phương pháp / thiết bị đo':'Measurement method / instrument'}</label>
+    <select class="inp" id="rp_method">${methods.map(m=>`<option ${repInfo.method===m?'selected':''}>${esc(m)}</option>`).join("")}</select>
+    <div class="btnrow" style="margin-top:14px"><button class="btn" onclick="doPrint()">🖨 ${esc(T('printRep'))}</button>
+      <button class="btn ghost" onclick="closeModal()">${esc(T('cancel'))}</button></div>
+  </div></div>`;
+}
+function doPrint(){ const g=i=>{const e=document.getElementById(i);return e?e.value:"";};
+  repInfo={project:g("rp_proj"),inspector:g("rp_insp"),method:g("rp_method")};
+  modal=null; renderModal(); buildReport(); }
+function validateRule(rule){ const p=rule.permitted;
+  if(!rule.standard) return "Thiếu Tiêu chuẩn.";
+  if(!rule.title||!rule.title.vi) return "Thiếu Tiêu đề (VI).";
+  if(!rule.acceptance||!rule.acceptance.vi) return "Thiếu Tiêu chí chấp nhận (VI).";
+  if(!rule.clause||!rule.clause.number) return "Thiếu Số điều khoản (dẫn chứng).";
+  if(!rule.feature) return "Thiếu Đặc trưng.";
+  if(!p||!p.kind) return "Thiếu loại dung sai (permitted.kind).";
+  try{
+    if(p.kind==="REF"){ if(!p.expression) return "REF: cần nội dung tham chiếu (expression)."; return ""; }
+    if(p.kind==="FIXED"){ if(!p.expression) return "FIXED: thiếu giá trị."; const v=evalExpr(p.expression,{}); if(isNaN(v)) return "FIXED: giá trị phải tính ra số (vd 6, hoặc max(d/500,5))."; return ""; }
+    if(p.kind==="FORMULA"){ if(!p.expression) return "FORMULA: thiếu biểu thức (vd h/300)."; const vs={}; (p.variables||[]).forEach(v=>vs[v.symbol]=v.def!=null?v.def:1);
+      const v=evalExpr(p.expression,vs); if(isNaN(v)) return "FORMULA: không tính được — kiểm tra biến đã khai báo & biểu thức."; if(!p.variables||!p.variables.length){ if(/[a-zA-Z]/.test(p.expression.replace(/min|max|abs|round|sqrt|floor|ceil/g,""))) return "FORMULA: biểu thức có biến nhưng chưa khai báo biến (dòng: ký_hiệu|nhãn VI|nhãn EN|đơn vị|mặc định)."; } return ""; }
+    if(p.kind==="TABLE"){ if(!p.bandVar) return "TABLE: thiếu bandVar (biến tra bảng)."; if(!Array.isArray(p.ranges)||!p.ranges.length) return "TABLE: thiếu ranges (dải)."; if(!Array.isArray(p.classes)||!p.classes.length) return "TABLE: thiếu classes.";
+      for(const c of p.classes){ if(!p.cells||!Array.isArray(p.cells[c])) return "TABLE: thiếu cells['"+c+"']."; if(p.cells[c].length!==p.ranges.length) return "TABLE: cells['"+c+"'] có "+p.cells[c].length+" ô — cần đúng "+p.ranges.length+" ô (= số dải)."; }
+      const vs={}; const r0=p.ranges[0]; vs[p.bandVar]=(r0.to>1e8?1000:(Math.max(r0.from,1)+r0.to)/2); const cp=computePermitted(rule,vs,p.classes[0]); if(cp&&cp.error) return "TABLE: ô bị lỗi tính — "+cp.error; return ""; }
+    if(p.kind==="MULTI"){ if(!Array.isArray(p.sets)||!p.sets.length) return "MULTI: thiếu sets (bộ dung sai)."; const nb=p.bands?p.bands.length:1;
+      for(const s of p.sets){ if(!s.key) return "MULTI: set thiếu 'key'."; if(!Array.isArray(s.cells)) return "MULTI: set '"+s.key+"' thiếu cells."; if(s.cells.length!==nb) return "MULTI: set '"+s.key+"' có "+s.cells.length+" ô — cần "+nb+" (= số bands)."; }
+      const vs={}; (p.vars||[]).forEach(v=>vs[v.symbol]=v.def!=null?v.def:1); if(p.bandVar&&(vs[p.bandVar]==null)) vs[p.bandVar]=p.bands?((Math.max(p.bands[0].from,1)+p.bands[0].to)/2):1;
+      const cp=computePermitted(rule,vs,p.sets[0].key); if(cp&&cp.error) return "MULTI: ô bị lỗi tính — "+cp.error; return ""; }
+    return "Loại dung sai không hợp lệ: "+p.kind;
+  }catch(e){ return "Lỗi cấu hình: "+e.message; }
+}
+function saveRule(id){ const g=i=>{ const e=document.getElementById(i); return e?e.value.trim():""; };
+  const kind=g("m_kind"); let permitted;
+  try{
+    if(kind==="TABLE"){ permitted=JSON.parse(g("m_pjson")); permitted.kind="TABLE"; }
+    else if(kind==="REF"){ permitted={kind:"REF",unit:g("m_unit")||"mm",expression:g("m_expr")}; }
+    else if(kind==="FIXED"){ permitted={kind:"FIXED",unit:g("m_unit")||"mm",expression:g("m_expr")}; }
+    else { permitted={kind:"FORMULA",unit:g("m_unit")||"mm",expression:g("m_expr")};
+      const vt=g("m_vars"); if(vt){ permitted.variables=vt.split("\n").map(l=>l.trim()).filter(Boolean).map(l=>{ const a=l.split("|");
+        return {symbol:(a[0]||"").trim(),label:{vi:(a[1]||"").trim(),en:(a[2]||a[1]||"").trim()},unit:(a[3]||"mm").trim(),def:a[4]!=null&&a[4]!==""?parseFloat(a[4]):undefined}; }); } }
+  }catch(e){ document.getElementById("m_msg").textContent="JSON: "+e.message; return; }
+  const std=g("m_std"), tvi=g("m_tvi"), accvi=g("m_accvi"), cnum=g("m_cnum");
+  if(!std||!tvi||!accvi||!cnum){ document.getElementById("m_msg").textContent=T('reqWarn'); return; }
+  const stdObj=STDS().find(s=>s.code===std); const region=g("m_region")|| (stdObj?stdObj.region:"EU");
+  const rule={ id: id||("custom_"+Date.now()), standard:std, region, category:g("m_cat"), feature:g("m_feat"),
+    element:{vi:g("m_elvi"),en:g("m_elen")||g("m_elvi")}, title:{vi:tvi,en:g("m_ten")||tvi},
+    permitted, conditions: g("m_condvi")?{vi:g("m_condvi"),en:g("m_condvi")}:undefined,
+    acceptance:{vi:accvi,en:g("m_accen")||accvi},
+    clause:{number:cnum, page: g("m_cpage")?parseInt(g("m_cpage")):0, quote:g("m_cquote")||""},
+    needsVerify: document.getElementById("m_verify").checked||undefined };
+  const verr=validateRule(rule); if(verr){ document.getElementById("m_msg").textContent="⚠ "+verr; return; }
+  if(id){ const i=TOLS().findIndex(r=>r.id===id); if(i>=0) DATA.tolerances[i]=rule; } else { DATA.tolerances.push(rule); }
+  saveData(); closeModal(); render();
+}
+
+/* import/export */
+function exportDataFile(){ const txt="/* Tolerance dataset exported "+new Date().toISOString().slice(0,10)+" */\n(function(){ window.APP_DATA = "+JSON.stringify(DATA,null,2)+"; })();\n";
+  dl("tolerances-data.js", txt, "text/javascript"); }
+function importDataFile(input){ const f=input.files[0]; if(!f) return; const rd=new FileReader();
+  rd.onload=()=>{ try{ let txt=rd.result; let obj;
+      const m=txt.match(/window\.APP_DATA\s*=\s*([\s\S]*?);\s*\}\)\(\)/); if(m){ obj=JSON.parse(m[1]); } else { obj=JSON.parse(txt); }
+      if(obj&&obj.tolerances){ DATA=obj; saveData(); render(); toast(LANG==='vi'?"Đã nhập dữ liệu":"Imported"); } else throw new Error("format");
+    }catch(e){ alert((LANG==='vi'?"Không đọc được file: ":"Cannot read file: ")+e.message); } };
+  rd.readAsText(f); input.value=""; }
+function dl(name,text,type){ const b=new Blob(["﻿"+text],{type:(type||"text/csv")+";charset=utf-8"}); const a=document.createElement("a"); a.href=URL.createObjectURL(b); a.download=name; a.click(); }
+function csvRow(a){ return a.map(x=>'"'+String(x==null?"":x).replace(/"/g,'""')+'"').join(",")+"\n"; }
+function exportCompareCsv(){ let c=csvRow(["Standard","Region","Feature","Element","Permitted","Acceptance","Clause"]);
+  compare.forEach(id=>{ const r=ruleById(id); if(!r) return; const p=r.permitted;
+    const perm=p.kind==="FORMULA"?("±"+p.expression+" "+p.unit):p.kind==="FIXED"?("±"+p.expression+" "+p.unit):p.kind==="TABLE"?("table by "+p.bandVar):p.expression;
+    c+=csvRow([r.standard,r.region,(FEATURES[r.feature]||{}).en||r.feature,tx(r.element),perm,tx(r.acceptance),r.clause.number]); }); dl("so_sanh_dung_sai.csv",c); }
+
+/* report */
+function buildReport(){ const r=ruleById(selectedId); if(!r){ window.print(); return; }
+  const cp=computePermitted(r,numVars(),calcClass); const m=parseFloat(measured); let status="—";
+  { const j=verdictOf(cp,m); if(j) status=j.status==="PASS"?T('pass'):T('fail'); }
+  const vr=Object.entries(numVars()).filter(([k,v])=>!isNaN(v)).map(([k,v])=>`${k} = ${v}`).join("; ");
+  document.getElementById("report").innerHTML=`<div style="padding:8px">
+    <h2 style="text-align:center;margin:0">${esc(T('reportTitle'))}</h2>
+    <div style="text-align:center;color:#5f6b7a;margin:4px 0 16px">${esc(T('date'))}: ${new Date().toLocaleString()}</div>
+    <table class="t"><tbody>
+      <tr><th style="width:200px">${LANG==='vi'?'Dự án / Hạng mục':'Project / Item'}</th><td>${esc(repInfo.project||'—')}</td></tr>
+      <tr><th>${esc(T('standard'))}</th><td>${esc(r.standard)} (${r.region})</td></tr>
+      <tr><th>${LANG==='vi'?'Dung sai':'Tolerance'}</th><td>${esc(tx(r.title))} — ${esc(catName(r.category))}</td></tr>
+      <tr><th>${esc(T('element'))} / ${esc(T('feature'))}</th><td>${esc(tx(r.element))} · ${esc(featName(r.feature))}</td></tr>
+      <tr><th>${esc(T('inputs'))}</th><td>${esc(vr)}${calcClass?' · '+esc(calcClass):''}</td></tr>
+      <tr><th>${esc(T('permitted'))}</th><td>${cp.na?(LANG==='vi'?'Không yêu cầu':'No requirement'):(cp.asym?esc(cp.expr):"±"+esc(fmt(cp.value))+" "+esc(r.permitted.unit))} ${(!cp.asym&&cp.expr)?'<br><small>'+esc(cp.expr)+'</small>':''}</td></tr>
+      <tr><th>${esc(T('measured'))}</th><td>${isNaN(m)?"—":esc(m)+" "+esc(r.permitted.unit)}</td></tr>
+      <tr><th>${LANG==='vi'?'Phương pháp đo':'Measurement method'}</th><td>${esc(repInfo.method||'—')}</td></tr>
+      <tr><th>${esc(T('result'))}</th><td style="font-weight:800;font-size:18px">${esc(status)}</td></tr>
+      <tr><th>${esc(T('acceptance'))}</th><td>${esc(tx(r.acceptance))}</td></tr>
+      <tr><th>${esc(T('evidence'))}</th><td><strong>${esc(r.clause.number)}</strong>${r.clause.page?' · '+esc(T('page'))+' '+r.clause.page:''}${r.clause.quote?'<br><em>“'+esc(r.clause.quote)+'”</em>':''}</td></tr>
+    </tbody></table>
+    <div style="margin-top:16px;color:#5f6b7a;font-size:12px">${esc(T('disclaimer'))}</div>
+    <div style="margin-top:40px;display:flex;justify-content:space-between"><div>${esc(T('inspector'))}: ${repInfo.inspector?esc(repInfo.inspector):'____________'}</div><div>${esc(T('signature'))}: ____________</div></div>
+  </div>`;
+  window.print();
+}
+
+/* misc */
+function toast(msg){ const d=document.createElement("div"); d.textContent=msg;
+  d.style.cssText="position:fixed;left:50%;bottom:80px;transform:translateX(-50%);background:#0c2238;color:#fff;padding:10px 16px;border-radius:10px;z-index:90;font-size:13px;box-shadow:var(--sh)";
+  document.body.appendChild(d); setTimeout(()=>d.remove(),1800); }
+
+/* PWA */
+if("serviceWorker" in navigator && location.protocol.indexOf("http")===0){ navigator.serviceWorker.register("sw.js").catch(()=>{}); }
+
+render();
+</script>
+</body>
+</html>

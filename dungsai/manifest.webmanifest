@@ -1,0 +1,17 @@
+{
+  "name": "Tra Cứu Dung Sai Kết Cấu Thép",
+  "short_name": "Dung Sai Thép",
+  "description": "Tra cứu dung sai hình học kết cấu thép theo EN 1090, ISO 13920, AISC, AWS, MBMA, JASS6 — tính toán & đánh giá Đạt/Không đạt kèm dẫn chứng.",
+  "lang": "vi",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#eef1f5",
+  "theme_color": "#0c447c",
+  "icons": [
+    { "src": "../icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "../icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "../icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

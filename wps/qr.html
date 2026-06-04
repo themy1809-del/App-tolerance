@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>In QR – Thư viện WPS</title>
+<link rel="manifest" href="manifest.webmanifest">
+<style>
+  :root{
+    --bg:#eef1f5; --ink:#1b2430; --muted:#5f6b7a; --line:#dfe5ec;
+    --brand:#0c447c; --soft:#e6f1fb;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;font-size:14px}
+  .appbar{position:sticky;top:0;z-index:20;background:linear-gradient(180deg,#0c447c,#0a3a6b);color:#fff;padding:max(10px,env(safe-area-inset-top)) 14px 10px;display:flex;align-items:center;gap:10px}
+  .appbar a.back{color:#fff;padding:6px 10px;border-radius:8px;background:rgba(255,255,255,.16);font-weight:600}
+  .appbar h1{font-size:16px;margin:0;font-weight:700}
+  .appbar .sp{flex:1}
+  .appbar button{background:rgba(255,255,255,.16);color:#fff;border:0;padding:7px 12px;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer}
+  .appbar button:hover{background:rgba(255,255,255,.28)}
+  .toolbar{background:#fff;border-bottom:1px solid var(--line);padding:10px 14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;position:sticky;top:54px;z-index:15}
+  .toolbar label{font-size:12px;font-weight:700;color:var(--muted)}
+  .toolbar select, .toolbar input{padding:7px 10px;border:1px solid var(--line);border-radius:8px;font-size:13px;background:#fff;font-family:inherit}
+  .toolbar .grow{flex:1;min-width:160px}
+  .toolbar .info{font-size:12px;color:var(--muted)}
+  .main{max-width:1280px;margin:0 auto;padding:14px}
+  .qrgrid{display:grid;grid-template-columns:repeat(auto-fill, minmax(180px, 1fr));gap:12px}
+  .qbox{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:5px;page-break-inside:avoid}
+  .qbox img{width:100%;height:auto;max-width:180px;aspect-ratio:1/1;background:#fff;display:block}
+  .qbox .nm{font-weight:800;font-size:12.5px;word-break:break-all;line-height:1.25;color:var(--brand)}
+  .qbox .sm{font-size:10.5px;color:var(--muted);line-height:1.3}
+  .help{background:#fff;border:1px dashed var(--brand);border-radius:12px;padding:14px;margin:0 0 14px;font-size:13px;color:#33404e}
+  .help b{color:var(--brand)}
+  .help code{background:#eef1f5;padding:2px 5px;border-radius:4px;font-size:12px}
+  /* PRINT */
+  @media print {
+    .appbar, .toolbar, .help { display:none !important }
+    body{background:#fff}
+    .main{padding:0;max-width:none}
+    .qrgrid{grid-template-columns:repeat(4, 1fr);gap:6px}
+    .qbox{border:1px solid #999;padding:6px;box-shadow:none}
+    .qbox img{max-width:140px}
+    .qbox .nm{font-size:11px}
+    .qbox .sm{font-size:9px}
+  }
+</style>
+</head>
+<body>
+
+<header class="appbar">
+  <a class="back" href="index.html">← Thư viện</a>
+  <h1>🔳 In QR cho WPS</h1>
+  <div class="sp"></div>
+  <button onclick="window.print()">🖨️ In</button>
+</header>
+
+<div class="toolbar">
+  <label>Dự án:</label>
+  <select id="fProj"><option value="">Tất cả</option></select>
+  <label>Quy trình:</label>
+  <select id="fProc"><option value="">Tất cả</option></select>
+  <input class="grow" id="q" type="search" placeholder="Lọc theo số WPS…">
+  <label>Cỡ QR:</label>
+  <select id="qSize">
+    <option value="160">Nhỏ (4 cột)</option>
+    <option value="200" selected>Vừa (3-4 cột)</option>
+    <option value="260">Lớn (2-3 cột)</option>
+  </select>
+  <span class="info" id="info">— / —</span>
+</div>
+
+<main class="main">
+  <div class="help">
+    <b>Cách dùng:</b> bấm <b>🖨️ In</b> ở góc trên → in ra giấy → cắt từng ô → dán lên bản vẽ shop, phiếu công việc, hoặc tag vật liệu.
+    Công nhân/QC dùng máy ảnh điện thoại quét QR → mở thẳng WPS đó trên app.
+    <br><br>
+    Có thể lọc trước theo dự án / quy trình / số WPS để chỉ in những cái cần.
+    Mã QR trỏ tới đường link: <code>https://&lt;tên-trang&gt;/wps/?id=WPS-DD-…</code>
+  </div>
+
+  <div class="qrgrid" id="grid"></div>
+</main>
+
+<script src="wps-index.js?v=5"></script>
+<script>
+let DB = null;
+let baseUrl = location.origin + location.pathname.replace(/\/qr\.html$/, '/');
+if (!baseUrl.endsWith('/')) baseUrl += '/';
+
+if (typeof window !== 'undefined' && window.WPS_DB) {
+  DB = window.WPS_DB; init();
+} else {
+  fetch('wps-index.json?v=' + Date.now())
+    .then(r=>r.json())
+    .then(d=>{ DB=d; init(); })
+    .catch(e=>{ document.getElementById('grid').innerHTML = '<div style="padding:30px;text-align:center;color:#7a2024">Lỗi tải dữ liệu: ' + e + '</div>'; });
+}
+
+function init(){
+  // populate filters
+  const projs = DB.projects.map(p => `<option value="${p.code}">${p.code} — ${p.name_vi}</option>`).join('');
+  document.getElementById('fProj').insertAdjacentHTML('beforeend', projs);
+  const procs = Array.from(new Set(DB.items.map(x => normProc(x.process)))).sort();
+  procs.forEach(p => document.getElementById('fProc').insertAdjacentHTML('beforeend', `<option value="${p}">${p}</option>`));
+  ['fProj','fProc','q','qSize'].forEach(id => document.getElementById(id).addEventListener('input', render));
+  render();
+}
+
+function normProc(p){
+  const s = String(p||'').toUpperCase();
+  if (s.includes('+')) return s.replace(/\s/g,'');
+  if (s.includes('TIG')) return 'GTAW';
+  if (s.includes('GTAW')) return 'GTAW';
+  if (s.includes('FCAW')) return 'FCAW';
+  if (s.includes('GMAW')) return 'GMAW';
+  if (s.includes('SMAW')) return 'SMAW';
+  if (s.includes('SAW')) return 'SAW';
+  return s.split(' ')[0];
+}
+
+function render(){
+  const fp = document.getElementById('fProj').value;
+  const fr = document.getElementById('fProc').value;
+  const q = document.getElementById('q').value.trim().toLowerCase();
+  const sz = document.getElementById('qSize').value;
+  const list = DB.items.filter(x => {
+    if (fp && x.project!==fp) return false;
+    if (fr && normProc(x.process)!==fr) return false;
+    if (q && !(x.id+' '+x.base_metal+' '+x.process).toLowerCase().includes(q)) return false;
+    return true;
+  });
+  document.getElementById('info').textContent = list.length + ' / ' + DB.items.length;
+  const grid = document.getElementById('grid');
+  grid.innerHTML = list.map(x => {
+    const url = baseUrl + '?id=' + encodeURIComponent(x.id);
+    const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=' + sz + 'x' + sz + '&margin=4&data=' + encodeURIComponent(url);
+    return `<div class="qbox">
+      <img src="${qrUrl}" alt="QR ${esc(x.id)}" loading="lazy">
+      <div class="nm">${esc(x.id)}</div>
+      <div class="sm">${esc(x.process)} • ${esc(x.position||'')}<br>${esc(short(x.base_metal||''))}</div>
+    </div>`;
+  }).join('');
+}
+
+function esc(s){ return String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<'function esc(s){ return String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function short(m){ return (m||'').split(/[→\(]/)[0].trim().slice(0,40); }
+</script>
+
+</body>
+</html>
