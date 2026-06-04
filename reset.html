@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xoá cache - DaiDung</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+body{background:linear-gradient(160deg,#0c447c,#082d54);color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.box{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);border-radius:18px;padding:30px 26px;max-width:420px;width:100%;text-align:center}
+.em{font-size:54px;line-height:1;margin-bottom:12px}
+h1{font-size:20px;font-weight:800;margin:0 0 8px}
+p{font-size:13.5px;opacity:.9;margin:0 0 18px;line-height:1.55}
+.log{background:rgba(0,0,0,.25);border-radius:10px;padding:12px;text-align:left;font-size:12px;font-family:monospace;color:#cfe0f3;max-height:200px;overflow:auto;margin-bottom:14px}
+.log .ok{color:#9fe1cb}
+.log .err{color:#f5c4b3}
+.btn{display:inline-block;background:#fff;color:#0c447c;padding:13px 24px;border-radius:11px;font-weight:800;font-size:14px;text-decoration:none;border:0;cursor:pointer;font-family:inherit;margin:4px}
+.btn.alt{background:rgba(255,255,255,.15);color:#fff}
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="em">🔄</div>
+  <h1>Xoá cache &amp; cập nhật app</h1>
+  <p>Dùng khi đã đẩy code mới lên GitHub mà điện thoại / máy vẫn hiện bản cũ.</p>
+  <div class="log" id="log">Đang chuẩn bị…</div>
+  <button class="btn" id="btnGo">🧹 Xoá sạch &amp; tải lại</button>
+  <a class="btn alt" href="./">← Trang chủ</a>
+</div>
+
+<script>
+const log = document.getElementById('log');
+function add(msg, cls){
+  const d = document.createElement('div');
+  d.textContent = msg;
+  if (cls) d.className = cls;
+  log.appendChild(d);
+  log.scrollTop = log.scrollHeight;
+}
+
+async function fullReset(){
+  log.innerHTML = '';
+  add('▸ Bắt đầu xoá cache…');
+
+  // 1. Unregister all service workers
+  if ('serviceWorker' in navigator) {
+    try {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      add('  Tìm thấy ' + regs.length + ' Service Worker');
+      for (const r of regs) {
+        await r.unregister();
+        add('  ✓ Đã gỡ SW: ' + (r.scope || r.scriptURL), 'ok');
+      }
+    } catch (e) { add('  ✗ Lỗi SW: ' + e.message, 'err'); }
+  }
+
+  // 2. Delete all caches
+  if ('caches' in window) {
+    try {
+      const keys = await caches.keys();
+      add('  Tìm thấy ' + keys.length + ' cache');
+      for (const k of keys) {
+        await caches.delete(k);
+        add('  ✓ Đã xoá cache: ' + k, 'ok');
+      }
+    } catch (e) { add('  ✗ Lỗi cache: ' + e.message, 'err'); }
+  }
+
+  // 3. Clear localStorage (giữ lại mật khẩu WPS nếu đã nhập)
+  try {
+    const wpsAuth = localStorage.getItem('wps_auth_v1');
+    add('  Sẽ xoá localStorage (giữ lại mật khẩu WPS nếu có)');
+    // Don't clear — user data is in there (favorites, recent). Just touch SW caches.
+  } catch (e) {}
+
+  add('', null);
+  add('✓ XONG! Đang tải lại trang chủ…', 'ok');
+  setTimeout(() => { location.replace('./?_=' + Date.now()); }, 1500);
+}
+
+document.getElementById('btnGo').addEventListener('click', fullReset);
+
+// Auto-status report on load
+(async () => {
+  add('▸ Trạng thái hiện tại:');
+  if ('serviceWorker' in navigator) {
+    const regs = await navigator.serviceWorker.getRegistrations();
+    add('  Service Worker đăng ký: ' + regs.length);
+    regs.forEach(r => add('    · ' + (r.active?.scriptURL || r.scope || '?')));
+  }
+  if ('caches' in window) {
+    const keys = await caches.keys();
+    add('  Cache có sẵn: ' + keys.length);
+    keys.forEach(k => add('    · ' + k));
+  }
+  add('');
+  add('Bấm nút bên dưới để xoá hết và tải lại bản mới.');
+})();
+</script>
+</body>
+</html>

@@ -799,10 +799,18 @@ function buildReport(){ const r=ruleById(selectedId); if(!r){ window.print(); re
 }
 
 /* misc */
+
+/* misc */
 function toast(msg){ const d=document.createElement("div"); d.textContent=msg;
   d.style.cssText="position:fixed;left:50%;bottom:80px;transform:translateX(-50%);background:#0c2238;color:#fff;padding:10px 16px;border-radius:10px;z-index:90;font-size:13px;box-shadow:var(--sh)";
-  d.style.cssText="position:fixed;left:50%;bottom:80px;transform:translateX(-50%);background:#0c2238;color:#fff;padding:10px 16px;border-radius:10px;z-index:90;font-size:13px;box-shadow:var(--sh)";
   document.body.appendChild(d); setTimeout(()=>d.remove(), 2200); }
+
+/* bootstrap — load saved data nếu có, render lần đầu, đăng ký service worker */
+try { const saved = localStorage.getItem("tol_data"); if (saved){ DATA = JSON.parse(saved); } } catch(e){}
+render();
+if ("serviceWorker" in navigator && location.protocol.indexOf("http")===0) {
+  navigator.serviceWorker.register("sw.js").catch(()=>{});
+}
 </script>
 </body>
 </html>
