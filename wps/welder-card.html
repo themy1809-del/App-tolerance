@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phiếu Thợ Hàn</title>
+<style>
+@page { size: A5 portrait; margin: 8mm; }
+*{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:#eef1f5;color:#1b2430;font-size:13px;line-height:1.45;padding:14px}
+.toolbar{max-width:560px;margin:0 auto 12px;display:flex;gap:10px;align-items:center;padding:10px;background:#fff;border:1px solid #dfe5ec;border-radius:10px}
+.toolbar a, .toolbar button{padding:8px 14px;border-radius:8px;background:#0c447c;color:#fff;border:0;font-weight:700;font-size:13px;cursor:pointer;text-decoration:none;font-family:inherit}
+.toolbar .alt{background:#eef1f5;color:#33404e}
+.toolbar .sp{flex:1}
+.toolbar .hint{font-size:12px;color:#5f6b7a}
+
+.card{max-width:560px;margin:0 auto;background:#fff;border:1px solid #cdd6df;border-radius:10px;overflow:hidden;box-shadow:0 4px 18px rgba(15,30,55,.08)}
+
+.h{background:#0c447c;color:#fff;padding:12px 16px;display:flex;align-items:center;gap:10px}
+.h .lg{width:34px;height:34px;background:#fff;color:#0c447c;border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px}
+.h .t1{font-size:10px;letter-spacing:1px;opacity:.85;text-transform:uppercase}
+.h .t2{font-size:17px;font-weight:800;line-height:1.2;word-break:break-all}
+.h .meta{text-align:right;font-size:11px;opacity:.9}
+
+.mat{padding:10px 14px;background:#0c447c;color:#fff;font-size:12.5px;display:grid;grid-template-columns:1fr 1fr;gap:6px;border-top:1px solid rgba(255,255,255,.15)}
+.mat .lb{opacity:.7;font-size:9.5px;letter-spacing:1px;text-transform:uppercase}
+.mat .v{font-weight:700;margin-top:1px}
+.mat .full{grid-column:span 2}
+
+.sec{padding:10px 14px;border-bottom:1px solid #dfe5ec}
+.sec .ttl{font-size:10.5px;letter-spacing:1px;text-transform:uppercase;font-weight:800;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center}
+.sec .ref{font-size:9.5px;font-weight:600;opacity:.65}
+
+.joint{background:#e6f1fb}
+.joint .ttl{color:#0c447c}
+.joint .ref{color:#185fa5}
+.joint svg{background:#fff;border:1px solid #b5d4f4;border-radius:6px;display:block;width:100%;height:auto}
+.joint .dims{margin-top:6px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;font-size:11.5px}
+.joint .dims .d{background:#fff;padding:5px 8px;border-radius:4px;border:0.5px solid #b5d4f4}
+.joint .dims .d b{color:#0c447c}
+.joint .extras{margin-top:6px;font-size:11.5px}
+.joint .extras span{margin-right:8px;color:#0c447c}
+
+.set{background:#fff7e0}
+.set .ttl{color:#7c4a00}
+.set .grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:5px}
+.set .box{background:#fff;border:1px solid #f0c14b;border-radius:6px;padding:6px 5px;text-align:center}
+.set .box .l{font-size:9px;color:#7c4a00;font-weight:700;letter-spacing:.3px}
+.set .box .v{font-size:17px;font-weight:800;color:#0c447c;line-height:1.1;margin-top:2px}
+.set .extra{margin-top:5px;font-size:11px;color:#7c4a00;text-align:center}
+.set .extra b{color:#0c447c}
+
+.acc{background:#e1f5ee}
+.acc .ttl{color:#085041}
+.acc .ref{color:#0f6e56}
+.acc .grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:10.5px}
+.acc .row{background:#fff;padding:5px 8px;border-radius:4px;border:0.5px solid #9fe1cb;display:flex;justify-content:space-between;gap:6px;align-items:flex-start}
+.acc .row .it{color:#5f6b7a;flex:1;font-weight:600}
+.acc .row .lm{color:#0f6e56;font-weight:800;text-align:right;flex:1}
+.acc .nde{margin-top:5px;font-size:10px;color:#0f6e56;display:flex;gap:8px;flex-wrap:wrap}
+.acc .nde span{background:#fff;padding:2px 7px;border-radius:4px;border:0.5px solid #9fe1cb}
+
+.note{background:#fbeae2;padding:8px 14px}
+.note .ttl{color:#7a2024;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;font-weight:800;margin-bottom:3px}
+.note ul{margin:0;padding-left:16px;font-size:11px;line-height:1.5;color:#1b2430}
+.note ul b{color:#7a2024}
+
+.ft{padding:7px 14px;background:#fafcfe;display:flex;align-items:center;gap:8px;border-top:0.5px solid #dfe5ec}
+.ft .info{flex:1;font-size:10px;color:#5f6b7a;line-height:1.4}
+.ft .info b{color:#1b2430}
+.ft .qr{width:48px;height:48px;border:1px solid #dfe5ec;border-radius:4px;padding:2px;background:#fff;display:flex;align-items:center;justify-content:center}
+.ft .qr img{max-width:100%;max-height:100%}
+
+@media print {
+  body{background:#fff;padding:0}
+  .toolbar{display:none}
+  .card{border:1px solid #999;box-shadow:none;border-radius:0;max-width:none}
+}
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <a href="index.html">← Quay lại</a>
+  <button onclick="window.print()">🖨️ In phiếu</button>
+  <div class="sp"></div>
+  <span class="hint">In khổ A5 — 2 phiếu / tờ A4</span>
+</div>
+
+<div id="cardWrap"></div>
+
+<script src="wps-index.js?v=5"></script>
+<script src="standards.js?v=1"></script>
+<script>
+const DB = window.WPS_DB;
+const params = new URLSearchParams(location.search);
+const wid = params.get('id');
+const x = DB.items.find(i => i.id === wid);
+
+if (!x){
+  document.getElementById('cardWrap').innerHTML = '<div style="padding:40px;text-align:center;color:#7a2024">⚠ Không tìm thấy WPS: '+ (wid||'')+'</div>';
+} else {
+  renderCard(x);
+}
+
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+function renderCard(x){
+  const proj = DB.projects.find(p => p.code===x.project);
+  const jcode = window.inferJointCode(x);
+  const joint = window.JOINT_CODES[jcode] || {};
+  const acc = window.resolveAcceptance(x);
+  const p = x.params || {};
+  const mats = (x.base_metal||'').split('→').map(s=>s.trim());
+  const matA = mats[0] || x.base_metal || '—';
+  const matB = mats[1] || matA;
+  const procIc = ({FCAW:'🔥',GMAW:'⚡',GTAW:'✨',SMAW:'🔌',SAW:'🌊'})[normProc(x.process)] || '🔧';
+  const posVi = (x.position||'').replace(/Uphill/gi,'hàn LÊN').replace(/Downhill/gi,'hàn XUỐNG').replace(/All/gi,'mọi tư thế');
+  const polVi = ({DCEN:'DCEN (cực âm)', DCEP:'DCEP (cực dương)', AC:'AC'})[p.current] || p.current || '—';
+
+  const fillerLine = (x.filler||'').replace(/AWS\s+/,'AWS ') + (x.size?` · ${x.size}`:'');
+  const gasLine = p.gas ? `${p.gas}${p.gas_flow?` · ${p.gas_flow} L/ph`:''}` : '—';
+  const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=120x120&margin=2&data=' + encodeURIComponent(location.origin + location.pathname.replace(/welder-card\.html/,'') + '?id=' + encodeURIComponent(x.id));
+
+  const html = `
+    <div class="card" id="card">
+      <div class="h">
+        <div class="lg">DD</div>
+        <div style="flex:1;min-width:0">
+          <div class="t1">${procIc} Phiếu thợ hàn</div>
+          <div class="t2">${esc(x.id)}</div>
+        </div>
+        <div class="meta">
+          <div>Rev ${esc(x.rev||'-')}</div>
+          <div>${esc(normProc(x.process))}</div>
+        </div>
+      </div>
+
+      <div class="mat">
+        <div><div class="lb">Kim loại A</div><div class="v">${esc(matA)}</div></div>
+        <div><div class="lb">Kim loại B</div><div class="v">${esc(matB)}</div></div>
+        <div class="full"><div class="lb">Vật liệu hàn (Filler)</div><div class="v">${esc(fillerLine)} · Khí: ${esc(gasLine)}</div></div>
+      </div>
+
+      <div class="sec joint">
+        <div class="ttl"><span>📐 Chuẩn bị mối ghép</span><span class="ref">${esc(joint.code||'AWS D1.1 Fig.3.3')} · ${esc(jcode||'')}</span></div>
+        ${jointSvg(joint, jcode)}
+        <div class="dims">
+          <div class="d"><b>Góc vát:</b><br>${esc(joint.groove_angle||'—')}</div>
+          <div class="d"><b>Khe hở:</b><br>${esc(joint.root_opening||'—')}</div>
+          <div class="d"><b>Mặt chân:</b><br>${esc(joint.root_face||'—')}</div>
+        </div>
+        <div class="extras"><span>📋 ${esc(joint.name_vi||joint.sub||'')}</span>${joint.backing?`<span>🧱 Đệm: ${esc(joint.backing)}</span>`:''}${joint.weld_type?`<span>🔗 ${esc(joint.weld_type)}</span>`:''}</div>
+      </div>
+
+      <div class="sec set">
+        <div class="ttl"><span>🔧 Cài máy hàn</span><span class="ref">${p.amps?'theo WPS gốc':'(xem PDF gốc)'}</span></div>
+        <div class="grid">
+          <div class="box"><div class="l">AMPE (A)</div><div class="v">${esc(p.amps||'—')}</div></div>
+          <div class="box"><div class="l">VÔN (V)</div><div class="v">${esc(p.volts||'—')}</div></div>
+          <div class="box"><div class="l">TỐC ĐỘ</div><div class="v" style="font-size:14px">${esc(p.travel||'—')}</div></div>
+          <div class="box"><div class="l">TIỀN NHIỆT</div><div class="v" style="font-size:14px">${esc(p.preheat||'≥20°C')}</div></div>
+        </div>
+        <div class="extra">Tư thế: <b>${esc(posVi||'—')}</b> · Loại dòng: <b>${esc(polVi)}</b>${p.interpass?` · Interpass MAX: <b>${esc(p.interpass)}</b>`:''}${p.heat_input?` · Heat input MAX: <b>${esc(p.heat_input)} kJ/mm</b>`:''}</div>
+      </div>
+
+      <div class="sec acc">
+        <div class="ttl"><span>✅ Tiêu chí ĐẠT</span><span class="ref">${esc(acc?acc.name_vi:'AWS D1.1')} · ${esc(acc?acc.table:'')}</span></div>
+        <div class="grid">
+          ${acc ? acc.visual.slice(0,8).map(v=>`<div class="row"><div class="it">${esc(v.item)}</div><div class="lm">${esc(v.pass||v.limit)}</div></div>`).join('') : ''}
+        </div>
+        ${acc && acc.nde ? `<div class="nde">${Object.entries(acc.nde).map(([k,v])=>`<span>${esc(k)}: ${esc(v)}</span>`).join('')}</div>` : ''}
+      </div>
+
+      <div class="note">
+        <div class="ttl">⚠ Lưu ý thi công</div>
+        <ul>
+          <li>Đánh xỉ + chải sạch <b>giữa mỗi lớp</b></li>
+          <li>Đeo kính, găng tay, áo da đầy đủ</li>
+          <li>Không hàn khi <b>gió &gt; 8 m/s</b> hoặc trời mưa</li>
+          ${(x.code||'').includes('D1.6') ? '<li>Inox: KHÔNG dùng chung bàn chải/đá mài với thép cacbon</li>' : ''}
+          ${(x.tags||[]).includes('dissimilar') ? '<li>Hàn khác vật liệu — KIỂM TRA filler 309L đúng loại trước khi mồi</li>' : ''}
+        </ul>
+      </div>
+
+      <div class="ft">
+        <div class="info">
+          <div>Dự án: <b>${esc(proj?(proj.name_vi):x.project)}</b></div>
+          <div>PQR: <b>${esc(x.pqr||'—')}</b></div>
+        </div>
+        <div class="qr"><img src="${qrUrl}" alt="QR ${esc(x.id)}"></div>
+      </div>
+    </div>
+  `;
+  document.getElementById('cardWrap').innerHTML = html;
+}
+
+function normProc(p){
+  const s = String(p||'').toUpperCase();
+  if (s.includes('+')) return s.replace(/\s/g,'');
+  if (s.includes('TIG')||s.includes('GTAW')) return 'GTAW';
+  if (s.includes('FCAW')) return 'FCAW';
+  if (s.includes('GMAW')) return 'GMAW';
+  if (s.includes('SMAW')) return 'SMAW';
+  if (s.includes('SAW')) return 'SAW';
+  return s.split(' ')[0];
+}
+
+function jointSvg(joint, code){
+  if (!joint || joint.type === 'Fillet'){
+    return `<svg viewBox="0 0 500 180"><rect x="40" y="120" width="420" height="20" fill="#cdd6df" stroke="#5f6b7a"/><rect x="220" y="40" width="20" height="80" fill="#cdd6df" stroke="#5f6b7a"/><polygon points="200,120 220,120 220,100" fill="#a9781a"/><polygon points="240,120 260,120 240,100" fill="#a9781a"/><text x="170" y="100" font-size="13" fill="#0c447c" font-weight="600">Leg (Kích thước chân)</text><text x="290" y="100" font-size="13" fill="#0c447c" font-weight="600">≥ theo bản vẽ</text><text x="250" y="170" text-anchor="middle" font-size="12" fill="#5f6b7a">${esc(code||'Fillet weld')}</text></svg>`;
+  }
+  if (joint.type === 'T/Corner'){
+    return `<svg viewBox="0 0 500 180"><rect x="40" y="115" width="420" height="20" fill="#cdd6df" stroke="#5f6b7a"/><polygon points="220,115 250,115 220,40 215,40" fill="#cdd6df" stroke="#5f6b7a"/><polygon points="220,115 250,115 240,135" fill="#a9781a"/><line x1="180" y1="80" x2="220" y2="80" stroke="#0c447c"/><text x="170" y="78" font-size="12" fill="#0c447c" font-weight="600" text-anchor="end">${esc(joint.groove_angle||'45°')}</text><line x1="230" y1="130" x2="250" y2="130" stroke="#aa4322"/><text x="290" y="135" font-size="12" fill="#aa4322" font-weight="600">${esc(joint.root_opening||'')}</text></svg>`;
+  }
+  if (joint.type === 'Pipe Butt'){
+    return `<svg viewBox="0 0 500 180"><g transform="translate(250,90) rotate(45) translate(-250,-90)"><ellipse cx="180" cy="90" rx="30" ry="55" fill="none" stroke="#5f6b7a" stroke-width="1.5"/><ellipse cx="320" cy="90" rx="30" ry="55" fill="none" stroke="#5f6b7a" stroke-width="1.5"/><line x1="180" y1="35" x2="320" y2="35" stroke="#cdd6df" stroke-width="20"/><line x1="180" y1="145" x2="320" y2="145" stroke="#cdd6df" stroke-width="20"/><line x1="245" y1="35" x2="245" y2="145" stroke="#a9781a" stroke-width="3"/><line x1="255" y1="35" x2="255" y2="145" stroke="#a9781a" stroke-width="3"/></g><text x="250" y="170" text-anchor="middle" font-size="12" fill="#5f6b7a">Pipe butt 6G/6GR · góc nghiêng 45° cố định</text></svg>`;
+  }
+  if (joint.sub && joint.sub.includes('Double')){
+    return `<svg viewBox="0 0 500 180"><rect x="40" y="80" width="200" height="40" fill="#cdd6df" stroke="#5f6b7a"/><rect x="260" y="80" width="200" height="40" fill="#cdd6df" stroke="#5f6b7a"/><polygon points="240,80 260,80 250,100" fill="#a9781a"/><polygon points="240,120 260,120 250,100" fill="#a9781a"/><polygon points="220,60 240,80 260,80 280,60" fill="#cea24a" opacity="0.6"/><polygon points="220,140 240,120 260,120 280,140" fill="#cea24a" opacity="0.6"/><line x1="218" y1="55" x2="282" y2="55" stroke="#0c447c"/><text x="250" y="48" text-anchor="middle" font-size="12" fill="#0c447c" font-weight="600">${esc(joint.groove_angle||'60°')}</text><text x="250" y="170" text-anchor="middle" font-size="12" fill="#5f6b7a">Double groove (hàn cả 2 mặt)</text></svg>`;
+  }
+  return `<svg viewBox="0 0 500 180"><rect x="40" y="95" width="200" height="25" fill="#cdd6df" stroke="#5f6b7a" stroke-width="1"/><rect x="260" y="95" width="200" height="25" fill="#cdd6df" stroke="#5f6b7a" stroke-width="1"/><polygon points="240,95 260,95 250,120" fill="#a9781a"/><polygon points="225,70 240,95 260,95 275,70" fill="#cea24a" opacity="0.6"/><line x1="220" y1="65" x2="280" y2="65" stroke="#0c447c" stroke-width="1.2"/><polygon points="220,65 228,61 228,69" fill="#0c447c"/><polygon points="280,65 272,61 272,69" fill="#0c447c"/><text x="250" y="55" text-anchor="middle" font-size="13" fill="#0c447c" font-weight="600">${esc(joint.groove_angle||'60°±5°')}</text><line x1="247" y1="125" x2="253" y2="125" stroke="#aa4322" stroke-width="2"/><line x1="247" y1="135" x2="247" y2="148" stroke="#aa4322"/><line x1="253" y1="135" x2="253" y2="148" stroke="#aa4322"/><text x="250" y="160" text-anchor="middle" font-size="12" fill="#aa4322" font-weight="600">Khe hở: ${esc(joint.root_opening||'2-4 mm')}</text>${joint.root_face && joint.root_face!=='0' ? `<text x="370" y="118" font-size="11" fill="#3b6d11" font-weight="600">Mặt chân: ${esc(joint.root_face)}</text>`:''}</svg>`;
+}
+</script>
+</body>
+</html>

@@ -44,6 +44,7 @@ function openDetail(x){
   document.getElementById('dOpen').onclick = () => openPdf(x, fileHref);
   document.getElementById('dDl').href = fileHref;
   document.getElementById('dDl').download = x.file;
+  document.getElementById('dCard').href = 'welder-card.html?id=' + encodeURIComponent(x.id);
   const pageInfo = x.page ? (x.page_end && x.page_end!==x.page ? ` · ${LANG==='vi'?'trang':'pages'} ${x.page}–${x.page_end}` : ` · ${LANG==='vi'?'trang':'page'} ${x.page}`) : '';
   document.getElementById('dSrc').innerHTML = proj
     ? `<b>${esc(proj.code)}</b> — ${esc(LANG==='vi'?proj.name_vi:proj.name_en)}<br>📄 ${esc(x.file)}${pageInfo}<br><span style="color:var(--muted)">${esc(proj.register_doc||'')}${proj.date?` · ${esc(proj.date)}`:''}</span>`
@@ -280,4 +281,29 @@ function renderSummary(x){
       p.transfer  && {ic:'💎', lb:'Truyền kim loại', val:esc(p.transfer)}
     ].filter(Boolean);
     if (paramTiles.length){
-      html += `<div class="sm-h" style=
+      html += `<div class="sm-h" style="margin-top:14px;color:#7c2024">🔧 Thông số máy hàn</div><div class="sm-grid">` +
+        paramTiles.map(t=>`<div class="sm-tile${t.hi?' hi':''}"><div class="sm-ic">${t.ic}</div><div class="sm-lb">${t.lb}</div><div class="sm-val">${t.val}</div></div>`).join('') +
+        `</div>`;
+    }
+  }
+  w.innerHTML = html;
+  w.style.display = 'block';
+}
+
+function openGlossary(){
+  document.getElementById('govl').style.display = 'flex';
+  document.getElementById('gSearch').value = '';
+  renderGlossary('');
+  setTimeout(()=>document.getElementById('gSearch').focus(), 50);
+}
+function closeGlossary(){ document.getElementById('govl').style.display = 'none'; }
+function renderGlossary(q){
+  const list = window.WPS_GLOSSARY || [];
+  const ql = (q||'').toLowerCase().trim();
+  const filtered = ql ? list.filter(it => it.term.toLowerCase().includes(ql) || it.vi.toLowerCase().includes(ql) || (it.note||'').toLowerCase().includes(ql)) : list;
+  const body = document.getElementById('gBody');
+  if (!filtered.length){ body.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">Không tìm thấy thuật ngữ.</div>'; return; }
+  body.innerHTML = filtered.map(it =>
+    `<div class="g-item"><div class="g-term">${esc(it.term)}</div><div class="g-vi">${esc(it.vi)}</div>${it.note?`<div class="g-note">${esc(it.note)}</div>`:''}</div>`
+  ).join('');
+}
