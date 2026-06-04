@@ -82,7 +82,7 @@
   .empty{color:var(--muted);text-align:center;padding:46px 18px}
   /* detail */
   .detail-pane{}
-  @media(min-width:980px){ .detail-pane{position:sticky;top:74px} }
+  @media(min-width:980px){ .detail-pane{position:sticky;top:74px;max-height:calc(100vh - 90px);overflow-y:auto;overflow-x:hidden;padding-right:6px} .detail-pane::-webkit-scrollbar{width:8px} .detail-pane::-webkit-scrollbar-thumb{background:#cdd6df;border-radius:4px} }
   @media(max-width:979px){
     .detail-pane{position:fixed;inset:0;z-index:50;background:var(--bg);transform:translateX(100%);transition:transform .22s ease;overflow:auto;padding:0}
     body.detail-open .detail-pane{transform:translateX(0)}
@@ -801,12 +801,8 @@ function buildReport(){ const r=ruleById(selectedId); if(!r){ window.print(); re
 /* misc */
 function toast(msg){ const d=document.createElement("div"); d.textContent=msg;
   d.style.cssText="position:fixed;left:50%;bottom:80px;transform:translateX(-50%);background:#0c2238;color:#fff;padding:10px 16px;border-radius:10px;z-index:90;font-size:13px;box-shadow:var(--sh)";
-  document.body.appendChild(d); setTimeout(()=>d.remove(),1800); }
-
-/* PWA */
-if("serviceWorker" in navigator && location.protocol.indexOf("http")===0){ navigator.serviceWorker.register("sw.js").catch(()=>{}); }
-
-render();
+  d.style.cssText="position:fixed;left:50%;bottom:80px;transform:translateX(-50%);background:#0c2238;color:#fff;padding:10px 16px;border-radius:10px;z-index:90;font-size:13px;box-shadow:var(--sh)";
+  document.body.appendChild(d); setTimeout(()=>d.remove(), 2200); }
 </script>
 </body>
 </html>
