@@ -146,6 +146,11 @@ function openDetail(x){
     html += `</table>`;
   }
   if (x.element) html += `<div style="margin-top:10px;font-size:13px;color:var(--muted)">📦 Áp dụng cho: <b style="color:var(--ink)">${esc(x.element)}</b></div>`;
+  // Sketch hướng dẫn CÁCH ĐO
+  if (x.sketch && window.VT_SKETCH && window.VT_SKETCH[x.sketch]){
+    const svg = window.VT_SKETCH[x.sketch]();
+    if (svg) html += `<div style="margin-top:14px;background:#fbfdff;border:1px solid #b5d4f4;border-radius:12px;padding:12px 14px"><div style="font-size:11px;font-weight:800;color:#0c447c;letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px">📐 Cách đo thực tế (QC kiểm tra vật tư đầu vào)</div>${svg}</div>`;
+  }
   if (x.note_vi) html += `<div class="note">⚠ <b>Lưu ý:</b> ${esc(x.note_vi)}</div>`;
   if (x.clause || std.name){
     html += `<div class="src"><div class="h">📋 NGUỒN / TIÊU CHUẨN</div>`;
@@ -153,6 +158,7 @@ function openDetail(x){
     if (std.name) html += `<div style="color:var(--muted);margin-top:3px">${esc(std.name)} · ${esc(std.region)}</div>`;
     html += `</div>`;
   }
+  document.getElementById('dBody').innerHTML = html;
   document.getElementById('dBody').innerHTML = html;
   document.getElementById('ovl').style.display = 'flex';
   const u = new URL(location.href); u.searchParams.set('id', x.id); history.replaceState(null,'',u.toString());

@@ -51,7 +51,7 @@ window.VT_DATA = {
   /* =========== ITEMS =========== */
   items: [
     /* ===== EN 10029 — Tấm dung sai ===== */
-    {id:'EN10029-thk-A', cat:'plate_tol', std:'EN 10029',
+    {id:'EN10029-thk-A', sketch:'plate_thickness', cat:'plate_tol', std:'EN 10029',
      title_vi:'Dung sai chiều dày tấm — Cấp A (Class A — chuẩn)',
      title_en:'Plate thickness tolerance — Class A',
      element:'plate', region:'EU',
@@ -67,7 +67,7 @@ window.VT_DATA = {
      note_vi:'Cấp A là mặc định khi không chỉ định. Có thể đặt Class B (sai lệch ±), C (chỉ + thấp), D (chỉ +).',
      clause:'EN 10029:2010 §7 Table 1'},
 
-    {id:'EN10029-flat', cat:'plate_tol', std:'EN 10029',
+    {id:'EN10029-flat', sketch:'plate_flatness', cat:'plate_tol', std:'EN 10029',
      title_vi:'Dung sai độ phẳng tấm — Class N (normal)',
      title_en:'Plate flatness — Class N',
      element:'plate', region:'EU',
@@ -82,7 +82,7 @@ window.VT_DATA = {
      clause:'EN 10029:2010 §8 Table 4'},
 
     /* ===== EN 10034 — I/H section ===== */
-    {id:'EN10034-Hflange', cat:'section_tol', std:'EN 10034',
+    {id:'EN10034-Hflange', sketch:'i_section_dims', cat:'section_tol', std:'EN 10034',
      title_vi:'Dung sai chiều rộng cánh thép H/I',
      title_en:'Flange width tolerance — H/I section',
      element:'I-beam, H-beam, IPE, HEA, HEB', region:'EU',
@@ -94,7 +94,7 @@ window.VT_DATA = {
      ],
      clause:'EN 10034:1993 Table 1'},
 
-    {id:'EN10034-Hheight', cat:'section_tol', std:'EN 10034',
+    {id:'EN10034-Hheight', sketch:'i_section_dims', cat:'section_tol', std:'EN 10034',
      title_vi:'Dung sai chiều cao bụng thép H/I',
      title_en:'Web height tolerance — H/I section',
      element:'I-beam, H-beam', region:'EU',
@@ -106,7 +106,7 @@ window.VT_DATA = {
      ],
      clause:'EN 10034:1993 Table 1'},
 
-    {id:'EN10034-out-of-square', cat:'section_tol', std:'EN 10034',
+    {id:'EN10034-out-of-square', sketch:'i_out_of_square', cat:'section_tol', std:'EN 10034',
      title_vi:'Độ không vuông cánh-bụng (out of square)',
      title_en:'Out of square flange/web',
      element:'I-beam, H-beam', region:'EU',
@@ -116,7 +116,7 @@ window.VT_DATA = {
      note_vi:'b = bề rộng cánh. Đo tại 1 m từ đầu thanh.',
      clause:'EN 10034:1993 Table 2'},
 
-    {id:'EN10034-web-off', cat:'section_tol', std:'EN 10034',
+    {id:'EN10034-web-off', sketch:'i_web_offcenter', cat:'section_tol', std:'EN 10034',
      title_vi:'Lệch tâm bụng (web off-center)',
      title_en:'Web off-centre',
      element:'I-beam, H-beam', region:'EU',
@@ -126,7 +126,7 @@ window.VT_DATA = {
      ],
      clause:'EN 10034:1993 Table 2'},
 
-    {id:'EN10034-straight', cat:'section_tol', std:'EN 10034',
+    {id:'EN10034-straight', sketch:'i_straightness', cat:'section_tol', std:'EN 10034',
      title_vi:'Độ cong dọc theo trục y-y và z-z',
      title_en:'Straightness y-y and z-z',
      element:'I-beam, H-beam', region:'EU',
@@ -139,7 +139,7 @@ window.VT_DATA = {
      clause:'EN 10034:1993 Table 2'},
 
     /* ===== EN 10056 — Angle ===== */
-    {id:'EN10056-leg', cat:'section_tol', std:'EN 10056',
+    {id:'EN10056-leg', sketch:'angle_leg', cat:'section_tol', std:'EN 10056',
      title_vi:'Dung sai chiều dài cạnh — Thép góc đều',
      title_en:'Leg length tolerance — Equal-leg angle',
      element:'L-angle', region:'EU',
@@ -151,7 +151,7 @@ window.VT_DATA = {
      ],
      clause:'EN 10056-2:1993 Table 1'},
 
-    {id:'EN10056-angle', cat:'section_tol', std:'EN 10056',
+    {id:'EN10056-angle', sketch:'angle_leg', cat:'section_tol', std:'EN 10056',
      title_vi:'Góc giữa 2 cạnh (sai lệch khỏi 90°)',
      title_en:'Angle between legs',
      element:'L-angle', region:'EU',
@@ -161,7 +161,7 @@ window.VT_DATA = {
      clause:'EN 10056-2:1993 Table 1'},
 
     /* ===== EN 10210/10219 — Hollow section ===== */
-    {id:'EN10210-side', cat:'tube_tol', std:'EN 10210-2',
+    {id:'EN10210-side', sketch:'hss_outside', cat:'tube_tol', std:'EN 10210-2',
      title_vi:'Dung sai cạnh ngoài — Ống hộp vuông/CN (hot-finished)',
      title_en:'Outside dimension SHS/RHS hot-finished',
      element:'HSS, SHS, RHS', region:'EU',
@@ -171,7 +171,7 @@ window.VT_DATA = {
      ],
      clause:'EN 10210-2:2019 Table B.3'},
 
-    {id:'EN10210-thk', cat:'tube_tol', std:'EN 10210-2',
+    {id:'EN10210-thk', sketch:'hss_outside', cat:'tube_tol', std:'EN 10210-2',
      title_vi:'Dung sai chiều dày thành ống hộp (hot-finished)',
      title_en:'Wall thickness HSS hot-finished',
      element:'HSS', region:'EU',
@@ -180,7 +180,7 @@ window.VT_DATA = {
      ],
      clause:'EN 10210-2:2019 Table B.3'},
 
-    {id:'EN10210-twist', cat:'tube_tol', std:'EN 10210-2',
+    {id:'EN10210-twist', sketch:'hss_twist', cat:'tube_tol', std:'EN 10210-2',
      title_vi:'Độ xoắn ống hộp (twist)',
      title_en:'Twist HSS',
      element:'HSS, SHS, RHS', region:'EU',
@@ -189,7 +189,7 @@ window.VT_DATA = {
      ],
      clause:'EN 10210-2:2019 Table B.3'},
 
-    {id:'EN10210-square', cat:'tube_tol', std:'EN 10210-2',
+    {id:'EN10210-square', sketch:'hss_squareness', cat:'tube_tol', std:'EN 10210-2',
      title_vi:'Độ vuông góc (cạnh — bán kính góc)',
      title_en:'Squareness of sides',
      element:'SHS, RHS', region:'EU',
@@ -198,7 +198,7 @@ window.VT_DATA = {
      ],
      clause:'EN 10210-2:2019 Table B.3'},
 
-    {id:'EN10219-side', cat:'tube_tol', std:'EN 10219-2',
+    {id:'EN10219-side', sketch:'hss_outside', cat:'tube_tol', std:'EN 10219-2',
      title_vi:'Dung sai cạnh ngoài — Hộp cold-formed',
      title_en:'Outside dim SHS/RHS cold-formed',
      element:'HSS cold-formed', region:'EU',
@@ -209,7 +209,7 @@ window.VT_DATA = {
      clause:'EN 10219-2:2019 Table B.4'},
 
     /* ===== ASTM A6 (general rolled) ===== */
-    {id:'ASTM-A6-Hflange', cat:'section_tol', std:'ASTM A6',
+    {id:'ASTM-A6-Hflange', sketch:'i_section_dims', cat:'section_tol', std:'ASTM A6',
      title_vi:'Dung sai cánh W-shape (ASTM A6)',
      title_en:'W-shape flange tolerance',
      element:'W-shape, A992', region:'US',
@@ -220,7 +220,7 @@ window.VT_DATA = {
      ],
      clause:'ASTM A6/A6M Table 17'},
 
-    {id:'ASTM-A500-side', cat:'tube_tol', std:'ASTM A500',
+    {id:'ASTM-A500-side', sketch:'hss_outside', cat:'tube_tol', std:'ASTM A500',
      title_vi:'Dung sai HSS ASTM A500 (cạnh)',
      title_en:'A500 HSS outside dimension',
      element:'HSS, RHS, SHS', region:'US',
@@ -234,7 +234,7 @@ window.VT_DATA = {
      clause:'ASTM A500-21a §8'},
 
     /* ===== EN 10025-2 SPECS ===== */
-    {id:'S235JR', cat:'spec', std:'EN 10025-2',
+    {id:'S235JR', sketch:'spec_chemistry', cat:'spec', std:'EN 10025-2',
      title_vi:'S235JR — Thép cacbon thường, kháng va đập 27J @ 20°C',
      title_en:'S235JR — Mild carbon, 27J@+20°C',
      element:'plate, section, tube', region:'EU',
@@ -253,7 +253,7 @@ window.VT_DATA = {
      ],
      clause:'EN 10025-2:2019 Table 4 + Table 7'},
 
-    {id:'S355J2', cat:'spec', std:'EN 10025-2',
+    {id:'S355J2', sketch:'spec_charpy', cat:'spec', std:'EN 10025-2',
      title_vi:'S355J2 — Hợp kim thấp, kháng va đập 27J @ -20°C',
      title_en:'S355J2 — Low alloy, 27J@-20°C',
      element:'plate, section, tube', region:'EU',
@@ -273,7 +273,7 @@ window.VT_DATA = {
      note_vi:'Phổ biến nhất cho kết cấu kéo dài làm việc ngoài trời.',
      clause:'EN 10025-2:2019 Table 4 + Table 7'},
 
-    {id:'S275JR', cat:'spec', std:'EN 10025-2',
+    {id:'S275JR', sketch:'spec_chemistry', cat:'spec', std:'EN 10025-2',
      title_vi:'S275JR — Trung gian S235/S355, 27J @ +20°C',
      title_en:'S275JR',
      element:'plate, section', region:'EU',
@@ -287,7 +287,7 @@ window.VT_DATA = {
      clause:'EN 10025-2:2019'},
 
     /* ===== ASTM SPECS ===== */
-    {id:'A36', cat:'spec', std:'ASTM A36',
+    {id:'A36', sketch:'spec_mech', cat:'spec', std:'ASTM A36',
      title_vi:'ASTM A36 — Cacbon thường (≈ S235)',
      title_en:'ASTM A36',
      element:'plate, section', region:'US',
@@ -304,7 +304,7 @@ window.VT_DATA = {
      ],
      clause:'ASTM A36/A36M-19 §6, §7'},
 
-    {id:'A572-50', cat:'spec', std:'ASTM A572',
+    {id:'A572-50', sketch:'spec_mech', cat:'spec', std:'ASTM A572',
      title_vi:'ASTM A572 Gr.50 — HSLA (≈ S355)',
      title_en:'ASTM A572 Gr.50',
      element:'plate, section', region:'US',
@@ -321,7 +321,7 @@ window.VT_DATA = {
      ],
      clause:'ASTM A572/A572M-21'},
 
-    {id:'A992', cat:'spec', std:'ASTM A992',
+    {id:'A992', sketch:'spec_mech', cat:'spec', std:'ASTM A992',
      title_vi:'ASTM A992 — Wide-flange chuẩn USA',
      title_en:'ASTM A992 — W-shapes',
      element:'W-shape', region:'US',
@@ -339,7 +339,7 @@ window.VT_DATA = {
      note_vi:'Thay thế cho A36 cho thép W. Có CE max để đảm bảo hàn được.',
      clause:'ASTM A992/A992M-20'},
 
-    {id:'A500-B', cat:'spec', std:'ASTM A500',
+    {id:'A500-B', sketch:'spec_mech', cat:'spec', std:'ASTM A500',
      title_vi:'ASTM A500 Gr.B — Hộp cold-formed phổ biến',
      title_en:'ASTM A500 Gr.B HSS',
      element:'HSS', region:'US',
@@ -354,7 +354,7 @@ window.VT_DATA = {
      ],
      clause:'ASTM A500/A500M-21a'},
 
-    {id:'SA516-70', cat:'spec', std:'ASTM A516',
+    {id:'SA516-70', sketch:'spec_charpy', cat:'spec', std:'ASTM A516',
      title_vi:'ASME SA516 Gr.70 — Tấm bồn áp lực (phổ biến)',
      title_en:'ASME SA516 Gr.70 PV plate',
      element:'plate', region:'US',
@@ -372,7 +372,7 @@ window.VT_DATA = {
      clause:'ASTM A516/A516M-21'},
 
     /* ===== JIS SPECS ===== */
-    {id:'SS400', cat:'spec', std:'JIS G3101',
+    {id:'SS400', sketch:'spec_chemistry', cat:'spec', std:'JIS G3101',
      title_vi:'JIS SS400 — Thép kết cấu thường Nhật',
      title_en:'JIS SS400',
      element:'plate, section', region:'JP',
@@ -386,7 +386,7 @@ window.VT_DATA = {
      note_vi:'KHÔNG yêu cầu test Charpy. Thay thế dần bằng SN400 cho công trình chịu địa chấn.',
      clause:'JIS G3101:2020'},
 
-    {id:'SN400B', cat:'spec', std:'JIS G3136',
+    {id:'SN400B', sketch:'spec_charpy', cat:'spec', std:'JIS G3136',
      title_vi:'JIS SN400B — Kháng địa chấn (Nhật)',
      title_en:'JIS SN400B',
      element:'plate, section', region:'JP',
@@ -403,7 +403,7 @@ window.VT_DATA = {
      clause:'JIS G3136:2020'},
 
     /* ===== EN 10204 — CHỨNG TỪ ===== */
-    {id:'cert-2.1', cat:'cert', std:'EN 10204',
+    {id:'cert-2.1', sketch:'cert_21', cat:'cert', std:'EN 10204',
      title_vi:'Loại 2.1 — Cam kết nhà sản xuất',
      title_en:'Type 2.1 — Declaration of compliance',
      element:'cert', region:'EU',
@@ -414,7 +414,7 @@ window.VT_DATA = {
      ],
      clause:'EN 10204:2004'},
 
-    {id:'cert-2.2', cat:'cert', std:'EN 10204',
+    {id:'cert-2.2', sketch:'cert_2x', cat:'cert', std:'EN 10204',
      title_vi:'Loại 2.2 — Test report (không xuất xứ riêng)',
      title_en:'Type 2.2 — Test report',
      element:'cert', region:'EU',
@@ -425,7 +425,7 @@ window.VT_DATA = {
      ],
      clause:'EN 10204:2004'},
 
-    {id:'cert-3.1', cat:'cert', std:'EN 10204',
+    {id:'cert-3.1', sketch:'cert_doc', cat:'cert', std:'EN 10204',
      title_vi:'Loại 3.1 — Inspection certificate (PHỔ BIẾN NHẤT)',
      title_en:'Type 3.1 — Inspection certificate',
      element:'cert', region:'EU',
@@ -437,7 +437,7 @@ window.VT_DATA = {
      note_vi:'Phổ biến nhất ở Việt Nam. Nhớ kiểm tra heat number trùng với mác in trên tấm/thép hình.',
      clause:'EN 10204:2004'},
 
-    {id:'cert-3.2', cat:'cert', std:'EN 10204',
+    {id:'cert-3.2', sketch:'cert_3x', cat:'cert', std:'EN 10204',
      title_vi:'Loại 3.2 — Có witness/bên thứ 3',
      title_en:'Type 3.2 — Witnessed by 3rd party',
      element:'cert', region:'EU',
@@ -449,7 +449,7 @@ window.VT_DATA = {
      clause:'EN 10204:2004'},
 
     /* ===== ISO 8501-1 RUST GRADES ===== */
-    {id:'rust-A', cat:'surface', std:'ISO 8501-1',
+    {id:'rust-A', sketch:'surface_rust', cat:'surface', std:'ISO 8501-1',
      title_vi:'Cấp gỉ A — Bề mặt còn vảy cán nguyên (mill scale)',
      title_en:'Rust grade A — Steel surface largely covered with adherent mill scale',
      element:'surface', region:'INT',
@@ -460,7 +460,7 @@ window.VT_DATA = {
      ],
      clause:'ISO 8501-1:2007'},
 
-    {id:'rust-B', cat:'surface', std:'ISO 8501-1',
+    {id:'rust-B', sketch:'surface_rust', cat:'surface', std:'ISO 8501-1',
      title_vi:'Cấp gỉ B — Vảy cán bắt đầu bong + gỉ xuất hiện',
      title_en:'Rust grade B — Mill scale beginning to flake + initial rust',
      element:'surface', region:'INT',
@@ -471,7 +471,7 @@ window.VT_DATA = {
      ],
      clause:'ISO 8501-1:2007'},
 
-    {id:'rust-C', cat:'surface', std:'ISO 8501-1',
+    {id:'rust-C', sketch:'surface_rust', cat:'surface', std:'ISO 8501-1',
      title_vi:'Cấp gỉ C — Vảy đã bay hết, bề mặt gỉ đều',
      title_en:'Rust grade C — Mill scale gone, general rust',
      element:'surface', region:'INT',
@@ -482,7 +482,7 @@ window.VT_DATA = {
      ],
      clause:'ISO 8501-1:2007'},
 
-    {id:'rust-D', cat:'surface', std:'ISO 8501-1',
+    {id:'rust-D', sketch:'surface_rust', cat:'surface', std:'ISO 8501-1',
      title_vi:'Cấp gỉ D — RỖ sâu nhìn rõ',
      title_en:'Rust grade D — Pitting visible',
      element:'surface', region:'INT',
@@ -493,7 +493,7 @@ window.VT_DATA = {
      ],
      clause:'ISO 8501-1:2007'},
 
-    {id:'clean-Sa2.5', cat:'surface', std:'ISO 8501-1',
+    {id:'clean-Sa2.5', sketch:'surface_profile', cat:'surface', std:'ISO 8501-1',
      title_vi:'Sa 2½ — Very thorough blast (chuẩn cho sơn epoxy)',
      title_en:'Sa 2½ — Very thorough blast-cleaning',
      element:'surface prep', region:'INT',
@@ -505,7 +505,7 @@ window.VT_DATA = {
      clause:'ISO 8501-1:2007 + ISO 8501-2'},
 
     /* ===== EN 10164 — Z quality ===== */
-    {id:'Z25', cat:'spec', std:'EN 10164',
+    {id:'Z25', sketch:'z_quality', cat:'spec', std:'EN 10164',
      title_vi:'Z25 — Cấp Z trung bình (≥ 15% RA across thickness)',
      title_en:'Z25 — Through-thickness deformation property',
      element:'plate', region:'EU',
@@ -518,7 +518,7 @@ window.VT_DATA = {
      clause:'EN 10164:2018'},
 
     /* ===== NDT incoming ===== */
-    {id:'EN10160-S0-E0', cat:'ndt', std:'EN 10160',
+    {id:'EN10160-S0-E0', sketch:'ut_plate', cat:'ndt', std:'EN 10160',
      title_vi:'EN 10160 S0/E0 — UT tấm chấp nhận cao nhất',
      title_en:'EN 10160 S0/E0 — Plate UT highest grade',
      element:'plate UT', region:'EU',
