@@ -202,6 +202,10 @@
 <div id="report" class="main"></div>
 
 <script src="tolerances-data.js"></script>
+<script src="tolerances-tier1.js"></script>
+<script src="tolerances-tier2.js"></script>
+<script src="sketches.js"></script>
+<script src="sketch-bind.js"></script>
 <script src="smart-search.js" defer></script>
 <script>
 /* ===== i18n ===== */
@@ -495,6 +499,11 @@ function renderDetail(){
         <div class="k">${esc(T('feature'))}</div><div>${esc(featName(r.feature))}</div>
         <div class="k">${esc(T('permitted'))}</div><div>${permittedSummary(r)}</div></div>`;
   h+=diagramBlock(r);
+  /* Sketch engineering style — inject from sketches.js nếu rule có sketch key */
+  if(r.sketch && window.DS_SKETCH && window.DS_SKETCH[r.sketch]){
+    const svg = window.DS_SKETCH[r.sketch]();
+    if (svg) h+=`<div style="margin-top:12px;background:#fbfdff;border:1px solid #b5d4f4;border-radius:12px;padding:12px"><div style="font-size:11px;font-weight:800;color:#0c447c;letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px">📐 Bản vẽ kỹ thuật — cách đo</div>${svg}</div>`;
+  }
   if(r.conditions) h+=`<div class="cond"><strong>${esc(T('conditions'))}:</strong> ${esc(tx(r.conditions))}</div>`;
   h+=`<div class="accept">✔ <strong>${esc(T('acceptance'))}:</strong> ${esc(tx(r.acceptance))}</div>`;
   if(r.needsVerify) h+=`<div class="warn">${esc(T('needVerify'))}</div>`;
@@ -806,7 +815,7 @@ function toast(msg){ const d=document.createElement("div"); d.textContent=msg;
   d.style.cssText="position:fixed;left:50%;bottom:80px;transform:translateX(-50%);background:#0c2238;color:#fff;padding:10px 16px;border-radius:10px;z-index:90;font-size:13px;box-shadow:var(--sh)";
   document.body.appendChild(d); setTimeout(()=>d.remove(), 2200); }
 
-/* bootstrap — load saved data nếu có, render lần đầu, đăng ký service worker */
+/* bootstrap */
 try { const saved = localStorage.getItem("tol_data"); if (saved){ DATA = JSON.parse(saved); } } catch(e){}
 render();
 if ("serviceWorker" in navigator && location.protocol.indexOf("http")===0) {
