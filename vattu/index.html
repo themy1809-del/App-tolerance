@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#3b6d11">
+<title>Kiểm tra Vật tư — Kết cấu thép</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/icon-180.png">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="appbar">
+  <a class="back" href="../" title="Về trang chủ">←</a>
+  <div class="logo">VT</div>
+  <div>
+    <h1>Kiểm tra Vật tư</h1>
+    <div class="sub">Steel Material Inspection · QC</div>
+  </div>
+  <div class="sp"></div>
+</header>
+
+<main class="main">
+  <div class="hero">
+    <h2>Tra cứu spec, dung sai &amp; tiêu chí nhập vật tư</h2>
+    <p>EN · ASTM · JIS · GB · ISO — dung sai kích thước, hoá học, cơ tính, MTC, bề mặt, NDT.</p>
+  </div>
+
+  <div class="search">
+    <span class="mag">🔍</span>
+    <input id="q" type="search" placeholder="Tìm: tấm 20mm, S355, A572, SS400, rust grade B…" autocomplete="off">
+    <button class="clr" id="qClear" style="display:none">✕</button>
+  </div>
+
+  <div class="filters" id="catRow"></div>
+
+  <details class="more">
+    <summary>Bộ lọc nâng cao</summary>
+    <div class="body">
+      <div><label class="fld">Tiêu chuẩn</label><select id="fStd"><option value="">— Tất cả —</option></select></div>
+      <div><label class="fld">Khu vực</label><select id="fRegion"><option value="">— Tất cả —</option></select></div>
+    </div>
+  </details>
+
+  <div class="count" id="countWrap" style="display:none">
+    <span id="countTxt">0 kết quả</span>
+    <span style="color:#3b6d11;font-weight:700;cursor:pointer;padding:4px 8px;border-radius:8px" id="resetBtn">Đặt lại</span>
+  </div>
+
+  <div class="section" id="catSect">
+    <h3>📂 Chọn nhóm để xem</h3>
+    <div class="mosaic" id="catGrid"></div>
+  </div>
+
+  <div class="grid" id="results" style="display:none"></div>
+  <div class="empty" id="empty" style="display:none">
+    <div class="lg">🗂️</div>
+    <div>Không tìm thấy. Thử bỏ bớt bộ lọc.</div>
+  </div>
+
+  <div class="ftr">
+    DaiDung Metallic — App Kiểm tra Vật tư &middot; <a href="../">← Trang chủ</a>
+  </div>
+</main>
+
+<div class="ovl" id="ovl" style="display:none" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="mhead">
+      <div class="ti">
+        <h3 id="dTitle">—</h3>
+        <div class="sm" id="dSub">—</div>
+      </div>
+      <button class="x" onclick="closeModal()">✕</button>
+    </div>
+    <div class="mbody" id="dBody"></div>
+  </div>
+</div>
+
+<script src="data.js?v=1"></script>
+<script src="app.js?v=1"></script>
+</body>
+</html>

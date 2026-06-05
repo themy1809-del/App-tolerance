@@ -1,0 +1,16 @@
+{
+  "name": "Vật tư — DaiDung",
+  "short_name": "Vật tư",
+  "description": "Kiểm tra vật tư kết cấu thép theo EN/ASTM/JIS/ISO",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#eef1f5",
+  "theme_color": "#3b6d11",
+  "lang": "vi",
+  "icons": [
+    { "src": "../icons/icon-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "../icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "../icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
