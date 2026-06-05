@@ -82,7 +82,7 @@ window.VT_DATA = {
      clause:'EN 10029:2010 §8 Table 4'},
 
     /* ===== EN 10034 — I/H section ===== */
-    {id:'EN10034-Hflange', sketch:'i_section_dims', cat:'section_tol', std:'EN 10034',
+    {id:'EN10034-Hflange', sketch:'i_flange_width', cat:'section_tol', std:'EN 10034',
      title_vi:'Dung sai chiều rộng cánh thép H/I',
      title_en:'Flange width tolerance — H/I section',
      element:'I-beam, H-beam, IPE, HEA, HEB', region:'EU',
@@ -94,7 +94,7 @@ window.VT_DATA = {
      ],
      clause:'EN 10034:1993 Table 1'},
 
-    {id:'EN10034-Hheight', sketch:'i_section_dims', cat:'section_tol', std:'EN 10034',
+    {id:'EN10034-Hheight', sketch:'i_web_height', cat:'section_tol', std:'EN 10034',
      title_vi:'Dung sai chiều cao bụng thép H/I',
      title_en:'Web height tolerance — H/I section',
      element:'I-beam, H-beam', region:'EU',
@@ -139,7 +139,7 @@ window.VT_DATA = {
      clause:'EN 10034:1993 Table 2'},
 
     /* ===== EN 10056 — Angle ===== */
-    {id:'EN10056-leg', sketch:'angle_leg', cat:'section_tol', std:'EN 10056',
+    {id:'EN10056-leg', sketch:'angle_only_leg', cat:'section_tol', std:'EN 10056',
      title_vi:'Dung sai chiều dài cạnh — Thép góc đều',
      title_en:'Leg length tolerance — Equal-leg angle',
      element:'L-angle', region:'EU',
@@ -151,7 +151,7 @@ window.VT_DATA = {
      ],
      clause:'EN 10056-2:1993 Table 1'},
 
-    {id:'EN10056-angle', sketch:'angle_leg', cat:'section_tol', std:'EN 10056',
+    {id:'EN10056-angle', sketch:'angle_alpha', cat:'section_tol', std:'EN 10056',
      title_vi:'Góc giữa 2 cạnh (sai lệch khỏi 90°)',
      title_en:'Angle between legs',
      element:'L-angle', region:'EU',
@@ -161,7 +161,7 @@ window.VT_DATA = {
      clause:'EN 10056-2:1993 Table 1'},
 
     /* ===== EN 10210/10219 — Hollow section ===== */
-    {id:'EN10210-side', sketch:'hss_outside', cat:'tube_tol', std:'EN 10210-2',
+    {id:'EN10210-side', sketch:'hss_outside_only', cat:'tube_tol', std:'EN 10210-2',
      title_vi:'Dung sai cạnh ngoài — Ống hộp vuông/CN (hot-finished)',
      title_en:'Outside dimension SHS/RHS hot-finished',
      element:'HSS, SHS, RHS', region:'EU',
@@ -171,7 +171,7 @@ window.VT_DATA = {
      ],
      clause:'EN 10210-2:2019 Table B.3'},
 
-    {id:'EN10210-thk', sketch:'hss_outside', cat:'tube_tol', std:'EN 10210-2',
+    {id:'EN10210-thk', sketch:'hss_wall_only', cat:'tube_tol', std:'EN 10210-2',
      title_vi:'Dung sai chiều dày thành ống hộp (hot-finished)',
      title_en:'Wall thickness HSS hot-finished',
      element:'HSS', region:'EU',
@@ -198,7 +198,7 @@ window.VT_DATA = {
      ],
      clause:'EN 10210-2:2019 Table B.3'},
 
-    {id:'EN10219-side', sketch:'hss_outside', cat:'tube_tol', std:'EN 10219-2',
+    {id:'EN10219-side', sketch:'hss_outside_only', cat:'tube_tol', std:'EN 10219-2',
      title_vi:'Dung sai cạnh ngoài — Hộp cold-formed',
      title_en:'Outside dim SHS/RHS cold-formed',
      element:'HSS cold-formed', region:'EU',
@@ -209,7 +209,7 @@ window.VT_DATA = {
      clause:'EN 10219-2:2019 Table B.4'},
 
     /* ===== ASTM A6 (general rolled) ===== */
-    {id:'ASTM-A6-Hflange', sketch:'i_section_dims', cat:'section_tol', std:'ASTM A6',
+    {id:'ASTM-A6-Hflange', sketch:'i_flange_width', cat:'section_tol', std:'ASTM A6',
      title_vi:'Dung sai cánh W-shape (ASTM A6)',
      title_en:'W-shape flange tolerance',
      element:'W-shape, A992', region:'US',
@@ -220,7 +220,7 @@ window.VT_DATA = {
      ],
      clause:'ASTM A6/A6M Table 17'},
 
-    {id:'ASTM-A500-side', sketch:'hss_outside', cat:'tube_tol', std:'ASTM A500',
+    {id:'ASTM-A500-side', sketch:'hss_outside_only', cat:'tube_tol', std:'ASTM A500',
      title_vi:'Dung sai HSS ASTM A500 (cạnh)',
      title_en:'A500 HSS outside dimension',
      element:'HSS, RHS, SHS', region:'US',
@@ -449,7 +449,7 @@ window.VT_DATA = {
      clause:'EN 10204:2004'},
 
     /* ===== ISO 8501-1 RUST GRADES ===== */
-    {id:'rust-A', sketch:'surface_rust', cat:'surface', std:'ISO 8501-1',
+    {id:'rust-A', sketch:'surface_rust_A', cat:'surface', std:'ISO 8501-1',
      title_vi:'Cấp gỉ A — Bề mặt còn vảy cán nguyên (mill scale)',
      title_en:'Rust grade A — Steel surface largely covered with adherent mill scale',
      element:'surface', region:'INT',
@@ -471,7 +471,7 @@ window.VT_DATA = {
      ],
      clause:'ISO 8501-1:2007'},
 
-    {id:'rust-C', sketch:'surface_rust', cat:'surface', std:'ISO 8501-1',
+    {id:'rust-C', sketch:'surface_rust_C', cat:'surface', std:'ISO 8501-1',
      title_vi:'Cấp gỉ C — Vảy đã bay hết, bề mặt gỉ đều',
      title_en:'Rust grade C — Mill scale gone, general rust',
      element:'surface', region:'INT',
@@ -482,7 +482,7 @@ window.VT_DATA = {
      ],
      clause:'ISO 8501-1:2007'},
 
-    {id:'rust-D', sketch:'surface_rust', cat:'surface', std:'ISO 8501-1',
+    {id:'rust-D', sketch:'surface_rust_D', cat:'surface', std:'ISO 8501-1',
      title_vi:'Cấp gỉ D — RỖ sâu nhìn rõ',
      title_en:'Rust grade D — Pitting visible',
      element:'surface', region:'INT',

@@ -204,7 +204,9 @@
 <script src="tolerances-data.js"></script>
 <script src="tolerances-tier1.js"></script>
 <script src="tolerances-tier2.js"></script>
+<script src="tolerances-tier3.js"></script>
 <script src="sketches.js"></script>
+<script src="sketches-v2.js"></script>
 <script src="sketch-bind.js"></script>
 <script src="smart-search.js" defer></script>
 <script>
@@ -819,7 +821,7 @@ function toast(msg){ const d=document.createElement("div"); d.textContent=msg;
 try { const saved = localStorage.getItem("tol_data"); if (saved){ DATA = JSON.parse(saved); } } catch(e){}
 render();
 if ("serviceWorker" in navigator && location.protocol.indexOf("http")===0) {
-  navigator.serviceWorker.register("sw.js").catch(()=>{});
+.catch(()=>{});
 }
 </script>
 </body>

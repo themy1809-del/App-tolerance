@@ -483,5 +483,150 @@ pipe_dim: () => `<svg viewBox="0 0 500 290" xmlns="http://www.w3.org/2000/svg">$
   ${caption('EN 10210/10219 — Đo 2 hướng vuông góc → tính độ tròn (ovality)')}
 </svg>`,
 
+/* ===== SPECIFIC I/H SECTION DIMS ===== */
+i_flange_width: () => `<svg viewBox="0 0 500 310" xmlns="http://www.w3.org/2000/svg">${DEFS}
+  <rect x="130" y="60" width="240" height="20" fill="url(#steelG)" stroke="#5f6b7a" stroke-width="1.2"/>
+  <rect x="130" y="60" width="240" height="20" fill="url(#hatch)" opacity="0.5"/>
+  <rect x="130" y="220" width="240" height="20" fill="url(#steelG)" stroke="#5f6b7a" stroke-width="1.2"/>
+  <rect x="130" y="220" width="240" height="20" fill="url(#hatch)" opacity="0.5"/>
+  <rect x="240" y="80" width="20" height="140" fill="url(#steelG)" stroke="#5f6b7a" stroke-width="1"/>
+  <rect x="240" y="80" width="20" height="140" fill="url(#hatch)" opacity="0.4"/>
+  ${dimH(130, 370, 38, 'b', '#aa4322')}
+  ${caliperOuter(250, 60, 250)}
+  <text x="40" y="265" font-size="11" fill="#3b6d11" font-weight="600">📐 Đo bề rộng cánh b bằng caliper ngoài tại 2 đầu + giữa thanh</text>
+  <text x="40" y="283" font-size="11" fill="#3b6d11" font-weight="600">⚠ Caliper PHẢI vuông góc, không bị xiên — sai số 0.1 mm là quan trọng</text>
+  ${caption('EN 10034 Table 1 — b<110: ±2 · 110-210: ±3 · 210-325: ±4 · ≥325: ±5 mm')}
+</svg>`,
+
+i_web_height: () => `<svg viewBox="0 0 500 310" xmlns="http://www.w3.org/2000/svg">${DEFS}
+  <rect x="170" y="60" width="160" height="20" fill="url(#steelG)" stroke="#5f6b7a" stroke-width="1"/>
+  <rect x="170" y="60" width="160" height="20" fill="url(#hatch)" opacity="0.5"/>
+  <rect x="170" y="220" width="160" height="20" fill="url(#steelG)" stroke="#5f6b7a" stroke-width="1"/>
+  <rect x="170" y="220" width="160" height="20" fill="url(#hatch)" opacity="0.5"/>
+  <rect x="240" y="80" width="20" height="140" fill="url(#steelG)" stroke="#aa4322" stroke-width="2"/>
+  <rect x="240" y="80" width="20" height="140" fill="url(#hatch)" opacity="0.5"/>
+  ${dimV(60, 240, 380, 'h', '#aa4322')}
+  <text x="40" y="265" font-size="11" fill="#3b6d11" font-weight="600">📐 Đo chiều cao tổng h từ mặt ngoài cánh trên đến mặt ngoài cánh dưới</text>
+  <text x="40" y="283" font-size="11" fill="#3b6d11" font-weight="600">🛠 Dùng caliper số (digital) hoặc thước cặp đo trong cho thanh lớn</text>
+  ${caption('EN 10034 Table 1 — h<180: ±2 · 180-400: ±3 · 400-700: ±4 · ≥700: ±5 mm')}
+</svg>`,
+
+/* ===== ANGLE specific ===== */
+angle_only_leg: () => `<svg viewBox="0 0 500 290" xmlns="http://www.w3.org/2000/svg">${DEFS}
+  <polygon points="170,60 195,60 195,200 320,200 320,225 170,225" fill="url(#steelG)" stroke="#5f6b7a" stroke-width="1.5"/>
+  <polygon points="170,60 195,60 195,200 320,200 320,225 170,225" fill="url(#hatch)" opacity="0.5"/>
+  ${dimV(60, 225, 140, 'L₁', '#aa4322')}
+  ${dimH(170, 320, 255, 'L₂', '#aa4322')}
+  ${caliperOuter(182, 60, 50)}
+  <text x="40" y="280" font-size="11" fill="#3b6d11" font-weight="600">📐 Đo từ điểm gốc (đỉnh góc) đến đầu cạnh — tránh vùng tròn fillet</text>
+  ${caption('EN 10056 — Cạnh ≤50: ±1 · ≤100: ±2 · ≤150: ±3 · >150: ±4 mm')}
+</svg>`,
+
+angle_alpha: () => `<svg viewBox="0 0 500 290" xmlns="http://www.w3.org/2000/svg">${DEFS}
+  <polygon points="170,60 195,60 195,200 320,200 320,225 170,225" fill="url(#steelG)" stroke="#5f6b7a" stroke-width="1.5"/>
+  <polygon points="170,60 195,60 195,200 320,200 320,225 170,225" fill="url(#hatch)" opacity="0.4"/>
+  <path d="M 195 100 A 40 40 0 0 0 235 60" fill="none" stroke="#aa4322" stroke-width="2.5"/>
+  <text x="240" y="95" font-size="14" fill="#aa4322" font-weight="800">α = 90° ± 30'</text>
+  <text x="240" y="115" font-size="11" fill="#aa4322">(= ± 0.5°)</text>
+  <g transform="translate(330,150)">
+    <rect x="0" y="0" width="100" height="65" fill="#fff" stroke="#1b2430" stroke-width="1.2"/>
+    <text x="50" y="18" text-anchor="middle" font-size="9" fill="#1b2430" font-weight="700">BEVEL</text>
+    <text x="50" y="32" text-anchor="middle" font-size="9" fill="#1b2430" font-weight="700">PROTRACTOR</text>
+    <circle cx="50" cy="48" r="10" fill="none" stroke="#aa4322" stroke-width="1.2"/>
+    <line x1="50" y1="48" x2="58" y2="42" stroke="#aa4322" stroke-width="1.5"/>
+  </g>
+  <text x="40" y="275" font-size="11" fill="#3b6d11" font-weight="600">📐 Áp bevel protractor vào trong góc — đọc trực tiếp độ</text>
+  ${caption('EN 10056-2 Table 1 — α = 90° ± 30 phút cho mọi kích cỡ thép góc')}
+</svg>`,
+
+/* ===== HSS SEPARATE FEATURES ===== */
+hss_outside_only: () => `<svg viewBox="0 0 500 290" xmlns="http://www.w3.org/2000/svg">${DEFS}
+  <rect x="160" y="65" width="180" height="135" fill="url(#steelG)" stroke="#5f6b7a" stroke-width="1.5"/>
+  <rect x="160" y="65" width="180" height="135" fill="url(#hatch)" opacity="0.5"/>
+  <rect x="172" y="77" width="156" height="111" fill="#fafcfe" stroke="#5f6b7a" stroke-width="0.5"/>
+  ${dimH(160, 340, 42, 'B', '#aa4322')}
+  ${dimV(65, 200, 370, 'H', '#aa4322')}
+  ${caliperOuter(250, 65, 200)}
+  <text x="40" y="232" font-size="11" fill="#3b6d11" font-weight="600">📐 Đo B, H tại 4 vị trí: 2 đầu + 2 điểm 1/3 chiều dài</text>
+  <text x="40" y="250" font-size="11" fill="#3b6d11" font-weight="600">⚠ Tính trung bình. Sai khi nóng tiếp giáp + lệch tâm khuôn</text>
+  ${caption('EN 10210-2 — Cạnh ≤100: ±1% (≥0.5 mm) · >100: ±0.8% (≥0.8 mm)')}
+</svg>`,
+
+hss_wall_only: () => `<svg viewBox="0 0 500 290" xmlns="http://www.w3.org/2000/svg">${DEFS}
+  <rect x="160" y="65" width="180" height="135" fill="url(#steelG)" stroke="#5f6b7a" stroke-width="1.5"/>
+  <rect x="160" y="65" width="180" height="135" fill="url(#hatch)" opacity="0.5"/>
+  <rect x="172" y="77" width="156" height="111" fill="#fafcfe" stroke="#5f6b7a" stroke-width="0.5"/>
+  <g stroke="#aa4322" stroke-width="2" fill="none">
+    <line x1="160" y1="77" x2="172" y2="77"/>
+    <line x1="160" y1="188" x2="172" y2="188"/>
+    <line x1="328" y1="77" x2="340" y2="77"/>
+    <line x1="328" y1="188" x2="340" y2="188"/>
+  </g>
+  <text x="125" y="80" text-anchor="end" font-size="13" fill="#aa4322" font-weight="800">t₁</text>
+  <text x="125" y="191" text-anchor="end" font-size="13" fill="#aa4322" font-weight="800">t₂</text>
+  <text x="355" y="80" font-size="13" fill="#aa4322" font-weight="800">t₃</text>
+  <text x="355" y="191" font-size="13" fill="#aa4322" font-weight="800">t₄</text>
+  <g transform="translate(370,120)">
+    <rect x="0" y="0" width="80" height="55" fill="#fff" stroke="#1b2430" stroke-width="1.2"/>
+    <text x="40" y="14" text-anchor="middle" font-size="9" fill="#1b2430" font-weight="700">UT GAUGE</text>
+    <text x="40" y="28" text-anchor="middle" font-size="9" fill="#1b2430" font-weight="700">(thickness)</text>
+    <text x="40" y="46" text-anchor="middle" font-size="11" fill="#aa4322" font-weight="700">t = ?</text>
+  </g>
+  <text x="40" y="232" font-size="11" fill="#3b6d11" font-weight="600">📐 Đo dày bằng UT gauge tại 4 góc (cản trở bên trong, không đo bằng caliper)</text>
+  <text x="40" y="250" font-size="11" fill="#3b6d11" font-weight="600">🛠 UT gauge số (0.01 mm). Bôi gel siêu âm trước khi đo</text>
+  ${caption('EN 10210-2 — Wall: −10% / +không yêu cầu · ASTM A500: −10% lo')}
+</svg>`,
+
+/* ===== ROUND PIPE ===== */
+pipe_round_dim: () => `<svg viewBox="0 0 500 290" xmlns="http://www.w3.org/2000/svg">${DEFS}
+  <circle cx="250" cy="145" r="90" fill="url(#steelG)" stroke="#5f6b7a" stroke-width="1.5"/>
+  <circle cx="250" cy="145" r="90" fill="url(#hatch)" opacity="0.5"/>
+  <circle cx="250" cy="145" r="75" fill="#fafcfe" stroke="#5f6b7a" stroke-width="0.5"/>
+  <line x1="160" y1="145" x2="340" y2="145" stroke="#aa4322" stroke-width="1.5" marker-start="url(#ahsR)" marker-end="url(#ahR)"/>
+  <text x="250" y="140" text-anchor="middle" font-size="13" fill="#aa4322" font-weight="800">OD</text>
+  <line x1="162" y1="145" x2="178" y2="145" stroke="#0c447c" stroke-width="2.5"/>
+  <text x="170" y="135" text-anchor="middle" font-size="11" fill="#0c447c" font-weight="700">t</text>
+  <line x1="250" y1="55" x2="250" y2="235" stroke="#0c447c" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="170" y1="80" x2="330" y2="210" stroke="#0c447c" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="40" y="265" font-size="11" fill="#3b6d11" font-weight="600">📐 Đo OD 2 hướng vuông góc (so độ tròn). Đo t = UT gauge</text>
+  ${caption('EN 10210/10219 · ASTM A53 — OD ±1% · ovality = (OD max−OD min)/OD ≤ 2%')}
+</svg>`,
+
+/* ===== SURFACE — separate sketches per grade ===== */
+surface_rust_A: () => `<svg viewBox="0 0 500 290" xmlns="http://www.w3.org/2000/svg">${DEFS}
+  <rect x="80" y="40" width="340" height="170" fill="#9aa7b3" stroke="#5f6b7a" stroke-width="1"/>
+  <g opacity="0.6">
+    ${Array.from({length:60}, (_,i)=>`<circle cx="${100+Math.floor(Math.random()*300)}" cy="${60+Math.floor(Math.random()*150)}" r="${1+Math.random()*1.5}" fill="#5f5e5a"/>`).join('')}
+  </g>
+  <text x="250" y="135" text-anchor="middle" font-size="22" fill="#1b2430" font-weight="800">CẤP A</text>
+  <text x="250" y="160" text-anchor="middle" font-size="13" fill="#1b2430" font-weight="700">Mill scale nguyên</text>
+  <text x="250" y="178" text-anchor="middle" font-size="11" fill="#5f6b7a">Vảy cán bám chắc, ít hoặc không gỉ</text>
+  ${caption('ISO 8501-1 A — Vật tư MỚI từ nhà máy. Phun cát Sa 2½ trước khi sơn')}
+</svg>`,
+
+surface_rust_C: () => `<svg viewBox="0 0 500 290" xmlns="http://www.w3.org/2000/svg">${DEFS}
+  <rect x="80" y="40" width="340" height="170" fill="#7c4a2e" stroke="#5f6b7a" stroke-width="1"/>
+  <g opacity="0.7">
+    ${Array.from({length:80}, (_,i)=>`<circle cx="${90+Math.floor(Math.random()*320)}" cy="${50+Math.floor(Math.random()*160)}" r="${1.5+Math.random()*2.5}" fill="#5a3520"/>`).join('')}
+  </g>
+  <text x="250" y="135" text-anchor="middle" font-size="22" fill="#fff" font-weight="800">CẤP C</text>
+  <text x="250" y="160" text-anchor="middle" font-size="13" fill="#fff" font-weight="700">Gỉ đều phủ toàn bộ</text>
+  <text x="250" y="178" text-anchor="middle" font-size="11" fill="#fff">Mill scale đã bay hết, có thể có rỗ nhẹ</text>
+  ${caption('ISO 8501-1 C — Vật tư cũ. Sa 2½ hoặc 3 trước khi sơn — kiểm tra rỗ')}
+</svg>`,
+
+surface_rust_D: () => `<svg viewBox="0 0 500 290" xmlns="http://www.w3.org/2000/svg">${DEFS}
+  <rect x="80" y="40" width="340" height="170" fill="#4a2c1a" stroke="#5f6b7a" stroke-width="1"/>
+  <g opacity="0.85">
+    ${Array.from({length:30}, (_,i)=>`<circle cx="${100+Math.floor(Math.random()*300)}" cy="${60+Math.floor(Math.random()*150)}" r="${3+Math.random()*4}" fill="#1f130a"/>`).join('')}
+  </g>
+  <text x="250" y="125" text-anchor="middle" font-size="22" fill="#fff" font-weight="800">CẤP D</text>
+  <text x="250" y="150" text-anchor="middle" font-size="13" fill="#fff" font-weight="700">⚠ RỖ ĂN MÒN SÂU</text>
+  <text x="250" y="168" text-anchor="middle" font-size="11" fill="#fff">Bề mặt KHÔNG còn phẳng</text>
+  <rect x="100" y="180" width="300" height="22" fill="#aa4322" stroke="#7a2024"/>
+  <text x="250" y="196" text-anchor="middle" font-size="12" fill="#fff" font-weight="800">⚠ ĐO UT TRƯỚC KHI NHẬN — GIẢM &gt;10% → LOẠI</text>
+  ${caption('ISO 8501-1 D — Sa 3 toàn diện sau UT. Có thể cần đắp lại')}
+</svg>`,
+
 none: () => ''
 };
