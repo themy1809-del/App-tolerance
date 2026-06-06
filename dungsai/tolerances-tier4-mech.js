@@ -353,5 +353,45 @@
 
   rules.forEach(function(r){ D.tolerances.push(r); });
 
+
+  // === REGISTER APPLICABILITY (group cho UI filter) ===
+  if (!D.applicability) D.applicability = [];
+  var mechStdCodes = stds.map(function(s){ return s.code; });
+
+  // Tạo group "mech" mới — Cơ khí chế tạo chính xác
+  var mechGroup = {
+    key: 'mech',
+    label: T('Cơ khí chế tạo chính xác (ISO/ASME GD&T)', 'Precision mechanical (ISO/ASME GD&T)'),
+    stds: mechStdCodes,
+    note: T(
+      'Dung sai gia công cơ khí: H7/H8/h6, ISO 2768, GD&T, độ nhám Ra, ren M.',
+      'Machining tolerances: H7/H8/h6, ISO 2768, GD&T, surface Ra, metric threads.'
+    )
+  };
+  if (!D.applicability.some(function(a){ return a.key === 'mech'; })){
+    D.applicability.push(mechGroup);
+  }
+
+  // Đồng thời thêm ISO mech standards vào tất cả group (vì ISO áp dụng toàn cầu)
+  var isoMech = ['ISO 286-1:2010','ISO 286-2:2010','ISO 2768-1:1989','ISO 2768-2:1989',
+    'ISO 1101:2017','ISO 1302:2002','ISO 4287:1997','ISO 965-1:2013','ISO 13715:2017'];
+  D.applicability.forEach(function(g){
+    if (g.key === 'mech') return;
+    isoMech.forEach(function(code){
+      if (g.stds.indexOf(code) === -1) g.stds.push(code);
+    });
+  });
+  // Thêm ASME vào group US
+  var usG = D.applicability.find(function(a){ return a.key === 'us'; });
+  if (usG && usG.stds.indexOf('ASME Y14.5:2018') === -1) usG.stds.push('ASME Y14.5:2018');
+  // Thêm DIN vào EU
+  var euG = D.applicability.find(function(a){ return a.key === 'eu'; });
+  if (euG && euG.stds.indexOf('DIN 7168:1991') === -1) euG.stds.push('DIN 7168:1991');
+  // JIS vào JP
+  var jpG = D.applicability.find(function(a){ return a.key === 'jp'; });
+  if (jpG && jpG.stds.indexOf('JIS B 0405:1991') === -1) jpG.stds.push('JIS B 0405:1991');
+
+  console.log('Tier 4 applicability: added group "mech" + injected ' + isoMech.length + ' ISO mech standards to all project groups');
+
   console.log('Tier 4 (Cơ khí) loaded: ' + rules.length + ' rules, ' + stds.length + ' standards');
 })();
