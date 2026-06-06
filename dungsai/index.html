@@ -821,7 +821,12 @@ function toast(msg){ const d=document.createElement("div"); d.textContent=msg;
 try { const saved = localStorage.getItem("tol_data"); if (saved){ DATA = JSON.parse(saved); } } catch(e){}
 render();
 if ("serviceWorker" in navigator && location.protocol.indexOf("http")===0) {
-.catch(()=>{});
+  navigator.serviceWorker.register("sw.js").catch(()=>{});
+}
+</script>
+</body>
+</html>
+catch(()=>{});
 }
 </script>
 </body>
