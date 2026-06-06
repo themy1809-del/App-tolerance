@@ -358,5 +358,111 @@
     ${cap('API 650 §7.5.4 — Chu vi ngoài kiểm độ tròn của shell từng tầng (ring)')}
   </svg>`;
 
+
+  /* ===== I-section SQUARENESS — vuông góc cánh-bụng ===== */
+  S.i_squareness = () => `<svg viewBox="0 0 500 290" xmlns="http://www.w3.org/2000/svg">${D2}
+    <text x="250" y="25" text-anchor="middle" font-size="13" fill="#0c447c" font-weight="800">MẶT CẮT TIẾT DIỆN I — KIỂM VUÔNG GÓC</text>
+    <g transform="translate(170,40)">
+      <rect x="0" y="0" width="160" height="20" fill="url(#v2sG)" stroke="#5f6b7a" stroke-width="1.2"/>
+      <rect x="0" y="0" width="160" height="20" fill="url(#v2h)" opacity="0.45"/>
+      <rect x="0" y="170" width="160" height="20" fill="url(#v2sG)" stroke="#5f6b7a" stroke-width="1.2"/>
+      <rect x="0" y="170" width="160" height="20" fill="url(#v2h)" opacity="0.45"/>
+      <rect x="70" y="20" width="20" height="150" fill="url(#v2sH)" stroke="#5f6b7a" stroke-width="1.2"/>
+      <rect x="70" y="20" width="20" height="150" fill="url(#v2h)" opacity="0.45"/>
+      <g stroke="#0c447c" stroke-width="1" stroke-dasharray="4,2">
+        <line x1="80" y1="0" x2="80" y2="20"/>
+        <line x1="60" y1="20" x2="100" y2="20"/>
+      </g>
+      <path d="M 80 20 L 80 5 L 95 5" stroke="#0c447c" stroke-width="2" fill="none"/>
+      <text x="105" y="9" font-size="11" fill="#0c447c" font-weight="800">90° lý thuyết</text>
+      <g transform="translate(90,20) rotate(-3)">
+        <line x1="0" y1="0" x2="0" y2="60" stroke="#aa4322" stroke-width="2.5"/>
+        <polygon points="0,60 -3,55 3,55" fill="#aa4322"/>
+      </g>
+      <text x="125" y="55" font-size="11" fill="#aa4322" font-weight="800">k₁ ≠ 0</text>
+      <g transform="translate(70,170) rotate(2)">
+        <line x1="0" y1="0" x2="0" y2="-60" stroke="#aa4322" stroke-width="2.5"/>
+        <polygon points="0,-60 -3,-55 3,-55" fill="#aa4322"/>
+      </g>
+      <text x="20" y="135" font-size="11" fill="#aa4322" font-weight="800">k₂ ≠ 0</text>
+    </g>
+    <g transform="translate(380,80)">
+      <rect x="0" y="0" width="80" height="110" fill="#fff" stroke="#1b2430" stroke-width="1.2"/>
+      <text x="40" y="14" text-anchor="middle" font-size="9" fill="#1b2430" font-weight="700">SQUARE</text>
+      <text x="40" y="28" text-anchor="middle" font-size="9" fill="#1b2430" font-weight="700">GAUGE</text>
+      <path d="M 20 45 L 20 95 L 65 95" stroke="#aa4322" stroke-width="2.5" fill="none"/>
+      <line x1="20" y1="50" x2="22" y2="48" stroke="#aa4322"/>
+      <line x1="22" y1="48" x2="22" y2="93" stroke="#aa4322" stroke-width="0.6"/>
+      <text x="40" y="105" text-anchor="middle" font-size="9" fill="#1b2430">áp sát vào cánh</text>
+    </g>
+    <text x="250" y="245" text-anchor="middle" font-size="11" fill="#3b6d11" font-weight="700">📐 Khe hở k = k₁ + k₂ giữa thước vuông và cánh</text>
+    <text x="250" y="260" text-anchor="middle" font-size="10" fill="#0c447c" font-weight="600">EN 1090-2: k ≤ b/100 (≥5/≥3 mm) · AISC: ≤ 0.01b</text>
+    <rect x="0" y="270" width="500" height="20" fill="#eef4fa"/>
+    <text x="250" y="283" text-anchor="middle" font-size="10.5" fill="#0c447c" font-weight="600">EN 1090-2 §11.2.3 — Squareness of flange to web</text>
+  </svg>`;
+
+  /* ===== I-section WEB OFFCENTER (tiet diện) ===== */
+  S.i_web_offcenter_v2 = () => `<svg viewBox="0 0 500 290" xmlns="http://www.w3.org/2000/svg">${D2}
+    <text x="250" y="22" text-anchor="middle" font-size="13" fill="#0c447c" font-weight="800">LỆCH TÂM BỤNG — Web off-centre</text>
+    <g transform="translate(150,40)">
+      <rect x="0" y="0" width="200" height="20" fill="url(#v2sG)" stroke="#5f6b7a"/>
+      <rect x="0" y="0" width="200" height="20" fill="url(#v2h)" opacity="0.45"/>
+      <rect x="0" y="180" width="200" height="20" fill="url(#v2sG)" stroke="#5f6b7a"/>
+      <rect x="0" y="180" width="200" height="20" fill="url(#v2h)" opacity="0.45"/>
+      <rect x="115" y="20" width="20" height="160" fill="url(#v2sH)" stroke="#5f6b7a"/>
+      <rect x="115" y="20" width="20" height="160" fill="url(#v2h)" opacity="0.45"/>
+      <line x1="100" y1="0" x2="100" y2="200" stroke="#0c447c" stroke-width="1" stroke-dasharray="5,3"/>
+      <text x="100" y="-2" text-anchor="middle" font-size="10" fill="#0c447c" font-weight="700">tâm lý thuyết</text>
+      <line x1="100" y1="100" x2="125" y2="100" stroke="#aa4322" stroke-width="3" marker-end="url(#v2ahR)"/>
+      <text x="135" y="98" font-size="13" fill="#aa4322" font-weight="800">e (lệch)</text>
+      ${dH(0, 100, 215, 'b/2', '#0c447c')}
+      ${dH(100, 200, 230, 'b/2 + e', '#aa4322')}
+    </g>
+    <text x="250" y="265" text-anchor="middle" font-size="11" fill="#3b6d11" font-weight="700">📐 Đo từ tâm bụng đến tâm cánh tại 1 m từ đầu thanh</text>
+    <text x="250" y="278" text-anchor="middle" font-size="10" fill="#0c447c" font-weight="600">EN 10034 §6.1 Table 2 — b<110: ≤2.5mm · b≥110: ≤3.5mm</text>
+  </svg>`;
+
+  /* ===== I-section WEB STRAIGHTNESS (theo h) ===== */
+  S.i_web_straight_v2 = () => `<svg viewBox="0 0 500 290" xmlns="http://www.w3.org/2000/svg">${D2}
+    <text x="250" y="22" text-anchor="middle" font-size="13" fill="#0c447c" font-weight="800">ĐỘ CONG BỤNG THEO CHIỀU CAO</text>
+    <g transform="translate(150,40)">
+      <rect x="0" y="0" width="200" height="20" fill="url(#v2sG)" stroke="#5f6b7a"/>
+      <rect x="0" y="0" width="200" height="20" fill="url(#v2h)" opacity="0.4"/>
+      <rect x="0" y="180" width="200" height="20" fill="url(#v2sG)" stroke="#5f6b7a"/>
+      <rect x="0" y="180" width="200" height="20" fill="url(#v2h)" opacity="0.4"/>
+      <path d="M 95 20 Q 75 100 95 180 L 115 180 Q 95 100 115 20 Z" fill="url(#v2sH)" stroke="#5f6b7a"/>
+      <path d="M 95 20 Q 75 100 95 180 L 115 180 Q 95 100 115 20 Z" fill="url(#v2h)" opacity="0.4"/>
+      <line x1="105" y1="20" x2="105" y2="180" stroke="#0c447c" stroke-width="1" stroke-dasharray="5,3"/>
+      <line x1="85" y1="100" x2="105" y2="100" stroke="#aa4322" stroke-width="3" marker-end="url(#v2ahR)"/>
+      <text x="60" y="105" font-size="13" fill="#aa4322" font-weight="800">f</text>
+      ${dV(20, 180, -15, 'h', '#0c447c')}
+    </g>
+    <text x="250" y="245" text-anchor="middle" font-size="11" fill="#3b6d11" font-weight="700">📐 Đặt thước thẳng theo h, đo khe hở lớn nhất f</text>
+    <text x="250" y="260" text-anchor="middle" font-size="10" fill="#0c447c" font-weight="600">EN 1090-2 Table B.7: f ≤ h/150 nhưng ≤ 6 mm</text>
+    <rect x="0" y="270" width="500" height="20" fill="#eef4fa"/>
+    <text x="250" y="283" text-anchor="middle" font-size="10.5" fill="#0c447c" font-weight="600">Áp dụng cho bụng tiết diện I tổ hợp hàn (built-up I)</text>
+  </svg>`;
+
+  /* ===== I-section FLANGE FLATNESS — méo cánh ===== */
+  S.i_flange_flat_v2 = () => `<svg viewBox="0 0 500 290" xmlns="http://www.w3.org/2000/svg">${D2}
+    <text x="250" y="22" text-anchor="middle" font-size="13" fill="#0c447c" font-weight="800">MÉO CÁNH I — Flange distortion</text>
+    <g transform="translate(150,50)">
+      <path d="M 0 0 Q 50 -15 100 0 Q 150 15 200 0 L 200 20 Q 150 35 100 20 Q 50 5 0 20 Z" fill="url(#v2sG)" stroke="#5f6b7a"/>
+      <path d="M 0 0 Q 50 -15 100 0 Q 150 15 200 0 L 200 20 Q 150 35 100 20 Q 50 5 0 20 Z" fill="url(#v2h)" opacity="0.4"/>
+      <rect x="90" y="20" width="20" height="120" fill="url(#v2sH)" stroke="#5f6b7a"/>
+      <rect x="90" y="20" width="20" height="120" fill="url(#v2h)" opacity="0.4"/>
+      <line x1="0" y1="10" x2="200" y2="10" stroke="#0c447c" stroke-width="1" stroke-dasharray="5,3"/>
+      <line x1="50" y1="-8" x2="50" y2="0" stroke="#aa4322" stroke-width="2.5" marker-start="url(#v2ahsR)"/>
+      <text x="40" y="-12" font-size="11" fill="#aa4322" font-weight="800">▲ méo lên</text>
+      <line x1="150" y1="18" x2="150" y2="10" stroke="#aa4322" stroke-width="2.5" marker-end="url(#v2ahR)"/>
+      <text x="160" y="35" font-size="11" fill="#aa4322" font-weight="800">▼ méo xuống</text>
+      ${dH(0, 200, 165, 'b', '#0c447c')}
+    </g>
+    <text x="250" y="240" text-anchor="middle" font-size="11" fill="#3b6d11" font-weight="700">📐 Đặt thước thẳng ngang cánh, đo độ vênh (peak-to-peak)</text>
+    <text x="250" y="258" text-anchor="middle" font-size="10" fill="#0c447c" font-weight="600">EN 1090-2: méo ≤ b/100 hoặc ≤ 3 mm tuỳ class B/C/D</text>
+    <rect x="0" y="270" width="500" height="20" fill="#eef4fa"/>
+    <text x="250" y="283" text-anchor="middle" font-size="10.5" fill="#0c447c" font-weight="600">Flange distortion vs flange undulation</text>
+  </svg>`;
+
   console.log('Sketches v2 loaded:', Object.keys(S).length, 'total sketches available');
 })();
