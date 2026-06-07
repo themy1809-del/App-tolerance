@@ -247,6 +247,46 @@ function szNext(){ if (zoomState.i<zoomState.imgs.length-1){ zoomState.i++; open
 function szPrev(){ if (zoomState.i>0){ zoomState.i--; openSketchZoom(zoomState.imgs, zoomState.i); } }
 
 /* ============ Tóm tắt nhanh tiếng Việt ============ */
+
+function matHelp(bm){
+  var s = (bm||'').toLowerCase();
+  if (/a240|304|tp304/.test(s)) return {icon:'✨', desc:'Inox AUSTENITIC 304 — chống ăn mòn tốt, không từ tính, dùng cho nhà bếp + kiến trúc',
+    consum:'E308L / ER308L (TIG, MIG) · 99% Ar + 1% O₂ cho MIG',
+    warn:'KHÔNG dùng brush carbon steel → contamination + gỉ'};
+  if (/316|tp316/.test(s)) return {icon:'✨', desc:'Inox 316 — có Mo 2-3%, chống pitting + chloride (biển, hoá chất)',
+    consum:'E316L / ER316L · gas 98%Ar+2%O₂',
+    warn:'316L preferred — tránh sensitization khi hàn'};
+  if (/duplex|2205|2507|s32205|s32750/.test(s)) return {icon:'⚡', desc:'Inox DUPLEX 2205 — cường độ gấp 2× của 316L, chống nước biển',
+    consum:'E2209-16 / ER2209 (over-alloyed)',
+    warn:'⚠ Heat input 0.5-2.5 kJ/mm — sai → mất cân bằng phase'};
+  if (/a335|p11|p22|p91|cr.mo/.test(s)) return {icon:'🔥', desc:'Thép Cr-Mo chịu nhiệt áp lực — dùng refinery + power plant',
+    consum:'E9018-B3 (P22) · E9015-B9 (P91)',
+    warn:'⚠⚠ Preheat 200-250°C + PWHT 690-780°C BẮT BUỘC'};
+  if (/a572|a992|s355|q345|sm490|sn490/.test(s)) return {icon:'🏗️', desc:'Thép HSLA cường độ cao (σy 345 MPa) — dùng cho nhà cao tầng, cầu',
+    consum:'E7018 / ER70S-6 / E71T-1 (low-H)',
+    warn:'CE 0.42-0.48 → preheat 50-100°C nếu t≥25mm'};
+  if (/a36|s235|ss400|q235|cct/.test(s)) return {icon:'📄', desc:'Thép carbon thường (σy 235 MPa) — kết cấu phổ thông',
+    consum:'E6013, E7016, E7018, ER70S-6',
+    warn:'CE ≤ 0.40 → thường KHÔNG cần preheat'};
+  if (/a53|a106|stk|api/.test(s)) return {icon:'🛢️', desc:'Ống thép carbon — áp lực và kết cấu',
+    consum:'E7018, ER70S-2/-3/-6 cho root',
+    warn:'Root pass GTAW + fill SMAW/FCAW phổ biến'};
+  if (/a500|a501|hss/.test(s)) return {icon:'⬜', desc:'Hollow Structural Section (HSS) — hộp/ống nguội',
+    consum:'E70xx hoặc ER70S-6',
+    warn:'Carbon equivalent thấp, không preheat thường'};
+  if (/sa516|sa537/.test(s)) return {icon:'🛢️', desc:'Tấm bồn áp lực ASME — A516 Gr.70 phổ biến nhất',
+    consum:'E7018-1 (low-H), ER70S-6',
+    warn:'Preheat 50-100°C cho t > 20mm · ASME PWHT thường yêu cầu'};
+  if (/al|nhom|aluminum|5083|6061/.test(s)) return {icon:'🛩️', desc:'Hợp kim nhôm — Al-Mg (5xxx) hoặc Al-Mg-Si (6xxx)',
+    consum:'ER5183/ER5356 (5xxx) · ER4043 (6061)',
+    warn:'⚠ Hàn AC TIG để gỡ oxide Al₂O₃ · Distortion cao'};
+  if (/monel|inconel|625|800/.test(s)) return {icon:'💎', desc:'Hợp kim Nickel — chống ăn mòn cực cao + nhiệt cao',
+    consum:'ERNiCrMo-3 (625), ENiCrFe-3 (600)',
+    warn:'⚠ Hot crack risk cao · clean tuyệt đối'};
+  return {icon:'🔧', desc:'Xem chi tiết nhóm vật liệu để biết que hàn phù hợp', consum:'', warn:''};
+}
+
+
 function renderSummary(x){
   const w = document.getElementById('dSum'); if (!w) return;
   const procName = ({
@@ -261,13 +301,27 @@ function renderSummary(x){
   const fillerShort = (x.filler||'').replace(/AWS\s+/,'').split(/\s+/)[0] + (x.size?` · ${x.size}`:'');
   const tiles = [
     {ic:procIc, lb:'Quy trình', val:esc(procName)},
-    {ic:'📦', lb:'Vật liệu hàn', val:matsHtml || '—'},
     {ic:'↗', lb:'Tư thế', val:esc(posVi||'—')},
     {ic:'🧵', lb:'Dây/Que hàn', val:esc(fillerShort||'—')},
     {ic:'📏', lb:'Chiều dày (mm)', val:esc(x.thickness||'—')},
     {ic:'📋', lb:'Tiêu chuẩn', val:esc(x.code||'—')}
   ];
-  let html = `<div class="sm-h">📋 Tóm tắt nhanh cho công nhân</div><div class="sm-grid">` +
+  // BIG material banner — Vật liệu = QUAN TRỌNG NHẤT cho thợ hàn
+  const mg = x.material_group || '';
+  const mgHint = mg.split(' → ')[0];
+  const matHint = matHelp(x.base_metal||'');
+  const matBanner = `
+    <div class="mat-banner" onclick="${mg?`showMatGroups('${mgHint.replace(/'/g,"\\'")}')`:''}" ${mg?'style="cursor:pointer"':''}>
+      <div class="mat-icon">${matHint.icon}</div>
+      <div class="mat-body">
+        <div class="mat-lbl">📦 VẬT LIỆU HÀN — quan trọng nhất với thợ</div>
+        <div class="mat-name">${matsHtml || '—'}</div>
+        <div class="mat-info">${matHint.desc}${mg?` · <b>${esc(mg)}</b>`:''}${mg?' <span style="background:#fff;color:#7c3f00;padding:1px 7px;border-radius:5px;font-size:11px;margin-left:4px">📖 chi tiết →</span>':''}</div>
+        ${matHint.consum ? `<div class="mat-consum">🔥 Que/dây phù hợp: <b>${matHint.consum}</b></div>` : ''}
+        ${matHint.warn ? `<div class="mat-warn">⚠ ${matHint.warn}</div>` : ''}
+      </div>
+    </div>`;
+  let html = `<div class="sm-h">📋 Tóm tắt nhanh cho công nhân</div>` + matBanner + `<div class="sm-grid">` +
     tiles.map(t=>`<div class="sm-tile"><div class="sm-ic">${t.ic}</div><div class="sm-lb">${t.lb}</div><div class="sm-val">${t.val}</div></div>`).join('') +
     `</div>`;
   // Welding parameters (if extracted from PDF)
