@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#7c3f00">
 <title>Lượng dư & Sai hỏng — Kết cấu thép</title>
+<link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="../icons/icon-180.png">
 <style>
 :root {
@@ -68,6 +69,18 @@ h1{font-size:17px;margin:0;font-weight:800;line-height:1.15}
 .list-item .bullet{color:var(--fail);font-weight:800;flex-shrink:0}
 .list-item.ok .bullet{color:var(--pass)}
 .symptom{background:#fbeae2;border-left:4px solid var(--fail);padding:10px 14px;border-radius:6px;font-size:13.5px;margin-bottom:14px}
+.chip{background:#fff;border:1px solid var(--line);padding:7px 13px;border-radius:20px;font-size:12.5px;font-weight:700;color:var(--muted);cursor:pointer;font-family:inherit}
+.chip-rc{background:#fff;border:1px solid var(--line);padding:7px 13px;border-radius:20px;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;font-family:inherit}
+.chip-rc.on{background:#0c447c;color:#fff;border-color:#0c447c}
+.filter-label{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px}
+.rc-badge{display:inline-block;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:800;letter-spacing:.3px;margin-right:4px;margin-top:4px;color:#fff}
+.rc-man{background:#aa4322}.rc-machine{background:#5f4ab7}
+.rc-material{background:#854f0b}.rc-method{background:#0c447c}
+.rc-measurement{background:#0f6e56}.rc-env{background:#3b6d11}
+.chip.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+.ref-img{display:block;margin:12px 0;text-align:center}
+.ref-img img{max-width:100%;max-height:280px;border:1px solid var(--line);border-radius:8px}
+.ref-img a{color:var(--brand);font-size:11px;display:block;margin-top:4px}
 @media (max-width:680px){
   .inp-row{flex-direction:column;align-items:stretch}
   .inp-row input{width:100%}
@@ -86,9 +99,35 @@ h1{font-size:17px;margin:0;font-weight:800;line-height:1.15}
 </header>
 
 <main class="main">
+  <div style="margin-bottom:14px"><input id="q" type="search" placeholder="🔍 Tìm: cháy chân, H2, preheat, kerf, bend, distortion..." style="width:100%;padding:11px 14px;border:1px solid var(--line);border-radius:10px;font-size:14px;font-family:inherit;background:#fff" oninput="render()"></div>
   <div class="tabs">
     <button class="tab on" id="tabA" onclick="setTab('A')">📐 Tính lượng dư</button>
-    <button class="tab" id="tabB" onclick="setTab('B')">🔍 Nguyên nhân sai hỏng</button>
+    <button class="tab" id="tabB" onclick="setTab('B')">🔍 Sai hỏng (45)</button>
+    <button class="tab" id="tabC" onclick="setTab('C')">📚 Thư viện 5M+1E</button>
+  </div>
+  <div id="catFilter" style="display:none;flex-direction:column;gap:8px;margin-bottom:12px">
+    <div>
+      <div class="filter-label">Theo loại lỗi:</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="chip on" data-cat="all" onclick="setCat('all')">Tất cả · 45</button>
+        <button class="chip" data-cat="weld" onclick="setCat('weld')">🔥 Hàn · 11</button>
+        <button class="chip" data-cat="dim" onclick="setCat('dim')">📐 Kích thước · 9</button>
+        <button class="chip" data-cat="paint" onclick="setCat('paint')">🎨 Sơn · 15</button>
+        <button class="chip" data-cat="other" onclick="setCat('other')">⚡ Khác · 10</button>
+      </div>
+    </div>
+    <div>
+      <div class="filter-label">Theo nguyên nhân gốc (Ishikawa 5M+1E):</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="chip-rc on" data-rc="all" onclick="setRC('all')">Tất cả</button>
+        <button class="chip-rc" data-rc="man" onclick="setRC('man')">👷 CON NGƯỜI · 10</button>
+        <button class="chip-rc" data-rc="machine" onclick="setRC('machine')">⚙️ MÁY MÓC · 6</button>
+        <button class="chip-rc" data-rc="material" onclick="setRC('material')">📦 VẬT LIỆU · 6</button>
+        <button class="chip-rc" data-rc="method" onclick="setRC('method')">📋 PHƯƠNG PHÁP · 16</button>
+        <button class="chip-rc" data-rc="measurement" onclick="setRC('measurement')">📏 ĐO LƯỜNG · 3</button>
+        <button class="chip-rc" data-rc="env" onclick="setRC('env')">🌦️ MÔI TRƯỜNG · 4</button>
+      </div>
+    </div>
   </div>
   <div id="content"></div>
 </main>
@@ -97,20 +136,53 @@ h1{font-size:17px;margin:0;font-weight:800;line-height:1.15}
 
 <script src="data.js?v=1"></script>
 <script src="sketches.js?v=1"></script>
+<script src="library-5m1e.js?v=1"></script>
 <script>
 var TAB = 'A';
+var CAT = 'all', RC = 'all';
 function setTab(t){
   TAB = t;
-  document.getElementById('tabA').classList.toggle('on', t==='A');
-  document.getElementById('tabB').classList.toggle('on', t==='B');
+  ['A','B','C'].forEach(x => document.getElementById('tab'+x).classList.toggle('on', t===x));
+  document.getElementById('catFilter').style.display = t==='B' ? 'flex' : 'none';
   render();
+}
+function setCat(c){
+  CAT = c;
+  document.querySelectorAll('.chip[data-cat]').forEach(b => b.classList.toggle('on', b.dataset.cat===c));
+  render();
+}
+function setRC(rc){
+  RC = rc;
+  document.querySelectorAll('.chip-rc[data-rc]').forEach(b => b.classList.toggle('on', b.dataset.rc===rc));
+  render();
+}
+function rcLabel(rc){
+  return ({man:'👷 CON NGƯỜI',machine:'⚙️ MÁY MÓC',material:'📦 VẬT LIỆU',method:'📋 PHƯƠNG PHÁP',measurement:'📏 ĐO LƯỜNG',env:'🌦️ MÔI TRƯỜNG'})[rc] || rc;
 }
 function esc(s){ return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
 function render(){
   var c = document.getElementById('content');
+  if (TAB === 'C') { renderLib(); return; }
   var html = '<div class="grid">';
   var items = TAB==='A' ? LD_DATA.allowance : LD_DATA.defects;
+  if (TAB === 'B') {
+    if (CAT !== 'all') {
+      if (CAT === 'other') items = items.filter(it => !['weld','dim','paint'].includes(it.cat));
+      else items = items.filter(it => it.cat === CAT);
+    }
+    if (RC !== 'all') items = items.filter(it => it.rootCause === RC);
+  }
+  var q = ((document.getElementById('q')||{}).value || '').toLowerCase().trim();
+  var norm = s => String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[đĐ]/g,'d').toLowerCase();
+  if (q) {
+    var qn = norm(q);
+    items = items.filter(function(it){
+      var hay = JSON.stringify(it);
+      return norm(hay).indexOf(qn) >= 0;
+    });
+  }
+  if (items.length === 0) { c.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">🔍 Không tìm thấy "' + esc(q) + '"</div>'; return; }
   items.forEach(function(it){
     if (TAB==='A'){
       html += '<div class="card" onclick="openCalc(\''+it.id+'\')">'
@@ -119,9 +191,11 @@ function render(){
         + '<span class="tag tag-'+it.cat+'">' + tagLabel(it.cat) + '</span>'
         + '</div>';
     } else {
+      var rcb = it.rootCause ? '<span class="rc-badge rc-'+it.rootCause+'">'+rcLabel(it.rootCause).replace(/^[^A-Za-z]*/,'')+'</span>' : '';
       html += '<div class="card" onclick="openDefect(\''+it.id+'\')">'
         + '<h3>'+ esc(it.name) +'</h3>'
         + '<div class="d">' + esc(it.symptom) + '</div>'
+        + rcb
         + '<span class="tag sev-'+it.severity+'">' + sevLabel(it.severity) + '</span> '
         + '<span class="tag tag-'+it.cat+'">' + tagLabel(it.cat) + '</span>'
         + '</div>';
@@ -140,6 +214,7 @@ function openCalc(id){
   var item = LD_DATA.allowance.find(x=>x.id===id);
   if (!item) return;
   var st = window.LD_SK[item.sketch] ? '<div class="sketch-box">'+LD_SK[item.sketch]()+'</div>' : '';
+  var refImg = item.refImg ? '<div class="ref-img"><img src="'+esc(item.refImg)+'" loading="lazy" alt="ref" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'"><a href="'+esc(item.refImg)+'" target="_blank">📸 Xem ảnh thật trên web (Wikimedia Commons)</a></div>' : '';
   var inputs = item.vars.map(function(v,i){
     return '<div class="inp-row"><label>'+esc(v.label)+'</label><input id="v_'+v.key+'" type="number" step="any" value="'+v.def+'" oninput="recalc(\''+id+'\')"></div>';
   }).join('');
@@ -178,22 +253,72 @@ function openDefect(id){
   var item = LD_DATA.defects.find(x=>x.id===id);
   if (!item) return;
   var st = window.LD_SK[item.sketch] ? '<div class="sketch-box">'+LD_SK[item.sketch]()+'</div>' : '';
+  var refImg = item.refImg ? '<div class="ref-img"><img src="'+esc(item.refImg)+'" loading="lazy" alt="ref" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'"><a href="'+esc(item.refImg)+'" target="_blank">📸 Xem ảnh thật trên web (Wikimedia Commons)</a></div>' : '';
   var causes = item.causes.map(c=>'<div class="list-item"><span class="bullet">▸</span><span>'+esc(c)+'</span></div>').join('');
   var remedies = item.remedies.map(r=>'<div class="list-item ok"><span class="bullet">✓</span><span>'+esc(r)+'</span></div>').join('');
   var html = '<div class="modal-bg" onclick="if(event.target===this)closeModal()"><div class="modal">'
     + '<div class="mhead"><h2>🔍 '+esc(item.name)+'</h2><button class="x" onclick="closeModal()">✕</button></div>'
     + '<div class="mbody">'
-    + '<span class="tag sev-'+item.severity+'">' + sevLabel(item.severity) + '</span>'
+    + '<span class="tag sev-'+item.severity+'">' + sevLabel(item.severity) + '</span> '
+    + (item.rootCause ? '<span class="rc-badge rc-'+item.rootCause+'" style="font-size:11px;padding:5px 11px">NGUYÊN NHÂN GỐC: '+rcLabel(item.rootCause)+'</span>' : '')
     + '<div class="symptom" style="margin-top:10px">'+esc(item.symptom)+'</div>'
     + st
+    + refImg
     + '<div class="section-title">⚠ NGUYÊN NHÂN PHỔ BIẾN</div>'+causes
     + '<div class="section-title" style="margin-top:14px">✓ BIỆN PHÁP KHẮC PHỤC</div>'+remedies
     + '<div class="ref">📖 ' + esc(item.ref) + '</div>'
     + '</div></div></div>';
   document.getElementById('modal').innerHTML = html;
 }
+function renderLib(){
+  var c = document.getElementById('content');
+  var html = '<div style="background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:14px"><h3 style="margin:0 0 10px;color:var(--brand)">🎯 Khung Ishikawa 5M+1E — Phân tích nguyên nhân gốc chuyên sâu</h3><p style="margin:0;font-size:13px;color:var(--muted);line-height:1.6">Mỗi nhóm nguyên nhân được phân tích đầy đủ: <strong>định nghĩa · sub-factors · lỗi thường gặp · công cụ phòng ngừa · biện pháp kiểm soát · ISO references · KPI tracking</strong>. Click vào mỗi card để xem chi tiết.</p></div>';
+  html += '<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(320px,1fr))">';
+  LD_LIB.forEach(function(cat){
+    html += '<div class="card" style="border-top:5px solid '+cat.color+'" onclick="openLib(\''+cat.id+'\')">'
+      + '<div style="font-size:32px;line-height:1;margin-bottom:8px">'+cat.icon+'</div>'
+      + '<h3 style="color:'+cat.color+'">'+esc(cat.name)+'</h3>'
+      + '<div class="d" style="margin:6px 0">'+esc(cat.short)+'</div>'
+      + '<div style="display:flex;gap:10px;font-size:11px;color:var(--muted);margin-top:10px">'
+      + '<span>📌 '+cat.subFactors.length+' sub-factors</span>'
+      + '<span>✓ '+cat.prevention.length+' tools</span>'
+      + '<span>📖 '+cat.isoRefs.length+' ISO</span>'
+      + '</div></div>';
+  });
+  html += '</div>';
+  c.innerHTML = html;
+}
+function openLib(id){
+  var cat = LD_LIB.find(x=>x.id===id);
+  if (!cat) return;
+  var subF = cat.subFactors.map(s => '<div class="list-item"><span class="bullet" style="color:'+cat.color+'">▸</span><span><strong>'+esc(s.name)+'</strong> — '+esc(s.desc)+'</span></div>').join('');
+  var fails = cat.commonFailures.map(f => '<div class="list-item"><span class="bullet">✗</span><span>'+esc(f)+'</span></div>').join('');
+  var prev = cat.prevention.map(p => '<div style="background:#e3f6ee;border-left:4px solid var(--pass);padding:10px 14px;border-radius:6px;margin-bottom:8px"><strong style="color:var(--pass)">'+esc(p.tool)+'</strong><div style="font-size:13px;margin-top:3px">'+esc(p.desc)+'</div><div style="font-size:11px;color:var(--muted);margin-top:4px">📖 '+esc(p.ref)+'</div></div>').join('');
+  var ctrls = cat.controls.map(c => '<div class="list-item ok"><span class="bullet">✓</span><span>'+esc(c)+'</span></div>').join('');
+  var isos = cat.isoRefs.map(i => '<tr><td style="padding:6px 10px;font-weight:700;color:var(--brand);white-space:nowrap">'+esc(i.code)+'</td><td style="padding:6px 10px;font-size:12.5px">'+esc(i.title)+'</td></tr>').join('');
+  var kpis = cat.kpis.map(k => '<div class="list-item"><span class="bullet" style="color:#5f4ab7">📊</span><span>'+esc(k)+'</span></div>').join('');
+  var html = '<div class="modal-bg" onclick="if(event.target===this)closeModal()"><div class="modal" style="max-width:880px">'
+    + '<div class="mhead" style="background:'+cat.color+';color:#fff;border-bottom-color:'+cat.color+'">'
+    + '<h2 style="color:#fff;display:flex;align-items:center;gap:10px">'+cat.icon+' '+esc(cat.name)+'</h2>'
+    + '<button class="x" style="background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.3);color:#fff" onclick="closeModal()">✕</button>'
+    + '</div>'
+    + '<div class="mbody">'
+    + '<div style="background:#f3f3f3;padding:14px;border-radius:8px;margin-bottom:14px;font-size:13.5px;line-height:1.6">'+esc(cat.definition)+'</div>'
+    + '<div class="section-title">📌 SUB-FACTORS (yếu tố chi tiết)</div>'+subF
+    + '<div class="section-title" style="margin-top:16px">✗ LỖI THƯỜNG GẶP TRONG XƯỞNG</div>'+fails
+    + '<div class="section-title" style="margin-top:16px">🛡 CÔNG CỤ PHÒNG NGỪA (Prevention)</div>'+prev
+    + '<div class="section-title" style="margin-top:16px">✓ BIỆN PHÁP KIỂM SOÁT (Controls)</div>'+ctrls
+    + '<div class="section-title" style="margin-top:16px">📊 KPI THEO DÕI</div>'+kpis
+    + '<div class="section-title" style="margin-top:16px">📖 ISO / CHUẨN THAM CHIẾU</div>'
+    + '<table style="width:100%;border-collapse:collapse;background:#fafafa;border-radius:8px;overflow:hidden">'+isos+'</table>'
+    + '</div></div></div>';
+  document.getElementById('modal').innerHTML = html;
+}
 function closeModal(){ document.getElementById('modal').innerHTML = ''; }
 render();
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
 </script>
 </body>
 </html>
