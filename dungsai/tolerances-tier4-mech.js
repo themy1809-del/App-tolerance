@@ -348,7 +348,69 @@
       permitted:{ kind:'TABLE', expression:T('Bản chất tương đương ISO 2768-m','Substantively equivalent to ISO 2768-m'), unit:'mm' },
       acceptance:T('Áp dụng cho bản vẽ Nhật. Khi không chỉ định, cấp m là mặc định.','For Japanese drawings. Class m default when not specified.'),
       clause:{ number:'JIS B 0405 Table 1', page:5 }
-    }
+    },
+
+    { id:'din7168-m',
+      standard:'DIN 7168:1991', region:'EU',
+      category:'machining', element:T('Kích thước thẳng (Đức)','Linear (Germany)'), feature:'GENERAL',
+      sketch:'iso2768_chart',
+      title:T('DIN 7168-m — Tương đương ISO 2768-m','DIN 7168-m — Equivalent to ISO 2768-m'),
+      permitted:{ kind:'TABLE', expression:T('Tương tự ISO 2768-m: ±0.1 (6-30) ±0.2 (30-120) ±0.3 (120-400)','Same as ISO 2768-m'), unit:'mm' },
+      acceptance:T('DIN 7168 đã bị thay bởi ISO 2768 từ 1991, nhưng vẫn xuất hiện trên bản vẽ cũ Đức (1970-90s). Đọc như ISO 2768.','DIN 7168 superseded by ISO 2768 since 1991, but still appears on old German drawings. Read as ISO 2768.'),
+      clause:{ number:'DIN 7168 Tabelle 1', page:3 }
+    },
+    // ========== ISO 286-1 — Hệ thống cơ sở (lý thuyết) ==========
+    { id:'iso286-1-itgrade',
+      standard:'ISO 286-1:2010', region:'ISO',
+      category:'machining', element:T('Hệ thống dung sai ISO','ISO tolerance system'), feature:'IT GRADE',
+      sketch:'iso2768_chart',
+      title:T('Cấp dung sai IT01 → IT18 — giá trị danh nghĩa','IT01 → IT18 tolerance grades — base values'),
+      permitted:{ kind:'TABLE',
+        expression:T('IT6 = 16i · IT7 = 25i · IT8 = 39i · IT9 = 62i · IT10 = 100i (i = đơn vị cấp)',
+                     'IT6 = 16i · IT7 = 25i · IT8 = 39i · IT9 = 62i · IT10 = 100i (i = tolerance unit)') , unit:'µm' },
+      acceptance:T('Cấp IT càng nhỏ → dung sai càng chặt. Cơ khí thường: IT6 (vòng bi) đến IT11 (lỗ thường)','Smaller IT → tighter tolerance. Common machining: IT6 (bearings) to IT11 (typical holes)'),
+      clause:{ number:'ISO 286-1 §5.3', page:7,
+        quote:'The standard tolerance grade (IT) is the basic figure characterising the precision class.' }
+    },
+    { id:'iso286-1-fund-dev',
+      standard:'ISO 286-1:2010', region:'ISO',
+      category:'machining', element:T('Hệ thống chữ-số (A→Z, a→z)','Letter-number system'), feature:'IT GRADE',
+      sketch:'hole_H_grade',
+      title:T('Ký hiệu H/h, G/g, K/k, P/p — sai lệch cơ bản','H/h, G/g, K/k, P/p — fundamental deviations'),
+      permitted:{ kind:'REF', expression:T('Chữ HOA = lỗ · chữ thường = trục','UPPER case = hole · lower case = shaft') },
+      acceptance:T('H: lỗ bắt đầu từ 0 (chỉ +). h: trục đỉnh bằng 0 (chỉ −). Còn lại có sai lệch cố định','H: hole starts at 0 (+ only). h: shaft top is 0 (− only). Others have fixed deviations'),
+      clause:{ number:'ISO 286-1 §5.4 + Table 4', page:9 }
+    },
+    { id:'iso286-1-fit-types',
+      standard:'ISO 286-1:2010', region:'ISO',
+      category:'machining', element:T('3 loại lắp ghép','3 fit categories'), feature:'FIT',
+      sketch:'fit_running',
+      title:T('Phân loại lắp ghép: chạy / trung gian / ép','Fit categories: clearance / transition / interference'),
+      permitted:{ kind:'REF', expression:T('Clearance (lỏng) · Transition (trung gian) · Interference (chặt)','Clearance · Transition · Interference') },
+      acceptance:T('Clearance: trục < lỗ luôn (H7/g6, H7/f7). Transition: có thể lỏng có thể chặt (H7/k6, H7/m6). Interference: trục > lỗ luôn (H7/p6, H7/s6)','Clearance: shaft < hole always. Transition: variable. Interference: shaft > hole always'),
+      clause:{ number:'ISO 286-1 §6 + Annex A', page:25 }
+    },
+
+    // ========== ISO 1302 — Ký hiệu Ra trên bản vẽ ==========
+    { id:'iso1302-symbol-basic',
+      standard:'ISO 1302:2002', region:'ISO',
+      category:'surface', element:T('Bản vẽ kỹ thuật','Engineering drawing'), feature:'ROUGHNESS',
+      sketch:'ra_comparison',
+      title:T('Ký hiệu Ra trên bản vẽ — biểu tượng ✓','Ra symbol on drawing — checkmark'),
+      permitted:{ kind:'REF', expression:T('Tam giác ✓ kèm số Ra (vd: Ra 3.2)','Triangle ✓ with Ra value (e.g. Ra 3.2)') },
+      acceptance:T('Tam giác mở: bất kỳ phương pháp gia công · Đóng có hình tròn: KHÔNG được gia công · Đóng kèm chữ: chỉ định phương pháp','Open triangle: any process · Closed with circle: NO machining · Closed with letter: specified process'),
+      clause:{ number:'ISO 1302 §4 + §5', page:6,
+        quote:'The basic graphical symbol consists of two lines of unequal length inclined at approximately 60 degrees.' }
+    },
+    { id:'iso1302-comparison-block',
+      standard:'ISO 1302:2002', region:'ISO',
+      category:'surface', element:T('Khối so sánh nhám (comparator)','Roughness comparator block'), feature:'ROUGHNESS',
+      sketch:'ra_comparison',
+      title:T('Kiểm bằng comparator block — so sánh trực tiếp','Inspection via comparator block — direct comparison'),
+      permitted:{ kind:'REF', expression:T('Khối nhám chuẩn nhiều cấp Ra cùng phương pháp gia công','Calibrated multi-Ra block, same machining method') },
+      acceptance:T('Khi không có profilometer: sờ tay + nhìn so với block chuẩn. Cùng phương pháp gia công thì so sánh được. Sai khác phương pháp → ko chính xác','No profilometer: touch + look against calibrated block. Same machining method comparable. Different method → inaccurate'),
+      clause:{ number:'ISO 1302 §A.3', page:18 }
+    },
   ];
 
   rules.forEach(function(r){ D.tolerances.push(r); });
