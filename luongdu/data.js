@@ -133,134 +133,134 @@ window.LD_DATA = {
 
   /* ===== B. NGUYÊN NHÂN SAI HỎNG — Defect root cause matrix ===== */
   defects: [
-    { id:'undercut', cat:'weld', rootCause:'man', name:'Cháy chân (Undercut)', severity:'medium',
+    { id:'undercut', cat:'weld', rootCause:'man', acceptance:{ok:'h ≤ 0.5 mm (cấp B nghiêm ngặt cho fatigue cao)', notok:'h > 1 mm (cấp D — đào sạch + hàn lại)', table:[['Cấp B (Stringent)','h ≤ 0.5 mm','pass'],['Cấp C (Intermediate)','h ≤ 0.5 mm hoặc 0.1t (t<3) · h ≤ 1 mm (t≥3)','warn'],['Cấp D (Moderate)','h ≤ 0.5 mm hoặc 0.2t (t<3) · h ≤ 1 mm (t≥3)','warn']], ref:'ISO 5817:2023 §5.10 Table 1'}, name:'Cháy chân (Undercut)', severity:'medium',
       symptom:'Rãnh khuyết tại chân mối hàn, song song mối hàn',
       causes:['Dòng hàn I quá cao','Hồ quang dài (V cao)','Tốc độ di chuyển nhanh','Góc que/đầu hàn sai','Không lưu vũ chuyển trên kim loại cơ bản'],
       remedies:['Giảm I 10-20A','Hạ chiều dài hồ quang','Chậm lại 10-15%','Chỉnh góc 70-80° cho fillet','Lưu chuyển tại chân 1-2 giây'],
       ref:'AWS D1.1 §7.16 + ISO 5817 §5.10', sketch:'def_undercut' },
 
-    { id:'porosity', cat:'weld', rootCause:'material', name:'Rỗ khí (Porosity)', severity:'high',
+    { id:'porosity', cat:'weld', rootCause:'material', acceptance:{ok:'Ø lỗ ≤ 0.2s (B) · không cluster > 25mm', notok:'Ø > 0.4s · cluster > 100mm · cần sửa toàn bộ', table:[['Cấp B','Ø ≤ 0.2s, max 3 mm · % rỗ ≤ 1%','pass'],['Cấp C','Ø ≤ 0.3s, max 4 mm · % rỗ ≤ 2%','warn'],['Cấp D','Ø ≤ 0.4s, max 5 mm · % rỗ ≤ 5%','warn']], ref:'ISO 5817:2023 §5.4 (s = chiều dày mối hàn)'}, name:'Rỗ khí (Porosity)', severity:'high',
       symptom:'Lỗ tròn nhỏ trên hoặc trong mối hàn — phát hiện qua RT/UT',
       causes:['Que/dây ẩm','Khí bảo vệ kém (rò rỉ, thiếu lưu lượng)','Bề mặt dơ (dầu, rỉ, sơn, nước)','Hồ quang dài (V cao)','Gió thổi tan khí bảo vệ'],
       remedies:['Sấy que SMAW 250°C/1h, dây MIG kín trong tủ sấy','Kiểm gas: 15-20 L/min · ống không gấp','Mài + lau aceton 25mm 2 bên đường hàn','Hạ V hồ quang','Che chắn gió < 3 m/s'],
       ref:'AWS D1.1 §7.18 + ISO 5817 §5.4', sketch:'def_porosity' },
 
-    { id:'crack-hot', cat:'weld', rootCause:'method', name:'Nứt nóng (Hot crack / Solidification crack)', severity:'critical',
+    { id:'crack-hot', cat:'weld', rootCause:'method', acceptance:{ok:'KHÔNG có nứt nào', notok:'BẤT KỲ vết nứt — cấp B/C/D đều TUYỆT ĐỐI KHÔNG', table:[['Cấp B','0% — không cho phép','fail'],['Cấp C','0% — không cho phép','fail'],['Cấp D','0% — không cho phép','fail']], ref:'ISO 5817:2023 §5.1 — Cracks NOT PERMITTED at any level'}, name:'Nứt nóng (Hot crack / Solidification crack)', severity:'critical',
       symptom:'Nứt dọc theo trục mối hàn ngay khi nguội. Centerline crack đặc trưng.',
       causes:['Tỷ số chiều rộng/chiều cao W/D < 1.4','Tốc độ di chuyển nhanh','Hàm lượng S, P cao trong vật liệu','Mặt cắt mối hàn không cân (concave)','Cốt liệu bẩn'],
       remedies:['Tăng W bằng dao động','Giảm tốc độ — tăng heat input','Chọn que/dây low-S (< 0.025%)','Đảm bảo profile lồi nhẹ (convex)','Vệ sinh mép kỹ'],
       ref:'AWS D1.1 §7.14 + Lincoln Procedure Handbook ch.6.3', sketch:'def_crack_hot' },
 
-    { id:'crack-cold', cat:'weld', rootCause:'method', name:'Nứt nguội (Cold crack / Hydrogen-induced)', severity:'critical',
+    { id:'crack-cold', cat:'weld', rootCause:'method', acceptance:{ok:'KHÔNG có nứt nào (UT sau 48h)', notok:'BẤT KỲ nứt H₂ trong HAZ — REJECT 100%', table:[['Cấp B','0% — không cho phép','fail'],['Cấp C','0% — không cho phép','fail'],['Cấp D','0% — không cho phép','fail']], ref:'ISO 5817:2023 §5.1 + EN 1011-2 (delay UT 48-72h)'}, name:'Nứt nguội (Cold crack / Hydrogen-induced)', severity:'critical',
       symptom:'Nứt xuất hiện 48-72h SAU khi hàn. Thường tại HAZ. Cần kiểm UT sau 48h.',
       causes:['H₂ khuếch tán: que ẩm, vật liệu ẩm','Tốc độ nguội nhanh','Restraint cao (cấu kiện cứng)','Carbon equivalent CE > 0.45','Thiếu preheat'],
       remedies:['Preheat: t=20mm → 100°C · t=40mm → 150°C · t=60mm → 200°C','Dùng que low-H (< 5 ml H₂/100g)','Sấy que 350°C/2h, lưu thùng 150°C','Post-weld heat treatment 200-250°C × 1h/25mm','Giảm restraint bằng sequence'],
       ref:'AWS D1.1 §5.6 Preheat table 5.8 + EN 1011-2', sketch:'def_crack_cold' },
 
-    { id:'lack-fusion', cat:'weld', rootCause:'man', name:'Không ngấu (Lack of Fusion / Incomplete Fusion)', severity:'high',
+    { id:'lack-fusion', cat:'weld', rootCause:'man', acceptance:{ok:'KHÔNG có LOF', notok:'BẤT KỲ LOF trong CJP · PJP tối đa 5% chiều dài', table:[['Cấp B','0% — không cho phép','fail'],['Cấp C','0% — không cho phép','fail'],['Cấp D','Cho phép ≤ 5% × L (chỉ cấp D với PJP)','warn']], ref:'ISO 5817:2023 §5.7 + AWS D1.1 §8.12'}, name:'Không ngấu (Lack of Fusion / Incomplete Fusion)', severity:'high',
       symptom:'Mối hàn không nóng chảy với kim loại cơ bản. Phát hiện qua UT.',
       causes:['Dòng hàn I thấp','Góc que sai','Tốc độ quá nhanh','Mép vát không sạch (xỉ, rỉ, sơn)','Khoảng cách điện cực CTWD lớn'],
       remedies:['Tăng I 15-25%','Chỉnh góc 75-80° hướng vào root','Giảm tốc độ','Mài lại mép vát đến kim loại sáng','Giữ CTWD 12-20mm cho MIG'],
       ref:'AWS D1.1 §7.15 + ISO 5817 §5.7', sketch:'def_lof' },
 
-    { id:'lack-penetration', cat:'weld', rootCause:'method', name:'Không thấu (Lack of Penetration / Incomplete Penetration)', severity:'high',
+    { id:'lack-penetration', cat:'weld', rootCause:'method', acceptance:{ok:'CJP: 0% LOP · PJP: theo thiết kế', notok:'CJP có root not fused (RT/UT phát hiện)', table:[['CJP — Cấp B/C','0% — không cho phép','fail'],['PJP','Theo design depth (vd 75% × t)','pass'],['Cấp D','Cho phép ≤ 5% × L với fillet','warn']], ref:'ISO 5817:2023 §5.13'}, name:'Không thấu (Lack of Penetration / Incomplete Penetration)', severity:'high',
       symptom:'Phần root joint không hàn ngấu hoàn toàn. Đáng kể với CJP.',
       causes:['Khe hở gốc quá hẹp (< 2mm)','Root face quá lớn (> 2mm)','Dòng hàn thấp','Tốc độ nhanh','Que/dây quá lớn cho rãnh'],
       remedies:['Mở khe gốc 3-5mm','Mài root face xuống ≤ 1.5mm','Tăng I 20%','Hàn lớp gốc chậm + lưu chuyển','Đổi que nhỏ hơn (Ø2.5 thay Ø3.2)'],
       ref:'AWS D1.1 §7.13 + EN 287-1', sketch:'def_lop' },
 
-    { id:'slag-inclusion', cat:'weld', rootCause:'man', name:'Xỉ kẹt (Slag Inclusion)', severity:'medium',
+    { id:'slag-inclusion', cat:'weld', rootCause:'man', acceptance:{ok:'Ø ≤ 0.2s (cấp B)', notok:'Ø > 0.4s hoặc dài > 4s', table:[['Cấp B','Ø ≤ 0.2s, max 3 mm','pass'],['Cấp C','Ø ≤ 0.3s, max 4 mm','warn'],['Cấp D','Ø ≤ 0.4s, max 6 mm','warn']], ref:'ISO 5817:2023 §5.3'}, name:'Xỉ kẹt (Slag Inclusion)', severity:'medium',
       symptom:'Xỉ bị giam giữa các lớp hàn. Phát hiện qua RT (vùng tối không tròn như rỗ).',
       causes:['Vệ sinh xỉ kém giữa lớp','Profile lớp lõm (concave)','Hàn ngược chiều với lớp trước','Tốc độ quá chậm tạo xỉ chìm','Que/dây dòng quá thấp'],
       remedies:['Đánh xỉ + đánh thép bằng bàn chải kim','Giữ profile lồi nhẹ','Hàn cùng chiều với lớp trước','Tăng I tăng tốc nhẹ','Đảo chỉ điều chỉnh'],
       ref:'AWS D1.1 §7.21 + ISO 5817 §5.3', sketch:'def_slag' },
 
-    { id:'spatter', cat:'weld', rootCause:'machine', name:'Văng tia (Spatter)', severity:'low',
+    { id:'spatter', cat:'weld', rootCause:'machine', acceptance:{ok:'Mức độ thấp — chỉ cosmetic', notok:'Spatter quá nhiều ảnh hưởng sandblast / sơn', table:[['Cấp B','Theo specification project','pass'],['Cấp C','Theo specification project','pass'],['Cấp D','Cho phép','pass']], ref:'ISO 5817:2023 §5.27 (depends on application)'}, name:'Văng tia (Spatter)', severity:'low',
       symptom:'Hạt kim loại nóng văng ra ngoài đường hàn — gây ảnh hưởng surface',
       causes:['Dòng hàn quá cao','CTWD quá dài (MIG)','Cường độ dòng âm (DCEN sai)','Khí bảo vệ thiếu CO₂ (chỉ Argon)'],
       remedies:['Giảm I 10-15A','Giữ CTWD 12-15mm','Đảo polarity sang DCEP','Đổi gas mix 82%Ar + 18%CO₂ cho MAG','Phun anti-spatter spray'],
       ref:'AWS D1.1 §7.5 + Lincoln Welding Handbook', sketch:'def_spatter' },
 
-    { id:'distortion-i', cat:'distort', rootCause:'method', name:'Méo cánh I (I-section Distortion)', severity:'high',
+    { id:'distortion-i', cat:'distort', rootCause:'method', acceptance:{ok:'Out-of-square ≤ b/100 hoặc 5mm theo EN 10034', notok:'Out > 2× spec — cold straightening hoặc reject', table:[['EN 10034','k = k₁+k₂ ≤ 2% × b, min 6.5 mm','pass'],['EN 1090-2 Class 1','±3 mm khắt khe hơn','warn'],['Out > spec','Cold straightening hoặc reject','fail']], ref:'EN 10034 Table 2 + EN 1090-2 §11.2.3'}, name:'Méo cánh I (I-section Distortion)', severity:'high',
       symptom:'Cánh trên/dưới bị cong vào, bụng vênh. Gây sai dung sai EN 10034.',
       causes:['Hàn liên tục 1 cánh không xen kẽ','Heat input quá lớn','Không có sequence','Không gá định vị','Hàn cùng phía liên tiếp'],
       remedies:['Sequence 1-3-2-4: hàn xen kẽ 2 cánh','Heat input ≤ 2.5 kJ/mm','Gá fix bằng strong-back kẹp','Hàn từ giữa ra 2 đầu','Pre-cambering trước hàn (chỉnh hình ngược)'],
       ref:'AWS D1.1 Annex K + EN 1090-2 §7.5', sketch:'def_distort_i' },
 
-    { id:'distortion-plate', cat:'distort', rootCause:'method', name:'Cong vênh tấm (Plate Warpage)', severity:'medium',
+    { id:'distortion-plate', cat:'distort', rootCause:'method', acceptance:{ok:'EN 10029 Class N: ≤ 8 mm trên 1m', notok:'Quá Class N → cold press straighten', table:[['Class N (Normal)','≤ 8 mm / 1m','pass'],['Class S (Special)','≤ 4 mm / 1m (chặt 50%)','pass'],['Cao hơn N','Cold straightening máy ép','fail']], ref:'EN 10029:2010 §8 Table 4'}, name:'Cong vênh tấm (Plate Warpage)', severity:'medium',
       symptom:'Tấm bị cong khi hàn nhiều mối song song. Khó kiểm phẳng EN 10029.',
       causes:['Heat input tập trung 1 vùng','Tấm mỏng (t < 8mm)','Không cố định khi hàn','Hàn liên tục 1 mặt'],
       remedies:['Phân nhóm hàn (skip welding) 100mm-bỏ 200mm','Dùng tấm balance dày hơn','Kẹp gá lên bàn nguội','Hàn song song 2 mặt cùng lúc','Sau hàn: cold straightening máy ép'],
       ref:'AWS D1.1 Annex K Fig K.5', sketch:'def_warp' },
 
-    { id:'misalign', cat:'fit', rootCause:'man', name:'Lệch tâm mối ghép (Misalignment / High-low)', severity:'medium',
+    { id:'misalign', cat:'fit', rootCause:'man', acceptance:{ok:'Δ ≤ 0.1t hoặc 3 mm (giá trị nhỏ hơn)', notok:'Δ > 3mm — mài + đắp lại nếu Δ > t/10', table:[['Cấp B','Δ ≤ 0.1t, max 1 mm','pass'],['Cấp C','Δ ≤ 0.15t, max 3 mm','warn'],['Cấp D','Δ ≤ 0.25t, max 5 mm','warn']], ref:'ISO 5817:2023 §5.21 + AWS D1.1'}, name:'Lệch tâm mối ghép (Misalignment / High-low)', severity:'medium',
       symptom:'Hai tấm không cùng cốt khi hàn butt joint. Chênh > 0.1t hoặc 3mm.',
       causes:['Fit-up trước hàn sai','Tack weld không đủ chắc','Tấm có dung sai dày lớn','Co rút khi hàn lệch'],
       remedies:['Kiểm fit-up trước hàn: ≤ 1mm','Tack weld 4-6 điểm × 25mm','Đảo tấm cùng dày','Symmetric welding 2 bên','Sửa bằng mài + đắp lại nếu Δ > t/10'],
       ref:'AWS D1.1 §5.21 + ASME UG-33', sketch:'def_misalign' },
 
-    { id:'arc-strike', cat:'weld', rootCause:'man', name:'Hồ quang lạc (Arc Strike)', severity:'high',
+    { id:'arc-strike', cat:'weld', rootCause:'man', acceptance:{ok:'KHÔNG có arc strike ngoài đường hàn', notok:'Bất kỳ vết hồ quang lạc — phải mài 1.5mm + UT', table:[['Cấp B','0% — không cho phép','fail'],['Cấp C','0% — không cho phép','fail'],['Cấp D','0% — không cho phép','fail']], ref:'AWS D1.1 §5.29 + EN 1090-2 §7.5.7'}, name:'Hồ quang lạc (Arc Strike)', severity:'high',
       symptom:'Vết hồ quang ngoài đường hàn — vùng đó cứng do tôi tự nhiên, có thể nứt sau.',
       causes:['Khởi động hồ quang trên kim loại cơ bản','Cáp tiếp đất tiếp xúc kém','Que rơi'],
       remedies:['Khởi động trên runoff tab (mép thừa)','Kiểm tiếp đất tốt','Mài sạch vết hồ quang lạc 1.5mm + UT vùng đó','Treo que đúng cách'],
       ref:'AWS D1.1 §5.29 + EN 1090-2 §7.5.7', sketch:'def_arc_strike' },
 
-    { id:'craters', cat:'weld', rootCause:'man', name:'Lõm cuối đường (Crater)', severity:'medium',
+    { id:'craters', cat:'weld', rootCause:'man', acceptance:{ok:'Crater đắp đầy hoàn toàn', notok:'Crater có nứt (star crack) → REJECT', table:[['Cấp B','h ≤ 0.05s, max 1 mm · 0 crack','pass'],['Cấp C','h ≤ 0.1s, max 2 mm · 0 crack','warn'],['Cấp D','h ≤ 0.2s, max 2 mm · 0 crack','warn']], ref:'ISO 5817:2023 §5.18 (h = depth)'}, name:'Lõm cuối đường (Crater)', severity:'medium',
       symptom:'Vết lõm tại điểm dừng hàn — dễ nứt crater.',
       causes:['Tắt hồ quang đột ngột','Không lưu chuyển đắp đầy','Dòng hàn dừng nhanh'],
       remedies:['Crater fill: lưu chuyển + giảm dần I','Đắp ngược lại 5-10mm trước khi tắt','Dùng máy có chế độ crater fill','Mài lõm + đắp lại'],
       ref:'AWS D1.1 §7.19', sketch:'def_crater' },
 
-    { id:'magnetic-blow', cat:'weld', rootCause:'machine', name:'Thổi từ (Magnetic Arc Blow)', severity:'medium',
+    { id:'magnetic-blow', cat:'weld', rootCause:'machine', acceptance:{ok:'Mối hàn đạt geometry sau khi compensate', notok:'Mối hàn lệch khỏi joint > 1 mm', table:[['Tất cả','Đạt geometry final = đạt — bản thân magnetic blow không phải defect','pass']], ref:'AWS Welding Handbook Vol.2'}, name:'Thổi từ (Magnetic Arc Blow)', severity:'medium',
       symptom:'Hồ quang bị "đẩy" lệch khỏi đường hàn, đặc biệt DC + sắt từ.',
       causes:['Cáp tiếp đất 1 phía','Hàn DC trên thép cao tự cảm ứng','Cuối tấm dày'],
       remedies:['Đặt tiếp đất 2 đầu của workpiece','Đổi AC khi DC bị thổi','Bọc dây cáp wraparound workpiece','Skewbed welding tách rời cuối tấm','Hàn xen kẽ 2 chiều'],
       ref:'AWS Welding Handbook Vol.2 ch.6', sketch:'def_blow' },
 
-    { id:'lamellar-tear', cat:'parent', rootCause:'material', name:'Lamellar Tearing (xé lớp kim loại cơ bản)', severity:'critical',
+    { id:'lamellar-tear', cat:'parent', rootCause:'material', acceptance:{ok:'KHÔNG có lamellar tear (UT straight beam pass)', notok:'Bất kỳ tear → REJECT vật liệu', table:[['Cấp B/C/D','0% — phải Z25/Z35 cho t≥25mm + UT','fail']], ref:'EN 10164 + AWS D1.1 §C-5.16'}, name:'Lamellar Tearing (xé lớp kim loại cơ bản)', severity:'critical',
       symptom:'Nứt theo phương song song mặt cán, dưới HAZ. Xảy ra với joints T-,L- transverse loading.',
       causes:['Vật liệu không Z-quality (Z15/Z25/Z35)','Restraint Z cao','Hydrogen','Vật liệu dày + lớp xen kẽ S/MnS'],
       remedies:['Đặt mua Z25 trở lên cho t ≥ 25mm','Thay đổi thiết kế giảm Z-loading','Buttering surface với điện cực mềm trước hàn','Preheat 150°C','Inspection UT đặc biệt straight-beam'],
       ref:'EN 10164 Z-grades + AWS D1.1 §C-5.16', sketch:'def_lamellar' },
 
-    { id:'reheat-crack', cat:'pwht', rootCause:'method', name:'Reheat Crack (PWHT cracking)', severity:'high',
+    { id:'reheat-crack', cat:'pwht', rootCause:'method', acceptance:{ok:'KHÔNG có nứt sau PWHT (UT/RT pass)', notok:'Bất kỳ nứt trong HAZ → REJECT', table:[['Cấp B/C/D','0% — không cho phép sau PWHT','fail']], ref:'ASME VIII Div.1 UCS-56 + WRC Bulletin'}, name:'Reheat Crack (PWHT cracking)', severity:'high',
       symptom:'Nứt trong HAZ khi PWHT (post-weld heat treatment) 550-700°C',
       causes:['Vật liệu có V, Mo, Cr cao (Cr-Mo steels)','PWHT quá chậm hoặc nhiệt độ sai','Stress concentration tại notch','Thiết kế welded joint phức tạp'],
       remedies:['Heating rate ≤ 100°C/h cho t < 25mm · ≤ 50°C/h cho t > 50mm','Holding 600-650°C × 2.5 min/mm','Stress-relief grinding trước PWHT','Sử dụng L-grade (low carbon) cho Cr-Mo'],
       ref:'ASME VIII Div.1 UCS-56 + WRC Bulletin', sketch:'def_reheat' },
 
-    { id:'mill-scale', cat:'parent', rootCause:'method', name:'Vảy cán còn lại (Mill Scale)', severity:'medium',
+    { id:'mill-scale', cat:'parent', rootCause:'method', acceptance:{ok:'Sa 2.5 — mài sạch 25mm 2 bên đường hàn', notok:'Còn vảy cán → porosity + LOF', table:[['Trước hàn','Sa 2.5 (ISO 8501-1) — kim loại sáng','pass'],['Sa 2','Còn vết nhẹ — chấp nhận cho fillet PJP','warn'],['Sa 1','Chỉ wire brush — KHÔNG ĐỦ','fail']], ref:'ISO 8501-1 + AWS D1.1 §5.15'}, name:'Vảy cán còn lại (Mill Scale)', severity:'medium',
       symptom:'Vảy đen FeO/Fe₃O₄ trên mặt thép cán nóng → mối hàn rỗ, không ngấu.',
       causes:['Không cạo vảy trước hàn','Sandblast Sa 2.5 không đạt','Lưu kho lâu ngoài trời','Mép cắt còn vảy'],
       remedies:['Mài cơ học 25mm 2 bên đường hàn đến kim loại sáng','Sandblast Sa 2.5 (ISO 8501-1) trước hàn','Lau aceton sau mài','Cắt plasma > mài thay vì oxy + mài'],
       ref:'ISO 8501-1 + AWS D1.1 §5.15', sketch:'def_mill_scale' },
 
-    { id:'rust', cat:'parent', rootCause:'env', name:'Gỉ kim loại cơ bản (Rust on parent metal)', severity:'medium',
+    { id:'rust', cat:'parent', rootCause:'env', acceptance:{ok:'Sa 2.5 + sấy 100°C/30 phút trước hàn', notok:'Còn gỉ ẩm → H₂ + porosity', table:[['Cấp A','Bề mặt mới — chấp nhận','pass'],['Cấp B','Có gỉ nhẹ — sandblast Sa 2.5','warn'],['Cấp C/D','Gỉ phủ + rỗ — REJECT hoặc cải tạo nặng','fail']], ref:'ISO 8501-1 (rust grade A/B/C/D)'}, name:'Gỉ kim loại cơ bản (Rust on parent metal)', severity:'medium',
       symptom:'Lớp gỉ ẩm trên mép vát → H₂ + porosity + giảm strength',
       causes:['Lưu kho ngoài trời > 6 tháng','Mặt bị nước/mưa','Sandblast không sạch','Vận chuyển không bảo vệ'],
       remedies:['Sandblast Sa 2.5 toàn diện','Sấy nóng 100°C/30 phút trước hàn','Bảo quản trong nhà có thông gió','Sơn lót zinc primer ngay sau sandblast','Bọc nilon nếu chứa ngoài'],
       ref:'ISO 8501-1 + EN ISO 12944', sketch:'def_rust' },
 
-    { id:'wrong-electrode', cat:'consum', rootCause:'man', name:'Sai loại que/dây (Wrong consumable)', severity:'high',
+    { id:'wrong-electrode', cat:'consum', rootCause:'man', acceptance:{ok:'Que/dây đúng theo WPS + MTC trace', notok:'Sai que → mối hàn không đạt CVN/UTS', table:[['Welder check','In tag rõ MTC + AWS class','pass'],['QC verify','Random 5% lots check','pass'],['Production trial','PQR re-do nếu thay loại que','warn']], ref:'AWS A5.x + ASME IX'}, name:'Sai loại que/dây (Wrong consumable)', severity:'high',
       symptom:'Mối hàn có cơ tính khác hợp đồng — không đạt CVN, không đạt sức bền',
       causes:['Lấy nhầm thùng que','Que/dây hết hạn + không sấy','Quên ghi rõ ban đầu','Trộn nhiều loại trong 1 thùng'],
       remedies:['Tag que rõ ràng theo MTC','FIFO (first in first out) khi xuất kho','Welder check trước hàn','PQR/WPS rõ ràng','In-process audit của QC'],
       ref:'AWS A5.x specifications + ASME IX', sketch:'def_consum' },
 
-    { id:'preheat-fail', cat:'pwht', rootCause:'man', name:'Quên/sai preheat', severity:'critical',
+    { id:'preheat-fail', cat:'pwht', rootCause:'man', acceptance:{ok:'Đo đủ nhiệt độ trước hàn — ghi log', notok:'Không đo / dưới spec → nứt H₂ sau 48-72h', table:[['t = 20 mm','T ≥ 100°C','pass'],['t = 40 mm','T ≥ 150°C','pass'],['t = 60 mm','T ≥ 200°C','pass'],['Hợp kim cao','Theo CE: CE>0.45 → preheat bắt buộc','warn']], ref:'AWS D1.1 §5.6 Table 5.8 + EN 1011-2'}, name:'Quên/sai preheat', severity:'critical',
       symptom:'Nứt H₂ sau 48-72h hoặc HAZ quá cứng > 350 HV',
       causes:['Người hàn quên đo nhiệt độ','Đo bằng nhiệt kế tiếp xúc sai','Crayon nhiệt độ hết hạn','Thiếu thiết bị (gas heater)'],
       remedies:['Đo bằng pen-type IR 50mm từ joint TRƯỚC khi hàn','Crayon Tempil chính xác ±5°C','Heating blanket cho dày > 40mm','HOLD inspection point cho t > 25mm','Training thợ hàn về CE/preheat'],
       ref:'AWS D1.1 §5.6 + EN 1011-2', sketch:'def_preheat' },
 
-    { id:'wrong-sequence', cat:'distort', rootCause:'method', name:'Sai sequence hàn', severity:'high',
+    { id:'wrong-sequence', cat:'distort', rootCause:'method', acceptance:{ok:'Sequence drawing có sẵn + theo đúng số thứ tự', notok:'Không sequence → distortion lớn', table:[['Có sequence','Theo drawing 1-3-2-4 xen kẽ','pass'],['Không sequence','KHÔNG được hàn — phải có drawing','fail']], ref:'AWS D1.1 Annex K + AISC Quality Manual'}, name:'Sai sequence hàn', severity:'high',
       symptom:'Biến dạng tổng thể quá lớn, không thể chỉnh thẳng sau',
       causes:['Hàn theo thứ tự ngẫu nhiên','Không có sequence drawing','Quá nhiều thợ làm song song không phối hợp','Hàn từ đầu đến cuối theo 1 chiều'],
       remedies:['Welding sequence drawing rõ trước thi công','Hàn xen kẽ 1-3-2-4','Hàn từ giữa ra 2 đầu','Symmetric về 2 phía neutral axis','Pre-camber tính trước'],
       ref:'AWS D1.1 Annex K + AISC Quality Manual', sketch:'def_sequence' },
 
     /* ========== PAINT / COATING DEFECTS (ISO 12944, SSPC, NACE) ========== */
-    { id:'paint-blister', cat:'paint', rootCause:'env', name:'Phồng sơn (Blistering)', severity:'high',
+    { id:'paint-blister', cat:'paint', rootCause:'env', acceptance:{ok:'Ri 0 — không blister (ISO 4628-2)', notok:'Ri ≥ 2 — bong bóng nhiều cần redo', table:[['Ri 0','Không có blister','pass'],['Ri 1','1-5 blister nhỏ — chấp nhận','warn'],['Ri 2-3','Nhiều blister — sửa cục bộ','warn'],['Ri 4-5','Dày đặc — sandblast lại + sơn lại','fail']], ref:'ISO 4628-2 (blister grading) + SSPC-VIS 2'}, name:'Phồng sơn (Blistering)', severity:'high',
       symptom:'Bong bóng tròn phồng lên trên màng sơn — chứa nước hoặc khí ở dưới',
       causes:['Bề mặt không sạch (dầu, muối, ẩm)','Sơn lên bề mặt ẩm/nước đọng','DFT quá dày (overcoat)','Sơn lên thép nóng > 50°C','Khoảng cách lớp không đủ (recoat window)'],
       remedies:['Sandblast Sa 2.5 + đo độ muối ≤ 50 mg/m²','Đo điểm sương dew point — nhiệt bề mặt > +3°C dew','Tuân thủ DFT max của TDS sơn','Đợi thép nguội < 40°C mới sơn','Tuân thủ recoat min/max window'],
@@ -268,7 +268,7 @@ window.LD_DATA = {
       refImg:'https://upload.wikimedia.org/wikipedia/commons/0/01/Paint_blister.jpg',
       sketch:'def_blister' },
 
-    { id:'paint-runs', cat:'paint', rootCause:'man', name:'Chảy sơn (Runs / Sags)', severity:'medium',
+    { id:'paint-runs', cat:'paint', rootCause:'man', acceptance:{ok:'Không thấy bằng mắt thường ở 1m', notok:'Visible runs/sags → mài + sửa cục bộ', table:[['Cosmetic OK','Không thấy ở 1m / không ảnh hưởng DFT','pass'],['Visible runs','Mài sạch + touch-up','warn'],['Drips dày','Drip > 3mm — re-blast vùng đó','fail']], ref:'SSPC-VIS 2 + ISO 4628'}, name:'Chảy sơn (Runs / Sags)', severity:'medium',
       symptom:'Đường rủ / giọt sơn chảy xuống — thường ở mép, góc',
       causes:['Sơn nhiều lớp 1 lần (DFT quá cao)','Pha loãng quá nhiều thinner','Súng phun quá gần / quá chậm','Bề mặt nghiêng + sơn không thixotropic','Nhiệt độ thấp + độ nhớt thấp'],
       remedies:['Phun 2 lớp mỏng thay 1 lớp dày','Đúng tỷ lệ thinner theo TDS','CTS distance 20-30cm + tốc độ đều','Quay tròn cấu kiện khi sơn mặt nghiêng','Nâng nhiệt độ phun hoặc đổi sơn high-build'],
@@ -276,7 +276,7 @@ window.LD_DATA = {
       refImg:'https://upload.wikimedia.org/wikipedia/commons/5/52/Paint_run_defect.jpg',
       sketch:'def_runs' },
 
-    { id:'paint-orange-peel', cat:'paint', rootCause:'machine', name:'Vỏ cam (Orange Peel)', severity:'low',
+    { id:'paint-orange-peel', cat:'paint', rootCause:'machine', acceptance:{ok:'Cosmetic OK cho industrial — không ảnh hưởng cơ tính', notok:'Khách hàng yêu cầu mặt nhẵn → recoat', table:[['Industrial','OK — không ảnh hưởng bảo vệ ăn mòn','pass'],['Architectural','Khách yêu cầu smooth → sand + recoat','warn']], ref:'SSPC-VIS / Project specification'}, name:'Vỏ cam (Orange Peel)', severity:'low',
       symptom:'Bề mặt sơn không phẳng, có texture giống vỏ cam',
       causes:['Súng phun quá xa (CTS > 40cm)','Áp suất phun thấp','Sơn quá đặc/ít thinner','Nhiệt độ ambient cao → sơn khô trước khi flow','Đầu súng quá nhỏ'],
       remedies:['Giữ CTS 20-25cm','Tăng áp suất phun (40-60 psi)','Pha thinner đúng tỷ lệ','Sơn vào sáng sớm hoặc chiều mát','Đổi đầu súng phù hợp viscosity'],
@@ -284,7 +284,7 @@ window.LD_DATA = {
       refImg:'https://upload.wikimedia.org/wikipedia/commons/4/4c/Orange_peel_paint.jpg',
       sketch:'def_orange_peel' },
 
-    { id:'paint-pinhole', cat:'paint', rootCause:'method', name:'Lỗ kim (Pinhole / Pinpoint)', severity:'high',
+    { id:'paint-pinhole', cat:'paint', rootCause:'method', acceptance:{ok:'Holiday test pass — 0 pinhole với 67.5V/mil', notok:'Có pinhole bất kỳ → sửa cục bộ', table:[['Holiday test','0 spark trên toàn bề mặt','pass'],['1-5 pinholes','Touch-up cục bộ + retest','warn'],['> 5 pinholes/m²','Re-coat toàn vùng','fail']], ref:'NACE SP0188 + ASTM D5162'}, name:'Lỗ kim (Pinhole / Pinpoint)', severity:'high',
       symptom:'Lỗ nhỏ xuyên qua màng sơn — phát hiện qua holiday detector',
       causes:['Sơn quá đặc → bọt khí không thoát','Sandblast còn pit sâu','Phun lớp dày 1 lần','Sơn lên bề mặt nóng','Thinner sai loại'],
       remedies:['Pha loãng + agitate sơn đều','Sandblast lại + filler pit > 50µm','Phun 2-3 lớp mỏng','Đợi bề mặt < 40°C','Dùng thinner đúng TDS'],
@@ -292,7 +292,7 @@ window.LD_DATA = {
       refImg:'https://upload.wikimedia.org/wikipedia/commons/0/0f/Pinhole_corrosion.jpg',
       sketch:'def_pinhole' },
 
-    { id:'paint-fish-eye', cat:'paint', rootCause:'machine', name:'Mắt cá (Fish-eye / Cratering)', severity:'medium',
+    { id:'paint-fish-eye', cat:'paint', rootCause:'machine', acceptance:{ok:'Không có fish-eye visible', notok:'Có fish-eye → mài + recoat vùng đó', table:[['Visible inspection','0 fish-eye ở 0.5m','pass'],['1-2 spots','Touch-up cục bộ','warn'],['Nhiều spots','Re-blast + re-coat (compressor cần trap)','fail']], ref:'SSPC-VIS 2'}, name:'Mắt cá (Fish-eye / Cratering)', severity:'medium',
       symptom:'Vết tròn lõm như mắt cá, có chấm tâm — do bề mặt bị dính dầu/silicone',
       causes:['Dầu mỡ silicone từ khí nén','Tay người vô tình chạm','Súng phun bị nhiễm silicone từ shop trước','Compressor không có water/oil trap'],
       remedies:['Lắp filter oil/water trên khí nén','Cấm chạm tay vào bề mặt đã sandblast','Vệ sinh súng phun trước khi đổi sơn','Mài + sơn lại vùng fish-eye'],
@@ -300,7 +300,7 @@ window.LD_DATA = {
       refImg:'https://upload.wikimedia.org/wikipedia/commons/2/20/Fisheye_paint_defect.jpg',
       sketch:'def_fisheye' },
 
-    { id:'paint-dft-low', cat:'paint', rootCause:'measurement', name:'DFT thiếu (Dry Film Thickness < spec)', severity:'high',
+    { id:'paint-dft-low', cat:'paint', rootCause:'measurement', acceptance:{ok:'DFT ≥ spec (95% NDFT theo ISO 19840)', notok:'DFT < spec → coat thêm', table:[['ISO 19840 80/20','Tối thiểu 80% reading ≥ NDFT','pass'],['90/10','90% ≥ NDFT, 10% ≥ 80% NDFT','warn'],['< spec','Coat thêm lớp đến đủ DFT','fail']], ref:'ISO 19840 + SSPC-PA 2'}, name:'DFT thiếu (Dry Film Thickness < spec)', severity:'high',
       symptom:'Đo bằng PIG/Elcometer ra giá trị < spec → không đủ bảo vệ ăn mòn',
       causes:['Phun quá nhanh / mỏng','Sơn pha loãng quá','Áp suất thấp','Không đo trong quá trình','Người phun thiếu kinh nghiệm'],
       remedies:['Phun chậm hơn, overlap 50%','Đo wet film thickness ngay sau phun bằng comb','Đo DFT sau khô bằng máy magnetic / eddy current','Sơn thêm lớp tới đạt spec','Train thợ phun + nghiệm thu từng lớp'],
@@ -308,7 +308,7 @@ window.LD_DATA = {
       refImg:'https://upload.wikimedia.org/wikipedia/commons/8/81/Coating_thickness_gauge.jpg',
       sketch:'def_dft' },
 
-    { id:'paint-dft-high', cat:'paint', rootCause:'measurement', name:'DFT thừa (DFT > max spec)', severity:'medium',
+    { id:'paint-dft-high', cat:'paint', rootCause:'measurement', acceptance:{ok:'DFT ≤ Max DFT của TDS', notok:'DFT > 125% max → có thể bị nứt + giảm độ dẻo', table:[['≤ Max DFT','OK theo TDS','pass'],['100-125% Max','Theo dõi crack trong 1 năm','warn'],['> 125% Max','Mài bớt xuống Max','fail']], ref:'ISO 19840 + TDS sơn'}, name:'DFT thừa (DFT > max spec)', severity:'medium',
       symptom:'Sơn quá dày → giảm độ dẻo, dễ nứt, lâu khô, có thể tổng ƯS nội',
       causes:['Phun chồng quá nhiều lớp','Sơn high-build không pha loãng','Không đo trong quá trình'],
       remedies:['Mài chip lớp thừa nếu quá max + 25%','Theo dõi WFT mỗi lớp','Đo DFT cumulative — không vượt max của TDS'],
@@ -316,7 +316,7 @@ window.LD_DATA = {
       refImg:'',
       sketch:'def_dft' },
 
-    { id:'paint-adhesion', cat:'paint', rootCause:'method', name:'Mất bám (Adhesion failure)', severity:'critical',
+    { id:'paint-adhesion', cat:'paint', rootCause:'method', acceptance:{ok:'Pull-off ≥ 5 MPa (epoxy) hoặc ≥ 3 MPa (alkyd)', notok:'< 3 MPa hoặc adhesion fail → re-blast + re-coat', table:[['Tốt','Pull-off ≥ 5 MPa, glue failure (sticker đứt)','pass'],['Trung bình','3-5 MPa, mixed failure mode','warn'],['Kém','< 3 MPa hoặc cohesive fail giữa layers — REJECT','fail']], ref:'ISO 4624 + ASTM D4541'}, name:'Mất bám (Adhesion failure)', severity:'critical',
       symptom:'Sơn bong khỏi bề mặt thép — pull-off test < spec',
       causes:['Bề mặt không sạch (oil, salt, scale)','Profile bề mặt < spec (Rz < 50µm)','Sơn không tương thích với primer','Recoat window vượt quá','Nhiệt độ sơn ngoài spec'],
       remedies:['Sandblast lại Sa 2.5 + đo profile Rz 50-80µm','Bridge test tương thích primer-topcoat','Sơn trong recoat window (4-24h tùy sơn)','Pull-off test (ISO 4624) ≥ 5 MPa cho epoxy','Salt contamination ≤ 50 mg/m² (ISO 8502-9)'],
@@ -324,7 +324,7 @@ window.LD_DATA = {
       refImg:'https://upload.wikimedia.org/wikipedia/commons/d/df/Paint_peeling.jpg',
       sketch:'def_adhesion' },
 
-    { id:'paint-rust-bleed', cat:'paint', rootCause:'method', name:'Gỉ thấm qua (Rust bleeding / Rust spot)', severity:'high',
+    { id:'paint-rust-bleed', cat:'paint', rootCause:'method', acceptance:{ok:'Sa 2.5 + sơn ngay 4h sau sandblast', notok:'Visible rust bleed → re-blast + re-coat', table:[['Sa 2.5','Không có rust bleed','pass'],['Sa 2','1-2 spots nhỏ — touch-up','warn'],['Visible bleed','Re-blast vùng đó + sơn lại','fail']], ref:'ISO 8501-1 + ISO 8502-9'}, name:'Gỉ thấm qua (Rust bleeding / Rust spot)', severity:'high',
       symptom:'Vết gỉ vàng/nâu thấm qua lớp sơn — sandblast còn vảy hoặc thép tự gỉ trong primer',
       causes:['Sandblast chưa sạch ISO Sa 2.5','Thép ẩm khi sơn primer','Không đủ thời gian khô primer','Salt residue dưới sơn'],
       remedies:['Re-blast vùng đó + sơn lại từ primer','Đo salt < 50 mg/m² trước primer','Sấy bề mặt + đo dew point','Sandblast trong vòng 4h là sơn primer ngay (no flash rust)'],
@@ -332,7 +332,7 @@ window.LD_DATA = {
       refImg:'https://upload.wikimedia.org/wikipedia/commons/b/b5/Rust_bleeding.jpg',
       sketch:'def_rust_bleed' },
 
-    { id:'paint-cracking', cat:'paint', rootCause:'material', name:'Nứt sơn (Cracking / Crazing)', severity:'medium',
+    { id:'paint-cracking', cat:'paint', rootCause:'material', acceptance:{ok:'Không nứt sau test 1 năm', notok:'Nứt mạng visible → REJECT, sơn lại', table:[['Cấp 0','Không nứt','pass'],['Cấp 1-2','Vết nhỏ — chấp nhận indoor','warn'],['Cấp 3-5','Mạng nứt — sandblast + recoat','fail']], ref:'ISO 4628-4'}, name:'Nứt sơn (Cracking / Crazing)', severity:'medium',
       symptom:'Mạng nứt nhỏ trên màng sơn',
       causes:['DFT quá dày','Sơn cũ hết hạn','UV exposure trên sơn không UV-resistant','Topcoat khác hệ với undercoat','Cấu kiện chịu ƯS sau khi sơn'],
       remedies:['Tuân thủ DFT max của TDS','Kiểm hạn sử dụng sơn','Dùng polyurethane / aliphatic cho topcoat ngoài trời','Bridge test 1 mẫu trước khi sơn cả lô'],
@@ -340,7 +340,7 @@ window.LD_DATA = {
       refImg:'https://upload.wikimedia.org/wikipedia/commons/8/8d/Paint_crack.jpg',
       sketch:'def_crack_paint' },
 
-    { id:'paint-chalk', cat:'paint', rootCause:'material', name:'Phấn hoá (Chalking)', severity:'low',
+    { id:'paint-chalk', cat:'paint', rootCause:'material', acceptance:{ok:'Cấp 0-1 sau 5 năm', notok:'Cấp 4-5 → đổi sang aliphatic PU', table:[['Cấp 0','Không chalking','pass'],['Cấp 1-2','Nhẹ — chấp nhận indoor','warn'],['Cấp 3-5','Nặng — re-coat, đổi PU cho outdoor','fail']], ref:'ISO 4628-6 + ISO 12944-2'}, name:'Phấn hoá (Chalking)', severity:'low',
       symptom:'Bột trắng trên bề mặt sơn — sau UV exposure dài',
       causes:['Topcoat alkyd / amino UV xấu','Pigment kém','Sơn rẻ ngoài trời'],
       remedies:['Sạch bằng nước + bàn chải mềm + recoat','Đổi sang aliphatic polyurethane cho ngoài trời','Theo ISO 12944-2: C5-M cho biển'],
@@ -348,7 +348,7 @@ window.LD_DATA = {
       refImg:'https://upload.wikimedia.org/wikipedia/commons/1/1a/Chalking_paint.jpg',
       sketch:'def_chalk' },
 
-    { id:'paint-color', cat:'paint', rootCause:'material', name:'Sai màu / Đốm (Color mismatch / Mottling)', severity:'low',
+    { id:'paint-color', cat:'paint', rootCause:'material', acceptance:{ok:'ΔE ≤ 2 (spectrometer)', notok:'ΔE > 4 → reject batch khác lot', table:[['ΔE ≤ 1','Không thấy khác biệt','pass'],['ΔE 1-2','Khác biệt nhẹ — chấp nhận','warn'],['ΔE 2-4','Visible — touch-up nếu cần','warn'],['ΔE > 4','Khác rõ — re-coat đồng đều','fail']], ref:'ISO 3668 + ASTM D2244'}, name:'Sai màu / Đốm (Color mismatch / Mottling)', severity:'low',
       symptom:'Màu không đồng đều, có đốm sáng tối, không khớp RAL spec',
       causes:['Trộn nhiều mẻ sơn khác lot','Khuấy chưa đều','Pigment lắng','Áp suất phun thay đổi'],
       remedies:['Đặt sơn cùng lot cho cả công trình','Khuấy 5-10 phút bằng máy mixer','Đo RAL bằng spectrometer','Đảm bảo áp suất ổn định'],
@@ -356,7 +356,7 @@ window.LD_DATA = {
       refImg:'',
       sketch:'def_color' },
 
-    { id:'paint-dirty-inclusion', cat:'paint', rootCause:'env', name:'Bụi/lông kẹt trong sơn (Inclusions)', severity:'medium',
+    { id:'paint-dirty-inclusion', cat:'paint', rootCause:'env', acceptance:{ok:'Không có inclusion visible 0.5m', notok:'Bụi/lông kẹt → mài + touch-up', table:[['VT 0.5m','0 inclusion visible','pass'],['1-5 spots','Mài + touch-up','warn'],['Nhiều','Re-blast + re-coat','fail']], ref:'ISO 12944-7'}, name:'Bụi/lông kẹt trong sơn (Inclusions)', severity:'medium',
       symptom:'Bụi, lông tóc, côn trùng kẹt trong màng sơn ướt',
       causes:['Phòng sơn không sạch / có gió','Sơn ngoài trời có gió bụi','Quần áo người sơn rụng xơ','Súng phun bẩn'],
       remedies:['Phòng sơn kín + filter khí HEPA','Sơn trong nhà / có lều che','Quần áo coverall đặc dùng cho sơn','Lọc sơn qua mesh 100 trước khi rót súng'],
@@ -364,7 +364,7 @@ window.LD_DATA = {
       refImg:'',
       sketch:'def_dirt' },
 
-    { id:'paint-dew-point', cat:'paint', rootCause:'env', name:'Đọng sương / Dew Point fail', severity:'critical',
+    { id:'paint-dew-point', cat:'paint', rootCause:'env', acceptance:{ok:'T_surface ≥ T_dew + 3°C khi sơn', notok:'T_surface < T_dew + 3 → STOP work', table:[['OK','T_surface > T_dew + 3°C, RH < 85%','pass'],['Marginal','T = T_dew + 3°C — sấy thêm','warn'],['Reject','T ≤ T_dew → STOP, không được sơn','fail']], ref:'ISO 8502-4 + SSPC-PA Guide'}, name:'Đọng sương / Dew Point fail', severity:'critical',
       symptom:'Nước đọng trên bề mặt thép khi sơn → blistering + adhesion fail',
       causes:['Nhiệt độ bề mặt ≤ dew point + 3°C','Sơn vào sáng sớm khi sương','Độ ẩm > 85%','Không đo nhiệt độ + dew point trước sơn'],
       remedies:['Phải có psychrometer đo Tdew, Tsurface, RH','Quy tắc: Tsurface ≥ Tdew + 3°C MỚI được sơn','RH ≤ 85% (tuỳ TDS)','Sấy bề mặt bằng heat blower hoặc đợi nắng lên'],
@@ -372,7 +372,7 @@ window.LD_DATA = {
       refImg:'https://upload.wikimedia.org/wikipedia/commons/9/97/Psychrometric_chart.png',
       sketch:'def_dew' },
 
-    { id:'paint-bleeding-thru', cat:'paint', rootCause:'material', name:'Bleeding qua màu (Topcoat bleed)', severity:'medium',
+    { id:'paint-bleeding-thru', cat:'paint', rootCause:'material', acceptance:{ok:'Topcoat che hết primer (đo bằng color spectrometer)', notok:'Primer còn thấy → 2-3 lớp topcoat', table:[['Không thấy primer','OK','pass'],['Thấy nhẹ','Thêm 1 lớp topcoat','warn'],['Thấy rõ','Sealer giữa + 2 lớp topcoat','fail']], ref:'TDS primer + topcoat compatibility'}, name:'Bleeding qua màu (Topcoat bleed)', severity:'medium',
       symptom:'Màu primer thấm qua topcoat — đặc biệt với red oxide primer dưới topcoat sáng',
       causes:['Topcoat solvent mạnh hoà tan primer','Primer chưa khô đủ','Sơn nhiều lớp solvent-based liên tiếp'],
       remedies:['Dùng sealer giữa primer và topcoat','Đợi primer khô hoàn toàn','Đổi sang primer light color','Topcoat 2 lớp che bleed'],
@@ -381,7 +381,7 @@ window.LD_DATA = {
       sketch:'def_bleed' },
 
     /* ========== DIMENSIONAL DEFECTS ========== */
-    { id:'dim-twist', cat:'dim', rootCause:'method', name:'Vặn (Twist) — không phẳng theo chiều dài', severity:'high',
+    { id:'dim-twist', cat:'dim', rootCause:'method', acceptance:{ok:'Twist ≤ 2 mm/m (Class 1) hoặc ≤ 4 mm/m (Class 2)', notok:'Twist > 2× spec → cold straighten hoặc reject', table:[['EN 1090-2 Class 1','≤ 2 mm/m','pass'],['EN 1090-2 Class 2','≤ 4 mm/m','warn'],['> Class 2','Cold straighten / reject','fail']], ref:'EN 1090-2 §11.2.4'}, name:'Vặn (Twist) — không phẳng theo chiều dài', severity:'high',
       symptom:'Cấu kiện I/box bị xoắn — không nằm thẳng trên 4 điểm',
       causes:['Hàn không cân 2 bên','Cắt 4 cánh không đối xứng','Không gá fix khi hàn dài','Heat input không đều'],
       remedies:['Sequence hàn xen kẽ 2 bên','Cắt CNC đảm bảo đối xứng','Strong-back fix toàn chiều dài','Cold straightening sau hàn'],
@@ -389,7 +389,7 @@ window.LD_DATA = {
       refImg:'',
       sketch:'def_twist' },
 
-    { id:'dim-sweep', cat:'dim', rootCause:'method', name:'Cong ngang (Sweep)', severity:'medium',
+    { id:'dim-sweep', cat:'dim', rootCause:'method', acceptance:{ok:'Sweep ≤ L/1000 (EN 10034)', notok:'Sweep > L/500 → cold straighten', table:[['EN 10034','≤ L/1000','pass'],['Marginal','L/1000 - L/500','warn'],['Reject','> L/500 — cold straighten','fail']], ref:'EN 10034 Table 2'}, name:'Cong ngang (Sweep)', severity:'medium',
       symptom:'Dầm cong theo trục yếu z-z thay vì trục chính y-y',
       causes:['Cắt blank không thẳng','Hàn 1 cánh trước cánh kia','Vận chuyển sai','Lệch cẩu khi nâng'],
       remedies:['Cắt CNC + kiểm thẳng trước hàn','Hàn xen kẽ 2 cánh','Vận chuyển có gá đỡ ≥ 3 điểm','Cẩu 2 điểm với spreader bar'],
@@ -397,7 +397,7 @@ window.LD_DATA = {
       refImg:'',
       sketch:'def_sweep' },
 
-    { id:'dim-camber-wrong', cat:'dim', rootCause:'man', name:'Camber sai chiều (Reverse camber)', severity:'high',
+    { id:'dim-camber-wrong', cat:'dim', rootCause:'man', acceptance:{ok:'Camber đúng chiều + đúng giá trị (±10%)', notok:'Camber ngược chiều → REJECT cấu kiện', table:[['Đúng chiều','Trong dung sai ±10% nominal','pass'],['Ngược chiều','REJECT — không thể sửa','fail']], ref:'AISC 303 §6.4 + AASHTO LRFD'}, name:'Camber sai chiều (Reverse camber)', severity:'high',
       symptom:'Dầm camber ngược hướng thiết kế (lên thành xuống)',
       causes:['Đọc bản vẽ sai','Lật cấu kiện khi vận chuyển','Hiểu nhầm camber up/down','Không có marker chiều camber'],
       remedies:['Đánh dấu mũi tên ↑ "TOP" trên cánh trên','Camber drawing rõ ràng có mũi tên','Cẩu + lắp đúng chiều','Inspection bằng template trước erection'],
@@ -405,7 +405,7 @@ window.LD_DATA = {
       refImg:'',
       sketch:'def_camber_wrong' },
 
-    { id:'dim-hole-pos', cat:'dim', rootCause:'machine', name:'Lỗ sai vị trí (Hole position out)', severity:'high',
+    { id:'dim-hole-pos', cat:'dim', rootCause:'machine', acceptance:{ok:'Vị trí lỗ trong ±2 mm so với drawing', notok:'Lỗ lệch > 4 mm → khoét rộng hoặc hàn bít + khoan mới', table:[['Class 1','±1.5 mm','pass'],['Class 2','±2 mm','pass'],['Marginal','2-4 mm','warn'],['Reject','> 4 mm','fail']], ref:'EN 1090-2 §6.6 + AISC 303'}, name:'Lỗ sai vị trí (Hole position out)', severity:'high',
       symptom:'Lỗ bulông không khớp với cấu kiện đối — không lắp được',
       causes:['Drill template sai','Bản vẽ thiếu chuẩn datum','CNC misalign','Không kiểm trước assembly'],
       remedies:['Drill jig + template đối chiếu','Vẽ rõ datum A/B','Calibration CNC định kỳ','Trial assembly 1 cặp trước khi nhân bản'],
@@ -413,7 +413,7 @@ window.LD_DATA = {
       refImg:'',
       sketch:'def_hole_pos' },
 
-    { id:'dim-length-wrong', cat:'dim', rootCause:'measurement', name:'Chiều dài sai (Length out of tol)', severity:'high',
+    { id:'dim-length-wrong', cat:'dim', rootCause:'measurement', acceptance:{ok:'Trong dung sai ±2mm (L≤2m) đến ±25mm (>20m)', notok:'Quá dung sai → cắt lại hoặc đắp thêm', table:[['L ≤ 2m','±2 mm','pass'],['L = 2-10m','±5 mm','pass'],['L > 20m','±25 mm','pass']], ref:'EN 1090-2 Table B.5 + ISO 13920'}, name:'Chiều dài sai (Length out of tol)', severity:'high',
       symptom:'Chiều dài đo bằng thước thép > / < spec',
       causes:['Cắt sai dim','Co rút hàn không bù','Thước thép giãn nở nhiệt','Đọc thước sai'],
       remedies:['Calibration thước thép định kỳ','Bù co rút hàn 0.0002L','Đo lúc nhiệt độ ổn định','Verify bằng laser distance meter'],
@@ -421,7 +421,7 @@ window.LD_DATA = {
       refImg:'',
       sketch:'def_len_wrong' },
 
-    { id:'dim-gap-flange', cat:'dim', rootCause:'machine', name:'Khe hở mối ghép bích (Flange gap)', severity:'high',
+    { id:'dim-gap-flange', cat:'dim', rootCause:'machine', acceptance:{ok:'Gap ≤ 0.5 mm sau siết bulông (ASME B16.5)', notok:'Gap > 1.5 mm → mài bích cho phẳng', table:[['Tight','Gap ≤ 0.5 mm — feeler 0.5 không vào','pass'],['Marginal','0.5-1.5 mm','warn'],['Reject','> 1.5 mm','fail']], ref:'ASME B16.5 + EN 1092-1'}, name:'Khe hở mối ghép bích (Flange gap)', severity:'high',
       symptom:'Khe giữa 2 bích lắp ghép > 1mm sau khi siết bulông',
       causes:['Bích không phẳng (warp > 1mm)','Hàn bích vào pipe lệch','Gá không vuông góc','Tấm gasket không đều'],
       remedies:['Mài bích để đạt phẳng < 0.5mm','Hàn bích trên jig vuông góc','Kiểm gap bằng feeler gauge < 0.5mm sau siết','Dùng gasket độ dày đều'],
@@ -429,7 +429,7 @@ window.LD_DATA = {
       refImg:'',
       sketch:'def_gap' },
 
-    { id:'dim-shrink-uneq', cat:'dim', rootCause:'method', name:'Co rút không đều (Unequal shrinkage)', severity:'medium',
+    { id:'dim-shrink-uneq', cat:'dim', rootCause:'method', acceptance:{ok:'Lệch tâm ≤ b/200 (EN 10034)', notok:'> 2× spec → cold straighten', table:[['Spec','≤ b/200','pass'],['Marginal','b/200 - b/100','warn'],['Reject','> b/100','fail']], ref:'EN 10034 + AWS D1.1 Annex K'}, name:'Co rút không đều (Unequal shrinkage)', severity:'medium',
       symptom:'Cấu kiện sau hàn lệch tâm so với trục lý thuyết',
       causes:['Hàn 1 bên trước bên kia','Heat input không cân','Không pre-set ngược','Sequence sai'],
       remedies:['Balanced welding 2 bên 1 lúc','Pre-set ngược 30-50% co dự kiến','Sequence drawing rõ','Đo + correct sau mỗi lớp'],
@@ -437,7 +437,7 @@ window.LD_DATA = {
       refImg:'',
       sketch:'def_shrink_uneq' },
 
-    { id:'dim-stack-up', cat:'dim', rootCause:'method', name:'Stack-up dung sai (Cumulative tolerance)', severity:'medium',
+    { id:'dim-stack-up', cat:'dim', rootCause:'method', acceptance:{ok:'Σ tolerance ≤ spec (RSS hoặc Worst Case)', notok:'Σ vượt → redesign hoặc tighter tolerance per part', table:[['Worst Case (sum)','Σ tolerance ≤ assembly tol','pass'],['RSS method','sqrt(Σ tol²) ≤ assembly tol','pass'],['Statistical fail','Cp/Cpk < 1.33 → tighter tol','warn']], ref:'ASME Y14.5 + ISO 14405'}, name:'Stack-up dung sai (Cumulative tolerance)', severity:'medium',
       symptom:'Nhiều dim cộng dồn vượt dung sai tổng — assembly không khớp',
       causes:['Không tính tolerance stack-up','Chain dimensioning thay vì baseline','Mỗi part đạt riêng nhưng sum sai','Không hiểu Sum vs RSS'],
       remedies:['Tính stack-up: Worst Case (sum) hoặc RSS (sqrt sum sq)','Đặt critical dim với baseline + GD&T','Tuỳ Cp/Cpk dùng method nào','Verify bằng trial fit-up'],
@@ -445,7 +445,7 @@ window.LD_DATA = {
       refImg:'',
       sketch:'def_stack_up' },
 
-    { id:'dim-baseplate', cat:'dim', rootCause:'method', name:'Base plate lệch (Anchor mismatch)', severity:'critical',
+    { id:'dim-baseplate', cat:'dim', rootCause:'method', acceptance:{ok:'Bolt circle ±3 mm (AISC) hoặc ±2 mm (TCVN)', notok:'Lệch quá → grouting + oversize hole', table:[['AISC 303','±3 mm bolt circle','pass'],['EN 1090-2','±6 mm với oversize hole +6mm','pass'],['Lệch > 10 mm','Khó grouting — reject','fail']], ref:'AISC 303 §7.5 + EN 1090-2 §11.2'}, name:'Base plate lệch (Anchor mismatch)', severity:'critical',
       symptom:'Cột không lắp vào base plate vì bulông neo không khớp lỗ',
       causes:['Đổ bê tông cẩu thả không theo bản vẽ','Template không có khi đổ móng','Bulông neo bị đẩy lệch khi đầm bê tông','Không có survey trước erection'],
       remedies:['Template thép bắt buộc khi đổ móng','Survey base position trước cẩu cột','Lỗ oversize trên base plate (+6mm)','Grouting sau cùng để bù lệch nhỏ'],

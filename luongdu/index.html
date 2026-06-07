@@ -160,10 +160,10 @@ h1{font-size:17px;margin:0;font-weight:800;line-height:1.15}
 
 <div id="modal"></div>
 
-<script src="data.js?v=3"></script>
-<script src="sketches.js?v=3"></script>
-<script src="library-5m1e.js?v=3"></script>
-<script src="gallery.js?v=3"></script>
+<script src="data.js?v=4"></script>
+<script src="sketches.js?v=4"></script>
+<script src="library-5m1e.js?v=4"></script>
+<script src="gallery.js?v=4"></script>
 <script>
 var TAB = 'A';
 var CAT = 'all', RC = 'all';
@@ -299,6 +299,7 @@ function openDefect(id){
     + '<div class="symptom" style="margin-top:10px">'+esc(item.symptom)+'</div>'
     + st
     + refImg
+    + (item.acceptance ? buildAcceptance(item.acceptance) : '')
     + '<div class="section-title">⚠ NGUYÊN NHÂN PHỔ BIẾN</div>'+causes
     + '<div class="section-title" style="margin-top:14px">✓ BIỆN PHÁP KHẮC PHỤC</div>'+remedies
     + '<div class="ref">📖 ' + esc(item.ref) + '</div>'
@@ -389,6 +390,33 @@ function renderGallery(){
   }
   c.innerHTML = html;
 }
+
+function buildAcceptance(a){
+  var rowColors = {pass:'#0f6e56', warn:'#8a5a00', fail:'#aa4322'};
+  var rowBg = {pass:'#e3f6ee', warn:'#fdf3e2', fail:'#fbeae2'};
+  var rowIcon = {pass:'✓', warn:'⚠', fail:'✗'};
+  var rows = (a.table||[]).map(function(r){
+    var s = r[2] || 'warn';
+    return '<tr>'
+      + '<td style="padding:8px 10px;font-weight:700;background:' + rowBg[s] + ';border-left:4px solid ' + rowColors[s] + ';font-size:13px">' + rowIcon[s] + ' ' + esc(r[0]) + '</td>'
+      + '<td style="padding:8px 10px;font-size:13px;color:#1b2430">' + esc(r[1]) + '</td>'
+      + '</tr>';
+  }).join('');
+  return '<div class="section-title">🎯 TIÊU CHÍ CHẤP NHẬN / TỪ CHỐI</div>'
+    + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 12px">'
+    + '<div style="background:#e3f6ee;border:2px solid #0f6e56;border-radius:8px;padding:10px 12px">'
+    + '<div style="font-weight:800;color:#0f6e56;font-size:12px;margin-bottom:4px">✓ ĐẠT</div>'
+    + '<div style="font-size:13px;color:#1b2430">' + esc(a.ok) + '</div>'
+    + '</div>'
+    + '<div style="background:#fbeae2;border:2px solid #aa4322;border-radius:8px;padding:10px 12px">'
+    + '<div style="font-weight:800;color:#aa4322;font-size:12px;margin-bottom:4px">✗ KHÔNG ĐẠT</div>'
+    + '<div style="font-size:13px;color:#1b2430">' + esc(a.notok) + '</div>'
+    + '</div>'
+    + '</div>'
+    + (rows ? '<table style="width:100%;border-collapse:collapse;margin-bottom:6px;background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden">' + rows + '</table>' : '')
+    + '<div style="font-size:11.5px;color:var(--muted);margin-bottom:14px">📖 ' + esc(a.ref) + '</div>';
+}
+
 function closeModal(){ document.getElementById('modal').innerHTML = ''; }
 render();
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
