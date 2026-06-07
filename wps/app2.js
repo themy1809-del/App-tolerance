@@ -23,7 +23,13 @@ function openDetail(x){
     ['filler', x.filler], ['f_no', x.f_no], ['size', x.size],
     ['pqr', x.pqr], ['project', proj?`${x.project} — ${LANG==='vi'?proj.name_vi:proj.name_en}`:x.project]
   ].filter(([_,v]) => v && v!=='-');
-  kv.innerHTML = rows.map(([k,v])=>`<div class="k">${t.kv[k]||k}</div><div class="v">${esc(v)}</div>`).join('');
+  kv.innerHTML = rows.map(([k,v])=>{
+    if (k==='material_group' && v) {
+      const hint = String(v).split(' → ')[0].replace(/'/g, "\\'");
+      return `<div class="k">${t.kv[k]||k}</div><div class="v" style="cursor:pointer;color:#7c3f00;text-decoration:underline dotted;font-weight:700" onclick="showMatGroups('${hint}')" title="Click để xem chi tiết nhóm vật liệu">${esc(v)} 📦</div>`;
+    }
+    return `<div class="k">${t.kv[k]||k}</div><div class="v">${esc(v)}</div>`;
+  }).join('');
   if (x.tags && x.tags.length){
     kv.insertAdjacentHTML('beforeend', `<div class="k">${t.kv.tags}</div><div class="v"><div class="tagchips">${x.tags.map(tg=>`<span class="tagchip">${esc(tg)}</span>`).join('')}</div></div>`);
   }
@@ -302,8 +308,11 @@ function renderGlossary(q){
   const ql = (q||'').toLowerCase().trim();
   const filtered = ql ? list.filter(it => it.term.toLowerCase().includes(ql) || it.vi.toLowerCase().includes(ql) || (it.note||'').toLowerCase().includes(ql)) : list;
   const body = document.getElementById('gBody');
-  if (!filtered.length){ body.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">Không tìm thấy thuật ngữ.</div>'; return; }
-  body.innerHTML = filtered.map(it =>
-    `<div class="g-item"><div class="g-term">${esc(it.term)}</div><div class="g-vi">${esc(it.vi)}</div>${it.note?`<div class="g-note">${esc(it.note)}</div>`:''}</div>`
-  ).join('');
+  if (!filtered.length){ body.innerHTML = '<div style="text-align:center;padding:30px;color:var(--muted)">🔍 Không tìm thấy thuật ngữ phù hợp.</div>'; return; }
+  body.innerHTML = filtered.map(it => `<div style="background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin-bottom:8px">
+    <div style="font-weight:800;color:var(--brand);font-size:14px">${esc(it.term)}</div>
+    <div style="font-size:13px;color:#1b2430;margin-top:4px">${esc(it.vi)}</div>
+    ${it.note ? `<div style="font-size:12px;color:var(--muted);margin-top:4px;font-style:italic">${esc(it.note)}</div>` : ''}
+  </div>`).join('');
 }
+function esc(s){ return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }

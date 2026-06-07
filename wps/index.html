@@ -233,7 +233,25 @@
 <script>
 var MG_TAB = 'list';
 function setMgTab(t){ MG_TAB = t; renderMG(); }
-function showMatGroups(){ MG_TAB = 'list'; renderMG(); document.getElementById('mgModal').classList.add('on'); }
+function showMatGroups(hint){
+  MG_TAB = 'list';
+  renderMG();
+  document.getElementById('mgModal').classList.add('on');
+  if (hint) {
+    setTimeout(function(){
+      var cards = document.querySelectorAll('.mg-card');
+      var hl = String(hint||'').toLowerCase();
+      for (var i=0;i<cards.length;i++){
+        if (cards[i].textContent.toLowerCase().indexOf(hl) >= 0){
+          cards[i].scrollIntoView({behavior:'smooth',block:'center'});
+          cards[i].style.boxShadow = '0 0 0 4px #fbe07d, 0 8px 24px rgba(0,0,0,.2)';
+          setTimeout(function(c){c.style.boxShadow='';}, 2500, cards[i]);
+          break;
+        }
+      }
+    }, 100);
+  }
+}
 function renderMG(){
   var html = '<div style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap">';
   html += '<button class="mg-tab' + (MG_TAB==='list'?' on':'') + '" onclick="setMgTab(\'list\')">📋 Danh sách 15 nhóm</button>';
