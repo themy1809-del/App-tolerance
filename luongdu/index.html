@@ -80,6 +80,13 @@ h1{font-size:17px;margin:0;font-weight:800;line-height:1.15}
 .gal-cat{font-size:10.5px;font-weight:800;color:var(--brand);letter-spacing:.4px;margin-bottom:4px}
 .gal-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px;line-height:1.3}
 .gal-desc{font-size:12px;color:var(--muted);line-height:1.45}
+.gal-placeholder{display:none;flex-direction:column;align-items:center;justify-content:center;color:#cdd6df;width:100%;height:100%;background:#1b2430}
+.search-btn{display:inline-block;padding:5px 9px;border-radius:6px;font-size:10.5px;font-weight:700;text-decoration:none;letter-spacing:.2px;transition:.15s}
+.search-btn.google{background:#4285f4;color:#fff}
+.search-btn.bing{background:#008373;color:#fff}
+.search-btn.ddg{background:#de5833;color:#fff}
+.search-btn:hover{opacity:.85;transform:translateY(-1px)}
+
 .chip{background:#fff;border:1px solid var(--line);padding:7px 13px;border-radius:20px;font-size:12.5px;font-weight:700;color:var(--muted);cursor:pointer;font-family:inherit}
 .chip-rc{background:#fff;border:1px solid var(--line);padding:7px 13px;border-radius:20px;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;font-family:inherit}
 .chip-rc.on{background:#0c447c;color:#fff;border-color:#0c447c}
@@ -115,14 +122,14 @@ h1{font-size:17px;margin:0;font-weight:800;line-height:1.15}
     <button class="tab on" id="tabA" onclick="setTab('A')">📐 Tính lượng dư</button>
     <button class="tab" id="tabB" onclick="setTab('B')">🔍 Sai hỏng (45)</button>
     <button class="tab" id="tabC" onclick="setTab('C')">📚 Thư viện 5M+1E</button>
-    <button class="tab" id="tabD" onclick="setTab('D')">📸 Ảnh thật (33)</button>
+    <button class="tab" id="tabD" onclick="setTab('D')">📸 Ảnh thật (39)</button>
   </div>
   <div id="galFilter" style="display:none;gap:6px;flex-wrap:wrap;margin-bottom:12px">
-    <button class="chip on" data-gal="all" onclick="setGal('all')">Tất cả · 33</button>
-    <button class="chip" data-gal="weld" onclick="setGal('weld')">🔥 Hàn · 12</button>
+    <button class="chip on" data-gal="all" onclick="setGal('all')">Tất cả · 39</button>
+    <button class="chip" data-gal="weld" onclick="setGal('weld')">🔥 Hàn · 15</button>
     <button class="chip" data-gal="paint" onclick="setGal('paint')">🎨 Sơn · 11</button>
-    <button class="chip" data-gal="dim" onclick="setGal('dim')">📐 Kích thước · 6</button>
-    <button class="chip" data-gal="nde" onclick="setGal('nde')">📡 NDE · 4</button>
+    <button class="chip" data-gal="dim" onclick="setGal('dim')">📐 Kích thước · 7</button>
+    <button class="chip" data-gal="nde" onclick="setGal('nde')">📡 NDE · 6</button>
   </div>
   <div id="catFilter" style="display:none;flex-direction:column;gap:8px;margin-bottom:12px">
     <div>
@@ -153,10 +160,10 @@ h1{font-size:17px;margin:0;font-weight:800;line-height:1.15}
 
 <div id="modal"></div>
 
-<script src="data.js?v=2"></script>
-<script src="sketches.js?v=2"></script>
-<script src="library-5m1e.js?v=2"></script>
-<script src="gallery.js?v=2"></script>
+<script src="data.js?v=3"></script>
+<script src="sketches.js?v=3"></script>
+<script src="library-5m1e.js?v=3"></script>
+<script src="gallery.js?v=3"></script>
 <script>
 var TAB = 'A';
 var CAT = 'all', RC = 'all';
@@ -348,46 +355,39 @@ function renderGallery(){
   if (GAL !== 'all') items = items.filter(g => g.cat === GAL);
   var q = ((document.getElementById('q')||{}).value || '').toLowerCase().trim();
   if (q) {
-    var qn = q.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[đĐ]/g,'d').toLowerCase();
-    items = items.filter(g => (g.title+g.desc+g.defect).normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[đĐ]/g,'d').toLowerCase().indexOf(qn) >= 0);
+    var qn = q.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[đĐ]/g,'d').toLowerCase();
+    items = items.filter(g => (g.title+g.desc+g.query+g.id).normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[đĐ]/g,'d').toLowerCase().indexOf(qn) >= 0);
   }
-  var html = '<div style="background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:14px;font-size:13px;color:var(--muted)">📸 <strong>33 ảnh thật</strong> từ Wikimedia Commons (Creative Commons / Public Domain). Click vào ảnh để xem full size + source attribution. Nguồn: Wikipedia, Wikimedia Foundation.</div>';
+  var html = '<div style="background:#fff4d0;border:1px solid var(--warn);border-radius:12px;padding:14px;margin-bottom:14px;font-size:13.5px;color:var(--warn)">💡 <strong>Cách dùng:</strong> Click "🔍 Google Images" hoặc "🔍 Bing Images" để mở browser search với query có sẵn → save ảnh ưng ý về folder <code>luongdu/images/&lt;id&gt;.jpg</code> → app tự dùng làm thumbnail. <a href="images/README.md" target="_blank" style="color:var(--brand)">📖 Hướng dẫn chi tiết</a></div>';
   if (items.length === 0) {
-    html += '<div style="text-align:center;padding:40px;color:var(--muted)">🔍 Không tìm thấy ảnh</div>';
+    html += '<div style="text-align:center;padding:40px;color:var(--muted)">🔍 Không tìm thấy</div>';
   } else {
     html += '<div class="gallery-grid">';
-    items.forEach(function(g, i){
-      html += '<div class="gal-card" onclick="openImg(' + i + ',\'' + GAL + '\')">'
-        + '<div class="gal-thumb"><img src="' + esc(g.img) + '" loading="lazy" alt="' + esc(g.title) + '" onerror="this.parentElement.innerHTML=\'<div class=&quot;gal-err&quot;>📷 Ảnh chưa tải được<br><span>Click để xem nguồn</span></div>\'"></div>'
+    items.forEach(function(g){
+      var localImg = 'images/'+g.id+'.jpg';
+      html += '<div class="gal-card">'
+        + '<div class="gal-thumb">'
+        + '<img src="' + esc(localImg) + '" loading="lazy" alt="' + esc(g.title) + '" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">'
+        + '<div class="gal-placeholder" style="display:none">'
+        + '<div style="font-size:36px;margin-bottom:8px">📷</div>'
+        + '<div style="font-size:11.5px;text-align:center;padding:0 10px;line-height:1.4">Chưa có ảnh thật<br><span style="font-size:10px;opacity:.7">Click button dưới để tìm</span></div>'
+        + '</div>'
+        + '</div>'
         + '<div class="gal-info">'
-        + '<div class="gal-cat">' + ({weld:'🔥 HÀN',paint:'🎨 SƠN',dim:'📐 KÍCH THƯỚC',nde:'📡 NDE'}[g.cat]||g.cat) + '</div>'
+        + '<div class="gal-cat">' + ({weld:"🔥 HÀN",paint:"🎨 SƠN",dim:"📐 KÍCH THƯỚC",nde:"📡 NDE"}[g.cat]||g.cat) + '</div>'
         + '<div class="gal-title">' + esc(g.title) + '</div>'
         + '<div class="gal-desc">' + esc(g.desc) + '</div>'
+        + '<div style="display:flex;gap:5px;margin-top:10px;flex-wrap:wrap">'
+        + '<a class="search-btn google" href="https://www.google.com/search?tbm=isch&q=' + encodeURIComponent(g.query) + '" target="_blank" rel="noopener">🔍 Google</a>'
+        + '<a class="search-btn bing" href="https://www.bing.com/images/search?q=' + encodeURIComponent(g.query) + '" target="_blank" rel="noopener">🔍 Bing</a>'
+        + '<a class="search-btn ddg" href="https://duckduckgo.com/?iax=images&ia=images&q=' + encodeURIComponent(g.query) + '" target="_blank" rel="noopener">🔍 DDG</a>'
+        + '</div>'
+        + '<div style="margin-top:6px;font-size:10.5px;color:var(--muted)">📁 Save: <code style="font-size:10px">' + esc(g.id) + '.jpg</code></div>'
         + '</div></div>';
     });
     html += '</div>';
   }
   c.innerHTML = html;
-}
-function openImg(idx, gcat){
-  var items = window.LD_GALLERY || [];
-  if (gcat !== 'all') items = items.filter(g => g.cat === gcat);
-  var g = items[idx];
-  if (!g) return;
-  var html = '<div class="modal-bg" onclick="if(event.target===this)closeModal()"><div class="modal" style="max-width:900px">'
-    + '<div class="mhead"><h2>📸 ' + esc(g.title) + '</h2><button class="x" onclick="closeModal()">✕</button></div>'
-    + '<div class="mbody" style="text-align:center">'
-    + '<img src="' + esc(g.img) + '" style="max-width:100%;max-height:520px;border:1px solid var(--line);border-radius:8px" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">'
-    + '<div style="display:none;padding:40px;color:var(--muted)">📷 Ảnh không tải được (Wikipedia có thể đã đổi URL).<br><a href="' + esc(g.sourceUrl) + '" target="_blank" style="color:var(--brand)">→ Xem trực tiếp trên Wikipedia</a></div>'
-    + '<div style="margin-top:14px;text-align:left">'
-    + '<div style="font-weight:700;font-size:15px;margin-bottom:6px">📝 Mô tả</div>'
-    + '<div style="color:var(--muted);font-size:14px">' + esc(g.desc) + '</div>'
-    + '</div>'
-    + '<div style="margin-top:14px;padding:10px 14px;background:#f3f3f3;border-radius:8px;text-align:left;font-size:12.5px">'
-    + '<strong>📖 Nguồn:</strong> <a href="' + esc(g.sourceUrl) + '" target="_blank">' + esc(g.source) + '</a><br>'
-    + '<strong>🔗 Direct URL:</strong> <a href="' + esc(g.img) + '" target="_blank" style="word-break:break-all">' + esc(g.img) + '</a>'
-    + '</div></div></div></div>';
-  document.getElementById('modal').innerHTML = html;
 }
 function closeModal(){ document.getElementById('modal').innerHTML = ''; }
 render();
