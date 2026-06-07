@@ -120,16 +120,7 @@
       category: 'weld', element: 'butt', feature: 'reinforcement',
       title: T('Mối hàn bồn — Reinforcement (UW-35)','PV weld reinforcement'),
       sketch: 'weld_reinforcement',
-      permitted: { kind: 'TABLE', bandVar: 't',
-        bands: [
-          { lo: 0, hi: 13, label: 't ≤ 13 mm' },
-          { lo: 13, hi: 25, label: '13 < t ≤ 25 mm' },
-          { lo: 25, hi: 9999, label: 't > 25 mm' }
-        ],
-        sets: [
-          { name: 'All', cells: ['3','4','6'], unit: 'mm' }
-        ]
-      },
+      permitted: { kind: 'REF', expression: '3 mm (t≤13) · 4 mm (13<t≤25) · 6 mm (t>25)', unit: 'mm' },
       acceptance: T('Lồi mối hàn ≤ 3/4/6 mm theo Table UW-35.1','Reinforcement ≤ 3/4/6 mm per UW-35.1'),
       clause: { number: 'ASME VIII Div.1 UW-35 Table', page: 35 }
     },
@@ -205,14 +196,7 @@
       category: 'fabrication', element: 'beam', feature: 'length',
       title: T('TCVN — Sai lệch chiều dài cấu kiện','Member length deviation'),
       sketch: 'tcvn_assembly',
-      permitted: { kind: 'TABLE', bandVar: 'L',
-        bands: [
-          { lo: 0, hi: 6000, label: 'L ≤ 6 m' },
-          { lo: 6000, hi: 15000, label: '6 < L ≤ 15 m' },
-          { lo: 15000, hi: 99999, label: 'L > 15 m' }
-        ],
-        sets: [{ name: 'TCVN', cells: ['5','10','15'], unit: 'mm' }]
-      },
+      permitted: { kind: 'REF', expression: '±5 mm (L≤6m) · ±10 mm (6<L≤15m) · ±15 mm (L>15m)', unit: 'mm' },
       acceptance: T('Sai lệch chiều dài tối đa ±5/10/15 mm theo dải L','Length deviation max ±5/10/15 mm by L range'),
       clause: { number: 'TCVN 170:2007 Bảng 3', page: 5 }
     },

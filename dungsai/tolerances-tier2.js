@@ -30,14 +30,7 @@
       category: 'fabrication', element: 'column', feature: 'length',
       title: T('GB — Chiều dài cột chế tạo','Column length fabrication'),
       sketch: 'beam_straight',
-      permitted: { kind: 'TABLE', bandVar: 'L',
-        bands: [
-          { lo: 0, hi: 10000, label: 'L ≤ 10 m' },
-          { lo: 10000, hi: 24000, label: '10 < L ≤ 24 m' },
-          { lo: 24000, hi: 99999, label: 'L > 24 m' }
-        ],
-        sets: [{ name: 'GB', cells: ['3','5','7'], unit: 'mm' }]
-      },
+      permitted: { kind: 'REF', expression: '±3 mm (L≤10m) · ±5 mm (10<L≤24m) · ±7 mm (L>24m)', unit: 'mm' },
       acceptance: T('Cột chế tạo: ±3 mm (L≤10) · ±5 mm (10-24) · ±7 mm (>24)','Column fab length: ±3/5/7 mm by L range'),
       clause: { number: 'GB 50205-2020 §8.3.1 Table 8.3.1' }
     },
