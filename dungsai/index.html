@@ -201,15 +201,16 @@
 <div id="modalRoot"></div>
 <div id="report" class="main"></div>
 
-<script src="tolerances-data.js?v=8"></script>
-<script src="tolerances-tier1.js?v=8"></script>
-<script src="tolerances-tier2.js?v=8"></script>
-<script src="tolerances-tier3.js?v=8"></script>
-<script src="tolerances-tier4-mech.js?v=8"></script>
-<script src="sketches.js?v=8"></script>
-<script src="sketches-v2.js?v=8"></script>
-<script src="sketches-v3-mech.js?v=8"></script>
-<script src="sketch-bind.js?v=8"></script>
+<script src="tolerances-data.js?v=9"></script>
+<script src="tolerances-tier1.js?v=9"></script>
+<script src="tolerances-tier2.js?v=9"></script>
+<script src="tolerances-tier3.js?v=9"></script>
+<script src="tolerances-tier4-mech.js?v=9"></script>
+<script src="sketches.js?v=9"></script>
+<script src="sketches-v2.js?v=9"></script>
+<script src="sketches-v3-mech.js?v=9"></script>
+<script src="sketch-overlay.js?v=9"></script>
+<script src="sketch-bind.js?v=9"></script>
 
 <script>
 /* ===== i18n ===== */
@@ -505,7 +506,7 @@ function renderDetail(){
   h+=diagramBlock(r);
   /* Sketch engineering style — inject from sketches.js nếu rule có sketch key */
   if(r.sketch && window.DS_SKETCH && window.DS_SKETCH[r.sketch]){
-    const svg = window.DS_SKETCH[r.sketch]();
+    const svg = window.DS_SKETCH[r.sketch](r);
     if (svg) h+=`<div style="margin-top:12px;background:#fbfdff;border:1px solid #b5d4f4;border-radius:12px;padding:12px"><div style="font-size:11px;font-weight:800;color:#0c447c;letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px">📐 Bản vẽ kỹ thuật — cách đo</div>${svg}</div>`;
   }
   if(r.conditions) h+=`<div class="cond"><strong>${esc(T('conditions'))}:</strong> ${esc(tx(r.conditions))}</div>`;

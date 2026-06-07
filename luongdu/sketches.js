@@ -1,0 +1,211 @@
+/* Sketches cho app Lượng dư + Sai hỏng */
+window.LD_SK = {};
+(function(){
+  var S = window.LD_SK;
+
+  /* ===== ALLOWANCE SKETCHES ===== */
+  S.shrink_trans = function(){ return '<svg viewBox="0 0 500 280" xmlns="http://www.w3.org/2000/svg">'
+    + '<text x="250" y="20" text-anchor="middle" font-size="13" fill="#0c447c" font-weight="800">CO RÚT NGANG SAU HÀN</text>'
+    + '<rect x="60" y="60" width="180" height="40" fill="#cdd6df" stroke="#5f6b7a"/>'
+    + '<rect x="260" y="60" width="180" height="40" fill="#cdd6df" stroke="#5f6b7a"/>'
+    + '<line x1="240" y1="60" x2="240" y2="100" stroke="#0c447c" stroke-dasharray="3,2"/>'
+    + '<line x1="260" y1="60" x2="260" y2="100" stroke="#0c447c" stroke-dasharray="3,2"/>'
+    + '<text x="250" y="55" text-anchor="middle" font-size="10" fill="#0c447c">trước hàn</text>'
+    + '<text x="250" y="115" text-anchor="middle" font-size="11" fill="#1b2430" font-weight="700">khoảng cách lý thuyết</text>'
+    + '<rect x="60" y="170" width="175" height="40" fill="#cdd6df" stroke="#5f6b7a"/>'
+    + '<rect x="265" y="170" width="175" height="40" fill="#cdd6df" stroke="#5f6b7a"/>'
+    + '<rect x="235" y="170" width="30" height="40" fill="#cea24a"/>'
+    + '<line x1="235" y1="155" x2="235" y2="220" stroke="#aa4322" stroke-dasharray="3,2"/>'
+    + '<line x1="265" y1="155" x2="265" y2="220" stroke="#aa4322" stroke-dasharray="3,2"/>'
+    + '<text x="250" y="150" text-anchor="middle" font-size="11" fill="#aa4322" font-weight="800">SAU HÀN — co lại S_t</text>'
+    + '<line x1="170" y1="225" x2="240" y2="225" stroke="#aa4322" stroke-width="2" marker-end="url(#arr)"/>'
+    + '<line x1="330" y1="225" x2="260" y2="225" stroke="#aa4322" stroke-width="2" marker-end="url(#arr)"/>'
+    + '<defs><marker id="arr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8" fill="#aa4322"/></marker></defs>'
+    + '<text x="250" y="250" text-anchor="middle" font-size="11" fill="#3b6d11" font-weight="700">📐 Cộng S_t vào blank để bù co rút</text>'
+    + '</svg>'; };
+
+  S.shrink_long = function(){ return '<svg viewBox="0 0 500 280" xmlns="http://www.w3.org/2000/svg">'
+    + '<text x="250" y="20" text-anchor="middle" font-size="13" fill="#0c447c" font-weight="800">CO RÚT DỌC — dầm I tổ hợp</text>'
+    + '<rect x="50" y="60" width="400" height="15" fill="#cdd6df" stroke="#5f6b7a"/>'
+    + '<rect x="50" y="125" width="400" height="15" fill="#cdd6df" stroke="#5f6b7a"/>'
+    + '<rect x="240" y="75" width="20" height="50" fill="#cdd6df" stroke="#5f6b7a"/>'
+    + '<rect x="50" y="73" width="400" height="3" fill="#cea24a"/>'
+    + '<rect x="50" y="124" width="400" height="3" fill="#cea24a"/>'
+    + '<text x="250" y="40" text-anchor="middle" font-size="10" fill="#5f6b7a">trước hàn L</text>'
+    + '<line x1="50" y1="170" x2="50" y2="190" stroke="#0c447c"/>'
+    + '<line x1="450" y1="170" x2="450" y2="190" stroke="#0c447c"/>'
+    + '<line x1="50" y1="180" x2="450" y2="180" stroke="#0c447c" marker-end="url(#arrL)" marker-start="url(#arrLs)"/>'
+    + '<text x="250" y="195" text-anchor="middle" font-size="12" fill="#0c447c" font-weight="800">L</text>'
+    + '<rect x="55" y="220" width="390" height="15" fill="#cdd6df" stroke="#aa4322" stroke-width="1.5"/>'
+    + '<text x="250" y="245" text-anchor="middle" font-size="11" fill="#aa4322" font-weight="700">SAU HÀN: L - S_l (co dọc theo trục)</text>'
+    + '<text x="250" y="265" text-anchor="middle" font-size="10" fill="#3b6d11">📐 S_l ≈ 0.0002L đơn / 0.0005L đôi cánh</text>'
+    + '<defs><marker id="arrL" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8" fill="#0c447c"/></marker>'
+    + '<marker id="arrLs" markerWidth="10" markerHeight="8" refX="0" refY="4" orient="auto"><path d="M10,0 L0,4 L10,8" fill="#0c447c"/></marker></defs>'
+    + '</svg>'; };
+
+  S.thermal = function(){ return '<svg viewBox="0 0 500 280" xmlns="http://www.w3.org/2000/svg">'
+    + '<text x="250" y="20" text-anchor="middle" font-size="13" fill="#0c447c" font-weight="800">GIÃN NỞ NHIỆT — α × ΔT × L</text>'
+    + '<rect x="50" y="60" width="350" height="30" fill="#cdd6df" stroke="#5f6b7a"/>'
+    + '<text x="225" y="80" text-anchor="middle" font-size="11" fill="#1b2430">20°C — chiều dài L</text>'
+    + '<rect x="50" y="120" width="370" height="30" fill="#fcd5b5" stroke="#aa4322"/>'
+    + '<text x="235" y="140" text-anchor="middle" font-size="11" fill="#aa4322" font-weight="700">50°C — L + ΔL</text>'
+    + '<line x1="400" y1="60" x2="400" y2="170" stroke="#aa4322" stroke-dasharray="3,2"/>'
+    + '<line x1="420" y1="120" x2="420" y2="170" stroke="#aa4322" stroke-dasharray="3,2"/>'
+    + '<line x1="400" y1="170" x2="420" y2="170" stroke="#aa4322" stroke-width="2" marker-start="url(#arrTs)" marker-end="url(#arrT)"/>'
+    + '<text x="410" y="190" text-anchor="middle" font-size="13" fill="#aa4322" font-weight="800">ΔL</text>'
+    + '<text x="250" y="220" text-anchor="middle" font-size="11" fill="#3b6d11" font-weight="700">📐 Thép: α = 12 µm/m/°C — Δ tăng 30°C trên 10m = 3.6mm</text>'
+    + '<text x="250" y="245" text-anchor="middle" font-size="10" fill="#5f6b7a">Quan trọng khi lắp ráp mùa khô (35°C) vs đêm lắp ráp (10°C)</text>'
+    + '<defs><marker id="arrT" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8" fill="#aa4322"/></marker>'
+    + '<marker id="arrTs" markerWidth="10" markerHeight="8" refX="0" refY="4" orient="auto"><path d="M10,0 L0,4 L10,8" fill="#aa4322"/></marker></defs>'
+    + '</svg>'; };
+
+  S.machining = function(){ return '<svg viewBox="0 0 500 280" xmlns="http://www.w3.org/2000/svg">'
+    + '<text x="250" y="20" text-anchor="middle" font-size="13" fill="#0c447c" font-weight="800">LƯỢNG DƯ GIA CÔNG</text>'
+    + '<rect x="100" y="80" width="300" height="100" fill="#888780" stroke="#1b2430"/>'
+    + '<rect x="115" y="95" width="270" height="70" fill="#cdd6df" stroke="#0c447c" stroke-width="2"/>'
+    + '<text x="250" y="135" text-anchor="middle" font-size="12" fill="#0c447c" font-weight="800">KÍCH THƯỚC THIẾT KẾ</text>'
+    + '<g stroke="#aa4322" stroke-width="2" stroke-dasharray="4,3">'
+    + '<line x1="100" y1="95" x2="115" y2="95"/><line x1="385" y1="95" x2="400" y2="95"/>'
+    + '<line x1="100" y1="165" x2="115" y2="165"/><line x1="385" y1="165" x2="400" y2="165"/>'
+    + '</g>'
+    + '<text x="60" y="100" font-size="10" fill="#aa4322" font-weight="700">m_face</text>'
+    + '<text x="60" y="170" font-size="10" fill="#aa4322" font-weight="700">m_face</text>'
+    + '<text x="250" y="60" text-anchor="middle" font-size="11" fill="#5f6b7a">BLANK THÔ (cắt CNC)</text>'
+    + '<text x="250" y="205" text-anchor="middle" font-size="11" fill="#3b6d11" font-weight="700">📐 Mỗi mặt phay/tiện: 2-3mm · Mỗi mặt mài: 0.5-1mm</text>'
+    + '<text x="250" y="230" text-anchor="middle" font-size="10" fill="#0c447c">Cộng vào kích thước cắt thô để đạt design size sau machining</text>'
+    + '</svg>'; };
+
+  S.bend = function(){ return '<svg viewBox="0 0 500 280" xmlns="http://www.w3.org/2000/svg">'
+    + '<text x="250" y="20" text-anchor="middle" font-size="13" fill="#0c447c" font-weight="800">LƯỢNG DƯ GẬP TÔN — BEND ALLOWANCE</text>'
+    + '<g transform="translate(150,60)">'
+    + '<path d="M 0 0 L 0 100 Q 0 130 30 130 L 100 130" stroke="#888780" stroke-width="20" fill="none" stroke-linejoin="round"/>'
+    + '<path d="M 8 0 L 8 100 Q 8 122 30 122 L 100 122" stroke="#aa4322" stroke-width="1.5" stroke-dasharray="3,2" fill="none"/>'
+    + '<circle cx="30" cy="100" r="3" fill="#0c447c"/>'
+    + '<text x="40" y="100" font-size="11" fill="#0c447c" font-weight="700">R (trong)</text>'
+    + '<text x="-10" y="-10" font-size="11" fill="#0c447c">L1</text>'
+    + '<text x="105" y="135" font-size="11" fill="#0c447c">L2</text>'
+    + '<path d="M 8 105 A 16 16 0 0 1 25 122" stroke="#aa4322" fill="none" stroke-width="2"/>'
+    + '<text x="32" y="118" font-size="10" fill="#aa4322" font-weight="700">θ</text>'
+    + '</g>'
+    + '<text x="250" y="235" text-anchor="middle" font-size="12" fill="#3b6d11" font-weight="800">BA = (π/180) × θ × (R + K × t)</text>'
+    + '<text x="250" y="252" text-anchor="middle" font-size="10" fill="#5f6b7a">K = 0.33 thép mềm · 0.40 trung bình · 0.50 cứng</text>'
+    + '</svg>'; };
+
+  S.springback = function(){ return '<svg viewBox="0 0 500 280" xmlns="http://www.w3.org/2000/svg">'
+    + '<text x="250" y="20" text-anchor="middle" font-size="13" fill="#0c447c" font-weight="800">SPRING-BACK — gập quá để đạt góc</text>'
+    + '<g transform="translate(120,60)">'
+    + '<text x="60" y="-5" text-anchor="middle" font-size="11" fill="#0c447c">đang gập</text>'
+    + '<path d="M 0 80 L 50 80 L 50 30" stroke="#aa4322" stroke-width="3" fill="none"/>'
+    + '<path d="M 25 80 A 25 25 0 0 0 50 55" stroke="#aa4322" stroke-width="1.5" stroke-dasharray="2,2" fill="none"/>'
+    + '<text x="30" y="55" font-size="10" fill="#aa4322" font-weight="700">θ_gập = 95°</text>'
+    + '</g>'
+    + '<g transform="translate(300,60)">'
+    + '<text x="60" y="-5" text-anchor="middle" font-size="11" fill="#0f6e56">sau khi nhả lực</text>'
+    + '<path d="M 0 80 L 50 80 L 53 33" stroke="#0f6e56" stroke-width="3" fill="none"/>'
+    + '<text x="30" y="55" font-size="10" fill="#0f6e56" font-weight="700">θ_thật = 90°</text>'
+    + '<path d="M 53 33 L 50 30" stroke="#aa4322" stroke-dasharray="2,1"/>'
+    + '<text x="65" y="35" font-size="9" fill="#aa4322">Δθ ≈ 5°</text>'
+    + '</g>'
+    + '<text x="250" y="200" text-anchor="middle" font-size="12" fill="#3b6d11" font-weight="800">Phải gập THÊM 3-8° để bù spring-back</text>'
+    + '<text x="250" y="222" text-anchor="middle" font-size="10" fill="#5f6b7a">θ_over phụ thuộc R, σ_y, t · Thép cường độ cao spring-back lớn hơn</text>'
+    + '<text x="250" y="245" text-anchor="middle" font-size="10" fill="#0c447c">📐 Thử 1 mẫu trước → đo angle → điều chỉnh chương trình gập</text>'
+    + '</svg>'; };
+
+  S.kerf = function(){ return '<svg viewBox="0 0 500 280" xmlns="http://www.w3.org/2000/svg">'
+    + '<text x="250" y="20" text-anchor="middle" font-size="13" fill="#0c447c" font-weight="800">KERF — bề rộng cắt mất</text>'
+    + '<rect x="50" y="80" width="180" height="60" fill="#888780" stroke="#1b2430"/>'
+    + '<rect x="270" y="80" width="180" height="60" fill="#888780" stroke="#1b2430"/>'
+    + '<rect x="230" y="80" width="40" height="60" fill="#aa4322" opacity="0.4"/>'
+    + '<rect x="230" y="80" width="40" height="60" fill="none" stroke="#aa4322" stroke-dasharray="4,2"/>'
+    + '<text x="250" y="73" text-anchor="middle" font-size="10" fill="#aa4322" font-weight="700">w_kerf</text>'
+    + '<line x1="230" y1="155" x2="270" y2="155" stroke="#aa4322" stroke-width="2" marker-start="url(#kk1)" marker-end="url(#kk2)"/>'
+    + '<text x="250" y="170" text-anchor="middle" font-size="11" fill="#aa4322" font-weight="800">k</text>'
+    + '<g font-size="11" fill="#1b2430">'
+    + '<text x="60" y="200" font-weight="700">⚡ Plasma:</text><text x="160" y="200">1.5 - 3 mm</text>'
+    + '<text x="60" y="220" font-weight="700">🔥 Oxy-flame:</text><text x="160" y="220">3 - 5 mm</text>'
+    + '<text x="60" y="240" font-weight="700">💎 Laser:</text><text x="160" y="240">0.2 - 0.5 mm</text>'
+    + '<text x="60" y="260" font-weight="700">🔨 Cưa lưỡi:</text><text x="160" y="260">4 - 6 mm</text>'
+    + '</g>'
+    + '<defs><marker id="kk1" markerWidth="10" markerHeight="8" refX="0" refY="4" orient="auto"><path d="M10,0 L0,4 L10,8" fill="#aa4322"/></marker>'
+    + '<marker id="kk2" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8" fill="#aa4322"/></marker></defs>'
+    + '</svg>'; };
+
+  S.bevel = function(){ return '<svg viewBox="0 0 500 280" xmlns="http://www.w3.org/2000/svg">'
+    + '<text x="250" y="20" text-anchor="middle" font-size="13" fill="#0c447c" font-weight="800">VÁT MÉP V-BUTT — chuẩn bị groove</text>'
+    + '<polygon points="50,60 245,60 220,180 50,180" fill="#cdd6df" stroke="#5f6b7a"/>'
+    + '<polygon points="255,60 450,60 450,180 280,180" fill="#cdd6df" stroke="#5f6b7a"/>'
+    + '<line x1="245" y1="60" x2="220" y2="180" stroke="#aa4322" stroke-width="2"/>'
+    + '<line x1="255" y1="60" x2="280" y2="180" stroke="#aa4322" stroke-width="2"/>'
+    + '<rect x="220" y="170" width="60" height="10" fill="#888780" stroke="#aa4322" stroke-width="1.5"/>'
+    + '<text x="250" y="50" text-anchor="middle" font-size="11" fill="#aa4322" font-weight="700">α (60-70°)</text>'
+    + '<text x="250" y="195" text-anchor="middle" font-size="10" fill="#aa4322" font-weight="700">root face (1-2mm)</text>'
+    + '<line x1="245" y1="180" x2="255" y2="180" stroke="#0c447c" stroke-width="3"/>'
+    + '<text x="280" y="178" font-size="10" fill="#0c447c">khe (2-4mm)</text>'
+    + '<line x1="40" y1="60" x2="40" y2="180" stroke="#0c447c" stroke-width="1" marker-start="url(#bb1)" marker-end="url(#bb2)"/>'
+    + '<text x="32" y="125" text-anchor="end" font-size="11" fill="#0c447c" font-weight="800">t</text>'
+    + '<text x="250" y="235" text-anchor="middle" font-size="11" fill="#3b6d11" font-weight="800">📐 Lượng dư = diện tích groove cần đắp bằng kim loại hàn</text>'
+    + '<text x="250" y="255" text-anchor="middle" font-size="10" fill="#5f6b7a">ISO 9692-1 — phụ thuộc phương pháp + t</text>'
+    + '<defs><marker id="bb1" markerWidth="10" markerHeight="8" refX="0" refY="4" orient="auto"><path d="M10,0 L0,4 L10,8" fill="#0c447c"/></marker>'
+    + '<marker id="bb2" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8" fill="#0c447c"/></marker></defs>'
+    + '</svg>'; };
+
+  /* ===== DEFECT SKETCHES ===== */
+  S.def_undercut = function(){ return '<svg viewBox="0 0 500 240" xmlns="http://www.w3.org/2000/svg">'
+    + '<rect x="50" y="100" width="400" height="60" fill="#cdd6df" stroke="#5f6b7a"/>'
+    + '<path d="M 200 100 Q 250 70 300 100 L 300 130 L 200 130 Z" fill="#cea24a" stroke="#7c4a00"/>'
+    + '<path d="M 190 100 Q 195 110 205 100" stroke="#aa4322" stroke-width="2.5" fill="none"/>'
+    + '<path d="M 295 100 Q 305 110 310 100" stroke="#aa4322" stroke-width="2.5" fill="none"/>'
+    + '<circle cx="200" cy="105" r="14" fill="none" stroke="#aa4322" stroke-width="2"/>'
+    + '<text x="200" y="180" text-anchor="middle" font-size="13" fill="#aa4322" font-weight="800">CHÁY CHÂN — rãnh khuyết tại chân hàn</text>'
+    + '<text x="200" y="205" text-anchor="middle" font-size="10" fill="#5f6b7a">Đo bằng undercut gauge · ISO 5817: B ≤ 0.5mm · C ≤ 1mm</text>'
+    + '</svg>'; };
+
+  S.def_porosity = function(){ return '<svg viewBox="0 0 500 240" xmlns="http://www.w3.org/2000/svg">'
+    + '<rect x="50" y="80" width="400" height="80" fill="#cdd6df" stroke="#5f6b7a"/>'
+    + '<rect x="50" y="105" width="400" height="30" fill="#cea24a" stroke="#7c4a00"/>'
+    + '<g fill="#1b2430">'
+    + '<circle cx="100" cy="115" r="3"/><circle cx="140" cy="120" r="4"/>'
+    + '<circle cx="180" cy="118" r="2.5"/><circle cx="225" cy="122" r="5"/>'
+    + '<circle cx="270" cy="115" r="3.5"/><circle cx="315" cy="120" r="2.5"/>'
+    + '<circle cx="360" cy="118" r="4"/><circle cx="400" cy="122" r="3"/>'
+    + '</g>'
+    + '<text x="250" y="180" text-anchor="middle" font-size="13" fill="#aa4322" font-weight="800">RỖ KHÍ — lỗ tròn trong mối hàn</text>'
+    + '<text x="250" y="205" text-anchor="middle" font-size="10" fill="#5f6b7a">Phát hiện qua RT (X-quang) · ISO 5817: B Ø≤0.2s, max 3</text>'
+    + '</svg>'; };
+
+  S.def_crack_hot = function(){ return '<svg viewBox="0 0 500 240" xmlns="http://www.w3.org/2000/svg">'
+    + '<rect x="50" y="80" width="400" height="80" fill="#cdd6df" stroke="#5f6b7a"/>'
+    + '<rect x="50" y="105" width="400" height="30" fill="#cea24a" stroke="#7c4a00"/>'
+    + '<line x1="80" y1="120" x2="420" y2="120" stroke="#aa4322" stroke-width="2.5"/>'
+    + '<text x="250" y="180" text-anchor="middle" font-size="13" fill="#aa4322" font-weight="800">NỨT NÓNG — centerline crack</text>'
+    + '<text x="250" y="205" text-anchor="middle" font-size="10" fill="#5f6b7a">Nứt dọc trục ngay khi nguội · ISO 5817: TUYỆT ĐỐI KHÔNG</text>'
+    + '</svg>'; };
+
+  S.def_crack_cold = function(){ return '<svg viewBox="0 0 500 240" xmlns="http://www.w3.org/2000/svg">'
+    + '<rect x="50" y="80" width="400" height="80" fill="#cdd6df" stroke="#5f6b7a"/>'
+    + '<rect x="50" y="105" width="400" height="30" fill="#cea24a" stroke="#7c4a00"/>'
+    + '<g stroke="#aa4322" stroke-width="2" fill="none">'
+    + '<path d="M 100 105 L 110 90 L 105 85"/>'
+    + '<path d="M 180 135 L 175 155 L 180 160"/>'
+    + '<path d="M 280 105 L 285 90"/>'
+    + '<path d="M 360 135 L 365 152"/>'
+    + '</g>'
+    + '<text x="250" y="180" text-anchor="middle" font-size="13" fill="#aa4322" font-weight="800">NỨT NGUỘI — H₂ delayed cracking</text>'
+    + '<text x="250" y="205" text-anchor="middle" font-size="10" fill="#5f6b7a">Xuất hiện 48-72h sau hàn · trong HAZ · cần UT sau 48h</text>'
+    + '</svg>'; };
+
+  // Helper: default defect sketch for the rest
+  var defNames = ['def_lof','def_lop','def_slag','def_spatter','def_distort_i','def_warp','def_misalign','def_arc_strike','def_crater','def_blow','def_lamellar','def_reheat','def_mill_scale','def_rust','def_consum','def_preheat','def_sequence'];
+  defNames.forEach(function(name){
+    if (S[name]) return;
+    var label = name.replace('def_','').replace(/_/g,' ');
+    S[name] = function(){ return '<svg viewBox="0 0 500 240" xmlns="http://www.w3.org/2000/svg">'
+      + '<rect x="50" y="80" width="400" height="80" fill="#cdd6df" stroke="#5f6b7a"/>'
+      + '<rect x="50" y="105" width="400" height="30" fill="#cea24a" stroke="#7c4a00"/>'
+      + '<text x="250" y="125" text-anchor="middle" font-size="11" fill="#1b2430" font-weight="700">[' + label.toUpperCase() + ']</text>'
+      + '<text x="250" y="190" text-anchor="middle" font-size="11" fill="#aa4322" font-weight="700">Xem mô tả + biện pháp khắc phục bên dưới</text>'
+      + '</svg>'; };
+  });
+
+  console.log('LD_SK loaded:', Object.keys(S).length, 'sketches');
+})();
