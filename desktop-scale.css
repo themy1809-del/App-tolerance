@@ -1,0 +1,76 @@
+/* DESKTOP RESPONSIVE SCALING — shared between all apps.
+   Mobile-first baseline scales UP on PC monitors. */
+
+/* === 1280px+ : Standard desktop === */
+@media (min-width: 1280px) {
+  html, body { font-size: 16px; }
+  body { line-height: 1.6; }
+
+  /* Containers wider */
+  .main, main.main, .container { max-width: 1400px !important; padding-left: 28px !important; padding-right: 28px !important; }
+
+  /* Headers bigger */
+  h1 { font-size: 30px !important; }
+  h2 { font-size: 22px !important; }
+  h3 { font-size: 17px !important; }
+  .appbar h1 { font-size: 19px !important; }
+  .appbar .sub { font-size: 13px !important; }
+
+  /* Cards more breathing room */
+  .card { padding: 18px 20px !important; }
+  .card h3, .card .h3 { font-size: 16px !important; }
+  .card .d, .card .ds { font-size: 14px !important; }
+
+  /* Modal much wider */
+  .modal, .ovl .modal { max-width: 1100px !important; }
+  .mhead h2, .mhead h3 { font-size: 21px !important; }
+  .mbody { padding: 22px 26px !important; font-size: 15px !important; }
+
+  /* Tabs/chips bigger */
+  .tab { padding: 12px 22px !important; font-size: 15px !important; }
+  .chip, .chip-rc { padding: 9px 16px !important; font-size: 13.5px !important; }
+
+  /* Search input bigger */
+  input[type="search"], .search input { font-size: 16px !important; padding: 13px 18px !important; }
+
+  /* Grid more columns on desktop */
+  .grid { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)) !important; gap: 16px !important; }
+  .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)) !important; gap: 18px !important; }
+  .mosaic { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important; gap: 16px !important; }
+
+  /* Sketch box bigger */
+  .sketch-box, .sketch { max-width: 700px; margin-left: auto !important; margin-right: auto !important; }
+
+  /* Buttons */
+  .btn { padding: 11px 22px !important; font-size: 14.5px !important; }
+
+  /* Launcher cards bigger */
+  .pick .card { min-height: 280px !important; padding: 30px 26px !important; }
+  .pick .card .em { font-size: 64px !important; }
+  .pick .card h2 { font-size: 24px !important; }
+  .pick .card .ds { font-size: 14.5px !important; max-width: 340px !important; }
+}
+
+/* === 1600px+ : Large monitor === */
+@media (min-width: 1600px) {
+  html, body { font-size: 17px; }
+  .main, main.main, .container { max-width: 1600px !important; padding-left: 36px !important; padding-right: 36px !important; }
+  h1 { font-size: 34px !important; }
+  h2 { font-size: 24px !important; }
+  .modal { max-width: 1300px !important; }
+  .mbody { padding: 26px 32px !important; font-size: 16px !important; }
+  .grid, .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)) !important; gap: 18px !important; }
+  .pick { max-width: 1500px !important; }
+  .pick .card { min-height: 320px !important; padding: 36px 30px !important; }
+  .pick .card .em { font-size: 72px !important; }
+  .pick .card h2 { font-size: 28px !important; }
+}
+
+/* === 1920px+ : Full HD / 4K === */
+@media (min-width: 1920px) {
+  html, body { font-size: 18px; }
+  .main, main.main { max-width: 1800px !important; }
+  .modal { max-width: 1500px !important; }
+  .pick { max-width: 1800px !important; }
+  .grid, .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)) !important; gap: 20px !important; }
+}
