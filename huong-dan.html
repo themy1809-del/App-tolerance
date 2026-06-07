@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0c447c">
+<title>Hướng dẫn triển khai — DaiDung Tools</title>
+<style>
+:root {
+  --brand:#0c447c; --brand2:#185fa5; --brand3:#0a3a6b;
+  --accent:#e6a700; --accent2:#cea24a;
+  --pass:#0f6e56; --pass-soft:#e3f6ee;
+  --warn:#8a5a00; --warn-soft:#fdf3e2;
+  --fail:#aa4322; --fail-soft:#fbeae2;
+  --ink:#1b2430; --muted:#5f6b7a; --line:#dfe5ec;
+  --bg:#f4f7fa; --card:#fff;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  background:var(--bg);color:var(--ink);font-size:15.5px;line-height:1.65}
+a{color:var(--brand);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* HERO BANNER */
+.hero{background:linear-gradient(135deg,#0c447c 0%,#185fa5 60%,#0a3a6b 100%);
+  color:#fff;padding:max(28px,env(safe-area-inset-top)) 24px 36px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(255,255,255,.1) 0%,transparent 50%),radial-gradient(circle at 80% 70%,rgba(255,255,255,.07) 0%,transparent 50%);pointer-events:none}
+.hero .back{position:absolute;top:max(14px,env(safe-area-inset-top));left:14px;
+  background:rgba(255,255,255,.18);color:#fff;width:38px;height:38px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;font-size:20px;text-decoration:none;font-weight:700}
+.hero .logo-row{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:18px}
+.hero .logo{width:64px;height:64px;border-radius:14px;background:#fff;color:var(--brand);
+  display:inline-flex;align-items:center;justify-content:center;font-weight:900;font-size:22px;
+  box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.hero h1{margin:0 0 8px;font-size:28px;font-weight:800;letter-spacing:-.4px;position:relative}
+.hero .sub{font-size:15px;opacity:.92;font-weight:500;max-width:600px;margin:0 auto;position:relative}
+.hero .tags{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px;position:relative}
+.hero .tag{background:rgba(255,255,255,.18);padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:.3px}
+
+/* CONTAINER */
+.main{max-width:980px;margin:0 auto;padding:24px 16px 60px}
+
+/* SECTION HEADER */
+.section-h{display:flex;align-items:center;gap:10px;margin:34px 0 14px;padding-bottom:8px;border-bottom:2px solid var(--line)}
+.section-h .num{background:var(--brand);color:#fff;width:34px;height:34px;border-radius:50%;
+  display:inline-flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;flex-shrink:0}
+.section-h h2{margin:0;font-size:21px;color:var(--brand);font-weight:800}
+
+/* STEP CARDS */
+.steps{display:grid;gap:14px}
+.step{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;
+  box-shadow:0 1px 3px rgba(20,30,45,.04);position:relative}
+.step.recommended{border-color:var(--pass);background:linear-gradient(180deg,var(--pass-soft) 0%,#fff 100%)}
+.step.warning{border-color:var(--warn);background:linear-gradient(180deg,var(--warn-soft) 0%,#fff 100%)}
+.step .title{display:flex;align-items:center;gap:10px;font-weight:800;font-size:16px;color:var(--brand);margin-bottom:8px}
+.step.recommended .title{color:var(--pass)}
+.step.warning .title{color:var(--warn)}
+.step .badge{font-size:10px;padding:3px 9px;border-radius:6px;font-weight:800;letter-spacing:.5px;text-transform:uppercase}
+.badge-rec{background:var(--pass);color:#fff}
+.badge-warn{background:var(--warn);color:#fff}
+.badge-free{background:#5f4ab7;color:#fff}
+.step p{margin:0 0 8px;font-size:14.5px}
+.step .meta{font-size:12.5px;color:var(--muted);margin-top:6px}
+
+/* GRID 3 CARDS for apps */
+.app-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin:18px 0}
+.app-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;text-align:center;transition:.18s}
+.app-card:hover{transform:translateY(-3px);box-shadow:0 10px 25px rgba(0,0,0,.08)}
+.app-card .em{font-size:40px;margin-bottom:8px;line-height:1}
+.app-card h3{margin:0 0 6px;font-size:15px;color:var(--brand)}
+.app-card p{margin:0;font-size:12px;color:var(--muted);line-height:1.5}
+
+/* CODE BLOCKS */
+code{font-family:Consolas,Monaco,monospace;background:#eef1f5;padding:2px 6px;border-radius:4px;font-size:13px;color:var(--brand)}
+pre{background:#1b2430;color:#cdd6df;padding:14px 16px;border-radius:8px;overflow-x:auto;font-size:13px;line-height:1.55;margin:10px 0}
+pre code{background:none;padding:0;color:inherit}
+
+/* INFO BOXES */
+.box{padding:14px 16px;border-radius:10px;margin:14px 0;border-left:5px solid;font-size:14.5px}
+.box-info{background:#e6f1fb;border-color:var(--brand);color:var(--brand3)}
+.box-warn{background:var(--warn-soft);border-color:var(--warn);color:var(--warn)}
+.box-success{background:var(--pass-soft);border-color:var(--pass);color:var(--pass)}
+.box-danger{background:var(--fail-soft);border-color:var(--fail);color:var(--fail)}
+.box strong{font-weight:800}
+
+/* FILE TREE */
+.tree{background:#1b2430;color:#cdd6df;padding:18px;border-radius:10px;font-family:Consolas,monospace;font-size:13.5px;line-height:1.7;margin:14px 0;overflow-x:auto}
+.tree .folder{color:#fbe07d}
+.tree .file{color:#cdd6df}
+.tree .comment{color:#888;font-style:italic;margin-left:8px}
+
+/* DIAGRAM */
+.diagram{margin:18px 0;padding:18px;background:#fff;border:1px solid var(--line);border-radius:12px;text-align:center}
+.diagram svg{max-width:100%;height:auto}
+.diagram .caption{font-size:12.5px;color:var(--muted);margin-top:8px}
+
+/* TIPS */
+.tips{margin:14px 0}
+.tip{display:flex;gap:12px;padding:10px 14px;margin-bottom:6px;background:#fff;border:1px solid var(--line);border-radius:8px}
+.tip-icon{font-size:18px;flex-shrink:0}
+
+/* RESPONSIVE */
+@media (max-width:680px){
+  .hero h1{font-size:22px}
+  .hero .sub{font-size:13px}
+  .main{padding:18px 12px 40px}
+  .section-h h2{font-size:17px}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <a class="back" href="./" aria-label="Trang chủ">←</a>
+  <div class="logo-row">
+    <div class="logo">DD</div>
+  </div>
+  <h1>📖 Hướng dẫn triển khai</h1>
+  <p class="sub">Bộ công cụ Tra cứu Dung sai · WPS · Vật tư · Lượng dư cho ngành kết cấu thép</p>
+  <div class="tags">
+    <span class="tag">PWA</span>
+    <span class="tag">Offline</span>
+    <span class="tag">Multi-language</span>
+    <span class="tag">Mobile-first</span>
+  </div>
+</div>
+
+<main class="main">
+
+  <!-- TỔNG QUAN 4 APP -->
+  <div class="section-h">
+    <div class="num">0</div>
+    <h2>Tổng quan — Bộ 4 app</h2>
+  </div>
+  <div class="app-grid">
+    <div class="app-card"><div class="em">📏</div><h3>Tra cứu Dung sai</h3><p>32 tiêu chuẩn · 213 rules · 40 sketches parametric</p></div>
+    <div class="app-card"><div class="em">🔥</div><h3>Thư viện WPS</h3><p>74 WPS · 161 sketches · password 1234</p></div>
+    <div class="app-card"><div class="em">📦</div><h3>Vật tư Đầu vào</h3><p>33 tiêu chuẩn · 37 items · sketch cách đo</p></div>
+    <div class="app-card"><div class="em">⚙️</div><h3>Lượng dư & Sai hỏng</h3><p>8 calculator · 45 defects · Thư viện 5M+1E</p></div>
+  </div>
+
+  <!-- BƯỚC 1 -->
+  <div class="section-h">
+    <div class="num">1</div>
+    <h2>Xem ngay trên máy (offline)</h2>
+  </div>
+  <p>Mở nhanh để xem trước — không cần internet:</p>
+  <div class="box box-info">
+    <strong>📂 Nhấn đúp</strong> vào file <code>webapp/index.html</code> → mở bằng Chrome/Edge/Safari/Firefox.
+    Mọi tính năng chạy được: tra cứu, tính toán, đánh giá, sketches.
+  </div>
+  <div class="box box-warn">
+    <strong>⚠ Lưu ý:</strong> Chạy file local chưa "cài lên điện thoại" được (PWA cần HTTPS). Để cài như app native, cần bước 2.
+  </div>
+
+  <!-- BƯỚC 2 -->
+  <div class="section-h">
+    <div class="num">2</div>
+    <h2>Đăng lên đường link (chọn 1 trong 3)</h2>
+  </div>
+
+  <div class="steps">
+    <div class="step recommended">
+      <div class="title">🚀 Cách A: Netlify Drop <span class="badge badge-rec">KHUYẾN NGHỊ · 1 PHÚT</span></div>
+      <p>Vào <a href="https://app.netlify.com/drop" target="_blank">app.netlify.com/drop</a> → kéo-thả nguyên thư mục <code>webapp</code> vào trang. Netlify tạo HTTPS link ngay (vd <code>https://daidung-tools.netlify.app</code>) → chia sẻ link cho cả đội.</p>
+      <p class="meta">✓ Miễn phí · ✓ HTTPS tự động · ✓ Custom domain · ✓ CDN toàn cầu</p>
+    </div>
+
+    <div class="step">
+      <div class="title">📦 Cách B: GitHub Pages <span class="badge badge-free">MIỄN PHÍ</span></div>
+      <p>Đẩy thư mục <code>webapp</code> lên repo GitHub → bật <code>Settings → Pages</code> → link dạng <code>https://&lt;user&gt;.github.io/&lt;repo&gt;</code>. Có HTTPS sẵn.</p>
+      <p class="meta">Đã có sẵn script <code>Cap-nhat-GitHub.bat</code> để auto add + commit + push.</p>
+    </div>
+
+    <div class="step">
+      <div class="title">🏢 Cách C: Máy chủ nội bộ công ty (IIS / Apache / Nginx)</div>
+      <p>Copy <code>webapp/</code> vào thư mục web. Dùng trong mạng LAN. Có thể chạy không HTTPS nội bộ nhưng <strong>cài PWA cần HTTPS</strong>.</p>
+    </div>
+  </div>
+
+  <!-- BƯỚC 3 -->
+  <div class="section-h">
+    <div class="num">3</div>
+    <h2>Cài lên điện thoại (sau khi có link HTTPS)</h2>
+  </div>
+
+  <div class="diagram">
+    <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+      <!-- Android -->
+      <g transform="translate(50,20)">
+        <rect x="0" y="0" width="160" height="160" rx="14" fill="#0c447c"/>
+        <text x="80" y="32" text-anchor="middle" font-size="14" fill="#fff" font-weight="800" font-family="Arial">🤖 ANDROID</text>
+        <text x="80" y="60" text-anchor="middle" font-size="11" fill="#cbd9e8" font-family="Arial">Chrome:</text>
+        <text x="80" y="80" text-anchor="middle" font-size="11" fill="#fff" font-family="Arial">⋮ menu →</text>
+        <text x="80" y="100" text-anchor="middle" font-size="12" fill="#fbe07d" font-weight="700" font-family="Arial">"Cài ứng dụng"</text>
+        <text x="80" y="120" text-anchor="middle" font-size="10" fill="#cbd9e8" font-family="Arial">hoặc</text>
+        <text x="80" y="140" text-anchor="middle" font-size="11" fill="#fff" font-weight="700" font-family="Arial">"Add to Home Screen"</text>
+      </g>
+      <!-- iOS -->
+      <g transform="translate(220,20)">
+        <rect x="0" y="0" width="160" height="160" rx="14" fill="#aa4322"/>
+        <text x="80" y="32" text-anchor="middle" font-size="14" fill="#fff" font-weight="800" font-family="Arial">🍎 iOS (Safari)</text>
+        <text x="80" y="60" text-anchor="middle" font-size="11" fill="#fcd5b5" font-family="Arial">Safari only:</text>
+        <text x="80" y="80" text-anchor="middle" font-size="11" fill="#fff" font-family="Arial">Nút Chia sẻ ⎙</text>
+        <text x="80" y="100" text-anchor="middle" font-size="12" fill="#fbe07d" font-weight="700" font-family="Arial">"Thêm vào MH chính"</text>
+        <text x="80" y="120" text-anchor="middle" font-size="10" fill="#fcd5b5" font-family="Arial">Add to Home Screen</text>
+      </g>
+      <!-- Desktop -->
+      <g transform="translate(390,20)">
+        <rect x="0" y="0" width="160" height="160" rx="14" fill="#0f6e56"/>
+        <text x="80" y="32" text-anchor="middle" font-size="14" fill="#fff" font-weight="800" font-family="Arial">💻 DESKTOP</text>
+        <text x="80" y="60" text-anchor="middle" font-size="11" fill="#cdf0e4" font-family="Arial">Chrome/Edge:</text>
+        <text x="80" y="80" text-anchor="middle" font-size="11" fill="#fff" font-family="Arial">Icon ⊕ ở thanh URL</text>
+        <text x="80" y="100" text-anchor="middle" font-size="12" fill="#fbe07d" font-weight="700" font-family="Arial">"Cài đặt DaiDung"</text>
+        <text x="80" y="120" text-anchor="middle" font-size="10" fill="#cdf0e4" font-family="Arial">Có shortcut trên desktop</text>
+      </g>
+    </svg>
+    <div class="caption">3 cách cài PWA — sau khi cài chạy như app native, hoạt động offline</div>
+  </div>
+
+  <div class="box box-success">
+    <strong>✅ Sau khi cài:</strong> mở như app thật, <strong>chạy offline</strong>, có icon riêng. Cache tự cập nhật khi online.
+  </div>
+
+  <!-- BƯỚC 4 -->
+  <div class="section-h">
+    <div class="num">4</div>
+    <h2>Cập nhật / thêm tiêu chuẩn (chỉ người bảo trì)</h2>
+  </div>
+
+  <div class="tips">
+    <div class="tip"><div class="tip-icon">🔐</div><div>Trong app vào tab <strong>"⚙ Quản trị"</strong> — nhập PIN 4 số (lần đầu tạo PIN).</div></div>
+    <div class="tip"><div class="tip-icon">➕</div><div><strong>+ Thêm dòng</strong> hoặc <strong>✏ Sửa</strong> / <strong>🗑 Xoá</strong> dòng có sẵn.</div></div>
+    <div class="tip"><div class="tip-icon">💾</div><div>Bấm <strong>"Lưu vào máy"</strong> để lưu localStorage trên thiết bị này.</div></div>
+    <div class="tip"><div class="tip-icon">⬇</div><div>Bấm <strong>"Xuất dữ liệu (.js)"</strong> để tải file <code>tolerances-data.js</code> mới — thay vào folder webapp/ → đăng lại link → cả đội thấy bản cập nhật.</div></div>
+  </div>
+
+  <div class="box box-info">
+    <strong>📋 Loại dung sai khi thêm:</strong><br>
+    <strong>FORMULA</strong>: công thức (vd <code>h/300</code>) + khai báo biến<br>
+    <strong>FIXED</strong>: giá trị cố định (vd <code>6</code>)<br>
+    <strong>REF</strong>: tham chiếu định tính (không tính số)<br>
+    <strong>TABLE</strong>: bảng theo dải kích thước + Class (sửa qua ô JSON)
+  </div>
+
+  <div class="box box-warn">
+    <strong>⚠ Bắt buộc:</strong> mỗi dòng có <code>clause.number</code> (dẫn chứng) và <code>acceptance</code> (tiêu chí chấp nhận VI).
+  </div>
+
+  <!-- BƯỚC 5 -->
+  <div class="section-h">
+    <div class="num">5</div>
+    <h2>Độ tin cậy dữ liệu</h2>
+  </div>
+  <div class="tips">
+    <div class="tip"><div class="tip-icon">📋</div><div><strong>Đã đối chiếu PDF</strong>: ISO 13920:2023 (Bảng 1/2/3), EN 1090-2 Annex B, EN 1090-4 Table D.1, AISC 303 §7.13, AWS D1.1 (undercut/reinforcement/root concavity).</div></div>
+    <div class="tip"><div class="tip-icon">⚠️</div><div><strong>Cần đối chiếu bản gốc</strong>: MBMA 2012, JASS 6.</div></div>
+  </div>
+  <div class="box box-danger">
+    <strong>⚠ Kết quả chỉ mang tính tra cứu.</strong> Khi nghiệm thu thực tế phải ưu tiên <em>execution specification / hợp đồng</em> và <strong>bản tiêu chuẩn gốc có kiểm soát</strong> (AISC §1.9: không quy định ≠ bằng 0).
+  </div>
+
+  <!-- BƯỚC 6: Cấu trúc file -->
+  <div class="section-h">
+    <div class="num">6</div>
+    <h2>Cấu trúc thư mục webapp/</h2>
+  </div>
+  <pre class="tree">
+<span class="folder">webapp/</span>
+├── <span class="file">index.html</span>          <span class="comment"># Launcher chooser — 4 cards</span>
+├── <span class="folder">dungsai/</span>          <span class="comment"># App 1: Tra cứu Dung sai</span>
+│   ├── <span class="file">index.html</span>
+│   ├── <span class="file">tolerances-data.js</span>     <span class="comment">+ tier1/2/3/4-mech.js</span>
+│   ├── <span class="file">sketches.js</span>            <span class="comment">+ sketches-v2/v3-mech.js</span>
+│   └── <span class="file">sketch-overlay.js</span>      <span class="comment"># Parametric — overlay giá trị rule</span>
+├── <span class="folder">wps/</span>              <span class="comment"># App 2: WPS Library (PW=1234)</span>
+│   ├── <span class="file">files/</span>          <span class="comment"># 74 WPS PDFs</span>
+│   ├── <span class="file">sketches/</span>       <span class="comment"># 161 PNG sketches</span>
+│   └── <span class="file">welder-card.html</span>       <span class="comment"># Phiếu thợ hàn A5 in được</span>
+├── <span class="folder">vattu/</span>            <span class="comment"># App 3: Kiểm tra Vật tư đầu vào</span>
+├── <span class="folder">luongdu/</span>          <span class="comment"># App 4: Lượng dư + Sai hỏng + 5M+1E</span>
+│   ├── <span class="file">data.js</span>         <span class="comment"># 8 calc + 45 defects</span>
+│   ├── <span class="file">sketches.js</span>     <span class="comment"># 50+ sketches</span>
+│   └── <span class="file">library-5m1e.js</span> <span class="comment"># Ishikawa root cause library</span>
+├── <span class="folder">icons/</span>           <span class="comment"># PWA icons 192/512/maskable</span>
+├── <span class="file">reset.html</span>         <span class="comment"># Xoá cache + SW (nếu kẹt phiên bản cũ)</span>
+└── <span class="file">Cap-nhat-GitHub.bat</span>      <span class="comment"># Auto push GitHub + clean .git locks</span>
+  </pre>
+
+  <!-- TROUBLESHOOTING -->
+  <div class="section-h">
+    <div class="num">⚠</div>
+    <h2>Khi gặp vấn đề</h2>
+  </div>
+
+  <div class="steps">
+    <div class="step warning">
+      <div class="title">🔄 App không cập nhật mặc dù đã push</div>
+      <p>Service Worker đang cache version cũ. Mở <a href="reset.html"><code>reset.html</code></a> → trang tự xoá SW + cache → redirect về home → F5.</p>
+    </div>
+    <div class="step warning">
+      <div class="title">📥 Cap-nhat-GitHub.bat lỗi "index.lock"</div>
+      <p>Đã có patch auto xoá <code>.git/index.lock</code> + <code>.git/HEAD.lock</code> trước khi pull/push. Nếu vẫn lỗi, đóng GitHub Desktop / VS Code source control rồi chạy lại.</p>
+    </div>
+    <div class="step warning">
+      <div class="title">⬜ Trang trắng / scripts không chạy</div>
+      <p>Mở DevTools (F12) → Console — xem lỗi JS. Hard reload bằng Ctrl+Shift+R. Nếu vẫn lỗi, vào <a href="reset.html"><code>reset.html</code></a>.</p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div style="margin-top:40px;padding-top:24px;border-top:2px solid var(--line);text-align:center;color:var(--muted);font-size:13px">
+    <p><strong style="color:var(--brand)">DaiDung Metallic Manufacture Construction & Trade Corporation</strong></p>
+    <p style="margin:6px 0">Tác giả: <strong>Thế Mỹ</strong> · Bản 2026</p>
+    <p style="margin-top:16px">
+      <a href="./" style="display:inline-block;padding:10px 22px;background:var(--brand);color:#fff;border-radius:10px;font-weight:700;text-decoration:none">← Quay về Trang chủ</a>
+    </p>
+  </div>
+
+</main>
+</body>
+</html>
