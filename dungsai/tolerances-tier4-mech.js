@@ -9,15 +9,15 @@
 
   // === STANDARDS ===
   var stds = [
-    { code:'ISO 286-1:2010', title:T('ISO 286-1 — Hệ thống dung sai ISO (cơ sở)','ISO 286-1 — ISO code system for tolerances (basis)'), region:'INT', edition:'2010' },
-    { code:'ISO 286-2:2010', title:T('ISO 286-2 — Bảng dung sai chuẩn cho trục & lỗ','ISO 286-2 — Standard tolerance tables holes/shafts'), region:'INT', edition:'2010' },
-    { code:'ISO 2768-1:1989', title:T('ISO 2768-1 — Dung sai chung kích thước tuyến tính & góc','ISO 2768-1 — General tolerances linear & angular'), region:'INT', edition:'1989' },
-    { code:'ISO 2768-2:1989', title:T('ISO 2768-2 — Dung sai chung hình dáng & vị trí','ISO 2768-2 — General geometrical tolerances'), region:'INT', edition:'1989' },
-    { code:'ISO 1101:2017',  title:T('ISO 1101 — GD&T (geometric tolerancing)','ISO 1101 — Geometrical product specifications'), region:'INT', edition:'2017' },
-    { code:'ISO 1302:2002',  title:T('ISO 1302 — Ký hiệu độ nhám bề mặt','ISO 1302 — Surface texture indication'), region:'INT', edition:'2002' },
-    { code:'ISO 4287:1997',  title:T('ISO 4287 — Thông số nhám Ra, Rz, Rmax','ISO 4287 — Surface roughness parameters'), region:'INT', edition:'1997' },
-    { code:'ISO 965-1:2013', title:T('ISO 965-1 — Ren hệ mét — Dung sai','ISO 965-1 — Metric thread tolerances'), region:'INT', edition:'2013' },
-    { code:'ISO 13715:2017', title:T('ISO 13715 — Cạnh sắc / bavia','ISO 13715 — Edges of undefined shape'), region:'INT', edition:'2017' },
+    { code:'ISO 286-1:2010', title:T('ISO 286-1 — Hệ thống dung sai ISO (cơ sở)','ISO 286-1 — ISO code system for tolerances (basis)'), region:'ISO', edition:'2010' },
+    { code:'ISO 286-2:2010', title:T('ISO 286-2 — Bảng dung sai chuẩn cho trục & lỗ','ISO 286-2 — Standard tolerance tables holes/shafts'), region:'ISO', edition:'2010' },
+    { code:'ISO 2768-1:1989', title:T('ISO 2768-1 — Dung sai chung kích thước tuyến tính & góc','ISO 2768-1 — General tolerances linear & angular'), region:'ISO', edition:'1989' },
+    { code:'ISO 2768-2:1989', title:T('ISO 2768-2 — Dung sai chung hình dáng & vị trí','ISO 2768-2 — General geometrical tolerances'), region:'ISO', edition:'1989' },
+    { code:'ISO 1101:2017',  title:T('ISO 1101 — GD&T (geometric tolerancing)','ISO 1101 — Geometrical product specifications'), region:'ISO', edition:'2017' },
+    { code:'ISO 1302:2002',  title:T('ISO 1302 — Ký hiệu độ nhám bề mặt','ISO 1302 — Surface texture indication'), region:'ISO', edition:'2002' },
+    { code:'ISO 4287:1997',  title:T('ISO 4287 — Thông số nhám Ra, Rz, Rmax','ISO 4287 — Surface roughness parameters'), region:'ISO', edition:'1997' },
+    { code:'ISO 965-1:2013', title:T('ISO 965-1 — Ren hệ mét — Dung sai','ISO 965-1 — Metric thread tolerances'), region:'ISO', edition:'2013' },
+    { code:'ISO 13715:2017', title:T('ISO 13715 — Cạnh sắc / bavia','ISO 13715 — Edges of undefined shape'), region:'ISO', edition:'2017' },
     { code:'ASME Y14.5:2018',title:T('ASME Y14.5 — Dimensioning & Tolerancing (GD&T Mỹ)','ASME Y14.5 — Dimensioning & Tolerancing'), region:'US', edition:'2018' },
     { code:'DIN 7168:1991',  title:T('DIN 7168 — Dung sai chung Đức (thay bởi 2768)','DIN 7168 — German general tolerances'), region:'EU', edition:'1991' },
     { code:'JIS B 0405:1991',title:T('JIS B 0405 — Dung sai chung Nhật','JIS B 0405 — Japanese general tolerances'), region:'JP', edition:'1991' }
@@ -28,7 +28,7 @@
   var rules = [
     // ========== ISO 286-2 — LIMITS & FITS (H7/H8/h6 etc) ==========
     { id:'iso286-H7-d6_18',
-      standard:'ISO 286-2:2010', region:'INT', sketch:'hole_H_grade',
+      standard:'ISO 286-2:2010', region:'ISO', sketch:'hole_H_grade',
       category:'machining', element:T('Lỗ chính xác (hole) — chốt định vị','Precision hole — dowel pin'), feature:'IT GRADE',
       title:T('Lỗ H7 — Ø3 đến Ø18 mm','H7 hole — Ø3 to Ø18 mm'),
       permitted:{ kind:'TABLE', expression:'+0 / +18 µm (Ø6-10) · +0 / +21 µm (Ø10-18)', unit:'µm' },
@@ -37,7 +37,7 @@
         quote:'H7 — fundamental deviation H (lower = 0), grade IT7. For Ø6-10: ES = +15 µm; Ø10-18: ES = +18 µm.' }
     },
     { id:'iso286-H7-d50',
-      standard:'ISO 286-2:2010', region:'INT', sketch:'hole_H_grade',
+      standard:'ISO 286-2:2010', region:'ISO', sketch:'hole_H_grade',
       category:'machining', element:T('Lỗ chính xác','Precision hole'), feature:'IT GRADE',
       title:T('Lỗ H7 — Ø30 đến Ø50 mm','H7 hole — Ø30 to Ø50 mm'),
       permitted:{ kind:'TABLE', expression:'+0 / +25 µm', unit:'µm' },
@@ -45,7 +45,7 @@
       clause:{ number:'ISO 286-2 Table 2', page:8 }
     },
     { id:'iso286-H8-d50',
-      standard:'ISO 286-2:2010', region:'INT', sketch:'hole_H_grade',
+      standard:'ISO 286-2:2010', region:'ISO', sketch:'hole_H_grade',
       category:'machining', element:T('Lỗ trung bình (bulông qua, ren ngoài)','Medium hole (bolt clearance, threading)'), feature:'IT GRADE',
       title:T('Lỗ H8 — Ø30 đến Ø50 mm','H8 hole — Ø30 to Ø50 mm'),
       permitted:{ kind:'TABLE', expression:'+0 / +39 µm', unit:'µm' },
@@ -54,7 +54,7 @@
         quote:'H8 grade IT8: Ø30-50 fundamental deviation H, ES = +39 µm.' }
     },
     { id:'iso286-H11-d50',
-      standard:'ISO 286-2:2010', region:'INT', sketch:'hole_H_grade',
+      standard:'ISO 286-2:2010', region:'ISO', sketch:'hole_H_grade',
       category:'machining', element:T('Lỗ thô (hàn, bulông phổ thông)','Coarse hole (welding, common bolts)'), feature:'IT GRADE',
       title:T('Lỗ H11 — Ø30 đến Ø50 mm','H11 hole — Ø30 to Ø50 mm'),
       permitted:{ kind:'TABLE', expression:'+0 / +160 µm', unit:'µm' },
@@ -62,7 +62,7 @@
       clause:{ number:'ISO 286-2 Table 2', page:8 }
     },
     { id:'iso286-h6-d50',
-      standard:'ISO 286-2:2010', region:'INT', sketch:'shaft_h_grade',
+      standard:'ISO 286-2:2010', region:'ISO', sketch:'shaft_h_grade',
       category:'machining', element:T('Trục chính xác (shaft)','Precision shaft'), feature:'IT GRADE',
       title:T('Trục h6 — Ø30 đến Ø50 mm','h6 shaft — Ø30 to Ø50 mm'),
       permitted:{ kind:'TABLE', expression:'−16 / +0 µm', unit:'µm' },
@@ -71,7 +71,7 @@
         quote:'h6 — fundamental deviation h (upper = 0), grade IT6 = 16 µm.' }
     },
     { id:'iso286-g6-d50',
-      standard:'ISO 286-2:2010', region:'INT', sketch:'shaft_h_grade',
+      standard:'ISO 286-2:2010', region:'ISO', sketch:'shaft_h_grade',
       category:'machining', element:T('Trục lắp lỏng (sliding)','Sliding-fit shaft'), feature:'IT GRADE',
       title:T('Trục g6 — Ø30 đến Ø50 mm','g6 shaft — Ø30 to Ø50 mm'),
       permitted:{ kind:'TABLE', expression:'−25 / −9 µm', unit:'µm' },
@@ -79,7 +79,7 @@
       clause:{ number:'ISO 286-2 Table 1', page:5 }
     },
     { id:'iso286-k6-d50',
-      standard:'ISO 286-2:2010', region:'INT', sketch:'shaft_h_grade',
+      standard:'ISO 286-2:2010', region:'ISO', sketch:'shaft_h_grade',
       category:'machining', element:T('Trục lắp chặt nhẹ (light interference)','Light interference shaft'), feature:'IT GRADE',
       title:T('Trục k6 — Ø30 đến Ø50 mm','k6 shaft — Ø30 to Ø50 mm'),
       permitted:{ kind:'TABLE', expression:'+2 / +18 µm', unit:'µm' },
@@ -87,7 +87,7 @@
       clause:{ number:'ISO 286-2 Table 1', page:5 }
     },
     { id:'iso286-fit-H7g6',
-      standard:'ISO 286-2:2010', region:'INT', sketch:'fit_running',
+      standard:'ISO 286-2:2010', region:'ISO', sketch:'fit_running',
       category:'machining', element:T('Cặp lắp lỗ-trục','Hole-shaft fit'), feature:'FIT',
       title:T('Lắp H7/g6 — Lắp lỏng có hướng dẫn (running fit)','H7/g6 fit — Close running'),
       permitted:{ kind:'TABLE', expression:T('Khe hở 9-50 µm tùy đường kính','Clearance 9-50 µm by diameter'), unit:'µm' },
@@ -95,7 +95,7 @@
       clause:{ number:'ISO 286-2 Annex A', page:25 }
     },
     { id:'iso286-fit-H7k6',
-      standard:'ISO 286-2:2010', region:'INT', sketch:'fit_running',
+      standard:'ISO 286-2:2010', region:'ISO', sketch:'fit_running',
       category:'machining', element:T('Cặp lắp lỗ-trục','Hole-shaft fit'), feature:'FIT',
       title:T('Lắp H7/k6 — Lắp trung gian (transition)','H7/k6 fit — Transition'),
       permitted:{ kind:'TABLE', expression:T('Lúc lỏng -2, lúc chặt +18 µm','Loose -2, tight +18 µm'), unit:'µm' },
@@ -103,7 +103,7 @@
       clause:{ number:'ISO 286-2 Annex A', page:25 }
     },
     { id:'iso286-fit-H7p6',
-      standard:'ISO 286-2:2010', region:'INT', sketch:'fit_press',
+      standard:'ISO 286-2:2010', region:'ISO', sketch:'fit_press',
       category:'machining', element:T('Cặp lắp lỗ-trục','Hole-shaft fit'), feature:'FIT',
       title:T('Lắp H7/p6 — Lắp chặt (medium drive)','H7/p6 fit — Medium drive press'),
       permitted:{ kind:'TABLE', expression:T('Ép từ +14 đến +35 µm','Press +14 to +35 µm'), unit:'µm' },
@@ -113,7 +113,7 @@
 
     // ========== ISO 2768-1 — GENERAL LINEAR ==========
     { id:'iso2768-f-link',
-      standard:'ISO 2768-1:1989', region:'INT', sketch:'iso2768_chart',
+      standard:'ISO 2768-1:1989', region:'ISO', sketch:'iso2768_chart',
       category:'machining', element:T('Kích thước thẳng (machined)','Linear machined'), feature:'GENERAL',
       title:T('ISO 2768-f (fine) — kích thước thẳng','ISO 2768-f (fine) — linear'),
       permitted:{ kind:'TABLE',
@@ -123,7 +123,7 @@
         quote:'Class f (fine): for nominal size 6 to 30 mm, permissible deviation = ±0.1 mm.' }
     },
     { id:'iso2768-m-link',
-      standard:'ISO 2768-1:1989', region:'INT', sketch:'iso2768_chart',
+      standard:'ISO 2768-1:1989', region:'ISO', sketch:'iso2768_chart',
       category:'machining', element:T('Kích thước thẳng','Linear machined'), feature:'GENERAL',
       title:T('ISO 2768-m (medium) — kích thước thẳng','ISO 2768-m (medium) — linear'),
       permitted:{ kind:'TABLE',
@@ -132,7 +132,7 @@
       clause:{ number:'ISO 2768-1 Table 1', page:5 }
     },
     { id:'iso2768-c-link',
-      standard:'ISO 2768-1:1989', region:'INT', sketch:'iso2768_chart',
+      standard:'ISO 2768-1:1989', region:'ISO', sketch:'iso2768_chart',
       category:'machining', element:T('Kích thước thẳng','Linear machined'), feature:'GENERAL',
       title:T('ISO 2768-c (coarse) — kích thước thẳng','ISO 2768-c (coarse) — linear'),
       permitted:{ kind:'TABLE',
@@ -141,7 +141,7 @@
       clause:{ number:'ISO 2768-1 Table 1', page:5 }
     },
     { id:'iso2768-v-link',
-      standard:'ISO 2768-1:1989', region:'INT', sketch:'iso2768_chart',
+      standard:'ISO 2768-1:1989', region:'ISO', sketch:'iso2768_chart',
       category:'machining', element:T('Kích thước thẳng','Linear machined'), feature:'GENERAL',
       title:T('ISO 2768-v (very coarse) — kích thước thẳng','ISO 2768-v (very coarse) — linear'),
       permitted:{ kind:'TABLE',
@@ -150,7 +150,7 @@
       clause:{ number:'ISO 2768-1 Table 1', page:5 }
     },
     { id:'iso2768-m-angular',
-      standard:'ISO 2768-1:1989', region:'INT', sketch:'iso2768_chart',
+      standard:'ISO 2768-1:1989', region:'ISO', sketch:'iso2768_chart',
       category:'machining', element:T('Góc (machined)','Angular'), feature:'GENERAL',
       title:T('ISO 2768-m — góc theo chiều dài cạnh','ISO 2768-m — angular by side length'),
       permitted:{ kind:'TABLE',
@@ -161,7 +161,7 @@
 
     // ========== ISO 2768-2 — GENERAL FORM & POSITION ==========
     { id:'iso2768-H-flat',
-      standard:'ISO 2768-2:1989', region:'INT',
+      standard:'ISO 2768-2:1989', region:'ISO',
       category:'machining', element:T('Mặt phẳng gia công','Machined plane'), feature:'FLATNESS',
       title:T('ISO 2768-H — Độ phẳng (form, fine class)','ISO 2768-H — Flatness (form, fine)'),
       permitted:{ kind:'TABLE',
@@ -170,7 +170,7 @@
       clause:{ number:'ISO 2768-2 Table 1', page:4 }
     },
     { id:'iso2768-K-flat',
-      standard:'ISO 2768-2:1989', region:'INT',
+      standard:'ISO 2768-2:1989', region:'ISO',
       category:'machining', element:T('Mặt phẳng gia công','Machined plane'), feature:'FLATNESS',
       title:T('ISO 2768-K — Độ phẳng (medium)','ISO 2768-K — Flatness (medium)'),
       permitted:{ kind:'TABLE',
@@ -179,7 +179,7 @@
       clause:{ number:'ISO 2768-2 Table 1', page:4 }
     },
     { id:'iso2768-K-perp',
-      standard:'ISO 2768-2:1989', region:'INT',
+      standard:'ISO 2768-2:1989', region:'ISO',
       category:'machining', element:T('Hai mặt vuông góc','Two perpendicular surfaces'), feature:'PERPENDICULARITY',
       title:T('ISO 2768-K — Độ vuông góc','ISO 2768-K — Perpendicularity'),
       permitted:{ kind:'TABLE',
@@ -188,7 +188,7 @@
       clause:{ number:'ISO 2768-2 Table 2', page:5 }
     },
     { id:'iso2768-K-symm',
-      standard:'ISO 2768-2:1989', region:'INT',
+      standard:'ISO 2768-2:1989', region:'ISO',
       category:'machining', element:T('Yếu tố đối xứng (slot, hole pair)','Symmetrical features'), feature:'SYMMETRY',
       title:T('ISO 2768-K — Đối xứng & lệch tâm','ISO 2768-K — Symmetry & coaxiality'),
       permitted:{ kind:'TABLE', expression:'0.6 (≤100) · 0.8 (100-300) · 1.0 (300-1000)', unit:'mm' },
@@ -196,7 +196,7 @@
       clause:{ number:'ISO 2768-2 Table 4', page:6 }
     },
     { id:'iso2768-K-runout',
-      standard:'ISO 2768-2:1989', region:'INT',
+      standard:'ISO 2768-2:1989', region:'ISO',
       category:'machining', element:T('Trục quay (rotating shaft)','Rotating shaft'), feature:'RUNOUT',
       title:T('ISO 2768-K — Độ đảo tròn (circular runout)','ISO 2768-K — Circular runout'),
       permitted:{ kind:'TABLE', expression:'0.2 (toàn dải)', unit:'mm' },
@@ -206,7 +206,7 @@
 
     // ========== ISO 1101 — GD&T ==========
     { id:'iso1101-flatness',
-      standard:'ISO 1101:2017', region:'INT', sketch:'gdt_flatness',
+      standard:'ISO 1101:2017', region:'ISO', sketch:'gdt_flatness',
       category:'gdt', element:T('Mặt phẳng có GD&T frame','Surface with GD&T frame'), feature:'FLATNESS',
       title:T('GD&T — Độ phẳng (⌭) theo bản vẽ','GD&T — Flatness (⌭) per drawing'),
       permitted:{ kind:'REF', expression:T('Theo giá trị trong khung GD&T','Per value in GD&T frame') },
@@ -215,7 +215,7 @@
         quote:'The flatness tolerance defines a tolerance zone limited by two parallel planes a distance t apart.' }
     },
     { id:'iso1101-parallel',
-      standard:'ISO 1101:2017', region:'INT',
+      standard:'ISO 1101:2017', region:'ISO',
       category:'gdt', element:T('Mặt phẳng so với datum A','Surface relative to datum A'), feature:'PARALLELISM',
       title:T('GD&T — Độ song song ∥ với datum','GD&T — Parallelism ∥ to datum'),
       permitted:{ kind:'REF', expression:T('Theo giá trị trong khung GD&T (vd: ∥ 0.05 A)','Per value in GD&T frame (e.g.: ∥ 0.05 A)') },
@@ -223,7 +223,7 @@
       clause:{ number:'ISO 1101 §18.1', page:44 }
     },
     { id:'iso1101-perp',
-      standard:'ISO 1101:2017', region:'INT',
+      standard:'ISO 1101:2017', region:'ISO',
       category:'gdt', element:T('Mặt phẳng vuông góc datum','Surface perpendicular to datum'), feature:'PERPENDICULARITY',
       title:T('GD&T — Độ vuông góc ⟂ với datum','GD&T — Perpendicularity ⟂ to datum'),
       permitted:{ kind:'REF', expression:T('Theo khung GD&T (vd: ⟂ 0.02 A)','Per GD&T frame (e.g.: ⟂ 0.02 A)') },
@@ -231,7 +231,7 @@
       clause:{ number:'ISO 1101 §18.2', page:45 }
     },
     { id:'iso1101-pos',
-      standard:'ISO 1101:2017', region:'INT', sketch:'gdt_position',
+      standard:'ISO 1101:2017', region:'ISO', sketch:'gdt_position',
       category:'gdt', element:T('Tâm lỗ / điểm trên mặt phẳng','Hole center / point on surface'), feature:'POSITION',
       title:T('GD&T — Vị trí ⊕ (true position)','GD&T — True position ⊕'),
       permitted:{ kind:'REF', expression:T('Theo khung GD&T (vd: ⊕ Ø0.1 A B C)','Per GD&T frame (e.g.: ⊕ Ø0.1 A B C)') },
@@ -240,7 +240,7 @@
         quote:'A tolerance zone defined by a cylinder of diameter t whose axis is in the theoretically exact position.' }
     },
     { id:'iso1101-conc',
-      standard:'ISO 1101:2017', region:'INT',
+      standard:'ISO 1101:2017', region:'ISO',
       category:'gdt', element:T('Trục đồng tâm với datum','Coaxial axis to datum'), feature:'CONCENTRICITY',
       title:T('GD&T — Đồng tâm ◎','GD&T — Concentricity ◎'),
       permitted:{ kind:'REF', expression:T('Theo khung GD&T (vd: ◎ Ø0.05 A)','Per GD&T frame (e.g.: ◎ Ø0.05 A)') },
@@ -248,7 +248,7 @@
       clause:{ number:'ISO 1101 §18.5', page:48 }
     },
     { id:'iso1101-runout',
-      standard:'ISO 1101:2017', region:'INT',
+      standard:'ISO 1101:2017', region:'ISO',
       category:'gdt', element:T('Mặt quay quanh trục','Rotating surface around axis'), feature:'RUNOUT',
       title:T('GD&T — Độ đảo tròn ↗ (circular runout)','GD&T — Circular runout ↗'),
       permitted:{ kind:'REF', expression:T('Theo khung GD&T (vd: ↗ 0.05 A)','Per GD&T frame (e.g.: ↗ 0.05 A)') },
@@ -258,7 +258,7 @@
 
     // ========== ISO 4287 / 1302 — SURFACE ROUGHNESS ==========
     { id:'iso1302-Ra-rough',
-      standard:'ISO 4287:1997', region:'INT', sketch:'ra_comparison',
+      standard:'ISO 4287:1997', region:'ISO', sketch:'ra_comparison',
       category:'surface', element:T('Bề mặt thô (cắt, đúc)','Rough surface (cut, cast)'), feature:'ROUGHNESS',
       title:T('Ra 12.5 — Bề mặt thô','Ra 12.5 — Rough'),
       permitted:{ kind:'FIXED', expression:'12.5', unit:'µm' },
@@ -266,7 +266,7 @@
       clause:{ number:'ISO 4287 §4.2', page:7 }
     },
     { id:'iso1302-Ra-rough-cnc',
-      standard:'ISO 4287:1997', region:'INT', sketch:'ra_comparison',
+      standard:'ISO 4287:1997', region:'ISO', sketch:'ra_comparison',
       category:'surface', element:T('Bề mặt phay/tiện thường','Standard mill/turn surface'), feature:'ROUGHNESS',
       title:T('Ra 3.2 — Phay/tiện thường','Ra 3.2 — Standard mill/turn'),
       permitted:{ kind:'FIXED', expression:'3.2', unit:'µm' },
@@ -274,7 +274,7 @@
       clause:{ number:'ISO 4287 §4.2', page:7 }
     },
     { id:'iso1302-Ra-finish',
-      standard:'ISO 4287:1997', region:'INT', sketch:'ra_comparison',
+      standard:'ISO 4287:1997', region:'ISO', sketch:'ra_comparison',
       category:'surface', element:T('Bề mặt hoàn thiện','Finished surface'), feature:'ROUGHNESS',
       title:T('Ra 1.6 — Mặt lắp ghép','Ra 1.6 — Mating surface'),
       permitted:{ kind:'FIXED', expression:'1.6', unit:'µm' },
@@ -282,7 +282,7 @@
       clause:{ number:'ISO 4287 §4.2', page:7 }
     },
     { id:'iso1302-Ra-precision',
-      standard:'ISO 4287:1997', region:'INT', sketch:'ra_comparison',
+      standard:'ISO 4287:1997', region:'ISO', sketch:'ra_comparison',
       category:'surface', element:T('Bề mặt chính xác','Precision surface'), feature:'ROUGHNESS',
       title:T('Ra 0.8 — Mặt làm việc chính xác','Ra 0.8 — Precision working surface'),
       permitted:{ kind:'FIXED', expression:'0.8', unit:'µm' },
@@ -290,7 +290,7 @@
       clause:{ number:'ISO 4287 §4.2', page:7 }
     },
     { id:'iso1302-Ra-mirror',
-      standard:'ISO 4287:1997', region:'INT', sketch:'ra_comparison',
+      standard:'ISO 4287:1997', region:'ISO', sketch:'ra_comparison',
       category:'surface', element:T('Bề mặt gương','Mirror finish'), feature:'ROUGHNESS',
       title:T('Ra 0.2 — Hoàn thiện gương','Ra 0.2 — Mirror finish'),
       permitted:{ kind:'FIXED', expression:'0.2', unit:'µm' },
@@ -300,7 +300,7 @@
 
     // ========== ISO 965 — METRIC THREADS ==========
     { id:'iso965-6H-int',
-      standard:'ISO 965-1:2013', region:'INT', sketch:'thread_gauge',
+      standard:'ISO 965-1:2013', region:'ISO', sketch:'thread_gauge',
       category:'thread', element:T('Ren trong (đai ốc)','Internal thread (nut)'), feature:'THREAD CLASS',
       title:T('Ren M trong cấp 6H — chuẩn','Internal thread M 6H — standard'),
       permitted:{ kind:'TABLE',
@@ -310,7 +310,7 @@
         quote:'Internal thread tolerance grade 6H provides medium quality for general use.' }
     },
     { id:'iso965-6g-ext',
-      standard:'ISO 965-1:2013', region:'INT', sketch:'thread_gauge',
+      standard:'ISO 965-1:2013', region:'ISO', sketch:'thread_gauge',
       category:'thread', element:T('Ren ngoài (bulông)','External thread (bolt)'), feature:'THREAD CLASS',
       title:T('Ren M ngoài cấp 6g — chuẩn','External thread M 6g — standard'),
       permitted:{ kind:'TABLE',
@@ -321,7 +321,7 @@
 
     // ========== ISO 13715 — EDGES ==========
     { id:'iso13715-edge',
-      standard:'ISO 13715:2017', region:'INT', sketch:'edge_condition',
+      standard:'ISO 13715:2017', region:'ISO', sketch:'edge_condition',
       category:'machining', element:T('Cạnh sắc / bavia','Sharp edges / burr'), feature:'EDGE',
       title:T('Cạnh máy gia công — bavia & vê tròn','Machined edges — burr & rounding'),
       permitted:{ kind:'REF', expression:T('Theo ký hiệu bản vẽ: −0.3 (vê), +0.3 (bavia), ±0.3 (cả hai)','Per drawing symbol: −0.3 (rounded), +0.3 (burr), ±0.3 (either)') },
