@@ -188,5 +188,57 @@
 <script src="standards.js?v=1"></script>
 <script src="app2.js?v=7"></script>
 <script src="app.js?v=7"></script>
+
+<style>
+.mat-group-fab{position:fixed;bottom:80px;right:14px;z-index:50;background:#7c3f00;color:#fff;border:0;border-radius:50px;padding:12px 18px;font-weight:800;font-size:13.5px;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.25);font-family:inherit}
+.mat-group-fab:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.3)}
+.mg-modal-bg{position:fixed;inset:0;background:rgba(20,30,45,.5);z-index:200;display:none;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
+.mg-modal-bg.on{display:flex}
+.mg-modal{background:#fff;border-radius:14px;max-width:1000px;width:100%;max-height:92vh;overflow-y:auto;margin-top:20px;box-shadow:0 12px 40px rgba(0,0,0,.3)}
+.mg-head{padding:16px 20px;border-bottom:1px solid #dfe5ec;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:2}
+.mg-head h2{margin:0;font-size:18px;color:#7c3f00}
+.mg-body{padding:18px 20px}
+.mg-card{border:2px solid var(--c,#0c447c);border-radius:10px;padding:14px;margin-bottom:14px;background:linear-gradient(180deg,#fff 50%,#fafafa)}
+.mg-card .head{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.mg-card .badge{background:var(--c);color:#fff;padding:4px 10px;border-radius:6px;font-weight:800;font-size:11.5px;letter-spacing:.5px}
+.mg-card .sub-badge{background:#888;color:#fff;padding:3px 8px;border-radius:5px;font-size:10.5px;font-weight:700}
+.mg-card h3{margin:0;font-size:15px;color:var(--c);flex:1}
+.mg-card .yield{font-size:11px;color:#5f6b7a;background:#eef1f5;padding:3px 8px;border-radius:5px;font-weight:700}
+.mg-card .grades{background:#f8f9fa;border-radius:6px;padding:10px 14px;margin-top:8px;font-size:12.5px;line-height:1.7}
+.mg-card .grades-title{font-weight:800;font-size:11px;color:#5f6b7a;text-transform:uppercase;margin-bottom:4px;letter-spacing:.5px}
+.mg-card .consum{background:#fffae6;border-left:4px solid #cea24a;padding:8px 12px;margin-top:8px;font-size:12.5px;border-radius:4px}
+.mg-card .notes{background:#e3f6ee;border-left:4px solid #0f6e56;padding:8px 12px;margin-top:6px;font-size:12px;border-radius:4px;color:#1b2430}
+</style>
+<button class="mat-group-fab" onclick="showMatGroups()">📦 Cẩm nang Nhóm vật liệu</button>
+<div class="mg-modal-bg" id="mgModal" onclick="if(event.target===this)closeMatGroups()">
+  <div class="mg-modal">
+    <div class="mg-head"><h2>📦 Cẩm nang Nhóm vật liệu hàn (ASME IX P/M-Number)</h2><button onclick="closeMatGroups()" style="background:none;border:1px solid #ccc;width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:17px">✕</button></div>
+    <div class="mg-body" id="mgBody"></div>
+  </div>
+</div>
+<script>
+function showMatGroups(){
+  var html = '<div style="background:#eef1f5;padding:12px 14px;border-radius:8px;margin-bottom:14px;font-size:13px;color:#5f6b7a">💡 Theo <strong>ASME Section IX QW/QB-422</strong>, vật liệu chia theo nhóm để giảm số lượng PQR cần qualified. Cùng nhóm → có thể dùng chung WPS. Click vào nhóm để xem chi tiết các loại thép thuộc nhóm đó.</div>';
+  (window.WPS_MATGROUPS||[]).forEach(function(g){
+    html += '<div class="mg-card" style="--c:' + g.color + '">'
+      + '<div class="head">'
+      + '<span class="badge">' + g.group + '</span>'
+      + (g.subgroup && g.subgroup !== '—' ? '<span class="sub-badge">' + g.subgroup + '</span>' : '')
+      + '<h3>' + g.name + '</h3>'
+      + '<span class="yield">σ_y = ' + g.yield + '</span>'
+      + '</div>'
+      + '<div class="grades"><div class="grades-title">▸ Bao gồm các loại:</div>'
+      + g.materials.map(function(m){ return '• ' + m; }).join('<br>')
+      + '</div>'
+      + '<div class="consum"><strong>🔥 Que/dây hàn phù hợp:</strong> ' + g.consumables + '</div>'
+      + (g.notes ? '<div class="notes">📌 ' + g.notes + '</div>' : '')
+      + '</div>';
+  });
+  document.getElementById('mgBody').innerHTML = html;
+  document.getElementById('mgModal').classList.add('on');
+}
+function closeMatGroups(){ document.getElementById('mgModal').classList.remove('on'); }
+</script>
+
 </body>
 </html>
