@@ -42,7 +42,7 @@
   .nav button.on{color:var(--brand)}
   .nav button.on .ic{transform:translateY(-1px)}
   @media(min-width:980px){
-    .nav{position:static;max-width:1180px;margin:10px auto 0;border:1px solid var(--line);border-radius:12px;justify-content:flex-start;gap:4px;padding:6px;box-shadow:var(--sh)}
+    .nav{position:sticky;top:58px;bottom:auto;z-index:39;max-width:1180px;margin:10px auto 0;border:1px solid var(--line);border-radius:12px;justify-content:flex-start;gap:4px;padding:6px;box-shadow:var(--sh)}
     .nav button{flex:none;flex-direction:row;gap:7px;font-size:14px;padding:9px 16px}
     .nav button .ic{font-size:17px}
     .nav button.on{background:var(--soft)}
@@ -194,8 +194,8 @@
   <div class="lang"><button id="lvi" class="on" onclick="setLang('vi')">VI</button><button id="len" onclick="setLang('en')">EN</button></div>
 </div>
 
-<div id="app" class="main"></div>
 <nav class="nav" id="nav"></nav>
+<div id="app" class="main"></div>
 <div id="credit">Tác giả: Thế Mỹ</div>
 <svg id="svgdefs" width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="stl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f7fa"/><stop offset="0.5" stop-color="#cdd6df"/><stop offset="1" stop-color="#9aa7b3"/></linearGradient><linearGradient id="stlH" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#f4f7fa"/><stop offset="0.5" stop-color="#cdd6df"/><stop offset="1" stop-color="#9aa7b3"/></linearGradient><linearGradient id="wld" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f0c14b"/><stop offset="1" stop-color="#a9781a"/></linearGradient><linearGradient id="cnc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9e2d6"/><stop offset="1" stop-color="#c7bda6"/></linearGradient><pattern id="hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="7" stroke="#8b97a3" stroke-width="0.8" opacity="0.5"/></pattern></defs></svg>
 
@@ -498,9 +498,7 @@ function render(){
   document.getElementById("abSub").textContent=LANG==="vi"?"Kết cấu thép · QC":"Steel structures · QC";
   // nav
   const items=[["lookup","🔍"],["compare","⚖️"],["standards","📚"],["check","☑️"],["admin","🛠️"]];
-  document.getElementById("nav").innerHTML=items.map(([k,ic])=>`<button class="${VIEW===k?'on':''}" onclick="setView('${k}')"><span class="ic">${ic}</span><span>${esc(tx(I18N.nav[k]))}</span></button>`).join("")
-    +`<button onclick="location.href='../han/'"><span class="ic">👁</span><span>${LANG==='vi'?'QC Hàn':'Weld QC'}</span></button>`
-    +`<button onclick="location.href='../son/'"><span class="ic">🎨</span><span>${LANG==='vi'?'QC Sơn':'Paint QC'}</span></button>`;
+  document.getElementById("nav").innerHTML=items.map(([k,ic])=>`<button class="${VIEW===k?'on':''}" onclick="setView('${k}')"><span class="ic">${ic}</span><span>${esc(tx(I18N.nav[k]))}</span></button>`).join("");
   const app=document.getElementById("app");
   if(VIEW==="lookup") app.innerHTML=viewLookup();
   else if(VIEW==="compare") app.innerHTML=viewCompare();
