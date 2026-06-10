@@ -395,7 +395,7 @@ function fmt(n){ if(n==null||isNaN(n)) return "—"; return (Math.round(n*100)/1
 
 /* ===== state ===== */
 let LANG="vi",VIEW="lookup";
-let F={std:"",cat:"",el:"",feat:"",q:""};
+let F={std:"",cat:"",el:"",feat:"",q:"",fav:false};
 let selectedId=null,calcVars={},calcClass=null,measured="";
 let compare=[];
 let browseAll=false;
@@ -409,7 +409,29 @@ function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;",
 function featName(f){ const o=FEATURES[f]; return o?(o.ic+" "+(o[LANG]||o.en)):f; }
 function catName(c){ const o=CATEGORIES[c]; return o?(o[LANG]||o.en):c; }
 function ruleById(id){ return TOLS().find(r=>r.id===id); }
+/* ===== bookmark (⭐) ===== */
+let FAVS = (function(){ try{ return JSON.parse(localStorage.getItem('tol_favs'))||[]; }catch(e){ return []; } })();
+function isFav(id){ return FAVS.indexOf(id)>=0; }
+function toggleFav(id, ev){ if(ev) ev.stopPropagation();
+  const i=FAVS.indexOf(id); if(i>=0) FAVS.splice(i,1); else FAVS.push(id);
+  localStorage.setItem('tol_favs', JSON.stringify(FAVS)); render(); }
+function copyCitation(id){ const r=ruleById(id); if(!r) return;
+  const p=r.permitted||{};
+  const txt=[
+    (LANG==='vi'?'TRÍCH DẪN TIÊU CHUẨN':'STANDARD CITATION'),
+    (LANG==='vi'?'Tiêu chí: ':'Criterion: ')+tx(r.title)+' — '+tx(r.element),
+    (LANG==='vi'?'Tiêu chuẩn: ':'Standard: ')+r.standard,
+    (LANG==='vi'?'Điều khoản/Bảng: ':'Clause/Table: ')+r.clause.number+(r.clause.page?(' (tr.'+r.clause.page+')'):''),
+    (p.expression?((LANG==='vi'?'Giới hạn: ':'Limit: ')+(p.kind==='FIXED'||p.kind==='FORMULA'?'±':'')+p.expression+' '+(p.unit||'')):''),
+    (LANG==='vi'?'Tiêu chí chấp nhận: ':'Acceptance: ')+tx(r.acceptance),
+    (r.clause.quote?('"'+r.clause.quote+'"'):'')
+  ].filter(Boolean).join('\n');
+  (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(()=>{
+    alert(LANG==='vi'?'✓ Đã copy trích dẫn!':'✓ Citation copied!');
+  }).catch(()=>prompt('Copy:', txt));
+}
 function filtered(){ return TOLS().filter(r=>{
+  if(F.fav&&!isFav(r.id)) return false;
   if(F.std&&r.standard!==F.std) return false; if(F.cat&&r.category!==F.cat) return false;
   if(F.el&&tx(r.element)!==F.el) return false; if(F.feat&&r.feature!==F.feat) return false;
   if(F.q){ const q=F.q.toLowerCase(); const h=(tx(r.title)+" "+tx(r.element)+" "+r.standard+" "+tx(r.acceptance)+" "+(r.clause?r.clause.number:"")).toLowerCase(); if(h.indexOf(q)<0) return false; }
@@ -424,7 +446,9 @@ function render(){
   document.getElementById("abSub").textContent=LANG==="vi"?"Kết cấu thép · QC":"Steel structures · QC";
   // nav
   const items=[["lookup","🔍"],["compare","⚖️"],["standards","📚"],["admin","🛠️"]];
-  document.getElementById("nav").innerHTML=items.map(([k,ic])=>`<button class="${VIEW===k?'on':''}" onclick="setView('${k}')"><span class="ic">${ic}</span><span>${esc(tx(I18N.nav[k]))}</span></button>`).join("");
+  document.getElementById("nav").innerHTML=items.map(([k,ic])=>`<button class="${VIEW===k?'on':''}" onclick="setView('${k}')"><span class="ic">${ic}</span><span>${esc(tx(I18N.nav[k]))}</span></button>`).join("")
+    +`<button onclick="location.href='../han/'"><span class="ic">👁</span><span>${LANG==='vi'?'QC Hàn':'Weld QC'}</span></button>`
+    +`<button onclick="location.href='../son/'"><span class="ic">🎨</span><span>${LANG==='vi'?'QC Sơn':'Paint QC'}</span></button>`;
   const app=document.getElementById("app");
   if(VIEW==="lookup") app.innerHTML=viewLookup();
   else if(VIEW==="compare") app.innerHTML=viewCompare();
@@ -442,7 +466,7 @@ function viewLookup(){
   const stdLabel = F.std ? F.std : (LANG==='vi'?'Tất cả tiêu chuẩn':'All standards');
   let h=`<div class="crumb"><span class="crumb-lab">${LANG==='vi'?'Đang xem':'Viewing'}: <b>${esc(stdLabel)}</b></span><button class="crumb-btn" onclick="resetChooser()">↺ ${LANG==='vi'?'Đổi tiêu chuẩn':'Change'}</button></div>`;
   h+=`<div class="search"><span class="mag">🔍</span><input class="inp" type="text" value="${esc(F.q)}" oninput="F.q=this.value;refreshList()" placeholder="${esc(T('searchPh'))}"></div>`;
-  h+=`<div class="filters"><span class="chip ${F.feat===''?'on':''}" onclick="F.feat='';render()">${esc(T('all'))}</span>`+
+  h+=`<div class="filters"><span class="chip ${F.fav?'on':''}" onclick="F.fav=!F.fav;render()" style="${F.fav?'background:#b07b00;border-color:#b07b00':''}">⭐ ${LANG==='vi'?'Đã lưu':'Saved'}${FAVS.length?' · '+FAVS.length:''}</span><span class="chip ${F.feat===''?'on':''}" onclick="F.feat='';render()">${esc(T('all'))}</span>`+
     feats.map(f=>`<span class="chip ${F.feat===f?'on':''}" onclick="F.feat='${f}';render()">${esc(featName(f))}</span>`).join("")+`</div>`;
   h+=`<details class="more"><summary>${esc(T('moreFilters'))}</summary><div class="body">
     <div><label class="fld">${esc(T('category'))}</label><select onchange="F.cat=this.value;render()"><option value="">${esc(T('all'))}</option>`+
@@ -480,7 +504,7 @@ function pickStd(code){ F.std=code; browseAll=false; F.q=""; F.feat=""; F.cat=""
 function resetChooser(){ F.std=""; browseAll=false; F.q=""; F.feat=""; F.cat=""; F.el=""; selectedId=null; document.body.classList.remove('detail-open'); render(); }
 function renderCards(list){ if(!list) list=filtered(); if(!list.length) return `<div class="empty">${esc(T('noResult'))}</div>`;
   return list.map(r=>`<div class="rcard ${r.id===selectedId?'on':''}" onclick="selectRule('${r.id}')">
-    <div class="t">${esc(tx(r.title))} ${r.needsVerify?'⚠':''}</div>
+    <div class="t" style="display:flex;align-items:flex-start;gap:6px"><span style="flex:1">${esc(tx(r.title))} ${r.needsVerify?'⚠':''}</span><button onclick="toggleFav('${r.id}',event)" title="${LANG==='vi'?'Lưu tiêu chí':'Bookmark'}" style="font-size:16px;line-height:1;opacity:${isFav(r.id)?1:.35};flex:none">${isFav(r.id)?'⭐':'☆'}</button></div>
     <div class="m"><span class="badge">${esc(r.standard)}</span><span class="region">${r.region}</span>
       <span class="tagf">${esc(featName(r.feature))}</span><span>· ${esc(tx(r.element))}</span></div></div>`).join(""); }
 function refreshList(){ const c=document.getElementById("cards"); if(c) c.innerHTML=renderCards(filtered());
@@ -518,6 +542,9 @@ function renderDetail(){
       <div class="kv" style="margin-top:8px"><div class="k">${esc(T('clause'))}</div><div><strong>${esc(r.clause.number)}</strong></div>`;
   if(r.clause.page) h+=`<div class="k">${esc(T('page'))}</div><div>${r.clause.page}</div>`;
   h+=`</div>`; if(r.clause.quote) h+=`<div class="quote">“${esc(r.clause.quote)}”</div>`;
+  h+=`<div style="display:flex;gap:8px;margin-top:10px">
+      <button onclick="copyCitation('${r.id}')" style="flex:1;padding:10px;background:var(--brand);color:#fff;border-radius:10px;font-weight:700;font-size:13px">📋 ${LANG==='vi'?'Copy trích dẫn':'Copy citation'}</button>
+      <button onclick="toggleFav('${r.id}')" style="flex:1;padding:10px;background:${isFav(r.id)?'#b07b00':'#eef1f5'};color:${isFav(r.id)?'#fff':'#33404e'};border-radius:10px;font-weight:700;font-size:13px">${isFav(r.id)?'⭐ '+(LANG==='vi'?'Đã lưu':'Saved'):'☆ '+(LANG==='vi'?'Lưu tiêu chí':'Bookmark')}</button></div>`;
   h+=`</div></div></div>`;
   h+=renderCalc(r);
   h+=`</div>`;

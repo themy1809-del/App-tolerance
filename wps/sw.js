@@ -1,5 +1,5 @@
 // Service worker for WPS Library (offline shell)
-const CACHE = 'wps-v4';
+const CACHE = 'wps-v5';
 const SHELL = [
   './',
   './index.html',
@@ -17,7 +17,7 @@ self.addEventListener('install', e => {
 
 self.addEventListener('activate', e => {
   e.waitUntil(
-    caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
+    caches.keys().then(keys => Promise.all(keys.filter(k => k.startsWith('wps-') && k !== CACHE).map(k => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });

@@ -51,6 +51,8 @@ function openDetail(x){
   document.getElementById('dDl').href = fileHref;
   document.getElementById('dDl').download = x.file;
   document.getElementById('dCard').href = 'welder-card.html?id=' + encodeURIComponent(x.id);
+  const dCopyBtn = document.getElementById('dCopy');
+  if (dCopyBtn) dCopyBtn.onclick = () => copyWpsSummary(x);
   const pageInfo = x.page ? (x.page_end && x.page_end!==x.page ? ` · ${LANG==='vi'?'trang':'pages'} ${x.page}–${x.page_end}` : ` · ${LANG==='vi'?'trang':'page'} ${x.page}`) : '';
   document.getElementById('dSrc').innerHTML = proj
     ? `<b>${esc(proj.code)}</b> — ${esc(LANG==='vi'?proj.name_vi:proj.name_en)}<br>📄 ${esc(x.file)}${pageInfo}<br><span style="color:var(--muted)">${esc(proj.register_doc||'')}${proj.date?` · ${esc(proj.date)}`:''}</span>`
@@ -73,6 +75,27 @@ function closeModal(){
   currentDetailId = null;
   const u = new URL(location.href); u.searchParams.delete('id'); history.replaceState(null, '', u.toString());
   if (isIdle()) render();
+}
+
+/* Copy tóm tắt thông số WPS — dán vào báo cáo/email/Zalo */
+function copyWpsSummary(x){
+  const proj = (DB.projects||[]).find(p => p.code===x.project);
+  const L = [
+    (LANG==='vi'?'THÔNG SỐ WPS — ':'WPS SUMMARY — ') + x.id + (x.rev?(' Rev '+x.rev):''),
+    ['Code', x.code], ['Process', x.process], ['Position', x.position],
+    [LANG==='vi'?'Vật liệu nền':'Base metal', x.base_metal],
+    [LANG==='vi'?'Nhóm vật liệu':'Material group', x.material_group],
+    [LANG==='vi'?'Chiều dày':'Thickness', x.thickness],
+    [LANG==='vi'?'Đường kính':'Diameter', x.diameter],
+    [LANG==='vi'?'Vật liệu hàn':'Filler', x.filler],
+    ['F-No', x.f_no], ['Size', x.size], ['PQR', x.pqr],
+    [LANG==='vi'?'Dự án':'Project', proj ? (x.project+' — '+(LANG==='vi'?proj.name_vi:proj.name_en)) : x.project],
+    ['File', x.file + (x.page?(' (tr.'+x.page+(x.page_end&&x.page_end!==x.page?('–'+x.page_end):'')+')'):'')]
+  ];
+  const txt = L.map(r => Array.isArray(r) ? (r[1] && r[1]!=='-' ? '  ' + r[0] + ': ' + r[1] : null) : r).filter(Boolean).join('\n');
+  (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(() => {
+    const b = document.getElementById('bCopy'); if (b){ const o=b.textContent; b.textContent = LANG==='vi'?'✓ Đã copy!':'✓ Copied!'; setTimeout(()=>b.textContent=o, 1500); }
+  }).catch(() => prompt('Copy:', txt));
 }
 
 /* ============ Wizard ============ */

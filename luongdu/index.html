@@ -159,6 +159,16 @@ h1{font-size:17px;margin:0;font-weight:800;line-height:1.15}
         <button class="chip-rc" data-rc="env" onclick="setRC('env')">🌦️ MÔI TRƯỜNG · 4</button>
       </div>
     </div>
+    <div>
+      <div class="filter-label">Theo mức độ nghiêm trọng:</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="chip-rc on" data-sev="all" onclick="setSev('all')">Tất cả</button>
+        <button class="chip-rc" data-sev="critical" onclick="setSev('critical')">⚠ NGHIÊM TRỌNG</button>
+        <button class="chip-rc" data-sev="high" onclick="setSev('high')">CAO</button>
+        <button class="chip-rc" data-sev="medium" onclick="setSev('medium')">TRUNG BÌNH</button>
+        <button class="chip-rc" data-sev="low" onclick="setSev('low')">THẤP</button>
+      </div>
+    </div>
   </div>
   <div id="content"></div>
 </main>
@@ -172,7 +182,12 @@ h1{font-size:17px;margin:0;font-weight:800;line-height:1.15}
 <script src="wiki-images.js?v=6"></script>
 <script>
 var TAB = 'A';
-var CAT = 'all', RC = 'all';
+var CAT = 'all', RC = 'all', SEV = 'all';
+function setSev(s){
+  SEV = s;
+  document.querySelectorAll('.chip-rc[data-sev]').forEach(b => b.classList.toggle('on', b.dataset.sev===s));
+  render();
+}
 function setTab(t){
   TAB = t;
   ['A','B','C','D'].forEach(x => document.getElementById('tab'+x).classList.toggle('on', t===x));
@@ -213,6 +228,9 @@ function render(){
       else items = items.filter(it => it.cat === CAT);
     }
     if (RC !== 'all') items = items.filter(it => it.rootCause === RC);
+    if (SEV !== 'all') items = items.filter(it => it.severity === SEV);
+    var sevOrder = {critical:0, high:1, medium:2, low:3};
+    items = items.slice().sort(function(a,b){ return (sevOrder[a.severity]??9) - (sevOrder[b.severity]??9); });
   }
   var q = ((document.getElementById('q')||{}).value || '').toLowerCase().trim();
   var norm = s => String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[đĐ]/g,'d').toLowerCase();
@@ -308,9 +326,52 @@ function openDefect(id){
     + (item.acceptance ? buildAcceptance(item.acceptance) : '')
     + '<div class="section-title">⚠ NGUYÊN NHÂN PHỔ BIẾN</div>'+causes
     + '<div class="section-title" style="margin-top:14px">✓ BIỆN PHÁP KHẮC PHỤC</div>'+remedies
+    + (item.cat==='weld' || item.cat==='consum'
+        ? '<a href="../han/" style="display:block;text-align:center;margin-top:14px;padding:12px;background:#7c2d12;color:#fff;border-radius:10px;font-weight:700;text-decoration:none">🧮 Đánh giá Đạt/Không đạt theo AWS D1.1 / ISO 5817 → mở module QC Hàn</a>'
+        : '')
+    + (item.cat==='paint'
+        ? '<a href="../son/" style="display:block;text-align:center;margin-top:14px;padding:12px;background:#14532d;color:#fff;border-radius:10px;font-weight:700;text-decoration:none">🎨 Tiêu chí nghiệm thu sơn (DFT, bề mặt, môi trường) → mở module QC Sơn</a>'
+        : '')
+    + '<button onclick="copyNCR(\''+item.id+'\')" style="display:block;width:100%;text-align:center;margin-top:10px;padding:12px;background:#0c447c;color:#fff;border:0;border-radius:10px;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit">📋 Tạo NCR nháp (copy vào clipboard)</button>'
     + '<div class="ref">📖 ' + esc(item.ref) + '</div>'
     + '</div></div></div>';
   document.getElementById('modal').innerHTML = html;
+}
+function copyNCR(id){
+  var item = LD_DATA.defects.find(x=>x.id===id);
+  if (!item) return;
+  var acc = item.acceptance || {};
+  var accTable = (acc.table||[]).map(function(r){ return '  - ' + r[0] + ': ' + r[1]; }).join('\n');
+  var txt = [
+    '=== NCR NHÁP (Non-Conformance Report) ===',
+    'Ngày lập: ' + new Date().toLocaleDateString('vi-VN'),
+    'Hạng mục / Mã cấu kiện: ........................',
+    'Vị trí phát hiện: ........................',
+    '',
+    '1. MÔ TẢ SỰ KHÔNG PHÙ HỢP',
+    '   Loại lỗi: ' + item.name + ' (' + sevLabel(item.severity) + ')',
+    '   Hiện tượng: ' + item.symptom,
+    '   Giá trị đo thực tế: ........................',
+    '',
+    '2. TIÊU CHUẨN THAM CHIẾU & TIÊU CHÍ CHẤP NHẬN',
+    '   ' + (acc.ref || item.ref),
+    accTable ? accTable : '   Chấp nhận: ' + (acc.ok || 'theo spec dự án'),
+    '   Không chấp nhận: ' + (acc.notok || 'theo spec dự án'),
+    '',
+    '3. NGUYÊN NHÂN (sơ bộ — Ishikawa ' + (item.rootCause ? rcLabel(item.rootCause) : '') + ')',
+    (item.causes||[]).slice(0,3).map(function(c){return '   - ' + c;}).join('\n'),
+    '',
+    '4. BIỆN PHÁP XỬ LÝ ĐỀ XUẤT',
+    (item.remedies||[]).slice(0,3).map(function(r){return '   - ' + r;}).join('\n'),
+    '',
+    '5. YÊU CẦU KIỂM TRA LẠI SAU XỬ LÝ: 100% bằng phương pháp ban đầu',
+    'Người lập: ............  QC duyệt: ............  Khách hàng/TVGS: ............'
+  ].join('\n');
+  (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(function(){
+    alert('✓ Đã copy NCR nháp — dán vào biểu mẫu/email.');
+  }).catch(function(){
+    prompt('Copy thủ công:', txt);
+  });
 }
 function renderLib(){
   var c = document.getElementById('content');

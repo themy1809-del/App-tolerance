@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#7c2d12">
+<title>QC Hàn — Kiểm tra mối hàn</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/icon-180.png">
+<style>
+  :root{
+    --bg:#f4f1ee; --card:#fff; --ink:#1b2430; --muted:#5f6b7a; --line:#e3ddd6;
+    --brand:#7c2d12; --brand2:#b4421f; --soft:#fbeee7;
+    --pass:#0f6e56; --pass-soft:#e3f6ee; --fail:#aa4322; --fail-soft:#fbeae2;
+    --warn:#8a5a00; --warn-soft:#fdf3e2;
+    --r:14px; --sh:0 1px 2px rgba(45,30,20,.07),0 6px 20px rgba(45,30,20,.06);
+    --navh:62px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.5}
+  button{font-family:inherit;cursor:pointer;border:0;background:none}
+  input,select{font-family:inherit}
+  .appbar{position:sticky;top:0;z-index:40;background:linear-gradient(180deg,#7c2d12,#5f2410);color:#fff;
+    padding:max(10px,env(safe-area-inset-top)) 14px 10px;display:flex;align-items:center;gap:10px}
+  .appbar .back{color:#fff;font-size:15px;font-weight:700;padding:6px 8px 6px 0}
+  .appbar h1{font-size:16px;margin:0;font-weight:700;line-height:1.15}
+  .appbar .sub{font-size:11px;opacity:.8}
+  .appbar .sp{flex:1}
+  .lang{display:flex;background:rgba(255,255,255,.16);border-radius:8px;overflow:hidden}
+  .lang button{color:#fff;padding:6px 11px;font-size:13px;font-weight:700;opacity:.65}
+  .lang button.on{background:#fff;color:var(--brand);opacity:1}
+  .main{max-width:1180px;margin:0 auto;padding:12px 14px calc(var(--navh) + 24px)}
+  @media(min-width:980px){.main{padding-bottom:28px}}
+  .nav{position:fixed;bottom:0;left:0;right:0;z-index:40;background:#fff;border-top:1px solid var(--line);
+    display:flex;justify-content:space-around;padding:6px 4px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(0,0,0,.05)}
+  .nav button{display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--muted);font-size:11px;font-weight:600;padding:4px 8px;border-radius:10px;flex:1}
+  .nav button .ic{font-size:20px;line-height:1}
+  .nav button.on{color:var(--brand)}
+  @media(min-width:980px){
+    .nav{position:static;max-width:1180px;margin:10px auto 0;border:1px solid var(--line);border-radius:12px;justify-content:flex-start;gap:4px;padding:6px;box-shadow:var(--sh)}
+    .nav button{flex:none;flex-direction:row;gap:7px;font-size:14px;padding:9px 16px}
+    .nav button .ic{font-size:17px}
+    .nav button.on{background:var(--soft)}
+  }
+  .search{position:relative;margin:12px 0 10px}
+  .search input{width:100%;padding:13px 14px 13px 42px;border:1px solid var(--line);border-radius:12px;font-size:16px;background:#fff;box-shadow:var(--sh)}
+  .search .mag{position:absolute;left:14px;top:50%;transform:translateY(-50%);opacity:.5;font-size:17px}
+  .filters{display:flex;gap:7px;overflow-x:auto;padding:2px 0 8px;-webkit-overflow-scrolling:touch}
+  .filters::-webkit-scrollbar{display:none}
+  .chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 13px;font-size:13px;font-weight:600;color:#33404e;white-space:nowrap;flex:none}
+  .chip.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+  .count{font-size:12.5px;color:var(--muted);margin:2px 2px 8px}
+  .lookgrid{display:block}
+  @media(min-width:980px){.lookgrid{display:grid;grid-template-columns:390px 1fr;gap:16px;align-items:start}}
+  .cards{display:flex;flex-direction:column;gap:10px}
+  .rcard{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:13px 14px;box-shadow:var(--sh);cursor:pointer;transition:.12s}
+  .rcard:active{transform:scale(.99)}
+  .rcard.on{outline:2px solid var(--brand);background:var(--soft)}
+  .rcard .t{font-weight:700;font-size:14.5px;margin-bottom:5px}
+  .rcard .m{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;color:var(--muted)}
+  .badge{font-size:10.5px;font-weight:800;padding:2px 7px;border-radius:6px;background:var(--soft);color:var(--brand)}
+  .gbadge{font-size:10px;font-weight:800;padding:2px 6px;border-radius:5px;background:#eef1f5;color:#4a5663}
+  .empty{color:var(--muted);text-align:center;padding:46px 18px}
+  .detail-pane{}
+  @media(min-width:980px){.detail-pane{position:sticky;top:74px;max-height:calc(100vh - 90px);overflow-y:auto;padding-right:6px}}
+  @media(max-width:979px){
+    .detail-pane{position:fixed;inset:0;z-index:50;background:var(--bg);transform:translateX(100%);transition:transform .22s ease;overflow:auto;padding:0}
+    body.detail-open .detail-pane{transform:translateX(0)}
+    body.detail-open{overflow:hidden}
+  }
+  .dhead{display:none}
+  @media(max-width:979px){.dhead{display:flex;align-items:center;gap:10px;position:sticky;top:0;background:var(--brand);color:#fff;padding:max(10px,env(safe-area-inset-top)) 14px 10px;z-index:2}
+    .dhead button{color:#fff;font-size:15px;font-weight:700;display:flex;align-items:center;gap:6px}
+    .dpad{padding:14px}}
+  @media(min-width:980px){.dpad{padding:0}}
+  .card{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:14px}
+  .card h2{font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:0;padding:13px 16px 0}
+  .card .cbody{padding:14px 16px}
+  .accept{background:#f4faf7;border:1px solid #cfe8df;border-left:4px solid var(--pass);border-radius:10px;padding:11px 13px;font-size:13.5px;margin-top:12px}
+  .warn{background:var(--warn-soft);border:1px solid #f0d9a8;border-left:4px solid var(--warn);border-radius:10px;padding:10px 12px;font-size:12.5px;color:#6b4700;margin-top:10px}
+  .evidence{background:#fffdf9;border:1px dashed var(--brand2);border-radius:12px;padding:12px 14px;margin-top:14px}
+  .evidence .h{font-size:11px;font-weight:800;letter-spacing:.5px;color:var(--brand);text-transform:uppercase}
+  .quote{font-style:italic;color:#33404e;border-left:3px solid var(--soft);padding-left:10px;margin-top:8px;font-size:12.5px}
+  .inrow{display:flex;gap:10px;align-items:center;margin:8px 0}
+  .inrow .lab{font-size:12px;color:var(--muted);min-width:150px;flex:1}
+  .inrow input{width:110px;padding:9px 10px;border:1px solid var(--line);border-radius:10px;font-size:16px;text-align:right}
+  .res{background:#2d1408;color:#fff;border-radius:12px;padding:14px;margin-top:12px}
+  .res .lbl{font-size:11px;text-transform:uppercase;letter-spacing:.5px;opacity:.7}
+  .res .big{font-size:16px;font-weight:700;margin-top:4px;line-height:1.45}
+  .verdict{border-radius:12px;padding:16px;text-align:center;margin-top:12px;font-weight:800;font-size:21px}
+  .verdict.pass{background:var(--pass-soft);color:var(--pass);border:1px solid #b7e0d2}
+  .verdict.fail{background:var(--fail-soft);color:var(--fail);border:1px solid #f0c4b3}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{border:1px solid var(--line);padding:8px 9px;text-align:left;vertical-align:top}
+  th{background:var(--soft);color:var(--brand);font-size:11.5px;text-transform:uppercase;letter-spacing:.3px}
+  tr:nth-child(even) td{background:#faf8f6}
+  .tblwrap{overflow-x:auto;margin-top:10px}
+  .seccard{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:14px;padding:16px}
+  .seccard h3{margin:0 0 8px;font-size:16px;color:var(--brand)}
+  .seccard .note{font-size:12.5px;color:var(--muted);margin:6px 0 0}
+  /* checklist */
+  .ckphase{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:14px;overflow:hidden}
+  .ckphase .ph{display:flex;align-items:center;gap:10px;padding:13px 16px;background:var(--soft);font-weight:800;color:var(--brand);font-size:15px}
+  .ckphase .ph .pct{margin-left:auto;font-size:12.5px;font-weight:700;color:var(--muted)}
+  .ckitem{display:flex;gap:11px;padding:12px 16px;border-top:1px solid var(--line);cursor:pointer;align-items:flex-start}
+  .ckitem:hover{background:#faf8f6}
+  .ckitem .box{width:22px;height:22px;border:2px solid #c9beb4;border-radius:6px;flex:none;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;margin-top:1px}
+  .ckitem.done .box{background:var(--pass);border-color:var(--pass)}
+  .ckitem .tx{font-size:13.5px}
+  .ckitem.done .tx{color:var(--muted);text-decoration:line-through}
+  .ckitem .rf{display:block;font-size:11px;color:var(--brand2);font-weight:700;margin-top:3px;text-decoration:none}
+  .ckbar{display:flex;gap:8px;margin-bottom:12px}
+  .btn{padding:10px 16px;border-radius:10px;background:var(--brand);color:#fff;font-weight:700;font-size:13.5px}
+  .btn.alt{background:#eee7e0;color:#5a4636}
+  /* symbols */
+  .symgrid{display:grid;grid-template-columns:1fr;gap:12px}
+  @media(min-width:760px){.symgrid{grid-template-columns:1fr 1fr}}
+  .symcard{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:14px 16px}
+  .symcard h4{margin:0 0 6px;font-size:14.5px;color:var(--brand)}
+  .symcard .codes{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+  .symcard .codes span{font-size:11px;font-weight:700;background:var(--soft);color:var(--brand);padding:3px 8px;border-radius:6px}
+  .symcard p{margin:0;font-size:13px;color:#33404e}
+  .symcard svg{width:100%;height:auto;background:#fffdf9;border:1px solid var(--line);border-radius:10px;margin-bottom:8px}
+  .tab{display:none}
+  .tab.on{display:block}
+  .h2x{font-size:18px;font-weight:800;color:var(--brand);margin:14px 2px 10px}
+</style>
+</head>
+<body>
+
+<header class="appbar">
+  <a class="back" href="../">←</a>
+  <div>
+    <h1 id="appTitle">QC Hàn — Kiểm tra mối hàn</h1>
+    <div class="sub">AWS D1.1:2020 · ISO 5817:2014 · EN 1090-2 · JASS 6</div>
+  </div>
+  <div class="sp"></div>
+  <div class="lang">
+    <button id="lvVi" class="on">VI</button>
+    <button id="lvEn">EN</button>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- TAB VT -->
+  <section class="tab on" id="tab-vt">
+    <div class="search"><span class="mag">🔍</span>
+      <input id="q" type="search" placeholder="Tìm: undercut, rỗ khí, nứt, fillet..." autocomplete="off">
+    </div>
+    <div class="filters" id="stdChips"></div>
+    <div class="filters" id="grpChips"></div>
+    <div class="lookgrid">
+      <div>
+        <div class="count" id="cnt"></div>
+        <div class="cards" id="list"></div>
+      </div>
+      <div class="detail-pane" id="dpane">
+        <div class="dhead"><button id="dback">← <span>Quay lại</span></button></div>
+        <div class="dpad" id="dbody"><div class="empty">Chọn một tiêu chí để xem chi tiết + tính toán Đạt/Không đạt</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB NDT -->
+  <section class="tab" id="tab-ndt"></section>
+
+  <!-- TAB CHECKLIST -->
+  <section class="tab" id="tab-ck"></section>
+
+  <!-- TAB SYMBOLS -->
+  <section class="tab" id="tab-sym"></section>
+
+  <!-- TAB TOOLS -->
+  <section class="tab" id="tab-tool"></section>
+
+</main>
+
+<nav class="nav">
+  <button data-tab="vt" class="on"><span class="ic">👁</span><span data-vi="Ngoại quan" data-en="Visual">Ngoại quan</span></button>
+  <button data-tab="ndt"><span class="ic">📡</span><span data-vi="NDT" data-en="NDT">NDT</span></button>
+  <button data-tab="ck"><span class="ic">☑️</span><span data-vi="Checklist" data-en="Checklist">Checklist</span></button>
+  <button data-tab="sym"><span class="ic">⛯</span><span data-vi="Ký hiệu" data-en="Symbols">Ký hiệu</span></button>
+  <button data-tab="tool"><span class="ic">🧮</span><span data-vi="Công cụ" data-en="Tools">Công cụ</span></button>
+</nav>
+
+<script src="data.js"></script>
+<script>
+const D = window.HAN_DATA;
+let LANG = localStorage.getItem('han_lang') || 'vi';
+const T = o => (o && typeof o === 'object') ? (o[LANG] || o.vi || '') : (o || '');
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ===== state ===== */
+let fStd = 'ALL', fGrp = 'ALL', selId = null, query = '';
+const GROUPS = [
+  { k: 'ALL', vi: 'Tất cả', en: 'All' },
+  { k: 'CRACK', vi: 'Nứt', en: 'Crack' },
+  { k: 'UNDERCUT', vi: 'Cháy chân', en: 'Undercut' },
+  { k: 'POROSITY', vi: 'Rỗ khí', en: 'Porosity' },
+  { k: 'PROFILE', vi: 'Biên dạng', en: 'Profile' },
+  { k: 'SIZE', vi: 'Kích thước', en: 'Size' },
+  { k: 'FUSION', vi: 'Ngấu', en: 'Fusion' },
+  { k: 'OTHER', vi: 'Khác', en: 'Other' }
+];
+
+/* ===== tabs ===== */
+document.querySelectorAll('.nav button').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.nav button').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+    document.getElementById('tab-' + b.dataset.tab).classList.add('on');
+    window.scrollTo(0, 0);
+  });
+});
+
+/* ===== lang ===== */
+function setLang(l) {
+  LANG = l; localStorage.setItem('han_lang', l);
+  document.getElementById('lvVi').classList.toggle('on', l === 'vi');
+  document.getElementById('lvEn').classList.toggle('on', l === 'en');
+  document.querySelectorAll('[data-vi]').forEach(e => e.textContent = e.dataset[l]);
+  renderAll();
+}
+document.getElementById('lvVi').onclick = () => setLang('vi');
+document.getElementById('lvEn').onclick = () => setLang('en');
+
+/* ===== VT list ===== */
+function chips() {
+  const sc = document.getElementById('stdChips');
+  const stds = ['ALL', ...D.STDS.map(s => s.code)];
+  sc.innerHTML = stds.map(s => `<button class="chip ${fStd===s?'on':''}" data-s="${esc(s)}">${s==='ALL'?(LANG==='vi'?'Mọi tiêu chuẩn':'All standards'):esc(s)}</button>`).join('');
+  sc.querySelectorAll('.chip').forEach(c => c.onclick = () => { fStd = c.dataset.s; renderVT(); });
+  const gc = document.getElementById('grpChips');
+  gc.innerHTML = GROUPS.map(g => `<button class="chip ${fGrp===g.k?'on':''}" data-g="${g.k}">${LANG==='vi'?g.vi:g.en}</button>`).join('');
+  gc.querySelectorAll('.chip').forEach(c => c.onclick = () => { fGrp = c.dataset.g; renderVT(); });
+}
+
+function filtered() {
+  const q = query.trim().toLowerCase();
+  return D.WELD_VT.filter(r =>
+    (fStd === 'ALL' || r.std === fStd) &&
+    (fGrp === 'ALL' || r.group === fGrp) &&
+    (!q || (T(r.title) + ' ' + T(r.criteria) + ' ' + r.std + ' ' + r.id).toLowerCase().includes(q))
+  );
+}
+
+function renderVT() {
+  chips();
+  const rows = filtered();
+  document.getElementById('cnt').textContent = (LANG==='vi' ? `${rows.length} tiêu chí` : `${rows.length} criteria`);
+  document.getElementById('list').innerHTML = rows.length ? rows.map(r => `
+    <div class="rcard ${selId===r.id?'on':''}" data-id="${r.id}">
+      <div class="t">${esc(T(r.title))}</div>
+      <div class="m"><span class="badge">${esc(r.std)}</span><span class="gbadge">${esc(T(r.load))}</span>${r.calc?'<span class="gbadge">🧮 calc</span>':''}</div>
+    </div>`).join('') : `<div class="empty">${LANG==='vi'?'Không tìm thấy':'No results'}</div>`;
+  document.querySelectorAll('#list .rcard').forEach(c => c.onclick = () => { selId = c.dataset.id; renderVT(); renderDetail(); document.body.classList.add('detail-open'); });
+}
+
+function renderDetail() {
+  const r = D.WELD_VT.find(x => x.id === selId);
+  const el = document.getElementById('dbody');
+  if (!r) { el.innerHTML = `<div class="empty">${LANG==='vi'?'Chọn một tiêu chí':'Select a criterion'}</div>`; return; }
+  let html = `
+    <div class="card"><h2>${esc(r.std)} · ${esc(T(r.load))}</h2><div class="cbody">
+      <div style="font-size:17px;font-weight:800;margin-bottom:8px">${esc(T(r.title))}</div>
+      <div style="font-size:14px">${esc(T(r.criteria))}</div>
+      <div class="accept"><b>${LANG==='vi'?'Tiêu chí chấp nhận':'Acceptance'}:</b> ${esc(T(r.acceptance))}</div>
+      <div class="evidence"><div class="h">${LANG==='vi'?'Dẫn chứng':'Evidence'}</div>
+        <div style="font-size:13px;font-weight:700;margin-top:6px">${esc(r.clause.ref)}</div>
+        <div class="quote">"${esc(r.clause.quote)}"</div>
+        ${r.clause.soft ? `<div class="warn">${LANG==='vi'?'⚠ Mục tham khảo thực hành — đối chiếu bản gốc tiêu chuẩn trước khi dùng làm căn cứ nghiệm thu chính thức.':'⚠ Practice reference — verify against original standard before formal acceptance.'}</div>` : ''}
+      </div>
+    </div>`;
+  if (r.calc) {
+    html += `<div class="card"><h2>🧮 ${LANG==='vi'?'Đánh giá Đạt / Không đạt':'PASS / FAIL evaluation'}</h2><div class="cbody" id="calcBody">
+      ${r.calc.inputs.map(i => `<div class="inrow"><span class="lab">${esc(T(i.label))}</span><input type="number" step="any" data-k="${i.k}" value="${i.def}"></div>`).join('')}
+      <div id="calcOut"></div>
+    </div></div>`;
+  }
+  el.innerHTML = html;
+  if (r.calc) {
+    const run = () => {
+      const vals = {};
+      el.querySelectorAll('#calcBody input').forEach(i => vals[i.dataset.k] = parseFloat(i.value) || 0);
+      const out = r.calc.evaluate(vals);
+      document.getElementById('calcOut').innerHTML = `
+        <div class="res"><div class="lbl">${LANG==='vi'?'Giới hạn cho phép':'Permitted limit'}</div>
+          <div class="big">${esc(out.limitText)}</div>
+          <div style="font-size:12.5px;opacity:.8;margin-top:6px">${esc(out.detail||'')}</div></div>
+        <div class="verdict ${out.pass?'pass':'fail'}">${out.pass?(LANG==='vi'?'✓ ĐẠT':'✓ PASS'):(LANG==='vi'?'✗ KHÔNG ĐẠT':'✗ FAIL')}</div>`;
+    };
+    el.querySelectorAll('#calcBody input').forEach(i => i.addEventListener('input', run));
+    run();
+  }
+}
+document.getElementById('dback').onclick = () => document.body.classList.remove('detail-open');
+document.getElementById('q').addEventListener('input', e => { query = e.target.value; renderVT(); });
+
+/* ===== NDT tab ===== */
+function renderNDT() {
+  const N = D.NDT;
+  let h = `<div class="h2x">${LANG==='vi'?'Phương pháp NDT & tiêu chuẩn chấp nhận':'NDT methods & acceptance standards'}</div>`;
+  h += N.methods.map(m => `
+    <div class="seccard">
+      <h3>${m.name} — ${esc(T(m.full))}</h3>
+      <div style="font-size:13.5px"><b>${LANG==='vi'?'Phạm vi':'Scope'}:</b> ${esc(T(m.scope))}</div>
+      <div style="font-size:13.5px;margin-top:4px"><b>${LANG==='vi'?'Phát hiện':'Detects'}:</b> ${esc(T(m.detect))}</div>
+      <div style="font-size:13.5px;margin-top:4px"><b>${LANG==='vi'?'Tiêu chuẩn':'Standards'}:</b> ${esc(T(m.std))}</div>
+      <div class="note">${esc(T(m.note))}</div>
+    </div>`).join('');
+
+  /* EXC map */
+  h += `<div class="seccard"><h3>${LANG==='vi'?'Mức chất lượng ISO 5817 theo cấp EXC':'ISO 5817 level by EXC class'}</h3>
+    <div class="tblwrap"><table><tr><th>EXC</th><th>${LANG==='vi'?'Mức ISO 5817':'ISO 5817 level'}</th><th>${LANG==='vi'?'Ghi chú':'Notes'}</th></tr>
+    ${D.EXC_MAP.rows.map(r => `<tr><td><b>${r.exc}</b></td><td><b>${r.level}</b></td><td>${esc(T(r.extra))||'—'}</td></tr>`).join('')}</table></div>
+    <div class="note">${esc(T(D.EXC_MAP.note))}</div>
+    <div class="evidence"><div class="h">${LANG==='vi'?'Dẫn chứng':'Evidence'}</div><div class="quote">"${esc(D.EXC_MAP.quote)}" — EN 1090-2:2018+A1:2024, 7.6.1</div></div></div>`;
+
+  /* hold time */
+  h += `<div class="seccard"><h3>⏱ ${esc(T(N.holdTime.title))}</h3>
+    <div class="tblwrap"><table><tr><th>${LANG==='vi'?'Kích thước mối hàn':'Weld size'}</th><th>Q (kJ/mm)</th><th>${LANG==='vi'?'Mác thép':'Grade'}</th><th>${LANG==='vi'?'Thời gian chờ':'Hold time'}</th></tr>
+    ${N.holdTime.rows.map(r => `<tr><td>${esc(r.size)}</td><td>${esc(T(r.q))}</td><td>${esc(r.grade)}</td><td><b>${esc(T(r.time))}</b></td></tr>`).join('')}</table></div>
+    <div class="note">${esc(T(N.holdTime.note))}</div>
+    <div class="evidence"><div class="h">${LANG==='vi'?'Dẫn chứng':'Evidence'}</div><div class="quote">"${esc(N.holdTime.quote)}"</div></div></div>`;
+
+  /* extent */
+  h += `<div class="seccard"><h3>📊 ${esc(T(N.extent.title))}</h3>
+    <div class="tblwrap"><table><tr><th>${LANG==='vi'?'Loại mối hàn':'Weld type'}</th><th>EXC1</th><th>EXC2</th><th>EXC3</th></tr>
+    ${N.extent.rows.map(r => `<tr><td>${esc(T(r.type))}</td><td>${r.exc1}</td><td>${r.exc2}</td><td>${r.exc3}</td></tr>`).join('')}</table></div>
+    <div class="note">${esc(T(N.extent.note))}</div>
+    <div class="evidence"><div class="h">${LANG==='vi'?'Dẫn chứng':'Evidence'}</div><div class="quote">"${esc(N.extent.quote)}"</div></div></div>`;
+
+  h += `<div class="seccard"><h3>👤 ${LANG==='vi'?'Yêu cầu nhân sự':'Personnel requirements'}</h3><div style="font-size:13.5px">${esc(T(N.personnel))}</div></div>`;
+  document.getElementById('tab-ndt').innerHTML = h;
+}
+
+/* ===== Checklist tab ===== */
+const CK_KEY = 'han_ck_v1';
+function ckState() { try { return JSON.parse(localStorage.getItem(CK_KEY)) || {}; } catch (e) { return {}; } }
+function renderCK() {
+  const st = ckState();
+  let h = `<div class="ckbar">
+    <button class="btn alt" id="ckReset">↺ ${LANG==='vi'?'Làm mới':'Reset'}</button>
+    <button class="btn" id="ckCopy">📋 ${LANG==='vi'?'Copy báo cáo':'Copy report'}</button></div>`;
+  D.CHECKLIST.forEach((ph, pi) => {
+    const done = ph.items.filter((_, ii) => st[pi + '_' + ii]).length;
+    h += `<div class="ckphase"><div class="ph">${ph.icon} ${esc(T(ph.phase))}<span class="pct">${done}/${ph.items.length}</span></div>
+      ${ph.items.map((it, ii) => `
+        <div class="ckitem ${st[pi+'_'+ii]?'done':''}" data-k="${pi}_${ii}">
+          <div class="box">${st[pi+'_'+ii]?'✓':''}</div>
+          <div class="tx">${esc(T(it.t))}<span class="rf">📎 ${esc(it.ref)}</span></div>
+        </div>`).join('')}</div>`;
+  });
+  const el = document.getElementById('tab-ck');
+  el.innerHTML = h;
+  el.querySelectorAll('.ckitem').forEach(c => c.onclick = () => {
+    const s = ckState(); s[c.dataset.k] = !s[c.dataset.k];
+    localStorage.setItem(CK_KEY, JSON.stringify(s)); renderCK();
+  });
+  el.querySelector('#ckReset').onclick = () => { localStorage.removeItem(CK_KEY); renderCK(); };
+  el.querySelector('#ckCopy').onclick = () => {
+    const s = ckState();
+    let txt = (LANG==='vi'?'BÁO CÁO CHECKLIST QC HÀN':'WELDING QC CHECKLIST REPORT') + ' — ' + new Date().toLocaleString() + '\n';
+    D.CHECKLIST.forEach((ph, pi) => {
+      txt += '\n## ' + T(ph.phase) + '\n';
+      ph.items.forEach((it, ii) => txt += (s[pi+'_'+ii] ? '[x] ' : '[ ] ') + T(it.t) + ' (' + it.ref + ')\n');
+    });
+    navigator.clipboard.writeText(txt).then(() => alert(LANG==='vi'?'Đã copy!':'Copied!'));
+  };
+}
+
+/* ===== Symbols tab ===== */
+function symSvg(id) {
+  const ln = 'stroke="#1b2430" stroke-width="2" fill="none"';
+  const base = a => `<svg viewBox="0 0 300 90" xmlns="http://www.w3.org/2000/svg">
+    <line x1="60" y1="45" x2="250" y2="45" ${ln}/>
+    <line x1="60" y1="45" x2="25" y2="70" ${ln}/>
+    <polygon points="25,70 36,62 31,57" fill="#1b2430"/>${a}</svg>`;
+  switch (id) {
+    case 'fillet': return base(`<polygon points="120,45 120,25 140,45" ${ln}/><text x="95" y="40" font-size="14" font-weight="bold" fill="#7c2d12">z6</text>`);
+    case 'butt_v': return base(`<path d="M120,45 L130,25 M140,45 L130,25 M120,45 L140,45" ${ln} stroke-dasharray="0"/><path d="M120,45 L130,28 L140,45" ${ln}/><text x="148" y="33" font-size="12" fill="#7c2d12">60°</text>`);
+    case 'butt_bevel': return base(`<path d="M120,45 L120,25 L138,45" ${ln}/>`);
+    case 'butt_u': return base(`<path d="M120,30 q10,18 20,0 M120,30 L120,25 M140,30 L140,25" ${ln}/><text x="150" y="33" font-size="12" fill="#7c2d12">U</text>`);
+    case 'pjp_cjp': return base(`<polygon points="240,35 285,35 263,55" fill="#fbeee7" stroke="#7c2d12" stroke-width="1.5"/><text x="247" y="48" font-size="11" font-weight="bold" fill="#7c2d12">CJP</text><line x1="250" y1="45" x2="240" y2="45" ${ln}/>`);
+    case 'all_around': return base(`<circle cx="60" cy="45" r="9" ${ln}/><polygon points="120,45 120,25 140,45" ${ln}/>`);
+    case 'field': return base(`<line x1="60" y1="45" x2="60" y2="18" ${ln}/><polygon points="60,18 85,24 60,31" fill="#1b2430"/><polygon points="120,45 120,25 140,45" ${ln}/>`);
+    case 'intermittent': return base(`<polygon points="100,45 100,25 120,45" ${ln}/><text x="128" y="38" font-size="13" font-weight="bold" fill="#7c2d12">3×50(100)</text><text x="70" y="40" font-size="13" font-weight="bold" fill="#7c2d12">z6</text>`);
+    case 'contour': return base(`<polygon points="120,45 120,25 140,45" ${ln}/><line x1="118" y1="21" x2="142" y2="21" ${ln}/><text x="148" y="26" font-size="12" fill="#7c2d12">G</text>`);
+    case 'iso_dashed': return base(`<line x1="60" y1="55" x2="250" y2="55" stroke="#aa4322" stroke-width="2" stroke-dasharray="7,5"/><polygon points="120,45 120,25 140,45" ${ln}/><text x="170" y="75" font-size="11" fill="#aa4322">ISO: identification (dashed) line</text>`);
+    default: return base('');
+  }
+}
+function renderSym() {
+  document.getElementById('tab-sym').innerHTML =
+    `<div class="h2x">${LANG==='vi'?'Ký hiệu hàn — AWS A2.4 / ISO 2553':'Weld symbols — AWS A2.4 / ISO 2553'}</div>
+    <div class="symgrid">` + D.SYMBOLS.map(s => `
+      <div class="symcard">${symSvg(s.id)}<h4>${esc(T(s.name))}</h4>
+        <div class="codes"><span>AWS: ${esc(s.aws)}</span><span>ISO: ${esc(s.iso)}</span></div>
+        <p>${esc(T(s.desc))}</p></div>`).join('') + '</div>';
+}
+
+/* ===== Tools tab ===== */
+function renderTools() {
+  const v = LANG === 'vi';
+  document.getElementById('tab-tool').innerHTML = `
+    <div class="h2x">${v?'Công cụ tính nhanh':'Quick tools'}</div>
+
+    <div class="seccard"><h3>📐 ${v?'Đổi cạnh ↔ chiều dày tính toán hàn góc':'Fillet leg ↔ throat converter'}</h3>
+      <div class="inrow"><span class="lab">${v?'Cạnh z (mm)':'Leg z (mm)'}</span><input type="number" step="any" id="tz" value="8"></div>
+      <div class="inrow"><span class="lab">${v?'Throat a (mm)':'Throat a (mm)'}</span><input type="number" step="any" id="ta" value=""></div>
+      <div class="res"><div class="lbl">${v?'Công thức':'Formula'}</div><div class="big" id="tzo">a = z / √2 ≈ 0.707·z</div></div>
+      <div class="note" style="font-size:12px;color:var(--muted);margin-top:8px">EN 1993-1-8 / ISO 2553: a = z·cos45° (mối hàn góc đều cạnh).</div>
+    </div>
+
+    <div class="seccard"><h3>🔥 ${v?'Nhiệt lượng đường hàn Q + thời gian chờ NDT':'Heat input Q + NDT hold time'}</h3>
+      <div class="inrow"><span class="lab">${v?'Điện áp U (V)':'Voltage U (V)'}</span><input type="number" step="any" id="hu" value="28"></div>
+      <div class="inrow"><span class="lab">${v?'Dòng điện I (A)':'Current I (A)'}</span><input type="number" step="any" id="hi" value="280"></div>
+      <div class="inrow"><span class="lab">${v?'Tốc độ hàn v (mm/phút)':'Travel speed v (mm/min)'}</span><input type="number" step="any" id="hv" value="300"></div>
+      <div class="inrow"><span class="lab">${v?'Hệ số k (SAW 1.0 · SMAW/FCAW 0.8 · GMAW 0.8 · TIG 0.6)':'k factor'}</span><input type="number" step="any" id="hk" value="0.8"></div>
+      <div class="inrow"><span class="lab">${v?'Kích thước mối hàn a/s (mm)':'Weld size a/s (mm)'}</span><input type="number" step="any" id="hs" value="8"></div>
+      <div id="hout"></div>
+      <div class="note" style="font-size:12px;color:var(--muted);margin-top:8px">Q = k·U·I·60/(v·1000) kJ/mm (EN 1011-1). Hold time: EN 1090-2 Table 23, S275–S460, preheat Method A.</div>
+    </div>
+
+    <div class="seccard"><h3>🌡 ${v?'Kiểm tra gia nhiệt sơ bộ AWS (tham khảo Table 5.8)':'AWS preheat quick reference (Table 5.8)'}</h3>
+      <div class="tblwrap"><table>
+        <tr><th>${v?'Chiều dày lớn nhất t (mm)':'Thickest part t (mm)'}</th><th>${v?'Cat. B (vd A572 Gr50, SMAW LH)':'Cat. B (e.g. A572 Gr50, LH SMAW)'}</th></tr>
+        <tr><td>3 ≤ t ≤ 20</td><td>0°C (32°F)</td></tr>
+        <tr><td>20 &lt; t ≤ 38</td><td>10°C (50°F)</td></tr>
+        <tr><td>38 &lt; t ≤ 65</td><td>65°C (150°F)</td></tr>
+        <tr><td>t &gt; 65</td><td>110°C (225°F)</td></tr>
+      </table></div>
+      <div class="note" style="font-size:12px;color:var(--muted);margin-top:8px">${v?'Tóm tắt AWS D1.1:2020 Table 5.8 Category B — luôn đối chiếu WPS & bảng gốc cho mác thép/quy trình cụ thể.':'Summary of AWS D1.1 Table 5.8 Cat. B — always verify against WPS & full table.'}</div>
+    </div>`;
+
+  const tz = document.getElementById('tz'), ta = document.getElementById('ta'), tzo = document.getElementById('tzo');
+  const syncZ = () => { const z = parseFloat(tz.value)||0; ta.value = Math.round(z/Math.SQRT2*100)/100; tzo.textContent = `z = ${z} mm → a = ${ta.value} mm`; };
+  const syncA = () => { const a = parseFloat(ta.value)||0; tz.value = Math.round(a*Math.SQRT2*100)/100; tzo.textContent = `a = ${a} mm → z = ${tz.value} mm`; };
+  tz.addEventListener('input', syncZ); ta.addEventListener('input', syncA); syncZ();
+
+  const hrun = () => {
+    const U=+document.getElementById('hu').value||0, I=+document.getElementById('hi').value||0,
+      vv=+document.getElementById('hv').value||1, k=+document.getElementById('hk').value||0.8,
+      s=+document.getElementById('hs').value||0;
+    const Q = k*U*I*60/(vv*1000);
+    let hold;
+    if (s<=6) hold = LANG==='vi'?'Chỉ cần nguội':'Cooling only';
+    else if (s<=12) hold = Q<=3?'8 h':'16 h';
+    else hold = Q<=3?'16 h':'24 h';
+    document.getElementById('hout').innerHTML = `<div class="res"><div class="lbl">Q & hold time</div>
+      <div class="big">Q = ${Math.round(Q*100)/100} kJ/mm → ${LANG==='vi'?'thời gian chờ NDT':'NDT hold'}: <b>${hold}</b></div></div>`;
+  };
+  ['hu','hi','hv','hk','hs'].forEach(id => document.getElementById(id).addEventListener('input', hrun));
+  hrun();
+}
+
+/* ===== render all ===== */
+function renderAll() { renderVT(); renderDetail(); renderNDT(); renderCK(); renderSym(); renderTools(); }
+setLang(LANG);
+
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#14532d">
+<title>QC Sơn — Sơn phủ kết cấu thép</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/icon-180.png">
+<style>
+  :root{
+    --bg:#eff3ef; --card:#fff; --ink:#1b2430; --muted:#5f6b7a; --line:#dde5dd;
+    --brand:#14532d; --brand2:#1f7a43; --soft:#e7f4ec;
+    --pass:#0f6e56; --pass-soft:#e3f6ee; --fail:#aa4322; --fail-soft:#fbeae2;
+    --warn:#8a5a00; --warn-soft:#fdf3e2;
+    --r:14px; --sh:0 1px 2px rgba(20,45,30,.07),0 6px 20px rgba(20,45,30,.06);
+    --navh:62px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.5}
+  button{font-family:inherit;cursor:pointer;border:0;background:none}
+  input,select{font-family:inherit}
+  .appbar{position:sticky;top:0;z-index:40;background:linear-gradient(180deg,#14532d,#0e3d21);color:#fff;
+    padding:max(10px,env(safe-area-inset-top)) 14px 10px;display:flex;align-items:center;gap:10px}
+  .appbar .back{color:#fff;font-size:15px;font-weight:700;padding:6px 8px 6px 0}
+  .appbar h1{font-size:16px;margin:0;font-weight:700;line-height:1.15}
+  .appbar .sub{font-size:11px;opacity:.8}
+  .appbar .sp{flex:1}
+  .lang{display:flex;background:rgba(255,255,255,.16);border-radius:8px;overflow:hidden}
+  .lang button{color:#fff;padding:6px 11px;font-size:13px;font-weight:700;opacity:.65}
+  .lang button.on{background:#fff;color:var(--brand);opacity:1}
+  .main{max-width:1180px;margin:0 auto;padding:12px 14px calc(var(--navh) + 24px)}
+  @media(min-width:980px){.main{padding-bottom:28px}}
+  .nav{position:fixed;bottom:0;left:0;right:0;z-index:40;background:#fff;border-top:1px solid var(--line);
+    display:flex;justify-content:space-around;padding:6px 2px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(0,0,0,.05)}
+  .nav button{display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--muted);font-size:10px;font-weight:600;padding:4px 5px;border-radius:10px;flex:1}
+  .nav button .ic{font-size:19px;line-height:1}
+  .nav button.on{color:var(--brand)}
+  @media(min-width:980px){
+    .nav{position:static;max-width:1180px;margin:10px auto 0;border:1px solid var(--line);border-radius:12px;justify-content:flex-start;gap:4px;padding:6px;box-shadow:var(--sh)}
+    .nav button{flex:none;flex-direction:row;gap:7px;font-size:14px;padding:9px 16px}
+    .nav button .ic{font-size:17px}
+    .nav button.on{background:var(--soft)}
+  }
+  .seccard{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:14px;padding:16px}
+  .seccard h3{margin:0 0 8px;font-size:16px;color:var(--brand)}
+  .seccard .note{font-size:12.5px;color:var(--muted);margin:8px 0 0}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{border:1px solid var(--line);padding:8px 9px;text-align:left;vertical-align:top}
+  th{background:var(--soft);color:var(--brand);font-size:11.5px;text-transform:uppercase;letter-spacing:.3px}
+  tr:nth-child(even) td{background:#f8fbf8}
+  .tblwrap{overflow-x:auto;margin-top:10px}
+  .evidence{background:#fbfdf9;border:1px dashed var(--brand2);border-radius:12px;padding:12px 14px;margin-top:12px}
+  .evidence .h{font-size:11px;font-weight:800;letter-spacing:.5px;color:var(--brand);text-transform:uppercase}
+  .quote{font-style:italic;color:#33404e;border-left:3px solid var(--soft);padding-left:10px;margin-top:8px;font-size:12.5px}
+  .warn{background:var(--warn-soft);border:1px solid #f0d9a8;border-left:4px solid var(--warn);border-radius:10px;padding:10px 12px;font-size:12.5px;color:#6b4700;margin-top:10px}
+  .accept{background:#f4faf7;border:1px solid #cfe8df;border-left:4px solid var(--pass);border-radius:10px;padding:11px 13px;font-size:13px;margin-top:10px}
+  .inrow{display:flex;gap:10px;align-items:center;margin:8px 0}
+  .inrow .lab{font-size:12px;color:var(--muted);flex:1}
+  .inrow input,.inrow textarea{width:130px;padding:9px 10px;border:1px solid var(--line);border-radius:10px;font-size:16px;text-align:right}
+  textarea.wide{width:100% !important;text-align:left !important;min-height:64px;font-size:14px !important}
+  .res{background:#0d2b18;color:#fff;border-radius:12px;padding:14px;margin-top:12px}
+  .res .lbl{font-size:11px;text-transform:uppercase;letter-spacing:.5px;opacity:.7}
+  .res .big{font-size:16px;font-weight:700;margin-top:4px;line-height:1.5}
+  .verdict{border-radius:12px;padding:16px;text-align:center;margin-top:12px;font-weight:800;font-size:20px}
+  .verdict.pass{background:var(--pass-soft);color:var(--pass);border:1px solid #b7e0d2}
+  .verdict.fail{background:var(--fail-soft);color:var(--fail);border:1px solid #f0c4b3}
+  .h2x{font-size:18px;font-weight:800;color:var(--brand);margin:14px 2px 10px}
+  /* defects */
+  .search{position:relative;margin:12px 0 10px}
+  .search input{width:100%;padding:13px 14px 13px 42px;border:1px solid var(--line);border-radius:12px;font-size:16px;background:#fff;box-shadow:var(--sh)}
+  .search .mag{position:absolute;left:14px;top:50%;transform:translateY(-50%);opacity:.5;font-size:17px}
+  .filters{display:flex;gap:7px;overflow-x:auto;padding:2px 0 8px}
+  .filters::-webkit-scrollbar{display:none}
+  .chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 13px;font-size:13px;font-weight:600;color:#33404e;white-space:nowrap;flex:none}
+  .chip.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+  .dfcard{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:12px;overflow:hidden}
+  .dfcard summary{padding:13px 16px;font-weight:700;font-size:14.5px;cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px}
+  .dfcard summary::-webkit-details-marker{display:none}
+  .dfcard summary .gb{margin-left:auto;font-size:10.5px;font-weight:800;padding:2px 8px;border-radius:6px;background:var(--soft);color:var(--brand);flex:none}
+  .dfcard .body{padding:0 16px 14px;font-size:13.5px}
+  .dfcard .row{margin-top:9px}
+  .dfcard .row b{color:var(--brand)}
+  .ckphase{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:14px;overflow:hidden}
+  .ckphase .ph{display:flex;align-items:center;gap:10px;padding:13px 16px;background:var(--soft);font-weight:800;color:var(--brand);font-size:15px}
+  .ckphase .ph .pct{margin-left:auto;font-size:12.5px;font-weight:700;color:var(--muted)}
+  .ckitem{display:flex;gap:11px;padding:12px 16px;border-top:1px solid var(--line);cursor:pointer;align-items:flex-start}
+  .ckitem:hover{background:#f8fbf8}
+  .ckitem .box{width:22px;height:22px;border:2px solid #b9cabd;border-radius:6px;flex:none;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;margin-top:1px}
+  .ckitem.done .box{background:var(--pass);border-color:var(--pass)}
+  .ckitem .tx{font-size:13.5px}
+  .ckitem.done .tx{color:var(--muted);text-decoration:line-through}
+  .ckitem .rf{display:block;font-size:11px;color:var(--brand2);font-weight:700;margin-top:3px}
+  .ckbar{display:flex;gap:8px;margin-bottom:12px}
+  .btn{padding:10px 16px;border-radius:10px;background:var(--brand);color:#fff;font-weight:700;font-size:13.5px}
+  .btn.alt{background:#e4ece5;color:#33503c}
+  .tab{display:none}
+  .tab.on{display:block}
+  ul.tight{margin:8px 0 0;padding-left:20px;font-size:13.5px}
+  ul.tight li{margin-bottom:7px}
+</style>
+</head>
+<body>
+
+<header class="appbar">
+  <a class="back" href="../">←</a>
+  <div>
+    <h1>QC Sơn — Sơn phủ kết cấu thép</h1>
+    <div class="sub">ISO 8501/8502/8503 · ISO 19840 · ISO 12944 · EN 1090-2 · SSPC-PA2</div>
+  </div>
+  <div class="sp"></div>
+  <div class="lang">
+    <button id="lvVi" class="on">VI</button>
+    <button id="lvEn">EN</button>
+  </div>
+</header>
+
+<main class="main">
+  <section class="tab on" id="tab-surf"></section>
+  <section class="tab" id="tab-env"></section>
+  <section class="tab" id="tab-dft"></section>
+  <section class="tab" id="tab-test"></section>
+  <section class="tab" id="tab-def"></section>
+  <section class="tab" id="tab-ck"></section>
+</main>
+
+<nav class="nav">
+  <button data-tab="surf" class="on"><span class="ic">🧹</span><span data-vi="Bề mặt" data-en="Surface">Bề mặt</span></button>
+  <button data-tab="env"><span class="ic">🌡</span><span data-vi="Môi trường" data-en="Climate">Môi trường</span></button>
+  <button data-tab="dft"><span class="ic">📏</span><span data-vi="DFT" data-en="DFT">DFT</span></button>
+  <button data-tab="test"><span class="ic">🔬</span><span data-vi="Kiểm tra" data-en="Tests">Kiểm tra</span></button>
+  <button data-tab="def"><span class="ic">⚠️</span><span data-vi="Lỗi sơn" data-en="Defects">Lỗi sơn</span></button>
+  <button data-tab="ck"><span class="ic">☑️</span><span data-vi="Checklist" data-en="Checklist">Checklist</span></button>
+</nav>
+
+<script src="data.js"></script>
+<script>
+const D = window.SON_DATA;
+let LANG = localStorage.getItem('son_lang') || 'vi';
+const T = o => (o && typeof o === 'object') ? (o[LANG] || o.vi || '') : (o || '');
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const softWarn = () => `<div class="warn">${LANG==='vi'
+  ? '⚠ Mục tổng hợp từ tiêu chuẩn không có bản PDF gốc trong dự án — đối chiếu bản gốc/spec dự án trước khi dùng làm căn cứ nghiệm thu chính thức.'
+  : '⚠ Compiled reference — verify against the original standard/project spec before formal acceptance.'}</div>`;
+
+document.querySelectorAll('.nav button').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.nav button').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+    document.getElementById('tab-' + b.dataset.tab).classList.add('on');
+    window.scrollTo(0, 0);
+  });
+});
+function setLang(l) {
+  LANG = l; localStorage.setItem('son_lang', l);
+  document.getElementById('lvVi').classList.toggle('on', l === 'vi');
+  document.getElementById('lvEn').classList.toggle('on', l === 'en');
+  document.querySelectorAll('[data-vi]').forEach(e => e.textContent = e.dataset[l]);
+  renderAll();
+}
+document.getElementById('lvVi').onclick = () => setLang('vi');
+document.getElementById('lvEn').onclick = () => setLang('en');
+
+/* ===== SURFACE ===== */
+function renderSurf() {
+  const S = D.SURFACE; const v = LANG === 'vi';
+  let h = `<div class="h2x">${v?'Chuẩn bị bề mặt':'Surface preparation'}</div>`;
+
+  h += `<div class="seccard"><h3>${esc(T(S.rustGrades.title))}</h3>
+    <div class="tblwrap"><table><tr><th>${v?'Cấp':'Grade'}</th><th>${v?'Mô tả':'Description'}</th></tr>
+    ${S.rustGrades.rows.map(r => `<tr><td><b>${r.g}</b></td><td>${esc(T(r.d))}</td></tr>`).join('')}</table></div>
+    <div class="note">${esc(S.rustGrades.ref)}</div>${S.rustGrades.soft?softWarn():''}</div>`;
+
+  h += `<div class="seccard"><h3>${esc(T(S.blastGrades.title))}</h3>
+    <div class="tblwrap"><table><tr><th>${v?'Cấp':'Grade'}</th><th>${v?'Phương pháp':'Method'}</th><th>${v?'Mô tả':'Description'}</th><th>${v?'Ứng dụng':'Use'}</th></tr>
+    ${S.blastGrades.rows.map(r => `<tr><td><b>${r.g}</b></td><td>${esc(T(r.m))}</td><td>${esc(T(r.d))}</td><td>${esc(T(r.use))}</td></tr>`).join('')}</table></div>
+    <div class="note">${esc(S.blastGrades.ref)}</div>${S.blastGrades.soft?softWarn():''}</div>`;
+
+  h += `<div class="seccard"><h3>${esc(T(S.prepGrades.title))}</h3>
+    <div class="note">${esc(T(S.prepGrades.note))}</div>
+    <div class="tblwrap"><table><tr><th>${v?'Tuổi thọ chống ăn mòn':'Expected life'}</th><th>${v?'Cấp ăn mòn':'Corrosivity'}</th><th>${v?'Cấp chuẩn bị':'Prep grade'}</th></tr>
+    ${S.prepGrades.rows.map(r => `<tr><td>${esc(T(r.life))}</td><td>${esc(T(r.cat))}</td><td><b>${esc(T(r.p))}</b></td></tr>`).join('')}</table></div>
+    <div class="tblwrap"><table><tr><th>P</th><th>${v?'Yêu cầu':'Requirement'}</th></tr>
+    ${S.prepGrades.pDesc.map(r => `<tr><td><b>${r.p}</b></td><td>${esc(T(r.d))}</td></tr>`).join('')}</table></div>
+    <div class="evidence"><div class="h">${v?'Dẫn chứng':'Evidence'}</div>
+      <div style="font-size:13px;font-weight:700;margin-top:6px">${esc(S.prepGrades.ref)}</div>
+      <div class="quote">"${esc(S.prepGrades.quote)}"</div></div></div>`;
+
+  h += `<div class="seccard"><h3>${esc(T(S.profile.title))}</h3>
+    <div class="tblwrap"><table><tr><th>${v?'Cấp':'Grade'}</th><th>${v?'Mô tả':'Description'}</th></tr>
+    ${S.profile.rows.map(r => `<tr><td><b>${esc(T(r.g))}</b></td><td>${esc(T(r.d))}</td></tr>`).join('')}</table></div>
+    <div class="note">${esc(T(S.profile.note))} — ${esc(S.profile.ref)}</div>${S.profile.soft?softWarn():''}</div>`;
+
+  h += `<div class="seccard"><h3>${esc(T(S.contamination.title))}</h3>
+    <div class="tblwrap"><table><tr><th>${v?'Tạp chất':'Contaminant'}</th><th>${v?'Giới hạn thông dụng':'Typical limit'}</th><th>${v?'Phương pháp':'Method'}</th></tr>
+    ${S.contamination.rows.map(r => `<tr><td><b>${esc(T(r.t))}</b></td><td>${esc(T(r.lim))}</td><td>${esc(T(r.m))}</td></tr>`).join('')}</table></div>
+    ${S.contamination.soft?softWarn():''}</div>`;
+
+  /* ISO 12944 */
+  const Z = D.ISO12944;
+  h += `<div class="seccard"><h3>${v?'Cấp ăn mòn & hệ sơn — ISO 12944':'Corrosivity & systems — ISO 12944'}</h3>
+    <div class="tblwrap"><table><tr><th>${v?'Cấp':'Cat.'}</th><th>${v?'Môi trường':'Environment'}</th></tr>
+    ${Z.cats.map(r => `<tr><td><b>${r.c}</b></td><td>${esc(T(r.env))}</td></tr>`).join('')}</table></div>
+    <div class="tblwrap"><table><tr><th>${v?'Độ bền':'Durability'}</th><th>${v?'Khoảng':'Range'}</th></tr>
+    ${Z.durability.rows.map(r => `<tr><td><b>${r.k}</b></td><td>${esc(T(r.v))}</td></tr>`).join('')}</table></div>
+    <div class="note">${esc(T(Z.durability.note))}</div>
+    <div class="tblwrap"><table><tr><th>${v?'Cấp/độ bền':'Cat./durability'}</th><th>${v?'Hệ sơn ví dụ':'Example system'}</th></tr>
+    ${Z.systems.map(r => `<tr><td><b>${r.c}</b></td><td>${esc(T(r.s))}</td></tr>`).join('')}</table></div>
+    <div class="note">${esc(T(Z.sysNote))}</div>${Z.soft?softWarn():''}</div>`;
+
+  document.getElementById('tab-surf').innerHTML = h;
+}
+
+/* ===== ENV + dew point calc ===== */
+function dewPoint(t, rh) {
+  const a = 17.625, b = 243.04;
+  const g = Math.log(rh / 100) + a * t / (b + t);
+  return b * g / (a - g);
+}
+function renderEnv() {
+  const v = LANG === 'vi';
+  let h = `<div class="h2x">${v?'Điều kiện môi trường thi công':'Application climate conditions'}</div>`;
+  h += `<div class="seccard"><h3>🧮 ${v?'Tính điểm sương & đánh giá điều kiện sơn':'Dew point calculator & condition check'}</h3>
+    <div class="inrow"><span class="lab">${v?'Nhiệt độ không khí (°C)':'Air temperature (°C)'}</span><input type="number" step="any" id="eT" value="30"></div>
+    <div class="inrow"><span class="lab">${v?'Độ ẩm tương đối RH (%)':'Relative humidity (%)'}</span><input type="number" step="any" id="eRH" value="75"></div>
+    <div class="inrow"><span class="lab">${v?'Nhiệt độ bề mặt thép (°C)':'Steel surface temp (°C)'}</span><input type="number" step="any" id="eTs" value="32"></div>
+    <div id="eOut"></div>
+    <div class="note">${v?'Điểm sương tính theo công thức Magnus (xấp xỉ ±0.4°C trong dải 0–60°C). Hiện trường nên dùng máy đo điểm sương/whirling hygrometer + bảng tra ISO 8502-4.':'Dew point per Magnus formula (±0.4°C, 0–60°C). On site use dew point meter / hygrometer + ISO 8502-4 tables.'}</div></div>`;
+  h += D.ENV.rules.map(r => `<div class="seccard"><h3>${esc(T(r.t))}</h3>
+    <div style="font-size:13.5px">${esc(T(r.d))}</div>
+    <div class="note">📎 ${esc(T(r.ref))}</div></div>`).join('');
+  h += `<div class="seccard"><h3>${v?'Tần suất đo & ghi chép':'Measurement frequency & records'}</h3><div style="font-size:13.5px">${esc(T(D.ENV.measure))}</div></div>`;
+  document.getElementById('tab-env').innerHTML = h;
+  const run = () => {
+    const t = +document.getElementById('eT').value || 0, rh = +document.getElementById('eRH').value || 0, ts = +document.getElementById('eTs').value || 0;
+    const dp = dewPoint(t, rh), delta = ts - dp;
+    const okDp = delta >= 3, okRh = rh <= 85;
+    document.getElementById('eOut').innerHTML = `
+      <div class="res"><div class="lbl">${v?'Kết quả':'Result'}</div><div class="big">
+        ${v?'Điểm sương':'Dew point'} Td = <b>${Math.round(dp*10)/10}°C</b><br>
+        Ts − Td = <b>${Math.round(delta*10)/10}°C</b> (${v?'yêu cầu':'required'} ≥ 3°C)<br>
+        RH = ${rh}% (${v?'yêu cầu':'required'} ≤ 85%)</div></div>
+      <div class="verdict ${okDp&&okRh?'pass':'fail'}">${okDp&&okRh?(v?'✓ ĐƯỢC PHÉP SƠN':'✓ OK TO PAINT'):(v?'✗ KHÔNG SƠN — chờ điều kiện đạt':'✗ DO NOT PAINT')}</div>`;
+  };
+  ['eT','eRH','eTs'].forEach(id => document.getElementById(id).addEventListener('input', run));
+  run();
+}
+
+/* ===== DFT ===== */
+function renderDft() {
+  const v = LANG === 'vi';
+  let h = `<div class="h2x">${v?'Chiều dày màng khô (DFT)':'Dry film thickness (DFT)'}</div>`;
+  h += `<div class="seccard"><h3>🧮 ${v?'Đánh giá loạt số đo DFT (ISO 19840)':'Evaluate DFT readings (ISO 19840)'}</h3>
+    <div class="inrow"><span class="lab">NDFT (µm)</span><input type="number" step="any" id="dN" value="240"></div>
+    <div class="inrow"><span class="lab">${v?'DFT tối đa cho phép (µm, mặc định 3×NDFT)':'Max DFT (µm, default 3×NDFT)'}</span><input type="number" step="any" id="dM" placeholder="auto"></div>
+    <div class="inrow" style="display:block"><span class="lab">${v?'Các số đo (cách nhau bằng dấu phẩy/khoảng trắng)':'Readings (comma/space separated)'}</span>
+      <textarea class="wide" id="dR">245 252 238 230 199 260 247 215 241 236</textarea></div>
+    <div id="dOut"></div>
+    <div class="note">${v?'Quy tắc ISO 19840: trung bình ≥ NDFT; mọi giá trị ≥ 80% NDFT; ≤ max. Nhớ trừ hiệu chỉnh độ nhám (mặc định 25µm cho profile Trung bình) nếu máy chưa hiệu chuẩn trên bề mặt phun.':'ISO 19840: mean ≥ NDFT; all ≥ 80% NDFT; ≤ max. Subtract roughness correction (default 25µm, Medium) if not zeroed on blasted surface.'}</div></div>`;
+  h += `<div class="seccard"><h3>${esc(T(D.DFT.iso19840.title))}</h3>
+    <ul class="tight">${D.DFT.iso19840.rules.map(r => `<li>${esc(T(r))}</li>`).join('')}</ul>
+    <div class="note">${esc(T(D.DFT.iso19840.sampling))}</div>
+    <div class="note">📎 ${esc(D.DFT.iso19840.ref)}</div>${D.DFT.iso19840.soft?softWarn():''}</div>`;
+  h += `<div class="seccard"><h3>${esc(T(D.DFT.sspc.title))}</h3>
+    <ul class="tight">${D.DFT.sspc.rules.map(r => `<li>${esc(T(r))}</li>`).join('')}</ul>
+    <div class="note">📎 ${esc(D.DFT.sspc.ref)}</div>${D.DFT.sspc.soft?softWarn():''}</div>`;
+  h += `<div class="seccard"><h3>🧮 ${v?'WFT cần phun để đạt NDFT':'WFT required for NDFT'}</h3>
+    <div class="inrow"><span class="lab">NDFT (µm)</span><input type="number" step="any" id="wN" value="120"></div>
+    <div class="inrow"><span class="lab">${v?'% thể tích chất rắn (VS%)':'Volume solids (%)'}</span><input type="number" step="any" id="wS" value="65"></div>
+    <div class="inrow"><span class="lab">${v?'% pha loãng (theo thể tích)':'Thinner added (vol %)'}</span><input type="number" step="any" id="wT" value="0"></div>
+    <div id="wOut"></div>
+    <div class="note">WFT = NDFT / VS% × (100 + %thinner) — ISO 2808.</div></div>`;
+  document.getElementById('tab-dft').innerHTML = h;
+
+  const run = () => {
+    const N = +document.getElementById('dN').value || 0;
+    const Mraw = document.getElementById('dM').value;
+    const M = Mraw ? +Mraw : 3 * N;
+    const reads = (document.getElementById('dR').value.match(/[\d.]+/g) || []).map(Number).filter(x => x > 0);
+    if (!reads.length || !N) { document.getElementById('dOut').innerHTML = ''; return; }
+    const mean = reads.reduce((a, b) => a + b, 0) / reads.length;
+    const min = Math.min(...reads), max = Math.max(...reads);
+    const below80 = reads.filter(r => r < 0.8 * N);
+    const okMean = mean >= N, ok80 = below80.length === 0, okMax = max <= M;
+    document.getElementById('dOut').innerHTML = `
+      <div class="res"><div class="lbl">${LANG==='vi'?'Kết quả':'Result'} (n = ${reads.length})</div><div class="big">
+        ${LANG==='vi'?'Trung bình':'Mean'} = <b>${Math.round(mean)}µm</b> ${okMean?'≥':'<'} NDFT ${N}µm ${okMean?'✓':'✗'}<br>
+        Min = ${min}µm (80% NDFT = ${Math.round(0.8*N)}µm) ${ok80?'✓':'✗ — '+below80.length+(LANG==='vi'?' điểm dưới 80%':' readings < 80%')}<br>
+        Max = ${max}µm (${LANG==='vi'?'giới hạn':'limit'} ${Math.round(M)}µm) ${okMax?'✓':'✗'}</div></div>
+      <div class="verdict ${okMean&&ok80&&okMax?'pass':'fail'}">${okMean&&ok80&&okMax?(LANG==='vi'?'✓ ĐẠT theo ISO 19840':'✓ PASS per ISO 19840'):(LANG==='vi'?'✗ KHÔNG ĐẠT':'✗ FAIL')}</div>`;
+  };
+  ['dN','dM','dR'].forEach(id => document.getElementById(id).addEventListener('input', run));
+  run();
+
+  const wrun = () => {
+    const N = +document.getElementById('wN').value || 0, S = +document.getElementById('wS').value || 1, Th = +document.getElementById('wT').value || 0;
+    const wft = N / S * (100 + Th);
+    document.getElementById('wOut').innerHTML = `<div class="res"><div class="lbl">WFT</div><div class="big">≈ <b>${Math.round(wft)} µm</b> ${LANG==='vi'?'màng ướt cần phun':'wet film required'}</div></div>`;
+  };
+  ['wN','wS','wT'].forEach(id => document.getElementById(id).addEventListener('input', wrun));
+  wrun();
+}
+
+/* ===== TESTS ===== */
+function renderTest() {
+  const v = LANG === 'vi';
+  let h = `<div class="h2x">${v?'Kiểm tra bám dính & màng sơn':'Adhesion & film tests'}</div>`;
+  h += D.TESTS.map(t => `<div class="seccard"><h3>${esc(T(t.name))}</h3>
+    <div style="font-size:12px;font-weight:700;color:var(--brand2)">📎 ${esc(T(t.std))}</div>
+    <div class="accept"><b>${v?'Tiêu chí chấp nhận':'Acceptance'}:</b> ${esc(T(t.crit))}</div>
+    <div style="font-size:13.5px;margin-top:9px"><b>${v?'Cách làm':'Procedure'}:</b> ${esc(T(t.how))}</div>
+    ${t.soft?softWarn():''}</div>`).join('');
+  /* cross-cut spacing calculator */
+  h += `<div class="seccard"><h3>🧮 ${v?'Khoảng cách rạch cross-cut theo DFT':'Cross-cut spacing by DFT'}</h3>
+    <div class="inrow"><span class="lab">DFT (µm)</span><input type="number" step="any" id="ccD" value="180"></div>
+    <div id="ccOut"></div></div>`;
+  document.getElementById('tab-test').innerHTML = h;
+  const run = () => {
+    const d = +document.getElementById('ccD').value || 0;
+    let s, ok = true;
+    if (d <= 60) s = '1 mm'; else if (d <= 120) s = '2 mm'; else if (d <= 250) s = '3 mm';
+    else { s = LANG==='vi' ? 'KHÔNG dùng cross-cut — DFT > 250µm, dùng pull-off (ISO 4624)' : 'Do NOT use cross-cut — DFT > 250µm, use pull-off'; ok = false; }
+    document.getElementById('ccOut').innerHTML = `<div class="res"><div class="lbl">ISO 2409</div><div class="big">${ok?(LANG==='vi'?'Khoảng cách rạch: ':'Spacing: ')+'<b>'+s+'</b>':s}</div></div>`;
+  };
+  document.getElementById('ccD').addEventListener('input', run); run();
+}
+
+/* ===== DEFECTS ===== */
+let dq = '', dg = 'ALL';
+const DGRPS = [
+  { k: 'ALL', vi: 'Tất cả', en: 'All' },
+  { k: 'APP', vi: 'Khi thi công', en: 'Application' },
+  { k: 'FILM', vi: 'Màng sơn', en: 'Film' },
+  { k: 'FAIL', vi: 'Hư hỏng', en: 'Failure' },
+  { k: 'AGE', vi: 'Lão hóa', en: 'Ageing' }
+];
+function renderDef() {
+  const v = LANG === 'vi';
+  const q = dq.trim().toLowerCase();
+  const rows = D.DEFECTS.filter(d =>
+    (dg === 'ALL' || d.grp === dg) &&
+    (!q || (T(d.name) + T(d.sym) + T(d.cause)).toLowerCase().includes(q)));
+  document.getElementById('tab-def').innerHTML = `
+    <div class="search"><span class="mag">🔍</span><input id="dfq" type="search" placeholder="${v?'Tìm lỗi: chảy, phồng, lỗ kim...':'Search defects...'}" value="${esc(dq)}"></div>
+    <div class="filters">${DGRPS.map(g => `<button class="chip ${dg===g.k?'on':''}" data-g="${g.k}">${v?g.vi:g.en}</button>`).join('')}</div>
+    <div style="font-size:12.5px;color:var(--muted);margin:2px 2px 8px">${rows.length} ${v?'lỗi':'defects'}</div>
+    ${rows.map(d => `<details class="dfcard"><summary>⚠️ ${esc(T(d.name))}<span class="gb">${(DGRPS.find(g=>g.k===d.grp)||{})[v?'vi':'en']||''}</span></summary>
+      <div class="body">
+        <div class="row"><b>${v?'Hiện tượng':'Symptom'}:</b> ${esc(T(d.sym))}</div>
+        <div class="row"><b>${v?'Nguyên nhân':'Causes'}:</b> ${esc(T(d.cause))}</div>
+        <div class="row"><b>${v?'Khắc phục':'Remedy'}:</b> ${esc(T(d.fix))}</div>
+        <div class="accept"><b>${v?'Tiêu chí chấp nhận':'Acceptance'}:</b> ${esc(T(d.accept))}</div>
+      </div></details>`).join('')}`;
+  document.getElementById('dfq').addEventListener('input', e => { dq = e.target.value; const p = document.activeElement; renderDef(); const el = document.getElementById('dfq'); el.focus(); el.setSelectionRange(el.value.length, el.value.length); });
+  document.querySelectorAll('#tab-def .chip').forEach(c => c.onclick = () => { dg = c.dataset.g; renderDef(); });
+}
+
+/* ===== CHECKLIST ===== */
+const CK_KEY = 'son_ck_v1';
+function ckState() { try { return JSON.parse(localStorage.getItem(CK_KEY)) || {}; } catch (e) { return {}; } }
+function renderCK() {
+  const v = LANG === 'vi';
+  const st = ckState();
+  let h = `<div class="ckbar">
+    <button class="btn alt" id="ckReset">↺ ${v?'Làm mới':'Reset'}</button>
+    <button class="btn" id="ckCopy">📋 ${v?'Copy báo cáo':'Copy report'}</button></div>`;
+  D.CHECKLIST.forEach((ph, pi) => {
+    const done = ph.items.filter((_, ii) => st[pi + '_' + ii]).length;
+    h += `<div class="ckphase"><div class="ph">${ph.icon} ${esc(T(ph.phase))}<span class="pct">${done}/${ph.items.length}</span></div>
+      ${ph.items.map((it, ii) => `
+        <div class="ckitem ${st[pi+'_'+ii]?'done':''}" data-k="${pi}_${ii}">
+          <div class="box">${st[pi+'_'+ii]?'✓':''}</div>
+          <div class="tx">${esc(T(it.t))}<span class="rf">📎 ${esc(T(it.ref))}</span></div>
+        </div>`).join('')}</div>`;
+  });
+  const el = document.getElementById('tab-ck');
+  el.innerHTML = h;
+  el.querySelectorAll('.ckitem').forEach(c => c.onclick = () => {
+    const s = ckState(); s[c.dataset.k] = !s[c.dataset.k];
+    localStorage.setItem(CK_KEY, JSON.stringify(s)); renderCK();
+  });
+  el.querySelector('#ckReset').onclick = () => { localStorage.removeItem(CK_KEY); renderCK(); };
+  el.querySelector('#ckCopy').onclick = () => {
+    const s = ckState();
+    let txt = (v?'BÁO CÁO CHECKLIST QC SƠN':'PAINTING QC CHECKLIST REPORT') + ' — ' + new Date().toLocaleString() + '\n';
+    D.CHECKLIST.forEach((ph, pi) => {
+      txt += '\n## ' + T(ph.phase) + '\n';
+      ph.items.forEach((it, ii) => txt += (s[pi+'_'+ii] ? '[x] ' : '[ ] ') + T(it.t) + ' (' + T(it.ref) + ')\n');
+    });
+    navigator.clipboard.writeText(txt).then(() => alert(v?'Đã copy!':'Copied!'));
+  };
+}
+
+function renderAll() { renderSurf(); renderEnv(); renderDft(); renderTest(); renderDef(); renderCK(); }
+setLang(LANG);
+
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+</script>
+</body>
+</html>

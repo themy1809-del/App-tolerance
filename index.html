@@ -30,7 +30,7 @@
   .main{flex:1;display:flex;align-items:center;justify-content:center;padding:24px 20px}
   .pick{width:100%;max-width:1100px;display:grid;grid-template-columns:1fr;gap:14px}
   @media(min-width:680px){.pick{grid-template-columns:1fr 1fr;gap:18px}}
-  @media(min-width:1280px){.pick{grid-template-columns:repeat(4,1fr);gap:18px;max-width:1400px}}
+  @media(min-width:1280px){.pick{grid-template-columns:repeat(3,1fr);gap:18px;max-width:1400px}}
 
   .card{background:rgba(255,255,255,.07);backdrop-filter:blur(8px);
     border:1px solid rgba(255,255,255,.18);border-radius:var(--r);padding:22px 20px;
@@ -90,15 +90,29 @@
       <div class="em">📏</div>
       <h2>Tra cứu Dung sai</h2>
       <div class="ds">Tiêu chuẩn dung sai kết cấu thép theo EN 1090, ISO 13920, AISC, AWS, MBMA, JASS6 — kèm tính toán &amp; đánh giá Đạt/Không đạt.</div>
-      <div class="meta">6 tiêu chuẩn quốc tế</div>
+      <div class="meta">7 tiêu chuẩn quốc tế</div>
     </a>
 
     <button class="card wps locked" id="wpsCard" type="button">
       <div class="em">🔥</div>
       <h2>Thư viện WPS</h2>
       <div class="ds">Welding Procedure Specifications — tra cứu nhanh theo công việc, xem sketch &amp; thông số. Hỗ trợ scan QR &amp; offline.</div>
-      <div class="meta">🔒 Cần mật khẩu · 74 WPS</div>
+      <div class="meta">🔒 Cần mật khẩu · 75 WPS</div>
     </button>
+
+    <a class="card han" href="han/">
+      <div class="em">👁</div>
+      <h2>QC Hàn</h2>
+      <div class="ds">Tiêu chí nghiệm thu mối hàn: ngoại quan (AWS D1.1 Table 8.1, ISO 5817 B/C/D, JASS 6), NDT theo EXC, checklist QC, ký hiệu hàn — kèm tính Đạt/Không đạt.</div>
+      <div class="meta">🧮 VT · NDT · Checklist</div>
+    </a>
+
+    <a class="card son" href="son/">
+      <div class="em">🎨</div>
+      <h2>QC Sơn</h2>
+      <div class="ds">Chuẩn bị bề mặt (ISO 8501, Sa 2½), điều kiện môi trường + điểm sương, DFT (ISO 19840/SSPC-PA2), bám dính, 16 lỗi sơn + khắc phục, hệ ISO 12944.</div>
+      <div class="meta">🧮 Dew point · DFT · Checklist</div>
+    </a>
 
     <a class="card vt" href="vattu/">
       <div class="em">📦</div>
