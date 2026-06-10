@@ -4,58 +4,94 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0c447c">
-<title>DaiDung — Tra cứu Dung sai & WPS</title>
+<title>DaiDung QC Suite — Công cụ kết cấu thép</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
 <style>
   :root{
-    --bg:#eef1f5; --ink:#1b2430; --muted:#5f6b7a; --line:#dfe5ec;
-    --brand:#0c447c; --brand2:#185fa5; --soft:#e6f1fb;
-    --r:18px;
+    --bg:#f2f4f7; --ink:#16202c; --muted:#5d6b7c; --line:#e2e7ee;
+    --brand:#0c447c; --brand2:#185fa5;
+    --r:16px; --sh:0 1px 2px rgba(18,30,48,.06),0 8px 28px rgba(18,30,48,.08);
+    --sh-hover:0 2px 4px rgba(18,30,48,.08),0 16px 44px rgba(18,30,48,.14);
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html,body{margin:0;padding:0;height:100%}
+  html,body{margin:0;padding:0}
   body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-    background:linear-gradient(160deg,#0c447c 0%,#0a3a6b 40%,#082d54 100%);color:#fff;
-    min-height:100vh;display:flex;flex-direction:column}
+    background:var(--bg);color:var(--ink);font-size:15px;line-height:1.55;min-height:100vh;
+    display:flex;flex-direction:column}
   a{color:inherit;text-decoration:none}
 
-  .header{padding:max(20px,env(safe-area-inset-top)) 20px 10px;text-align:center}
-  .logo{width:64px;height:64px;border-radius:14px;background:#fff;color:var(--brand);
-    display:inline-flex;align-items:center;justify-content:center;font-weight:900;font-size:22px;
-    box-shadow:0 8px 24px rgba(0,0,0,.18);margin-bottom:14px}
-  .header h1{margin:0 0 6px;font-size:24px;font-weight:800;letter-spacing:-.3px}
-  .header .sub{font-size:13.5px;opacity:.85;font-weight:500}
+  /* ===== top bar ===== */
+  .topbar{background:linear-gradient(135deg,#0c447c 0%,#0a3a6b 55%,#093158 100%);color:#fff;
+    padding:max(14px,env(safe-area-inset-top)) 0 0}
+  .tb-in{max-width:1180px;margin:0 auto;padding:6px 22px 0;display:flex;align-items:center;gap:13px}
+  .logo{width:42px;height:42px;border-radius:11px;background:#fff;color:var(--brand);
+    display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;flex:none;
+    box-shadow:0 4px 14px rgba(0,0,0,.25)}
+  .tb-t{font-size:16.5px;font-weight:800;letter-spacing:-.2px;line-height:1.2}
+  .tb-s{font-size:11.5px;opacity:.75;font-weight:500}
+  .tb-sp{flex:1}
+  .tb-link{font-size:12.5px;font-weight:700;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);
+    padding:8px 14px;border-radius:9px;transition:.15s}
+  .tb-link:hover{background:rgba(255,255,255,.22)}
 
-  .main{flex:1;display:flex;align-items:center;justify-content:center;padding:24px 20px}
-  .pick{width:100%;max-width:1100px;display:grid;grid-template-columns:1fr;gap:14px}
-  @media(min-width:680px){.pick{grid-template-columns:1fr 1fr;gap:18px}}
-  @media(min-width:1280px){.pick{grid-template-columns:repeat(3,1fr);gap:18px;max-width:1400px}}
+  .hero{max-width:1180px;margin:0 auto;padding:30px 22px 38px;color:#fff;width:100%}
+  .hero h1{margin:0 0 8px;font-size:clamp(22px,3.4vw,32px);font-weight:850;letter-spacing:-.5px;line-height:1.18}
+  .hero p{margin:0;font-size:14px;opacity:.82;max-width:660px}
+  .hero .stats{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+  .stat{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:10px;
+    padding:7px 13px;font-size:12px;font-weight:700;letter-spacing:.2px}
+  .stat b{font-size:13.5px}
 
-  .card{background:rgba(255,255,255,.07);backdrop-filter:blur(8px);
-    border:1px solid rgba(255,255,255,.18);border-radius:var(--r);padding:22px 20px;
-    cursor:pointer;transition:.18s;text-align:center;display:flex;flex-direction:column;
-    align-items:center;gap:8px;min-height:240px;justify-content:center;color:#fff;font-family:inherit;width:100%}
-  .card:hover{background:rgba(255,255,255,.13);transform:translateY(-2px);box-shadow:0 12px 36px rgba(0,0,0,.22)}
-  .card:active{transform:scale(.99)}
-  .card .em{font-size:54px;line-height:1;margin-bottom:6px}
-  .card h2{margin:0;font-size:22px;font-weight:800;letter-spacing:-.2px}
-  .card .ds{font-size:13.5px;opacity:.85;line-height:1.5;max-width:300px}
-  .card .meta{margin-top:10px;font-size:11.5px;opacity:.7;background:rgba(255,255,255,.12);
-    padding:5px 11px;border-radius:8px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;display:inline-flex;align-items:center;gap:6px}
-  .card.locked .meta{background:rgba(224,160,0,.3)}
+  /* ===== content ===== */
+  .wrap{max-width:1180px;margin:-22px auto 0;padding:0 22px 30px;width:100%;flex:1}
+  .sec{margin-bottom:26px}
+  .sec-h{display:flex;align-items:center;gap:10px;margin:26px 2px 12px}
+  .sec-h .ln{flex:1;height:1px;background:var(--line)}
+  .sec-h .tt{font-size:12px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted)}
+  .grid{display:grid;grid-template-columns:1fr;gap:14px}
+  @media(min-width:640px){.grid{grid-template-columns:1fr 1fr}}
+  @media(min-width:1024px){.grid{grid-template-columns:1fr 1fr 1fr}}
 
-  .footer{text-align:center;padding:18px 20px max(20px,env(safe-area-inset-bottom));
-    font-size:11.5px;opacity:.65}
-  .topactions{position:absolute;top:max(14px,env(safe-area-inset-top));right:14px;font-size:11.5px;opacity:.75}
-  .topactions a{padding:5px 10px;border-radius:8px;background:rgba(255,255,255,.1);text-decoration:none}
+  .mcard{position:relative;background:#fff;border:1px solid var(--line);border-radius:var(--r);
+    padding:20px 20px 16px;box-shadow:var(--sh);cursor:pointer;transition:.18s;
+    display:flex;flex-direction:column;gap:10px;text-align:left;font-family:inherit;width:100%;overflow:hidden}
+  .mcard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--ac)}
+  .mcard:hover{transform:translateY(-3px);box-shadow:var(--sh-hover);border-color:#d3dce8}
+  .mcard:active{transform:scale(.99)}
+  .mtop{display:flex;align-items:center;gap:12px}
+  .mic{width:46px;height:46px;border-radius:12px;background:var(--ac-soft);color:var(--ac);
+    display:flex;align-items:center;justify-content:center;font-size:23px;flex:none}
+  .mtt{font-size:16.5px;font-weight:800;letter-spacing:-.2px;line-height:1.25}
+  .msub{font-size:11px;font-weight:700;color:var(--ac);text-transform:uppercase;letter-spacing:.6px}
+  .mds{font-size:13px;color:var(--muted);line-height:1.55;flex:1}
+  .mmeta{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:2px}
+  .pill{font-size:10.5px;font-weight:800;padding:4px 9px;border-radius:7px;background:#f1f4f8;color:#46566a;letter-spacing:.2px}
+  .pill.ac{background:var(--ac-soft);color:var(--ac)}
+  .pill.lock{background:#fdf3e2;color:#8a5a00}
+  .go{position:absolute;right:16px;top:20px;color:#c3cedb;font-size:17px;font-weight:800;transition:.18s}
+  .mcard:hover .go{color:var(--ac);transform:translateX(3px)}
 
-  /* Password modal */
-  .pw-ovl{position:fixed;inset:0;z-index:100;background:rgba(8,18,42,.85);backdrop-filter:blur(6px);
+  /* accent palettes per module */
+  .m-dim {--ac:#0c447c;--ac-soft:#e6f0fb}
+  .m-han {--ac:#7c2d12;--ac-soft:#fbeee7}
+  .m-son {--ac:#14532d;--ac-soft:#e7f4ec}
+  .m-wps {--ac:#b4421f;--ac-soft:#fdeee8}
+  .m-vt  {--ac:#3b6d11;--ac-soft:#eef6e6}
+  .m-ld  {--ac:#5f4ab7;--ac-soft:#efecfa}
+
+  .footer{border-top:1px solid var(--line);background:#fff}
+  .ft-in{max-width:1180px;margin:0 auto;padding:16px 22px calc(16px + env(safe-area-inset-bottom));
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+  .ft-in .sp{flex:1}
+  .ver{font-weight:700;background:#f1f4f8;padding:3px 9px;border-radius:7px}
+
+  /* ===== password modal (giữ nguyên logic) ===== */
+  .pw-ovl{position:fixed;inset:0;z-index:100;background:rgba(8,18,42,.55);backdrop-filter:blur(6px);
     display:none;align-items:center;justify-content:center;padding:20px}
   .pw-ovl.on{display:flex}
-  .pw-card{background:#fff;color:#1b2430;border-radius:18px;padding:26px 24px;max-width:360px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4)}
-  .pw-em{font-size:48px;line-height:1;margin-bottom:10px}
+  .pw-card{background:#fff;color:#1b2430;border-radius:18px;padding:26px 24px;max-width:360px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+  .pw-em{font-size:44px;line-height:1;margin-bottom:10px}
   .pw-h{font-size:18px;font-weight:800;margin:0 0 4px;color:var(--brand)}
   .pw-s{font-size:13px;color:var(--muted);margin:0 0 18px}
   .pw-card input{width:100%;padding:14px 16px;border:1px solid var(--line);background:#fafcfe;color:var(--ink);
@@ -72,66 +108,109 @@
   .pw-rem{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:14px;font-size:12.5px;color:var(--muted);cursor:pointer}
   .pw-rem input{width:auto;padding:0;-webkit-text-security:none;font-size:14px;letter-spacing:0;background:transparent;border:0;font-weight:400}
 </style>
-<link rel="stylesheet" href="desktop-scale.css?v=1">
 </head>
 <body>
 
-<div class="topactions"><a href="huong-dan.html" target="_blank">📖 Hướng dẫn</a></div>
+<div class="topbar">
+  <div class="tb-in">
+    <div class="logo">DD</div>
+    <div>
+      <div class="tb-t">DaiDung QC Suite</div>
+      <div class="tb-s">Kết cấu thép · Quality Control</div>
+    </div>
+    <div class="tb-sp"></div>
+    <a class="tb-link" href="huong-dan.html" target="_blank">📖 Hướng dẫn</a>
+  </div>
+  <div class="hero">
+    <h1>Tra cứu tiêu chuẩn &amp; nghiệm thu —<br>tất cả trong một chỗ</h1>
+    <p>Dung sai, mối hàn, sơn phủ, vật tư đầu vào, WPS và xử lý sai hỏng — kèm dẫn chứng điều khoản, hình cách đo và tính Đạt/Không đạt tự động. Hoạt động offline.</p>
+    <div class="stats">
+      <span class="stat"><b>7</b> tiêu chuẩn quốc tế</span>
+      <span class="stat"><b>75</b> WPS</span>
+      <span class="stat"><b>45</b> lỗi + khắc phục</span>
+      <span class="stat"><b>20+</b> calculator</span>
+      <span class="stat">📱 Offline / PWA</span>
+    </div>
+  </div>
+</div>
 
-<header class="header">
-  <div class="logo">DD</div>
-  <h1>DaiDung — Công cụ kết cấu thép</h1>
-  <div class="sub">Bạn cần tra cứu gì?</div>
-</header>
+<div class="wrap">
 
-<main class="main">
-  <div class="pick">
-    <a class="card tol" href="dungsai/">
-      <div class="em">📏</div>
-      <h2>Tra cứu Dung sai</h2>
-      <div class="ds">Tiêu chuẩn dung sai kết cấu thép theo EN 1090, ISO 13920, AISC, AWS, MBMA, JASS6 — kèm tính toán &amp; đánh giá Đạt/Không đạt.</div>
-      <div class="meta">7 tiêu chuẩn quốc tế</div>
+  <div class="sec-h"><span class="tt">📐 Tiêu chuẩn &amp; nghiệm thu</span><span class="ln"></span></div>
+  <div class="grid">
+    <a class="mcard m-dim" href="dungsai/">
+      <span class="go">→</span>
+      <div class="mtop"><div class="mic">📏</div><div>
+        <div class="msub">Kích thước · Hình học</div>
+        <div class="mtt">Tra cứu Dung sai</div>
+      </div></div>
+      <div class="mds">EN 1090-2, ISO 13920, AISC 303, AWS, MBMA, JASS 6 — tra giới hạn theo cấu kiện, tính Đạt/Không đạt, trích dẫn điều khoản, checklist đo kiểm.</div>
+      <div class="mmeta"><span class="pill ac">7 tiêu chuẩn</span><span class="pill">⭐ Bookmark</span><span class="pill">☑️ Checklist</span></div>
     </a>
 
-    <button class="card wps locked" id="wpsCard" type="button">
-      <div class="em">🔥</div>
-      <h2>Thư viện WPS</h2>
-      <div class="ds">Welding Procedure Specifications — tra cứu nhanh theo công việc, xem sketch &amp; thông số. Hỗ trợ scan QR &amp; offline.</div>
-      <div class="meta">🔒 Cần mật khẩu · 75 WPS</div>
-    </button>
-
-    <a class="card han" href="han/">
-      <div class="em">👁</div>
-      <h2>QC Hàn</h2>
-      <div class="ds">Tiêu chí nghiệm thu mối hàn: ngoại quan (AWS D1.1 Table 8.1, ISO 5817 B/C/D, JASS 6), NDT theo EXC, checklist QC, ký hiệu hàn — kèm tính Đạt/Không đạt.</div>
-      <div class="meta">🧮 VT · NDT · Checklist</div>
+    <a class="mcard m-han" href="han/">
+      <span class="go">→</span>
+      <div class="mtop"><div class="mic">👁</div><div>
+        <div class="msub">Mối hàn · VT / NDT</div>
+        <div class="mtt">QC Hàn</div>
+      </div></div>
+      <div class="mds">Tiêu chí chấp nhận ngoại quan (AWS D1.1 Table 8.1, ISO 5817 B/C/D, JASS 6), NDT theo EXC, hình cách đo từng khuyết tật, checklist trước/trong/sau hàn, ký hiệu hàn.</div>
+      <div class="mmeta"><span class="pill ac">25 tiêu chí</span><span class="pill">📐 Hình cách đo</span><span class="pill">🧮 Đạt/Không đạt</span></div>
     </a>
 
-    <a class="card son" href="son/">
-      <div class="em">🎨</div>
-      <h2>QC Sơn</h2>
-      <div class="ds">Chuẩn bị bề mặt (ISO 8501, Sa 2½), điều kiện môi trường + điểm sương, DFT (ISO 19840/SSPC-PA2), bám dính, 16 lỗi sơn + khắc phục, hệ ISO 12944.</div>
-      <div class="meta">🧮 Dew point · DFT · Checklist</div>
-    </a>
-
-    <a class="card vt" href="vattu/">
-      <div class="em">📦</div>
-      <h2>Kiểm tra Vật tư ĐẦU VÀO</h2>
-      <div class="ds">Nghiệm thu vật tư khi NHẬP KHO — spec, dung sai, sketch cách đo, MTC, bề mặt + gỉ, UT. Theo EN/ASTM/JIS/ISO.</div>
-      <div class="meta">📐 Có sketch cách đo</div>
-    </a>
-
-    <a class="card ld" href="luongdu/">
-      <div class="em">⚙</div>
-      <h2>Lượng dư & Sai hỏng</h2>
-      <div class="ds">Tính lượng dư co rút hàn, giãn nở nhiệt, gập, kerf cắt. Tra nguyên nhân + biện pháp khắc phục cho 22 lỗi thường gặp theo AWS/EN.</div>
-      <div class="meta">📐 8 calculator · 22 lỗi</div>
+    <a class="mcard m-son" href="son/">
+      <span class="go">→</span>
+      <div class="mtop"><div class="mic">🎨</div><div>
+        <div class="msub">Sơn phủ · Chống ăn mòn</div>
+        <div class="mtt">QC Sơn</div>
+      </div></div>
+      <div class="mds">Chuẩn bị bề mặt ISO 8501 (Sa 2½, P1–P3), điểm sương +3°C, DFT theo ISO 19840/SSPC-PA2, bám dính, 16 lỗi sơn, hệ sơn ISO 12944 — kèm hình cách đo.</div>
+      <div class="mmeta"><span class="pill ac">DFT · Dew point</span><span class="pill">📐 Hình cách đo</span><span class="pill">⚠️ 16 lỗi sơn</span></div>
     </a>
   </div>
-</main>
+
+  <div class="sec-h"><span class="tt">🏭 Sản xuất &amp; vật tư</span><span class="ln"></span></div>
+  <div class="grid">
+    <button class="mcard m-wps" id="wpsCard" type="button">
+      <span class="go">→</span>
+      <div class="mtop"><div class="mic">🔥</div><div>
+        <div class="msub">Quy trình hàn</div>
+        <div class="mtt">Thư viện WPS</div>
+      </div></div>
+      <div class="mds">75 WPS tra theo công việc, vật liệu, tư thế — xem thông số máy hàn, sketch, PDF gốc, in QR dán bản vẽ, phiếu thợ hàn. Copy thông số vào báo cáo.</div>
+      <div class="mmeta"><span class="pill lock">🔒 Mật khẩu nội bộ</span><span class="pill ac">75 WPS</span><span class="pill">🔳 QR</span></div>
+    </button>
+
+    <a class="mcard m-vt" href="vattu/">
+      <span class="go">→</span>
+      <div class="mtop"><div class="mic">📦</div><div>
+        <div class="msub">Đầu vào · IMI</div>
+        <div class="mtt">Kiểm tra Vật tư</div>
+      </div></div>
+      <div class="mds">Nghiệm thu khi nhập kho: spec + dung sai EN/ASTM/JIS, sketch cách đo, MTC &amp; heat number, cấp gỉ, UT tách lớp — kèm checklist nghiệm thu đầu vào.</div>
+      <div class="mmeta"><span class="pill ac">44 vật tư</span><span class="pill">📐 Sketch cách đo</span><span class="pill">☑️ Checklist</span></div>
+    </a>
+
+    <a class="mcard m-ld" href="luongdu/">
+      <span class="go">→</span>
+      <div class="mtop"><div class="mic">⚙️</div><div>
+        <div class="msub">Công nghệ · Sai hỏng</div>
+        <div class="mtt">Lượng dư &amp; Sai hỏng</div>
+      </div></div>
+      <div class="mds">8 calculator (co rút hàn, giãn nhiệt, gập + spring-back, kerf, vát mép), 45 lỗi với nguyên nhân Ishikawa 5M+1E, ảnh thật, tạo NCR nháp 1 chạm.</div>
+      <div class="mmeta"><span class="pill ac">8 calculator</span><span class="pill">45 lỗi · ảnh thật</span><span class="pill">📋 NCR</span></div>
+    </a>
+  </div>
+
+</div>
 
 <footer class="footer">
-  DaiDung Metallic Manufacture Construction &amp; Trade Corporation
+  <div class="ft-in">
+    <span>© DaiDung Metallic Manufacture Construction &amp; Trade Corporation</span>
+    <span class="sp"></span>
+    <span class="ver">v2.0 · 06/2026</span>
+    <a href="reset.html" style="font-weight:700">↺ Xóa cache</a>
+  </div>
 </footer>
 
 <div class="pw-ovl" id="pwOvl" onclick="if(event.target===this)closePw()">

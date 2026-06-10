@@ -186,6 +186,7 @@
 </main>
 
 <script src="data.js"></script>
+<script src="sketches.js"></script>
 <script>
 const D = window.HAN_DATA;
 let LANG = localStorage.getItem('han_lang') || 'vi';
@@ -294,6 +295,15 @@ function renderDetail() {
         ${r.clause.soft ? `<div class="warn">${LANG==='vi'?'⚠ Mục tham khảo thực hành — đối chiếu bản gốc tiêu chuẩn trước khi dùng làm căn cứ nghiệm thu chính thức.':'⚠ Practice reference — verify against original standard before formal acceptance.'}</div>` : ''}
       </div>
     </div>`;
+  /* Cách đo + hình vẽ cách đo */
+  const skKey = (window.HAN_SK_MAP || {})[r.id];
+  if (skKey && window.HAN_SK && window.HAN_SK[skKey]) {
+    const steps = (window.HAN_MEASURE || {})[skKey];
+    html += `<div class="card"><h2>📐 ${LANG==='vi'?'Cách đo':'How to measure'}</h2><div class="cbody">
+      <div style="background:#fffdf9;border:1px solid var(--line);border-radius:10px;padding:8px">${window.HAN_SK[skKey]()}</div>
+      ${steps ? `<div style="font-size:13.5px;margin-top:10px;line-height:1.65">${esc(steps[LANG] || steps.vi)}</div>` : ''}
+    </div></div>`;
+  }
   html += photoBlock(r);
   if (r.calc) {
     html += `<div class="card"><h2>🧮 ${LANG==='vi'?'Đánh giá Đạt / Không đạt':'PASS / FAIL evaluation'}</h2><div class="cbody" id="calcBody">

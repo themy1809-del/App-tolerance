@@ -72,7 +72,7 @@ window.LD_DATA = {
         {key:'t', label:'Chiều dày t (mm)', def:3, unit:'mm'},
         {key:'k', label:'Hệ số tâm trung hoà K (thép mềm 0.33 · cứng 0.5)', def:0.40, unit:''}
       ],
-      calc: (v) => ({ value: (Math.PI/180) * v.theta * (v.R + v.k * v.t), unit: 'mm', note: 'Chiều dài blank = L1 + L2 + BA - 2 × (R+t)' }),
+      calc: (v) => ({ value: (Math.PI/180) * v.theta * (v.R + v.k * v.t), unit: 'mm', note: 'Blank = L1 + L2 + BA − 2×(R+t), với L1, L2 = kích thước NGOÀI 2 cánh (gập 90°)' }),
       ref: 'ASME B89 + Steel Sheet Forming Handbook',
       sketch: 'bend'
     },
@@ -81,7 +81,7 @@ window.LD_DATA = {
       cat: 'form',
       title: 'Spring-back gập (đàn hồi ngược)',
       desc: 'Sau khi gập, tôn nảy lại 1 phần. Phải gập quá để đạt góc thiết kế.',
-      formula: 'θ_over = θ × (1 + R × σ_y / (E × t))',
+      formula: 'θ_over = θ × (1 + 3Rσ_y/(E·t) − 4(Rσ_y/(E·t))³)  (Gardiner)',
       vars: [
         {key:'theta', label:'Góc thiết kế θ (°)', def:90, unit:'°'},
         {key:'R', label:'Bán kính R (mm)', def:5, unit:'mm'},
@@ -115,16 +115,17 @@ window.LD_DATA = {
       cat: 'weld',
       title: 'Vát mép & root face (groove preparation)',
       desc: 'Chuẩn bị mép trước hàn butt joint — góc vát + root face + khe hở.',
-      formula: 'Loss = t × tan(α/2) × 2 (mỗi mặt)',
+      formula: 'A ≈ (t − root)² × tan(α/2) + gap × t   (rãnh V đơn, α = góc vát TỔNG)',
       vars: [
         {key:'t', label:'Chiều dày t (mm)', def:20, unit:'mm'},
-        {key:'alpha', label:'Góc vát rãnh α (°)', def:60, unit:'°'},
+        {key:'alpha', label:'Góc vát rãnh TỔNG α (°)', def:60, unit:'°'},
         {key:'root', label:'Root face (mm)', def:2, unit:'mm'},
         {key:'gap', label:'Khe hở gốc (mm)', def:3, unit:'mm'}
       ],
       calc: (v) => {
-        var area_per_side = 0.5 * (v.t - v.root) * (v.t - v.root) * Math.tan(v.alpha/2 * Math.PI/180);
-        return { value: 2 * area_per_side, unit: 'mm²', note: 'Diện tích cần bù bằng kim loại đắp · Khe ' + v.gap + 'mm · Root ' + v.root + 'mm' };
+        var vGroove = (v.t - v.root) * (v.t - v.root) * Math.tan(v.alpha/2 * Math.PI/180);
+        var gapArea = v.gap * v.t;
+        return { value: vGroove + gapArea, unit: 'mm²', note: 'Tiết diện kim loại đắp tối thiểu (chưa kể gia cường ~10%): rãnh V ' + Math.round(vGroove) + ' + khe hở ' + Math.round(gapArea) + ' mm²' };
       },
       ref: 'AWS D1.1 Fig 3.4 + ISO 9692-1',
       sketch: 'bevel'
@@ -169,7 +170,7 @@ window.LD_DATA = {
       remedies:['Mở khe gốc 3-5mm','Mài root face xuống ≤ 1.5mm','Tăng I 20%','Hàn lớp gốc chậm + lưu chuyển','Đổi que nhỏ hơn (Ø2.5 thay Ø3.2)'],
       ref:'AWS D1.1 §7.13 + EN 287-1', sketch:'def_lop' },
 
-    { id:'slag-inclusion', cat:'weld', rootCause:'man', acceptance:{ok:'Ø ≤ 0.2s (cấp B)', notok:'Ø > 0.4s hoặc dài > 4s', table:[['Cấp B','Ø ≤ 0.2s, max 3 mm','pass'],['Cấp C','Ø ≤ 0.3s, max 4 mm','warn'],['Cấp D','Ø ≤ 0.4s, max 6 mm','warn']], ref:'ISO 5817:2023 §5.3'}, name:'Xỉ kẹt (Slag Inclusion)', severity:'medium',
+    { id:'slag-inclusion', cat:'weld', rootCause:'man', acceptance:{ok:'h ≤ 0.2s (cấp B)', notok:'h > 0.4s — đào sạch + hàn lại', table:[['Cấp B','h ≤ 0.2s, max 2 mm','pass'],['Cấp C','h ≤ 0.3s, max 3 mm','warn'],['Cấp D','h ≤ 0.4s, max 4 mm','warn']], ref:'ISO 5817:2014 Table 1 No.2.7 (301/302/303) — solid inclusions (h = kích thước khuyết tật, s = chiều dày mối hàn)'}, name:'Xỉ kẹt (Slag Inclusion)', severity:'medium',
       symptom:'Xỉ bị giam giữa các lớp hàn. Phát hiện qua RT (vùng tối không tròn như rỗ).',
       causes:['Vệ sinh xỉ kém giữa lớp','Profile lớp lõm (concave)','Hàn ngược chiều với lớp trước','Tốc độ quá chậm tạo xỉ chìm','Que/dây dòng quá thấp'],
       remedies:['Đánh xỉ + đánh thép bằng bàn chải kim','Giữ profile lồi nhẹ','Hàn cùng chiều với lớp trước','Tăng I tăng tốc nhẹ','Đảo chỉ điều chỉnh'],
