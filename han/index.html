@@ -144,6 +144,7 @@
 
 <nav class="nav">
   <button data-tab="vt" class="on"><span class="ic">👁</span><span data-vi="Ngoại quan" data-en="Visual">Ngoại quan</span></button>
+  <button data-tab="do"><span class="ic">📷</span><span data-vi="Đo ảnh" data-en="Photo">Đo ảnh</span></button>
   <button data-tab="ndt"><span class="ic">📡</span><span data-vi="NDT" data-en="NDT">NDT</span></button>
   <button data-tab="ck"><span class="ic">☑️</span><span data-vi="Checklist" data-en="Checklist">Checklist</span></button>
   <button data-tab="sym"><span class="ic">⛯</span><span data-vi="Ký hiệu" data-en="Symbols">Ký hiệu</span></button>
@@ -170,6 +171,9 @@
       </div>
     </div>
   </section>
+
+  <!-- TAB ĐO ẢNH -->
+  <section class="tab" id="tab-do"></section>
 
   <!-- TAB NDT -->
   <section class="tab" id="tab-ndt"></section>
@@ -313,6 +317,12 @@ function renderDetail() {
   }
   el.innerHTML = html;
   if (r.calc) {
+    /* nhận giá trị gửi từ tab Đo ảnh */
+    if (window.PHOTO_PENDING && window.PHOTO_PENDING.rule === r.id) {
+      const inp = el.querySelector(`#calcBody input[data-k="${window.PHOTO_PENDING.key}"]`);
+      if (inp) { inp.value = window.PHOTO_PENDING.val; inp.style.background = '#fdf3e2'; }
+      window.PHOTO_PENDING = null;
+    }
     const run = () => {
       const vals = {};
       el.querySelectorAll('#calcBody input').forEach(i => vals[i.dataset.k] = parseFloat(i.value) || 0);
@@ -488,9 +498,189 @@ function renderTools() {
   hrun();
 }
 
+/* ============================================================
+   ĐO ẢNH — đo khuyết tật trên ảnh chụp + gửi vào calculator
+   Hiệu chuẩn bằng vật chuẩn trong ảnh (thước/dưỡng/đồng xu).
+   Hồ sơ lưu IndexedDB trên máy. Đo trên ảnh = THAM KHẢO.
+   ============================================================ */
+const PHOTO_TARGET = {
+  aws_undercut_static: 'd', aws_undercut_cyclic: 'd', iso_undercut: 'h', jass_undercut: 'd',
+  aws_undersize: 'm', aws_profile: 'r',
+  iso_excess_butt: 'h', iso_convex_fillet: 'h', iso_excess_pen: 'h', iso_sagging: 'h',
+  iso_pore: 'd', aws_porosity_cyclic: 'dia', iso_throat_under: 'h', iso_asym: 'h'
+};
+const PH = { img: null, scale: 0, mode: null, pts: [], cal: null, measures: [], canvas: null, ctx: null };
+
+function phDb() {
+  return new Promise((res, rej) => {
+    const rq = indexedDB.open('han_photos_v1', 1);
+    rq.onupgradeneeded = () => rq.result.createObjectStore('recs', { keyPath: 'id', autoIncrement: true });
+    rq.onsuccess = () => res(rq.result); rq.onerror = () => rej(rq.error);
+  });
+}
+async function phSave(rec) { const db = await phDb(); return new Promise((res, rej) => { const tx = db.transaction('recs', 'readwrite'); tx.objectStore('recs').add(rec); tx.oncomplete = res; tx.onerror = () => rej(tx.error); }); }
+async function phAll() { const db = await phDb(); return new Promise((res, rej) => { const rq = db.transaction('recs').objectStore('recs').getAll(); rq.onsuccess = () => res(rq.result || []); rq.onerror = () => rej(rq.error); }); }
+async function phDel(id) { const db = await phDb(); return new Promise((res, rej) => { const tx = db.transaction('recs', 'readwrite'); tx.objectStore('recs').delete(id); tx.oncomplete = res; tx.onerror = () => rej(tx.error); }); }
+
+function initPhoto() {
+  const v = LANG === 'vi';
+  const ruleOpts = Object.keys(PHOTO_TARGET)
+    .map(id => { const r = D.WELD_VT.find(x => x.id === id); return r ? `<option value="${id}">${esc(T(r.title))} (${esc(r.std)})</option>` : ''; }).join('');
+  document.getElementById('tab-do').innerHTML = `
+    <div class="h2x">📷 ${v?'Đo khuyết tật trên ảnh':'Measure defects on photo'}</div>
+    <div class="warn">⚠ ${v?'Đo trên ảnh chỉ THAM KHẢO (sai số do góc chụp/phối cảnh). Nghiệm thu chính thức phải đo bằng dụng cụ. Chụp vuông góc bề mặt, đặt thước/dưỡng cùng mặt phẳng với khuyết tật.':'Photo measurement is INDICATIVE only (perspective error). Official acceptance requires gauge measurement. Shoot perpendicular, place ruler in same plane as defect.'}</div>
+    <div class="seccard">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+        <label class="btn" style="cursor:pointer;display:inline-block">📁 ${v?'Chọn / chụp ảnh':'Choose / take photo'}<input type="file" id="phFile" accept="image/*" capture="environment" style="display:none"></label>
+        <button class="btn alt" id="phCal">🎯 ${v?'Hiệu chuẩn':'Calibrate'}</button>
+        <button class="btn alt" id="phMeasure">📏 ${v?'Đo':'Measure'}</button>
+        <button class="btn alt" id="phClear">↺ ${v?'Xóa đo':'Clear'}</button>
+      </div>
+      <div id="phStatus" style="font-size:13px;font-weight:700;color:var(--brand);min-height:20px">${v?'Bước 1: chọn ảnh có kèm vật chuẩn (thước/dưỡng).':'Step 1: choose photo with a reference object.'}</div>
+      <canvas id="phCanvas" style="width:100%;max-width:760px;display:none;border:1px solid var(--line);border-radius:10px;margin-top:10px;cursor:crosshair;touch-action:none"></canvas>
+      <div id="phList" style="margin-top:10px"></div>
+    </div>
+    <div class="seccard" id="phSaveCard" style="display:none">
+      <h3>💾 ${v?'Lưu hồ sơ ảnh':'Save photo record'}</h3>
+      <div class="inrow"><span class="lab">${v?'Dự án / Mã cấu kiện':'Project / piece mark'}</span><input type="text" id="phProj" style="width:200px;text-align:left"></div>
+      <div class="inrow"><span class="lab">${v?'Ghi chú':'Note'}</span><input type="text" id="phNote" style="width:200px;text-align:left"></div>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button class="btn" id="phSaveBtn">💾 ${v?'Lưu vào máy':'Save'}</button>
+        <button class="btn alt" id="phExport">⬇ ${v?'Tải ảnh chú thích':'Download annotated'}</button>
+      </div>
+    </div>
+    <div class="seccard">
+      <h3>🗂 ${v?'Hồ sơ đã lưu (máy này)':'Saved records (this device)'}</h3>
+      <div id="phGallery" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px"></div>
+      <div class="note" style="margin-top:8px">${v?'Mẹo: ảnh đã gán loại khuyết tật ở đây chính là dữ liệu huấn luyện AI nhận dạng sau này — chụp càng nhiều càng tốt.':'Tip: labeled photos here become training data for future AI recognition.'}</div>
+    </div>
+    <template id="phRuleOpts">${ruleOpts}</template>`;
+
+  PH.canvas = document.getElementById('phCanvas');
+  PH.ctx = PH.canvas.getContext('2d');
+  document.getElementById('phFile').addEventListener('change', phLoad);
+  document.getElementById('phCal').onclick = () => { if (!PH.img) return phMsg(v?'Chọn ảnh trước.':'Choose photo first.'); PH.mode = 'cal'; PH.pts = []; phMsg(v?'Bấm 2 ĐẦU MÚT của vật chuẩn trên ảnh.':'Click both ENDS of reference object.'); };
+  document.getElementById('phMeasure').onclick = () => {
+    if (!PH.img) return phMsg(v?'Chọn ảnh trước.':'Choose photo first.');
+    if (!PH.scale) return phMsg(v?'Phải hiệu chuẩn trước khi đo.':'Calibrate first.');
+    PH.mode = 'm'; PH.pts = []; phMsg(v?'Bấm 2 điểm cần đo khoảng cách.':'Click 2 points to measure.');
+  };
+  document.getElementById('phClear').onclick = () => { PH.measures = []; PH.pts = []; PH.mode = null; phDraw(); phRenderList(); };
+  PH.canvas.addEventListener('pointerdown', phClick);
+  document.getElementById('phSaveBtn').onclick = phSaveRec;
+  document.getElementById('phExport').onclick = () => {
+    const a = document.createElement('a');
+    a.download = 'do-anh-' + Date.now() + '.jpg';
+    a.href = PH.canvas.toDataURL('image/jpeg', 0.85); a.click();
+  };
+  phRenderGallery();
+}
+function phMsg(t) { document.getElementById('phStatus').textContent = t; }
+function phLoad(e) {
+  const f = e.target.files[0]; if (!f) return;
+  const img = new Image();
+  img.onload = () => {
+    PH.img = img; PH.scale = 0; PH.cal = null; PH.measures = []; PH.pts = []; PH.mode = null;
+    const maxW = 1280, sc = Math.min(1, maxW / img.width);
+    PH.canvas.width = Math.round(img.width * sc); PH.canvas.height = Math.round(img.height * sc);
+    PH.canvas.style.display = 'block';
+    document.getElementById('phSaveCard').style.display = 'block';
+    phDraw(); phRenderList();
+    phMsg(LANG==='vi'?'Bước 2: bấm 🎯 Hiệu chuẩn rồi bấm 2 đầu vật chuẩn.':'Step 2: Calibrate using reference object.');
+    URL.revokeObjectURL(img.src);
+  };
+  img.src = URL.createObjectURL(f);
+}
+function phClick(ev) {
+  if (!PH.mode || !PH.img) return;
+  const r = PH.canvas.getBoundingClientRect();
+  const x = (ev.clientX - r.left) * PH.canvas.width / r.width;
+  const y = (ev.clientY - r.top) * PH.canvas.height / r.height;
+  PH.pts.push({ x, y }); phDraw();
+  if (PH.pts.length < 2) return;
+  const [a, b] = PH.pts, px = Math.hypot(b.x - a.x, b.y - a.y);
+  if (PH.mode === 'cal') {
+    const mm = parseFloat(prompt(LANG==='vi'?'Khoảng cách thật giữa 2 điểm (mm):':'Real distance (mm):', '10'));
+    if (mm > 0 && px > 2) { PH.scale = mm / px; PH.cal = { a, b, mm }; phMsg((LANG==='vi'?'Đã hiệu chuẩn: ':'Calibrated: ') + (PH.scale).toFixed(4) + ' mm/px — ' + (LANG==='vi'?'bấm 📏 Đo':'now Measure')); }
+    else phMsg(LANG==='vi'?'Hiệu chuẩn không hợp lệ — thử lại.':'Invalid — retry.');
+  } else {
+    const mm = px * PH.scale;
+    PH.measures.push({ a, b, mm });
+    phMsg((LANG==='vi'?'Kết quả: ':'Result: ') + mm.toFixed(2) + ' mm — ' + (LANG==='vi'?'đo tiếp hoặc gửi vào tiêu chí bên dưới.':'measure again or send to a criterion.'));
+  }
+  PH.pts = []; PH.mode = PH.mode === 'm' ? 'm' : null; phDraw(); phRenderList();
+}
+function phDraw() {
+  if (!PH.img) return;
+  const c = PH.ctx, w = PH.canvas.width, h = PH.canvas.height;
+  c.clearRect(0, 0, w, h); c.drawImage(PH.img, 0, 0, w, h);
+  const line = (a, b, col) => { c.strokeStyle = col; c.lineWidth = 3; c.beginPath(); c.moveTo(a.x, a.y); c.lineTo(b.x, b.y); c.stroke();
+    [a, b].forEach(p => { c.fillStyle = col; c.beginPath(); c.arc(p.x, p.y, 5, 0, 7); c.fill(); }); };
+  const tag = (a, b, txt, col) => { const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2; c.font = 'bold 16px Arial';
+    const tw = c.measureText(txt).width; c.fillStyle = '#fff'; c.fillRect(mx - tw/2 - 5, my - 24, tw + 10, 21);
+    c.strokeStyle = col; c.lineWidth = 1; c.strokeRect(mx - tw/2 - 5, my - 24, tw + 10, 21);
+    c.fillStyle = col; c.fillText(txt, mx - tw/2, my - 8); };
+  if (PH.cal) { line(PH.cal.a, PH.cal.b, '#0f6e56'); tag(PH.cal.a, PH.cal.b, PH.cal.mm + 'mm (chuẩn)', '#0f6e56'); }
+  PH.measures.forEach((m, i) => { line(m.a, m.b, '#c0241c'); tag(m.a, m.b, (i+1) + ': ' + m.mm.toFixed(2) + 'mm', '#c0241c'); });
+  PH.pts.forEach(p => { c.fillStyle = '#e8b04b'; c.beginPath(); c.arc(p.x, p.y, 6, 0, 7); c.fill(); });
+}
+function phRenderList() {
+  const v = LANG === 'vi';
+  const opts = document.getElementById('phRuleOpts') ? document.getElementById('phRuleOpts').innerHTML : '';
+  document.getElementById('phList').innerHTML = PH.measures.length ? PH.measures.map((m, i) => `
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;border-top:1px solid var(--line);padding:8px 0">
+      <b style="color:#c0241c;flex:none">#${i+1}: ${m.mm.toFixed(2)} mm</b>
+      <select data-i="${i}" class="phSel" style="flex:1;min-width:200px;padding:8px;border:1px solid var(--line);border-radius:8px;font-size:13px">${opts}</select>
+      <button class="btn" style="padding:8px 12px;font-size:12.5px" data-send="${i}">→ ${v?'Đánh giá':'Evaluate'}</button>
+    </div>`).join('') : '';
+  document.querySelectorAll('#phList [data-send]').forEach(b => b.onclick = () => {
+    const i = +b.dataset.send;
+    const ruleId = document.querySelector(`#phList .phSel[data-i="${i}"]`).value;
+    window.PHOTO_PENDING = { rule: ruleId, key: PHOTO_TARGET[ruleId], val: Math.round(PH.measures[i].mm * 100) / 100 };
+    selId = ruleId;
+    document.querySelector('.nav button[data-tab="vt"]').click();
+    renderVT(); renderDetail(); document.body.classList.add('detail-open');
+  });
+}
+async function phSaveRec() {
+  if (!PH.img) return;
+  const v = LANG === 'vi';
+  try {
+    await phSave({
+      ts: Date.now(),
+      proj: document.getElementById('phProj').value || '',
+      note: document.getElementById('phNote').value || '',
+      mms: PH.measures.map(m => Math.round(m.mm * 100) / 100),
+      img: PH.canvas.toDataURL('image/jpeg', 0.72)
+    });
+    phMsg(v?'✓ Đã lưu hồ sơ vào máy.':'✓ Saved.'); phRenderGallery();
+  } catch (e) { phMsg((v?'Lỗi lưu: ':'Save error: ') + e); }
+}
+async function phRenderGallery() {
+  const v = LANG === 'vi';
+  let recs = [];
+  try { recs = await phAll(); } catch (e) { return; }
+  const g = document.getElementById('phGallery'); if (!g) return;
+  g.innerHTML = recs.length ? recs.sort((a,b) => b.ts - a.ts).map(r => `
+    <div style="border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff">
+      <img src="${r.img}" style="width:100%;display:block;aspect-ratio:4/3;object-fit:cover">
+      <div style="padding:7px 9px;font-size:11.5px">
+        <b>${esc(r.proj || (v?'(chưa ghi)':'(no id)'))}</b><br>
+        ${new Date(r.ts).toLocaleDateString('vi-VN')} · ${(r.mms||[]).map(m=>m+'mm').join(', ') || '—'}<br>
+        ${esc(r.note || '')}
+        <div style="display:flex;gap:6px;margin-top:5px">
+          <a href="${r.img}" download="hoso-${r.id}.jpg" style="color:var(--brand);font-weight:700">⬇ ${v?'Tải':'Save'}</a>
+          <button style="color:#c0241c;font-weight:700;font-size:11.5px" data-del="${r.id}">✕ ${v?'Xóa':'Del'}</button>
+        </div>
+      </div>
+    </div>`).join('') : `<div style="font-size:12.5px;color:var(--muted)">${v?'Chưa có hồ sơ nào.':'No records yet.'}</div>`;
+  g.querySelectorAll('[data-del]').forEach(b => b.onclick = async () => { await phDel(+b.dataset.del); phRenderGallery(); });
+}
+
 /* ===== render all ===== */
 function renderAll() { renderVT(); renderDetail(); renderNDT(); renderCK(); renderSym(); renderTools(); }
 setLang(LANG);
+initPhoto();
 
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   navigator.serviceWorker.register('sw.js').catch(()=>{});
