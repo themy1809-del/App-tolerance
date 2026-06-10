@@ -48,6 +48,18 @@
     <span style="color:#3b6d11;font-weight:700;cursor:pointer;padding:4px 8px;border-radius:8px" id="resetBtn">Đặt lại</span>
   </div>
 
+  <details class="more" id="ckWrap" style="margin-bottom:12px">
+    <summary>☑️ Checklist nghiệm thu vật tư đầu vào (bấm mở)</summary>
+    <div class="body" style="display:block">
+      <div style="display:flex;gap:8px;margin:10px 0">
+        <button type="button" id="vtCkReset" style="padding:8px 14px;border:1px solid #cdd;border-radius:8px;background:#eef;font-weight:700;cursor:pointer;font-family:inherit">↺ Làm mới</button>
+        <button type="button" id="vtCkCopy" style="padding:8px 14px;border:0;border-radius:8px;background:#3b6d11;color:#fff;font-weight:700;cursor:pointer;font-family:inherit">📋 Copy báo cáo</button>
+        <span id="vtCkPct" style="margin-left:auto;font-weight:700;color:#3b6d11;align-self:center"></span>
+      </div>
+      <div id="vtCkList"></div>
+    </div>
+  </details>
+
   <div class="section" id="catSect">
     <h3>📂 Chọn nhóm để xem</h3>
     <div class="mosaic" id="catGrid"></div>
@@ -81,5 +93,69 @@
 <script src="data.js?v=2"></script>
 <script src="app.js?v=2"></script>
 <script src="smart-search.js?v=1" defer></script>
+<script>
+/* ===== Checklist nghiệm thu vật tư đầu vào ===== */
+(function(){
+  var ITEMS = [
+    ['📄 HỒ SƠ', [
+      ['MTC đúng loại theo PO (thường EN 10204 Type 3.1), số heat/lô trên MTC khớp vật tư thực tế', 'EN 10204'],
+      ['Số lượng, quy cách, mác thép khớp PO / packing list', 'PO dự án'],
+      ['Giá trị cơ tính & thành phần hóa học trên MTC đạt yêu cầu mác thép (CEV nếu spec yêu cầu)', 'EN 10025 / ASTM A6'],
+    ]],
+    ['🏷️ NHẬN DẠNG', [
+      ['Mác thép + heat number dập/in trên vật tư, đọc được, khớp MTC', 'EN 10025-1 §10 / A6'],
+      ['Vật tư không rõ nhận dạng → cách ly chờ xử lý, KHÔNG nhập kho', 'Quy trình IMI'],
+    ]],
+    ['👁 NGOẠI QUAN & BỀ MẶT', [
+      ['Cấp gỉ A hoặc B (ISO 8501-1); cấp C/D phải báo QC đánh giá trước khi nhận', 'ISO 8501-1'],
+      ['Không khuyết tật bề mặt quá mức: rỗ sâu, xước sâu, tách lớp lộ mép (theo class spec)', 'EN 10163 / A6'],
+      ['Không cong vênh, xoắn vượt dung sai giao hàng', 'EN 10029 / EN 10034 / A6'],
+    ]],
+    ['📏 KÍCH THƯỚC (tra chi tiết trong app này)', [
+      ['Chiều dày tấm đo tại vị trí quy định, trong dung sai (vd EN 10029 Class A/B/C/D)', 'EN 10029'],
+      ['Kích thước mặt cắt hình (H/I/U/L) & khối lượng trong dung sai', 'EN 10034 / EN 10056 / A6'],
+      ['Chiều dài, độ thẳng, độ vuông mép trong dung sai giao hàng', 'EN 10029 / A6'],
+    ]],
+    ['🔬 KIỂM TRA BỔ SUNG (nếu spec yêu cầu)', [
+      ['UT tách lớp (lamination) cho tấm dày / vùng hàn quan trọng', 'EN 10160 / ASTM A435'],
+      ['Đối chứng cơ tính / hóa học (test lại) khi MTC nghi ngờ', 'Spec dự án'],
+    ]],
+    ['📦 LƯU KHO', [
+      ['Kê cao khỏi nền, chống đọng nước, tách riêng theo mác thép', 'Thực hành IMI'],
+      ['Đánh dấu trạng thái: ĐẠT / CHỜ / LOẠI rõ ràng', 'Quy trình QC'],
+    ]]
+  ];
+  var KEY = 'vt_ck_v1';
+  function st(){ try { return JSON.parse(localStorage.getItem(KEY))||{}; } catch(e){ return {}; } }
+  function render(){
+    var s = st(), total = 0, done = 0, html = '';
+    ITEMS.forEach(function(g, gi){
+      html += '<div style="font-weight:800;color:#3b6d11;margin:12px 0 4px">' + g[0] + '</div>';
+      g[1].forEach(function(it, ii){
+        var k = gi + '_' + ii, on = !!s[k]; total++; if (on) done++;
+        html += '<div data-k="' + k + '" class="vtck" style="display:flex;gap:10px;padding:9px 6px;border-bottom:1px solid #e6e6e0;cursor:pointer;align-items:flex-start">'
+          + '<div style="width:20px;height:20px;border:2px solid ' + (on?'#3b6d11':'#bbb') + ';border-radius:5px;background:' + (on?'#3b6d11':'#fff') + ';color:#fff;flex:none;text-align:center;line-height:17px;font-size:13px">' + (on?'✓':'') + '</div>'
+          + '<div style="font-size:13px;' + (on?'color:#888;text-decoration:line-through':'') + '">' + it[0]
+          + '<span style="display:block;font-size:11px;color:#3b6d11;font-weight:700;margin-top:2px">📎 ' + it[1] + '</span></div></div>';
+      });
+    });
+    document.getElementById('vtCkList').innerHTML = html;
+    document.getElementById('vtCkPct').textContent = done + '/' + total;
+    document.querySelectorAll('#vtCkList .vtck').forEach(function(el){
+      el.onclick = function(){ var s2 = st(); s2[el.dataset.k] = !s2[el.dataset.k]; localStorage.setItem(KEY, JSON.stringify(s2)); render(); };
+    });
+  }
+  document.getElementById('vtCkReset').onclick = function(){ localStorage.removeItem(KEY); render(); };
+  document.getElementById('vtCkCopy').onclick = function(){
+    var s = st(), txt = 'BÁO CÁO CHECKLIST NGHIỆM THU VẬT TƯ — ' + new Date().toLocaleString() + '\n';
+    ITEMS.forEach(function(g, gi){
+      txt += '\n## ' + g[0].replace(/^[^ ]+ /,'') + '\n';
+      g[1].forEach(function(it, ii){ txt += (s[gi+'_'+ii]?'[x] ':'[ ] ') + it[0] + ' (' + it[1] + ')\n'; });
+    });
+    (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(function(){ alert('✓ Đã copy!'); }).catch(function(){ prompt('Copy:', txt); });
+  };
+  render();
+})();
+</script>
 </body>
 </html>

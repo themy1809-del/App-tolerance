@@ -216,7 +216,7 @@
 <script>
 /* ===== i18n ===== */
 const I18N={
-  nav:{lookup:{vi:"Tra cứu",en:"Lookup"},compare:{vi:"So sánh",en:"Compare"},standards:{vi:"Tiêu chuẩn",en:"Standards"},admin:{vi:"Quản trị",en:"Admin"}},
+  nav:{lookup:{vi:"Tra cứu",en:"Lookup"},compare:{vi:"So sánh",en:"Compare"},standards:{vi:"Tiêu chuẩn",en:"Standards"},check:{vi:"Checklist",en:"Checklist"},admin:{vi:"Quản trị",en:"Admin"}},
   searchPh:{vi:"Tìm: cột, plumb, h/300, undercut…",en:"Search: column, plumb, h/300, undercut…"},
   moreFilters:{vi:"Bộ lọc nâng cao",en:"More filters"},
   standard:{vi:"Tiêu chuẩn",en:"Standard"},category:{vi:"Nhóm",en:"Category"},element:{vi:"Cấu kiện",en:"Element"},feature:{vi:"Đặc trưng",en:"Feature"},
@@ -439,13 +439,65 @@ function filtered(){ return TOLS().filter(r=>{
 function uniqueElements(){ const s=new Set(); TOLS().forEach(r=>{ if(!F.std||r.standard===F.std) s.add(tx(r.element)); }); return [...s].sort(); }
 
 /* ===== render ===== */
+/* ===== Checklist đo kiểm kích thước ===== */
+const TOLCK_KEY='tol_ck_v1';
+const TOLCK=[
+  {ph:{vi:"TRƯỚC KHI ĐO",en:"BEFORE MEASURING"},ic:"📋",items:[
+    {t:{vi:"Bản vẽ rev mới nhất + xác định class dung sai áp dụng (EXC / Class A–D / Essential–Functional)",en:"Latest drawing rev + applicable tolerance class (EXC / Class A–D)"},ref:"EN 1090-2 Annex B / ISO 13920"},
+    {t:{vi:"Dụng cụ đo có tem hiệu chuẩn còn hạn: thước cuộn, thước cặp, máy thủy bình / total station",en:"Instruments calibrated & in date: tapes, calipers, level / total station"},ref:"EN 1090-2 12.2 / ISO 17123"},
+    {t:{vi:"Ghi nhiệt độ môi trường — thước chuẩn ở 20°C, bù giãn nở khi đo dài (thép ~12µm/m/°C)",en:"Record ambient temp — tapes standardized at 20°C, correct for expansion"},ref:"ISO 1 / module Lượng dư"},
+    {t:{vi:"Cấu kiện kê trên gối đỡ ổn định, không biến dạng do tự trọng/kẹp; đo võng khi KHÔNG tải",en:"Component supported without self-weight distortion; camber measured unloaded"},ref:"EN 1090-2 12.2"},
+    {t:{vi:"Làm sạch điểm đo (gỉ, xỉ, sơn dày làm sai số đo chiều dày)",en:"Clean measuring points (rust, slag, thick paint affect readings)"},ref:{vi:"Thực hành QC",en:"QC practice"}},
+    {t:{vi:"Xác định datum/mốc tham chiếu đúng theo bản vẽ trước khi đo",en:"Establish datum per drawing before measuring"},ref:"ISO 7976-1"}
+  ]},
+  {ph:{vi:"TRONG KHI ĐO",en:"DURING MEASUREMENT"},ic:"📐",items:[
+    {t:{vi:"Đo đúng vị trí quy định: giữa nhịp cho độ võng/camber, 2 đầu + giữa cho cong vênh",en:"Measure at specified locations: mid-span for bow/camber, ends + middle for straightness"},ref:"ISO 7976-2 / EN 1090-2 Annex B"},
+    {t:{vi:"Thước cuộn: kéo đủ lực căng tiêu chuẩn, không gấp khúc; đo dài dùng lực kế nếu có",en:"Tape under standard tension, no kinks"},ref:"ISO 7976-2"},
+    {t:{vi:"Đọc ≥ 2 lần / lấy trung bình; số bất thường phải đo lại",en:"Read ≥ 2 times, average; re-measure outliers"},ref:{vi:"Thực hành QC",en:"QC practice"}},
+    {t:{vi:"Ghi số liệu kèm VỊ TRÍ đo + nhiệt độ; không ghi tròn số trước khi đánh giá",en:"Record value WITH location + temp; do not round before evaluation"},ref:{vi:"Hồ sơ QC",en:"QC records"}},
+    {t:{vi:"Đánh giá Đạt/Không đạt ngay bằng tab Tra cứu của app này",en:"Evaluate PASS/FAIL immediately using this app's Lookup tab"},ref:{vi:"App Dung sai",en:"This app"}}
+  ]},
+  {ph:{vi:"SAU KHI ĐO / HỒ SƠ",en:"AFTER / RECORDS"},ic:"✅",items:[
+    {t:{vi:"Lập báo cáo kích thước (dimensional report): giá trị đo, giới hạn, kết luận, người đo, ngày",en:"Dimensional report: measured, limit, verdict, inspector, date"},ref:"EN 1090-2 Cl.12"},
+    {t:{vi:"Điểm KHÔNG ĐẠT: lập NCR (dùng nút tạo NCR trong module Lượng dư) + cách ly/đánh dấu cấu kiện",en:"FAILs: raise NCR (see Lượng dư module) + quarantine/mark component"},ref:{vi:"Quy trình NCR",en:"NCR procedure"}},
+    {t:{vi:"Sửa xong đo lại 100% hạng mục không đạt",en:"Re-measure 100% of failed items after rectification"},ref:"EN 1090-2 12.3"},
+    {t:{vi:"Lưu hồ sơ + ảnh kèm số cấu kiện để truy xuất",en:"File records + photos with piece mark for traceability"},ref:{vi:"Hồ sơ QC",en:"QC records"}}
+  ]}
+];
+function tolCkSt(){ try{ return JSON.parse(localStorage.getItem(TOLCK_KEY))||{}; }catch(e){ return {}; } }
+function tolCkToggle(k){ const s=tolCkSt(); s[k]=!s[k]; localStorage.setItem(TOLCK_KEY,JSON.stringify(s)); render(); }
+function tolCkReset(){ localStorage.removeItem(TOLCK_KEY); render(); }
+function tolCkCopy(){ const s=tolCkSt();
+  let txt=(LANG==='vi'?'BÁO CÁO CHECKLIST ĐO KIỂM KÍCH THƯỚC':'DIMENSIONAL INSPECTION CHECKLIST')+' — '+new Date().toLocaleString()+'\n';
+  TOLCK.forEach((ph,pi)=>{ txt+='\n## '+tx(ph.ph)+'\n';
+    ph.items.forEach((it,ii)=>{ txt+=(s[pi+'_'+ii]?'[x] ':'[ ] ')+tx(it.t)+' ('+tx(it.ref)+')\n'; }); });
+  (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(()=>alert(LANG==='vi'?'✓ Đã copy!':'✓ Copied!')).catch(()=>prompt('Copy:',txt));
+}
+function viewCheck(){
+  const s=tolCkSt();
+  let h=`<div class="sectitle">☑️ ${LANG==='vi'?'Checklist đo kiểm kích thước':'Dimensional inspection checklist'}</div>
+  <p class="lead">${LANG==='vi'?'Chuẩn bị – đo – hồ sơ. Tick lưu trên máy; copy báo cáo để dán vào hồ sơ.':'Prepare – measure – records. Ticks saved locally; copy report for records.'}</p>
+  <div class="btnrow" style="margin-bottom:12px">
+    <button class="btn alt" onclick="tolCkReset()">↺ ${LANG==='vi'?'Làm mới':'Reset'}</button>
+    <button class="btn" onclick="tolCkCopy()">📋 ${LANG==='vi'?'Copy báo cáo':'Copy report'}</button></div>`;
+  TOLCK.forEach((ph,pi)=>{
+    const done=ph.items.filter((_,ii)=>s[pi+'_'+ii]).length;
+    h+=`<div class="card" style="overflow:hidden"><div style="display:flex;align-items:center;gap:10px;padding:13px 16px;background:var(--soft);font-weight:800;color:var(--brand)">${ph.ic} ${esc(tx(ph.ph))}<span style="margin-left:auto;font-size:12.5px;color:var(--muted)">${done}/${ph.items.length}</span></div>`;
+    ph.items.forEach((it,ii)=>{ const k=pi+'_'+ii, on=!!s[k];
+      h+=`<div onclick="tolCkToggle('${k}')" style="display:flex;gap:11px;padding:12px 16px;border-top:1px solid var(--line);cursor:pointer;align-items:flex-start">
+        <div style="width:22px;height:22px;border:2px solid ${on?'var(--pass)':'#c5cdd6'};border-radius:6px;background:${on?'var(--pass)':'#fff'};color:#fff;flex:none;text-align:center;line-height:19px;font-size:14px">${on?'✓':''}</div>
+        <div style="font-size:13.5px;${on?'color:var(--muted);text-decoration:line-through':''}">${esc(tx(it.t))}<span style="display:block;font-size:11px;color:var(--brand2);font-weight:700;margin-top:3px">📎 ${esc(tx(it.ref))}</span></div></div>`; });
+    h+=`</div>`;
+  });
+  return h;
+}
 function setLang(l){ LANG=l; document.getElementById("lvi").classList.toggle("on",l==="vi"); document.getElementById("len").classList.toggle("on",l==="en"); document.documentElement.lang=l; render(); }
 function setView(v){ VIEW=v; if(v!=="lookup"){ document.body.classList.remove("detail-open"); } render(); }
 function render(){
   document.getElementById("abTitle").textContent=LANG==="vi"?"Tra Cứu Dung Sai":"Tolerance Lookup";
   document.getElementById("abSub").textContent=LANG==="vi"?"Kết cấu thép · QC":"Steel structures · QC";
   // nav
-  const items=[["lookup","🔍"],["compare","⚖️"],["standards","📚"],["admin","🛠️"]];
+  const items=[["lookup","🔍"],["compare","⚖️"],["standards","📚"],["check","☑️"],["admin","🛠️"]];
   document.getElementById("nav").innerHTML=items.map(([k,ic])=>`<button class="${VIEW===k?'on':''}" onclick="setView('${k}')"><span class="ic">${ic}</span><span>${esc(tx(I18N.nav[k]))}</span></button>`).join("")
     +`<button onclick="location.href='../han/'"><span class="ic">👁</span><span>${LANG==='vi'?'QC Hàn':'Weld QC'}</span></button>`
     +`<button onclick="location.href='../son/'"><span class="ic">🎨</span><span>${LANG==='vi'?'QC Sơn':'Paint QC'}</span></button>`;
@@ -453,6 +505,7 @@ function render(){
   if(VIEW==="lookup") app.innerHTML=viewLookup();
   else if(VIEW==="compare") app.innerHTML=viewCompare();
   else if(VIEW==="standards") app.innerHTML=viewStandards();
+  else if(VIEW==="check") app.innerHTML=viewCheck();
   else if(VIEW==="admin") app.innerHTML=viewAdmin();
   renderModal();
 }

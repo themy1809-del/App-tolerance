@@ -38,7 +38,7 @@
   .nav button .ic{font-size:19px;line-height:1}
   .nav button.on{color:var(--brand)}
   @media(min-width:980px){
-    .nav{position:static;max-width:1180px;margin:10px auto 0;border:1px solid var(--line);border-radius:12px;justify-content:flex-start;gap:4px;padding:6px;box-shadow:var(--sh)}
+    .nav{position:sticky;top:58px;bottom:auto;z-index:39;max-width:1180px;margin:10px auto 0;border:1px solid var(--line);border-radius:12px;justify-content:flex-start;gap:4px;padding:6px;box-shadow:var(--sh)}
     .nav button{flex:none;flex-direction:row;gap:7px;font-size:14px;padding:9px 16px}
     .nav button .ic{font-size:17px}
     .nav button.on{background:var(--soft)}
@@ -116,15 +116,6 @@
   </div>
 </header>
 
-<main class="main">
-  <section class="tab on" id="tab-surf"></section>
-  <section class="tab" id="tab-env"></section>
-  <section class="tab" id="tab-dft"></section>
-  <section class="tab" id="tab-test"></section>
-  <section class="tab" id="tab-def"></section>
-  <section class="tab" id="tab-ck"></section>
-</main>
-
 <nav class="nav">
   <button data-tab="surf" class="on"><span class="ic">🧹</span><span data-vi="Bề mặt" data-en="Surface">Bề mặt</span></button>
   <button data-tab="env"><span class="ic">🌡</span><span data-vi="Môi trường" data-en="Climate">Môi trường</span></button>
@@ -133,6 +124,15 @@
   <button data-tab="def"><span class="ic">⚠️</span><span data-vi="Lỗi sơn" data-en="Defects">Lỗi sơn</span></button>
   <button data-tab="ck"><span class="ic">☑️</span><span data-vi="Checklist" data-en="Checklist">Checklist</span></button>
 </nav>
+
+<main class="main">
+  <section class="tab on" id="tab-surf"></section>
+  <section class="tab" id="tab-env"></section>
+  <section class="tab" id="tab-dft"></section>
+  <section class="tab" id="tab-test"></section>
+  <section class="tab" id="tab-def"></section>
+  <section class="tab" id="tab-ck"></section>
+</main>
 
 <script src="data.js"></script>
 <script>
@@ -176,7 +176,11 @@ function renderSurf() {
   h += `<div class="seccard"><h3>${esc(T(S.blastGrades.title))}</h3>
     <div class="tblwrap"><table><tr><th>${v?'Cấp':'Grade'}</th><th>${v?'Phương pháp':'Method'}</th><th>${v?'Mô tả':'Description'}</th><th>${v?'Ứng dụng':'Use'}</th></tr>
     ${S.blastGrades.rows.map(r => `<tr><td><b>${r.g}</b></td><td>${esc(T(r.m))}</td><td>${esc(T(r.d))}</td><td>${esc(T(r.use))}</td></tr>`).join('')}</table></div>
-    <div class="note">${esc(S.blastGrades.ref)}</div>${S.blastGrades.soft?softWarn():''}</div>`;
+    <div class="note">${esc(S.blastGrades.ref)}</div>
+    <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+      <a href="https://www.google.com/search?tbm=isch&q=${encodeURIComponent('ISO 8501-1 Sa 2.5 surface preparation comparison photo')}" target="_blank" rel="noopener" style="flex:1;text-align:center;padding:9px;background:var(--soft);color:var(--brand);border-radius:10px;font-weight:700;font-size:12.5px;text-decoration:none;min-width:160px">📸 ${v?'Ảnh thật các cấp Sa':'Sa grade photos'} (Google)</a>
+      <a href="https://www.bing.com/images/search?q=${encodeURIComponent('ISO 8501-1 rust grade A B C D blast cleaning Sa 2.5 photo')}" target="_blank" rel="noopener" style="flex:1;text-align:center;padding:9px;background:var(--soft);color:var(--brand);border-radius:10px;font-weight:700;font-size:12.5px;text-decoration:none;min-width:160px">📸 ${v?'Ảnh cấp gỉ A–D':'Rust grades A–D'} (Bing)</a>
+    </div>${S.blastGrades.soft?softWarn():''}</div>`;
 
   h += `<div class="seccard"><h3>${esc(T(S.prepGrades.title))}</h3>
     <div class="note">${esc(T(S.prepGrades.note))}</div>
@@ -346,13 +350,23 @@ function renderDef() {
     <div class="search"><span class="mag">🔍</span><input id="dfq" type="search" placeholder="${v?'Tìm lỗi: chảy, phồng, lỗ kim...':'Search defects...'}" value="${esc(dq)}"></div>
     <div class="filters">${DGRPS.map(g => `<button class="chip ${dg===g.k?'on':''}" data-g="${g.k}">${v?g.vi:g.en}</button>`).join('')}</div>
     <div style="font-size:12.5px;color:var(--muted);margin:2px 2px 8px">${rows.length} ${v?'lỗi':'defects'}</div>
-    ${rows.map(d => `<details class="dfcard"><summary>⚠️ ${esc(T(d.name))}<span class="gb">${(DGRPS.find(g=>g.k===d.grp)||{})[v?'vi':'en']||''}</span></summary>
+    ${rows.map(d => {
+      const q = encodeURIComponent(((d.name && d.name.en) || '') + ' paint coating defect photo');
+      return `<details class="dfcard"><summary>⚠️ ${esc(T(d.name))}<span class="gb">${(DGRPS.find(g=>g.k===d.grp)||{})[v?'vi':'en']||''}</span></summary>
       <div class="body">
+        <img src="images/${d.id}.jpg" loading="lazy" alt="photo"
+          style="width:100%;border-radius:10px;border:1px solid var(--line);display:block;margin-top:8px"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <div style="display:none;font-size:12px;color:var(--muted);margin-top:8px">${v?'Chưa có ảnh — lưu về':'No photo yet — save to'} <code>son/images/${d.id}.jpg</code></div>
         <div class="row"><b>${v?'Hiện tượng':'Symptom'}:</b> ${esc(T(d.sym))}</div>
         <div class="row"><b>${v?'Nguyên nhân':'Causes'}:</b> ${esc(T(d.cause))}</div>
         <div class="row"><b>${v?'Khắc phục':'Remedy'}:</b> ${esc(T(d.fix))}</div>
         <div class="accept"><b>${v?'Tiêu chí chấp nhận':'Acceptance'}:</b> ${esc(T(d.accept))}</div>
-      </div></details>`).join('')}`;
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <a href="https://www.google.com/search?tbm=isch&q=${q}" target="_blank" rel="noopener" style="flex:1;text-align:center;padding:9px;background:var(--soft);color:var(--brand);border-radius:10px;font-weight:700;font-size:12.5px;text-decoration:none">🔍 Google Images</a>
+          <a href="https://www.bing.com/images/search?q=${q}" target="_blank" rel="noopener" style="flex:1;text-align:center;padding:9px;background:var(--soft);color:var(--brand);border-radius:10px;font-weight:700;font-size:12.5px;text-decoration:none">🔍 Bing Images</a>
+        </div>
+      </div></details>`;}).join('')}`;
   document.getElementById('dfq').addEventListener('input', e => { dq = e.target.value; const p = document.activeElement; renderDef(); const el = document.getElementById('dfq'); el.focus(); el.setSelectionRange(el.value.length, el.value.length); });
   document.querySelectorAll('#tab-def .chip').forEach(c => c.onclick = () => { dg = c.dataset.g; renderDef(); });
 }
