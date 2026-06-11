@@ -68,6 +68,14 @@
     <div class="step"><div class="n">5</div><div class="tx"><b>Đánh dấu ghép bộ (match-marking)</b> — đánh số từng mối nối sau khi ráp đạt để công trường lắp đúng vị trí, đúng chiều.<span class="tool">🧰 Sơn đánh dấu + sơ đồ match-mark đính kèm hồ sơ</span></div></div>
   </div>
 
+  <div class="h2x">🔩 Bu lông trong ráp thử — quy tắc sống còn</div>
+  <div class="seccard">
+    <div class="step"><div class="n">1</div><div class="tx"><b>Chỉ XỎ — không căng lực.</b> Ráp thử dùng drift pin định vị + bu lông thử xiết tay (snug nhẹ) để kiểm đối tiếp lỗ và độ khít mặt nối. <b>TUYỆT ĐỐI không căng tới lực Fp,C/Tb.</b><span class="tool">⚠ EN 1090-2 mục 8.5.1: bu lông đã căng đủ lực rồi tháo ra → LOẠI BỎ CẢ BỘ, không tái sử dụng. Căng nhầm ở ráp thử = vứt cả lô bu lông.</span></div></div>
+    <div class="step"><div class="n">2</div><div class="tx"><b>Tỷ lệ kiểm:</b> mỗi mối nối xỏ drift pin + bu lông thử theo tỷ lệ spec quy định; lỗ không thông → xử lý doa trong giới hạn, ghi nhận vào biên bản.<span class="tool">🧰 Khe hở lỗ chuẩn: <a class="inl" href="../soche/">QC Sơ chế → lỗ Table 11</a></span></div></div>
+    <div class="step"><div class="n">3</div><div class="tx"><b>Bu lông thử dùng riêng:</b> đánh dấu bộ bu lông phục vụ ráp thử, không trộn vào lô bu lông lắp dựng chính thức.<span class="tool">🏷️ Sơn đánh dấu bu lông thử</span></div></div>
+    <div class="step"><div class="n">4</div><div class="tx"><b>Xiết lực thật = giai đoạn LẮP DỰNG:</b> momen/góc xoay theo hệ EN hoặc AISC của hợp đồng, đủ trình tự 2 bước + nghiệm thu lấy mẫu.<span class="tool">🧮 <a class="inl" href="../bulong/">Mở QC Bu lông — calculator + quy tắc + checklist</a></span></div></div>
+  </div>
+
   <div class="h2x">☑️ Checklist & biên bản</div>
   <div id="ck"></div>
 </main>
@@ -87,7 +95,7 @@ const STEPS = [
 ];
 const CK = [
   ['CHUẨN BỊ', ['Phạm vi ráp thử chốt bằng văn bản, có xác nhận khách hàng', 'Bãi ráp + gối kê đạt cao độ (bắn máy có số liệu)', 'Toàn bộ cấu kiện tham gia đã đạt QC Dim, đủ mark']],
-  ['RÁP & ĐO', ['Ráp đúng trình tự bản vẽ, không ép cưỡng bức', 'Kích thước tổng + đường chéo + cao độ trong dung sai bản vẽ lắp', 'Lỗ đối tiếp: bu lông thử xỏ đạt tỷ lệ spec; lỗ lệch xử lý đúng quy trình', 'Mặt nối khít theo yêu cầu (đo thước lá có ghi số)']],
+  ['RÁP & ĐO', ['Ráp đúng trình tự bản vẽ, không ép cưỡng bức', 'Kích thước tổng + đường chéo + cao độ trong dung sai bản vẽ lắp', 'Lỗ đối tiếp: drift pin + bu lông thử xỏ đạt tỷ lệ spec; lỗ lệch xử lý đúng quy trình', 'Bu lông CHỈ xiết tay (snug nhẹ) — KHÔNG căng lực Fp,C/Tb (EN 1090-2 8.5.1)', 'Bu lông thử đánh dấu riêng, không trộn vào lô lắp dựng', 'Mặt nối khít theo yêu cầu (đo thước lá có ghi số)']],
   ['NGHIỆM THU', ['Match-marking đầy đủ mọi mối nối + sơ đồ kèm hồ sơ', 'Ảnh tổng thể + từng mối nối đã lưu', 'Biên bản ráp thử ký đủ các bên; điểm sửa chữa ghi rõ', 'Tháo rời có kiểm soát, mark được bảo vệ']]
 ];
 const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
