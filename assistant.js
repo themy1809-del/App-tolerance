@@ -42,7 +42,7 @@
     /* "kiểm tra/nghiệm thu/đo + đối tượng" cũng là câu hỏi */
     if (/(kiem tra|nghiem thu|danh gia|\bdo\b)/.test(qn) && ENT.some(e => e.re.test(qn))) return true;
     /* TỔNG QUÁT: từ chuyên môn QC + từ hỏi/sự cố = câu hỏi (chống lọt lưới) */
-    const DOMAIN = /\bhan\b|moi han|\but\b|\bndt\b|\brt\b|\bmt\b|\bpt\b|\bvt\b|sieu am|\bson\b|dft|ma kem|bu long|bulong|xiet|kich thuoc|dung sai|fit.?up|ga lap|packing|lashing|vat tu|thep|wps|pqr|exc|camber|cong venh|khe ho|undercut|ro khi|nut\b|que han|preheat|\blo\b|cat\b|vat mep|ket cau|cau kien|khung|\bdam\b|\bcot\b|gian\b|lo dot|\bvong\b|thang dung|container|di bien|tem nhan|bien ban|hold time|\bdo vong\b|rap thu|lap thu|trial|lap dung|\bcoil\b|\bhgi\b|\bppgl\b|\bgl\b|ton bao|ma kem coil|z275|az150|azm/;
+    const DOMAIN = /\bhan\b|moi han|\but\b|\bndt\b|\brt\b|\bmt\b|\bpt\b|\bvt\b|sieu am|\bson\b|dft|ma kem|bu long|bulong|xiet|kich thuoc|dung sai|fit.?up|ga lap|packing|lashing|vat tu|thep|wps|pqr|exc|camber|cong venh|khe ho|undercut|ro khi|nut\b|que han|preheat|\blo\b|cat\b|vat mep|ket cau|cau kien|khung|\bdam\b|\bcot\b|gian\b|lo dot|\bvong\b|thang dung|container|di bien|tem nhan|bien ban|hold time|\bdo vong\b|rap thu|lap thu|trial|lap dung|\bcoil\b|\bhgi\b|\bppgl\b|\bgl\b|ton bao|ma kem coil|z275|az150|azm|\bque (han|jam|ham|hang)\b|bi am\b/;
     const ASK = /\bsao\b|\bgi\b|the nao|lam (sao|gi)|\bcan\b|\bphai\b|\bsua\b|xu l(y|i)|khong (dat|pass)|\bfail\b|bi loai|\bloi\b|bao nhieu|kiem tra|nghiem thu|huong dan|khac phuc|tai sao|vi sao|chon\b|\bnen\b|duoc khong|dat khong|co sao|bao lau|ai ky|can ai|chong gi|khac (gi|nhau)|bi (vong|cong|tray|bong|chay)|ba via|dung sai/;
     return DOMAIN.test(qn) && ASK.test(qn);
   }
@@ -400,7 +400,7 @@
       const sp = !plan && SPECIALS.find(s => s.re.test(qn));
       if (sp) plan = sp.fn(q, len);
       /* 2) lỗi / sai hỏng */
-      if (!plan && /loi |bi (nut|ro|cong|venh|chay|phong|bong|thung)|defect|khac phuc|nguyen nhan|sai hong|xu l(y|i)|khong dat|\bfail\b|mai lem|lem vao|chay chan|chay canh/.test(qn)) plan = planDefect();
+      if (!plan && /loi |bi (nut|ro|cong|venh|chay|phong|bong|thung)|defect|khac phuc|nguyen nhan|sai hong|xu l(y|i)|khong dat|\bfail\b|mai lem|lem vao|chay chan|chay canh|bi am\b/.test(qn)) plan = planDefect();
       /* 3) theo đối tượng */
       if (!plan) {
         const { ent, entVi } = detect(qn);
@@ -447,20 +447,47 @@
       if (/^AIza/.test(key)) {
         const ALL = ['gemini-3.5-flash', 'gemini-2.5-flash'];
         const saved = localStorage.getItem('qc_gem_model');
-        /* NHỚ model chạy được lần trước → gọi thẳng, không thử lại model hỏng (nhanh hơn hẳn) */
-        const MODELS = saved && ALL.includes(saved) ? [saved].concat(ALL.filter(m => m !== saved)) : ALL;
-        let lastRes = null;
-        for (const mdl of MODELS) {
-          const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + mdl + ':generateContent', {
+        /* Model bị từ chối hẳn (404/403/400) → ghi nhớ, BỎ QUA 12 giờ — không tốn 1 vòng gọi hỏng mỗi câu */
+        let bad = {};
+        try { bad = JSON.parse(localStorage.getItem('qc_gem_bad') || '{}'); } catch (e) {}
+        const now = Date.now();
+        /* Model vừa quá tải (5xx/429) → né 10 phút, đi thẳng model còn lại */
+        let busy = {};
+        try { busy = JSON.parse(localStorage.getItem('qc_gem_busy') || '{}'); } catch (e) {}
+        let MODELS = ALL.filter(m => !(bad[m] && now - bad[m] < 12 * 3600 * 1000))
+                        .filter(m => !(busy[m] && now - busy[m] < 10 * 60 * 1000));
+        if (!MODELS.length) MODELS = [ALL[ALL.length - 1]];
+        if (saved && MODELS.includes(saved)) MODELS = [saved].concat(MODELS.filter(m => m !== saved));
+        /* Timeout 8s: request treo → cắt ngay, không bắt người dùng chờ */
+        const goi = (mdl) => {
+          const ab = new AbortController();
+          const tm = setTimeout(() => ab.abort(), 8000);
+          return fetch('https://generativelanguage.googleapis.com/v1beta/models/' + mdl + ':generateContent', {
             method: 'POST',
             headers: { 'content-type': 'application/json', 'x-goog-api-key': key },
+            signal: ab.signal,
             body: JSON.stringify({
               systemInstruction: { parts: [{ text: SYS }] },
               contents: [{ role: 'user', parts: [{ text: USER }] }],
               /* 2.5: tắt thinking → nhanh hơn nhiều; giới hạn 900 token cho gọn */
               generationConfig: mdl.includes('2.5') ? { maxOutputTokens: 900, thinkingConfig: { thinkingBudget: 0 } } : { maxOutputTokens: 900 }
             })
-          });
+          }).catch(() => ({ ok: false, status: 408 })).finally(() => clearTimeout(tm));
+        };
+        let lastRes = null;
+        for (let i = 0; i < MODELS.length; i++) {
+          const mdl = MODELS[i];
+          let res = await goi(mdl);
+          /* Model CUỐI bị quá tải (5xx/429/timeout) → tự thử lại 1 lần sau 1.5s thay vì báo lỗi ngay */
+          if (!res.ok && i === MODELS.length - 1 && [408, 429, 500, 503, 504].includes(res.status)) {
+            await new Promise(rs => setTimeout(rs, 1500));
+            res = await goi(mdl);
+          }
+          /* Quá tải/treo → né model này 10 phút cho các câu sau */
+          if (!res.ok && [408, 429, 500, 503, 504].includes(res.status)) {
+            busy[mdl] = now;
+            try { localStorage.setItem('qc_gem_busy', JSON.stringify(busy)); } catch (e) {}
+          }
           if (res.ok) {
             const j = await res.json();
             const txt = (((j.candidates || [])[0] || {}).content || { parts: [] }).parts.map(p => p.text || '').join('\n');
@@ -471,8 +498,12 @@
           }
           lastRes = res;
           if (saved === mdl) localStorage.removeItem('qc_gem_model');
-          /* 400 (tham số không hỗ trợ) / 429 / 404 / 403 / 5xx → thử model tiếp theo */
-          if (![400, 429, 404, 403, 500, 503, 504].includes(res.status) && !res.ok) break;
+          /* 404/403/400 = key không có quyền model này → nhớ để bỏ qua 12h */
+          if ([400, 404, 403].includes(res.status)) {
+            bad[mdl] = now;
+            try { localStorage.setItem('qc_gem_bad', JSON.stringify(bad)); } catch (e) {}
+          }
+          if (![400, 408, 429, 404, 403, 500, 503, 504].includes(res.status) && !res.ok) break;
         }
         fail(lastRes || { status: 0 }, 'Gemini');
       }
