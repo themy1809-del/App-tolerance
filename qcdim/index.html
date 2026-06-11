@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0c447c">
+<title>QC Dim — Kích thước sau hàn</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/icon-180.png">
+<style>
+  :root{
+    --bg:#f7f5f0; --ink:#1b2430; --muted:#5f6b7a; --line:#e8e1d2;
+    --brand:#0c447c; --brand2:#185fa5; --soft:#e6f0fb;
+    --pass:#0f6e56; --pass-soft:#e3f6ee; --fail:#aa4322; --fail-soft:#fbeae2;
+    --warn:#8a5a00; --warn-soft:#fdf3e2;
+    --r:14px; --sh:0 1px 2px rgba(60,45,10,.07),0 6px 20px rgba(60,45,10,.06);
+    --navh:62px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.5}
+  button{font-family:inherit;cursor:pointer;border:0;background:none}
+  input{font-family:inherit}
+  .appbar{position:sticky;top:0;z-index:40;background:linear-gradient(180deg,#0c447c,#0a3a6b);color:#fff;
+    padding:max(10px,env(safe-area-inset-top)) 14px 10px;display:flex;align-items:center;gap:10px}
+  .appbar .back{color:#fff;font-size:15px;font-weight:700;padding:6px 8px 6px 0}
+  .appbar h1{font-size:16px;margin:0;font-weight:700;line-height:1.15}
+  .appbar .sub{font-size:11px;opacity:.8}
+  .appbar .sp{flex:1}
+  .lang{display:flex;background:rgba(255,255,255,.16);border-radius:8px;overflow:hidden}
+  .lang button{color:#fff;padding:6px 11px;font-size:13px;font-weight:700;opacity:.65}
+  .lang button.on{background:#fff;color:var(--brand);opacity:1}
+  .nav{position:fixed;bottom:0;left:0;right:0;z-index:40;background:#fff;border-top:1px solid var(--line);
+    display:flex;justify-content:space-around;padding:6px 4px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(0,0,0,.05)}
+  .nav button{display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--muted);font-size:11px;font-weight:600;padding:4px 8px;border-radius:10px;flex:1}
+  .nav button .ic{font-size:20px;line-height:1}
+  .nav button.on{color:var(--brand)}
+  @media(min-width:980px){
+    .nav{position:sticky;top:58px;bottom:auto;z-index:39;max-width:1180px;margin:10px auto 0;border:1px solid var(--line);border-radius:12px;justify-content:flex-start;gap:4px;padding:6px;box-shadow:var(--sh)}
+    .nav button{flex:none;flex-direction:row;gap:7px;font-size:14px;padding:9px 16px}
+    .nav button .ic{font-size:17px}
+    .nav button.on{background:var(--soft)}
+  }
+  .main{max-width:1180px;margin:0 auto;padding:12px 14px calc(var(--navh) + 24px)}
+  @media(min-width:980px){.main{padding-bottom:28px}}
+  .seccard{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:14px;padding:16px;transition:box-shadow .15s ease}
+  .seccard:hover{box-shadow:0 2px 4px rgba(60,45,10,.08),0 10px 28px rgba(60,45,10,.1)}
+  .seccard h3{margin:0 0 8px;font-size:16px;color:var(--brand)}
+  .evidence{background:#fffdf6;border:1px dashed var(--brand2);border-radius:12px;padding:12px 14px;margin-top:12px}
+  .evidence .h{font-size:11px;font-weight:800;letter-spacing:.5px;color:var(--brand);text-transform:uppercase}
+  .quote{font-style:italic;color:#33404e;border-left:3px solid var(--soft);padding-left:10px;margin-top:8px;font-size:12.5px}
+  .warn{background:var(--warn-soft);border:1px solid #f0d9a8;border-left:4px solid var(--warn);border-radius:10px;padding:10px 12px;font-size:12.5px;color:#6b4700;margin-top:10px}
+  .measure{font-size:13px;background:#f4f9ff;border:1px solid #cfe3f5;border-left:4px solid #185fa5;border-radius:10px;padding:9px 12px;margin-top:10px;color:#0c3a63}
+  .inrow{display:flex;gap:10px;align-items:center;margin:8px 0}
+  .inrow .lab{font-size:12px;color:var(--muted);flex:1}
+  .inrow input{width:120px;padding:9px 10px;border:1px solid var(--line);border-radius:10px;font-size:16px;text-align:right;background:#fff}
+  .res{background:#2b220a;color:#fff;border-radius:12px;padding:14px;margin-top:12px}
+  .res .lbl{font-size:11px;text-transform:uppercase;letter-spacing:.5px;opacity:.7}
+  .res .big{font-size:15px;font-weight:700;margin-top:4px;line-height:1.55}
+  .verdict{border-radius:12px;padding:14px;text-align:center;margin-top:10px;font-weight:800;font-size:19px}
+  .verdict.pass{background:var(--pass-soft);color:var(--pass);border:1px solid #b7e0d2}
+  .verdict.fail{background:var(--fail-soft);color:var(--fail);border:1px solid #f0c4b3}
+  .h2x{font-size:18px;font-weight:800;color:var(--brand);margin:14px 2px 10px;display:flex;align-items:center;gap:10px}
+  .h2x::after{content:"";flex:1;height:1px;background:var(--line)}
+  .step{display:flex;gap:12px;padding:11px 0;border-top:1px dashed var(--line)}
+  .step:first-child{border-top:0}
+  .step .n{width:28px;height:28px;border-radius:50%;background:var(--brand);color:#fff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex:none;margin-top:1px}
+  .step .tx{font-size:13.5px;flex:1}
+  .step .tx b{display:block;font-size:14.5px;margin-bottom:2px;color:#16202c}
+  .step .tool{display:block;font-size:12px;color:var(--brand2);font-weight:700;margin-top:4px}
+  .ckphase{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:14px;overflow:hidden}
+  .ckphase .ph{display:flex;align-items:center;gap:10px;padding:13px 16px;background:var(--soft);font-weight:800;color:var(--brand);font-size:15px}
+  .ckphase .ph .pct{margin-left:auto;font-size:12.5px;font-weight:700;color:var(--muted)}
+  .ckitem{display:flex;gap:11px;padding:12px 16px;border-top:1px solid var(--line);cursor:pointer;align-items:flex-start}
+  .ckitem:hover{background:#faf8f1}
+  .ckitem .box{width:22px;height:22px;border:2px solid #d4c8a8;border-radius:6px;flex:none;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;margin-top:1px}
+  .ckitem.done .box{background:var(--pass);border-color:var(--pass)}
+  .ckitem .tx{font-size:13.5px}
+  .ckitem.done .tx{color:var(--muted);text-decoration:line-through}
+  .ckitem .rf{display:block;font-size:11px;color:var(--brand2);font-weight:700;margin-top:3px}
+  .ckbar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+  .btn{padding:10px 16px;border-radius:10px;background:var(--brand);color:#fff;font-weight:700;font-size:13.5px}
+  .btn.alt{background:#f0e8d2;color:#6b4a05}
+  .btn:active{transform:scale(.98)}
+  .tab{display:none}
+  .tab.on{display:block;animation:fadein .25s ease}
+  @keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<header class="appbar">
+  <a class="back" href="../">←</a>
+  <div>
+    <h1>QC Dim — Kích thước sau hàn</h1>
+    <div class="sub">Giới hạn theo class — tra Thư viện Dung sai (trích dẫn đã xác minh)</div>
+  </div>
+  <div class="sp"></div>
+  <div class="lang">
+    <button id="lvVi" class="on">VI</button>
+    <button id="lvEn">EN</button>
+  </div>
+</header>
+
+<nav class="nav">
+  <button data-tab="qt" class="on"><span class="ic">🪜</span><span data-vi="Quy trình" data-en="Steps">Quy trình</span></button>
+  <button data-tab="kt"><span class="ic">📏</span><span data-vi="Kiểm tra" data-en="Inspect">Kiểm tra</span></button>
+  <button data-tab="photo"><span class="ic">📷</span><span data-vi="Đo ảnh" data-en="Photo">Đo ảnh</span></button>
+  <button data-tab="ck"><span class="ic">☑️</span><span data-vi="Checklist" data-en="Checklist">Checklist</span></button>
+</nav>
+
+<main class="main">
+  <section class="tab on" id="tab-qt"></section>
+  <section class="tab" id="tab-kt"></section>
+  <section class="tab" id="tab-photo">
+    <div class="h2x">📷 Đo ảnh kích thước</div>
+    <div class="seccard" id="photoMount"></div>
+  </section>
+  <section class="tab" id="tab-ck"></section>
+</main>
+
+<script src="data.js"></script>
+<script src="../report.js"></script>
+<script src="../qclog.js"></script>
+<script src="../photo-tool.js"></script>
+<script>
+const D = window.QD_DATA;
+let LANG = localStorage.getItem('qd_lang') || 'vi';
+const T = o => (o && typeof o === 'object') ? (o[LANG] || o.vi || '') : (o || '');
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+document.querySelectorAll('.nav button').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.nav button').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+    document.getElementById('tab-' + b.dataset.tab).classList.add('on');
+    window.scrollTo(0, 0);
+  });
+});
+function setLang(l) {
+  LANG = l; localStorage.setItem('qd_lang', l);
+  document.getElementById('lvVi').classList.toggle('on', l === 'vi');
+  document.getElementById('lvEn').classList.toggle('on', l === 'en');
+  document.querySelectorAll('[data-vi]').forEach(e => e.textContent = e.dataset[l]);
+  renderAll();
+}
+document.getElementById('lvVi').onclick = () => setLang('vi');
+document.getElementById('lvEn').onclick = () => setLang('en');
+
+function renderQT() {
+  const v = LANG === 'vi';
+  document.getElementById('tab-qt').innerHTML = `<div class="h2x">🪜 ${v?'Quy trình QC Dim — 8 bước':'Dimensional QC — 8 steps'}</div>
+    <div class="seccard">` +
+    D.STEPS.map((s, i) => `<div class="step"><div class="n">${i+1}</div><div class="tx"><b>${esc(T(s.t))}</b>${esc(T(s.d))}<span class="tool">🧰 ${esc(T(s.tool))}</span></div></div>`).join('') +
+    `</div><div class="warn">⚠ ${v?'Nguyên tắc QC Dim: đo khi cấu kiện NGUỘI + KHÔNG TẢI, mọi vị trí từ MỘT datum, đo dài phải bù nhiệt. Giới hạn chính thức + trích dẫn điều khoản: mở Thư viện Dung sai.':'Measure cooled &amp; unloaded, single datum, temperature-corrected.'}</div>`;
+}
+
+function renderKT() {
+  const v = LANG === 'vi';
+  let h = `<div class="h2x">📏 ${v?'Tiêu chí + đánh giá Đạt/Không đạt':'Criteria + PASS/FAIL'}</div>`;
+  h += D.RULES.map((r, i) => `
+    <div class="seccard">
+      <h3>${esc(T(r.title))}</h3>
+      <div style="font-size:13.5px">${esc(T(r.criteria))}</div>
+      <div class="measure">📏 <b>${v?'Cách đo':'How'}:</b> ${esc(T(r.measure))}</div>
+      <div style="margin-top:10px" id="calc_${i}">
+        ${r.calc.inputs.map(inp => `<div class="inrow"><span class="lab">${esc(T(inp.label))}</span><input type="number" step="any" data-k="${inp.k}" value="${inp.def}"></div>`).join('')}
+        <div class="cout"></div>
+      </div>
+      <div class="evidence"><div class="h">${v?'Dẫn chứng':'Evidence'}</div><div class="quote">"${esc(r.quote)}"</div></div>
+    </div>`).join('');
+  document.getElementById('tab-kt').innerHTML = h;
+
+  D.RULES.forEach((r, i) => {
+    const box = document.getElementById('calc_' + i);
+    const run = () => {
+      const vals = {};
+      box.querySelectorAll('input').forEach(inp => vals[inp.dataset.k] = parseFloat(inp.value) || 0);
+      const out = r.calc.evaluate(vals);
+      box.querySelector('.cout').innerHTML =
+        `<div class="res"><div class="lbl">${LANG==='vi'?'Giới hạn':'Limit'}</div><div class="big">${esc(out.limitText)}<br><span style="font-size:12.5px;opacity:.8">${esc(out.detail||'')}</span></div></div>
+         <div class="verdict ${out.pass?'pass':'fail'}">${out.pass?(LANG==='vi'?'✓ ĐẠT':'✓ PASS'):(LANG==='vi'?'✗ KHÔNG ĐẠT':'✗ FAIL')}</div>` +
+        (window.QCLog ? QCLog.saveButton('QC Dim', T(r.title), out.pass, (out.detail||'') + ' | ' + out.limitText) : '');
+    };
+    box.querySelectorAll('input').forEach(inp => inp.addEventListener('input', run));
+    run();
+  });
+}
+
+const CK_KEY = 'qd_ck_v1';
+function ckState() { try { return JSON.parse(localStorage.getItem(CK_KEY)) || {}; } catch (e) { return {}; } }
+function renderCK() {
+  const v = LANG === 'vi';
+  const st = ckState();
+  let h = `<div class="ckbar">
+    <button class="btn alt" id="ckReset">↺ ${v?'Làm mới':'Reset'}</button>
+    <button class="btn" id="ckPrint">🖨 ${v?'In biên bản':'Print'}</button></div>`;
+  D.CHECKLIST.forEach((ph, pi) => {
+    const done = ph.items.filter((_, ii) => st[pi + '_' + ii]).length;
+    h += `<div class="ckphase"><div class="ph">${ph.icon} ${esc(T(ph.phase))}<span class="pct">${done}/${ph.items.length}</span></div>
+      ${ph.items.map((it, ii) => `
+        <div class="ckitem ${st[pi+'_'+ii]?'done':''}" data-k="${pi}_${ii}">
+          <div class="box">${st[pi+'_'+ii]?'✓':''}</div>
+          <div class="tx">${esc(T(it.t))}<span class="rf">📎 ${esc(T(it.ref))}</span></div>
+        </div>`).join('')}</div>`;
+  });
+  const el = document.getElementById('tab-ck');
+  el.innerHTML = h;
+  el.querySelectorAll('.ckitem').forEach(c => c.onclick = () => {
+    const s = ckState(); s[c.dataset.k] = !s[c.dataset.k];
+    localStorage.setItem(CK_KEY, JSON.stringify(s)); renderCK();
+  });
+  el.querySelector('#ckReset').onclick = () => { localStorage.removeItem(CK_KEY); renderCK(); };
+  el.querySelector('#ckPrint').onclick = () => {
+    const s = ckState();
+    if (window.QCReport) QCReport.print({
+      module: 'QC Dim', color: '#0c447c',
+      title: v ? 'DIMENSIONAL REPORT — BIÊN BẢN ĐO KIỂM KÍCH THƯỚC' : 'DIMENSIONAL INSPECTION REPORT',
+      groups: D.CHECKLIST.map((ph, pi) => ({
+        name: T(ph.phase),
+        items: ph.items.map((it, ii) => ({ ok: !!s[pi+'_'+ii], text: T(it.t), ref: T(it.ref) }))
+      }))
+    });
+  };
+}
+
+function renderAll() { renderQT(); renderKT(); renderCK(); }
+setLang(LANG);
+if (window.PhotoTool) PhotoTool.mount(document.getElementById('photoMount'), { key: 'qd_photos_v1' });
+
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+</script>
+</body>
+</html>

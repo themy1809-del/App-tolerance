@@ -42,6 +42,17 @@
   .btn{padding:10px 16px;border-radius:10px;background:var(--brand);color:#fff;font-weight:700;font-size:13.5px}
   .btn.alt{background:#dcebe8;color:#0b5852}
   a.inl{color:var(--brand);font-weight:700;text-decoration:underline dotted}
+  .skbox{background:#fbfefd;border:1px solid var(--line);border-radius:10px;padding:8px;max-width:430px;margin:10px auto}
+  .measure{font-size:13px;background:#f4f9ff;border:1px solid #cfe3f5;border-left:4px solid #185fa5;border-radius:10px;padding:9px 12px;margin-top:10px;color:#0c3a63}
+  .inrow{display:flex;gap:10px;align-items:center;margin:8px 0}
+  .inrow .lab{font-size:12px;color:var(--muted);flex:1}
+  .inrow input{width:120px;padding:9px 10px;border:1px solid var(--line);border-radius:10px;font-size:16px;text-align:right;background:#fff;font-family:inherit}
+  .res{background:#0a2a26;color:#fff;border-radius:12px;padding:14px;margin-top:12px}
+  .res .lbl{font-size:11px;text-transform:uppercase;letter-spacing:.5px;opacity:.7}
+  .res .big{font-size:15px;font-weight:700;margin-top:4px;line-height:1.55}
+  .verdict{border-radius:12px;padding:14px;text-align:center;margin-top:10px;font-weight:800;font-size:19px}
+  .verdict.pass{background:var(--pass-soft);color:var(--pass);border:1px solid #b7e0d2}
+  .verdict.fail{background:#fbeae2;color:var(--fail);border:1px solid #f0c4b3}
 </style>
 </head>
 <body>
@@ -67,6 +78,9 @@
     <div class="step"><div class="n">4</div><div class="tx"><b>Cao độ & độ võng đặt sẵn (camber)</b> — kê gối đúng sơ đồ, đo tại các điểm nút.<span class="tool">🧰 Máy thủy bình/total station · <a class="inl" href="../dungsai/">tra giới hạn camber</a></span></div></div>
     <div class="step"><div class="n">5</div><div class="tx"><b>Đánh dấu ghép bộ (match-marking)</b> — đánh số từng mối nối sau khi ráp đạt để công trường lắp đúng vị trí, đúng chiều.<span class="tool">🧰 Sơn đánh dấu + sơ đồ match-mark đính kèm hồ sơ</span></div></div>
   </div>
+
+  <div class="h2x">🧮 Tiêu chí đánh giá — có hình mô phỏng + Đạt/Không đạt</div>
+  <div id="crit"></div>
 
   <div class="h2x">🔩 Bu lông trong ráp thử — quy tắc sống còn</div>
   <div class="seccard">
@@ -101,6 +115,116 @@ const CK = [
 const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 document.getElementById('steps').innerHTML = STEPS.map((s,i) =>
   `<div class="step"><div class="n">${i+1}</div><div class="tx"><b>${esc(s[0])}</b>${esc(s[1])}<span class="tool">🧰 ${esc(s[2])}</span></div></div>`).join('');
+
+/* ===== TIÊU CHÍ ĐÁNH GIÁ + HÌNH MÔ PHỎNG ===== */
+const IK='#1b2430', DM='#aa4322', GN='#0f766e', ST='#cdd6df', WD='#b9893f';
+const fig = inner => `<svg viewBox="0 0 320 135" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block"><defs><marker id="rah" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="${DM}"/></marker></defs>${inner}</svg>`;
+const lb = (x,y,t,c,a) => `<text x="${x}" y="${y}" font-size="11" font-weight="700" fill="${c||DM}" text-anchor="${a||'middle'}" font-family="Segoe UI,Arial">${t}</text>`;
+const FIGS = {
+  pad: () => fig(`
+    <rect x="20" y="108" width="280" height="10" fill="${ST}" stroke="${IK}"/>
+    <rect x="50" y="84" width="40" height="24" fill="${WD}" stroke="${IK}" stroke-width="1.4"/>
+    <rect x="150" y="84" width="40" height="24" fill="${WD}" stroke="${IK}" stroke-width="1.4"/>
+    <rect x="250" y="84" width="40" height="24" fill="${WD}" stroke="${IK}" stroke-width="1.4"/>
+    <rect x="30" y="64" width="280" height="20" fill="${ST}" stroke="${IK}" stroke-width="1.5"/>
+    <line x1="30" y1="84" x2="310" y2="84" stroke="${GN}" stroke-width="1.4" stroke-dasharray="6,4"/>
+    ${lb(160,40,'gối kê ĐỒNG CAO ĐỘ — bắn máy trước khi đặt cấu kiện',GN)}
+    ${lb(160,130,'gối lệch cao độ = cụm ráp vênh giả tạo, đo gì cũng sai',IK)}`),
+  drift: () => fig(`
+    <rect x="60" y="40" width="90" height="60" fill="${ST}" stroke="${IK}" stroke-width="1.5"/>
+    <rect x="170" y="40" width="90" height="60" fill="${ST}" stroke="${IK}" stroke-width="1.5"/>
+    <circle cx="120" cy="58" r="7" fill="#fff" stroke="${IK}" stroke-width="1.4"/>
+    <circle cx="200" cy="58" r="7" fill="#fff" stroke="${IK}" stroke-width="1.4"/>
+    <circle cx="120" cy="84" r="7" fill="#fff" stroke="${IK}" stroke-width="1.4"/>
+    <circle cx="200" cy="84" r="7" fill="#fff" stroke="${IK}" stroke-width="1.4"/>
+    <rect x="106" y="54" width="108" height="8" rx="4" fill="${GN}"/>
+    ${lb(160,30,'drift pin xuyên định vị · bu lông thử xỏ TỰ DO các lỗ còn lại',GN)}
+    ${lb(160,124,'lỗ không thông → doa trong giới hạn, ghi biên bản — CẤM cắt nhiệt mở lỗ',DM)}`),
+  diag: () => fig(`
+    <rect x="50" y="30" width="220" height="80" fill="none" stroke="${IK}" stroke-width="2"/>
+    <line x1="50" y1="30" x2="270" y2="110" stroke="${DM}" stroke-width="1.6" stroke-dasharray="6,4"/>
+    <line x1="270" y1="30" x2="50" y2="110" stroke="${GN}" stroke-width="1.6" stroke-dasharray="6,4"/>
+    ${lb(238,52,'d1',DM)}${lb(86,52,'d2',GN)}
+    ${lb(160,22,'|d1 − d2| = độ méo khung cụm ráp',IK)}
+    ${lb(160,128,'cùng thước · cùng lực căng · cùng người đo',GN)}`),
+  gap: () => fig(`
+    <rect x="40" y="40" width="110" height="60" fill="${ST}" stroke="${IK}" stroke-width="1.5"/>
+    <rect x="156" y="40" width="110" height="60" fill="${ST}" stroke="${IK}" stroke-width="1.5"/>
+    <rect x="150" y="40" width="6" height="60" fill="#fff" stroke="${DM}" stroke-width="1"/>
+    <path d="M170,18 L153,46" stroke="${GN}" stroke-width="3" stroke-linecap="round"/>
+    ${lb(206,22,'thước lá đo khe mặt nối',GN,'start')}
+    ${lb(160,124,'mối ép mặt (bearing): độ khít theo bản vẽ — đo nhiều điểm quanh chu vi',IK)}`),
+  mark: () => fig(`
+    <rect x="40" y="50" width="110" height="44" fill="${ST}" stroke="${IK}" stroke-width="1.5"/>
+    <rect x="170" y="50" width="110" height="44" fill="${ST}" stroke="${IK}" stroke-width="1.5"/>
+    <rect x="118" y="58" width="30" height="16" fill="#fff" stroke="${DM}" stroke-width="1.4"/>
+    <rect x="172" y="58" width="30" height="16" fill="#fff" stroke="${DM}" stroke-width="1.4"/>
+    ${lb(133,70,'A1',DM)}${lb(187,70,'A1',DM)}
+    ${lb(160,34,'match-mark TRÙNG MÃ hai phía mỗi mối nối',DM)}
+    ${lb(160,122,'kèm sơ đồ match-mark vào hồ sơ — công trường lắp đúng vị trí/chiều',GN)}`)
+};
+/* ISO 13920 Table 1 (đã xác minh) */
+const ISO_R=[{f:2,t:30},{f:30,t:120},{f:120,t:400},{f:400,t:1000},{f:1000,t:2000},{f:2000,t:4000},{f:4000,t:8000},{f:8000,t:12000},{f:12000,t:16000},{f:16000,t:20000},{f:20000,t:1e12}];
+const ISO_B=[1,2,2,3,4,6,8,10,12,14,16], ISO_C=[1,3,4,6,8,11,14,18,21,24,27];
+function isoLim(L,cls){ let i=ISO_R.findIndex(b=>L>b.f&&L<=b.t); if(i<0)i=ISO_R.length-1; return (cls==='C'?ISO_C:ISO_B)[i]; }
+const num = v => Math.round(v*100)/100;
+
+const CRIT = [
+  { t:'Cao độ gối kê / đồng phẳng bãi ráp', fig:'pad',
+    d:'Bắn máy toàn bộ gối TRƯỚC khi đặt cấu kiện; chênh cao giữa các gối trong giới hạn bản vẽ (không ghi → thông lệ ±3mm). Gối lệch là sai số "ảo" lan vào mọi phép đo sau.',
+    m:'Máy thủy bình/laser quét từng gối, ghi bảng cao độ kèm biên bản.',
+    inputs:[['dh','Chênh cao lớn nhất giữa các gối (mm)',2],['tol','Giới hạn bản vẽ ± (mm)',3]],
+    ev:v=>({lim:`±${v.tol} mm`, det:`Chênh ${num(v.dh)} mm`, pass:v.dh<=v.tol}) },
+  { t:'Đối tiếp lỗ bu lông giữa các phân đoạn', fig:'drift',
+    d:'Drift pin định vị + bu lông thử xỏ TỰ DO; tỷ lệ lỗ đạt so spec (nhập % hợp đồng yêu cầu). Lỗ kẹt → doa trong giới hạn cho phép + ghi nhận; cấm cắt nhiệt mở lỗ khi chưa duyệt.',
+    m:'Đếm số lỗ kiểm / số lỗ bu lông thử xỏ lọt tự do từng mối nối.',
+    inputs:[['n','Số lỗ kiểm tra',24],['ok','Số lỗ xỏ tự do',23],['req','Tỷ lệ yêu cầu theo spec (%)',100]],
+    ev:v=>{ const p=v.n?Math.round(v.ok/v.n*1000)/10:0; return {lim:`≥ ${v.req}% lỗ thông tự do`, det:`${v.ok}/${v.n} = ${p}%`, pass:p>=v.req}; } },
+  { t:'Khẩu độ / kích thước tổng cụm ráp', fig:'diag',
+    d:'Chiều dài tổng, khẩu độ giữa các trục so bản vẽ LẮP; class theo hợp đồng (B/C phổ biến) — bảng ISO 13920 đã xác minh nhúng sẵn. Đo dài bù nhiệt về 20°C.',
+    m:'Thước cuộn chứng chỉ / total station; 2 lần đọc lấy trung bình.',
+    inputs:[['L','Danh nghĩa (mm)',24000],['m','Đo được — đã bù nhiệt (mm)',24010],['c','Class (2=B, 3=C)',2]],
+    ev:v=>{ const cls=v.c>=3?'C':'B'; const lim=isoLim(v.L,cls); const d=Math.abs(v.m-v.L); return {lim:`ISO 13920 class ${cls}: ±${lim} mm`, det:`Lệch ${num(d)} mm`, pass:d<=lim}; } },
+  { t:'Vuông góc — chênh hai đường chéo', fig:'diag',
+    d:'|d1−d2| so dung sai bản vẽ lắp; không ghi → tham chiếu ISO 13920 class B theo chiều dài đường chéo.',
+    m:'Cùng một thước, cùng lực căng, cùng người đo cả 2 đường.',
+    inputs:[['d1','Đường chéo 1 (mm)',26832],['d2','Đường chéo 2 (mm)',26841],['tol','Dung sai bản vẽ (0 = ISO B)',0]],
+    ev:v=>{ const d=Math.abs(v.d1-v.d2); const ref=isoLim(Math.max(v.d1,v.d2),'B'); const lim=v.tol>0?v.tol:ref; return {lim:v.tol>0?`|Δd| ≤ ${v.tol} mm (bản vẽ)`:`|Δd| ≤ ${ref} mm (ISO 13920 B)`, det:`|Δd| = ${num(d)} mm`, pass:d<=lim}; } },
+  { t:'Độ khít mặt nối (bearing / mặt bích)', fig:'gap',
+    d:'Khe hở mặt tiếp xúc đo thước lá nhiều điểm quanh chu vi; giới hạn theo bản vẽ/spec (mối ép mặt thường yêu cầu rất khít — nhập giá trị spec).',
+    m:'Thước lá từng nấc, ghi giá trị lớn nhất + vị trí.',
+    inputs:[['g','Khe hở lớn nhất đo (mm)',0.3],['tol','Giới hạn spec (mm)',0.5]],
+    ev:v=>({lim:`≤ ${v.tol} mm (spec)`, det:`Đo ${num(v.g)} mm`, pass:v.g<=v.tol}) },
+  { t:'Match-marking đầy đủ', fig:'mark',
+    d:'Mỗi mối nối có mã TRÙNG hai phía + sơ đồ tổng; đếm số mối đã mark / tổng số mối.',
+    m:'Đối chiếu sơ đồ match-mark với thực tế từng mối.',
+    inputs:[['n','Tổng số mối nối',12],['ok','Số mối đã mark đúng',12]],
+    ev:v=>({lim:`${v.n}/${v.n} mối phải có mark trùng mã`, det:`Đã mark ${v.ok}/${v.n}`, pass:v.ok>=v.n}) }
+];
+(function renderCrit(){
+  const el=document.getElementById('crit');
+  el.innerHTML = CRIT.map((c,i)=>`<div class="seccard"><h3>${esc(c.t)}</h3>
+    <div style="font-size:13.5px">${esc(c.d)}</div>
+    <div class="skbox">${FIGS[c.fig]()}</div>
+    <div class="measure">📏 <b>Cách đo:</b> ${esc(c.m)}</div>
+    <div id="rtc_${i}" style="margin-top:10px">
+      ${c.inputs.map(p=>`<div class="inrow"><span class="lab">${esc(p[1])}</span><input type="number" step="any" data-k="${p[0]}" value="${p[2]}"></div>`).join('')}
+      <div class="cout"></div>
+    </div></div>`).join('');
+  CRIT.forEach((c,i)=>{
+    const box=document.getElementById('rtc_'+i);
+    const run=()=>{
+      const v={}; box.querySelectorAll('input').forEach(inp=>v[inp.dataset.k]=parseFloat(inp.value)||0);
+      const o=c.ev(v);
+      box.querySelector('.cout').innerHTML =
+        `<div class="res"><div class="lbl">Giới hạn</div><div class="big">${esc(o.lim)}<br><span style="font-size:12.5px;opacity:.8">${esc(o.det)}</span></div></div>
+         <div class="verdict ${o.pass?'pass':'fail'}">${o.pass?'✓ ĐẠT':'✗ KHÔNG ĐẠT'}</div>` +
+        (window.QCLog ? QCLog.saveButton('QC Ráp thử', c.t, o.pass, o.det+' | '+o.lim) : '');
+    };
+    box.querySelectorAll('input').forEach(inp=>inp.addEventListener('input',run));
+    run();
+  });
+})();
 
 const KEY='rt_ck_v1';
 function st(){ try{ return JSON.parse(localStorage.getItem(KEY))||{}; }catch(e){ return {}; } }

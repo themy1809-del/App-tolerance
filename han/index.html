@@ -148,7 +148,8 @@
 </header>
 
 <nav class="nav">
-  <button data-tab="vt" class="on"><span class="ic">👁</span><span data-vi="Ngoại quan" data-en="Visual">Ngoại quan</span></button>
+  <button data-tab="qt" class="on"><span class="ic">🪜</span><span data-vi="Quy trình" data-en="Steps">Quy trình</span></button>
+  <button data-tab="vt"><span class="ic">👁</span><span data-vi="Ngoại quan" data-en="Visual">Ngoại quan</span></button>
   <button data-tab="do"><span class="ic">📷</span><span data-vi="Đo ảnh" data-en="Photo">Đo ảnh</span></button>
   <button data-tab="ndt"><span class="ic">📡</span><span data-vi="NDT" data-en="NDT">NDT</span></button>
   <button data-tab="ck"><span class="ic">☑️</span><span data-vi="Checklist" data-en="Checklist">Checklist</span></button>
@@ -159,8 +160,11 @@
 
 <main class="main">
 
+  <!-- TAB QUY TRÌNH -->
+  <section class="tab on" id="tab-qt"></section>
+
   <!-- TAB VT -->
-  <section class="tab on" id="tab-vt">
+  <section class="tab" id="tab-vt">
     <div class="search"><span class="mag">🔍</span>
       <input id="q" type="search" placeholder="Tìm: undercut, rỗ khí, nứt, fillet..." autocomplete="off">
     </div>
@@ -706,8 +710,41 @@ async function phRenderGallery() {
   g.querySelectorAll('[data-del]').forEach(b => b.onclick = async () => { await phDel(+b.dataset.del); phRenderGallery(); });
 }
 
+/* ===== TAB QUY TRÌNH — 9 bước chi tiết ===== */
+function renderQT() {
+  const v = LANG === 'vi';
+  const S = v ? [
+    ['Nhận diện mối hàn + WPS', 'Xác định mối theo weld map; WPS đúng liên kết có tại máy (vật liệu/chiều dày/tư thế); thợ đúng chứng chỉ còn hiệu lực.', 'Weld map + Thư viện WPS + sổ WQT'],
+    ['Xác nhận fit-up ĐÃ nghiệm thu', 'Khe hở/góc vát/lệch mép đạt và có biên bản (mối quan trọng) — chưa đạt fit-up thì KHÔNG thả hàn.', 'Module QC Fit-up (biên bản)'],
+    ['Kiểm trước hàn', 'Que hydro thấp sấy đúng nhiệt/giờ + tủ giữ nhiệt; preheat đạt theo chiều dày + mác (đo cách mép 75mm); che chắn gió (khí bảo vệ ≤ 8km/h); bề mặt khô sạch.', 'Tab Checklist (10 mục) + bảng preheat ở Công cụ'],
+    ['Giám sát trong khi hàn', 'Dòng/áp/tốc độ trong dải WPS; interpass không vượt max; làm sạch xỉ giữa các lớp; không mồi hồ quang ngoài rãnh; tuần tra ghi nhật ký hàn.', 'Nhật ký hàn + ampe kìm'],
+    ['Chờ nguội đúng quy định', 'VT sau khi nguội về nhiệt độ môi trường; thép A514/A517/HPS 690W: chờ ≥ 48h (nứt trễ hydro).', 'Tiêu chí "Thời điểm kiểm tra" trong tab Ngoại quan'],
+    ['VT 100% — 25 tiêu chí', 'Soi đèn ≥350 lux dọc 2 chân + mặt + crater; từng khuyết tật có hình cách đo + calculator: nhập số đo là ra ĐẠT/KHÔNG ĐẠT theo mức B/C/D (EXC).', 'Tab Ngoại quan + dưỡng hàn + thước V-WAC'],
+    ['Đo kích thước mối hàn', 'Size fillet bằng dưỡng từng đoạn 50mm; chiều dài + vị trí mối hàn so bản vẽ; throat mặt lõm bằng cam gauge.', 'Fillet/cam gauge — tiêu chí (6) Ngoại quan'],
+    ['NDT theo EXC', 'Chờ đủ hold time (8–24h theo Q + chiều dày, tính ở Công cụ) → UT/MT/PT theo % Table 24; nhân sự ISO 9712 L2.', 'Tab NDT (bảng đã xác minh)'],
+    ['Xử lý + hồ sơ', 'Mối hỏng: sửa theo quy trình duyệt + kiểm lại 100% + NCR; lưu kết quả Nhật ký QC (nút 💾); in checklist thành biên bản; cập nhật weld map.', 'NCR (Lượng dư) + 🖨 In + Nhật ký QC']
+  ] : [
+    ['Identify weld + WPS', 'Weld map; correct WPS at station; qualified welder.', 'WPS library'],
+    ['Fit-up accepted', 'Gap/bevel/misalignment passed with report — no release otherwise.', 'Fit-up module'],
+    ['Pre-weld checks', 'Electrode baking, preheat, wind protection, dry surfaces.', 'Checklist tab'],
+    ['Monitor welding', 'Parameters in WPS range; interpass; cleaning; no stray arcs.', 'Weld log'],
+    ['Cooling wait', 'VT after ambient; HSS 48h delay.', 'VT timing criterion'],
+    ['VT 100%', '25 criteria with measuring sketches + PASS/FAIL calculators.', 'Visual tab'],
+    ['Weld dimensions', 'Fillet size per 50mm, lengths, cam gauge for concave.', 'Gauges'],
+    ['NDT per EXC', 'Hold time then UT/MT/PT per Table 24.', 'NDT tab'],
+    ['Rectify + records', 'Repair + 100% recheck + NCR; save to QC log; print report.', 'Log + print']
+  ];
+  document.getElementById('tab-qt').innerHTML = `<div class="h2x">🪜 ${v?'Quy trình QC Hàn — 9 bước':'Welding QC — 9 steps'}</div>
+    <div class="seccard">` +
+    S.map((s, i) => `<div style="display:flex;gap:12px;padding:11px 0;border-top:1px dashed var(--line)">
+      <div style="width:28px;height:28px;border-radius:50%;background:var(--brand);color:#fff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex:none;margin-top:1px">${i+1}</div>
+      <div style="font-size:13.5px;flex:1"><b style="display:block;font-size:14.5px;margin-bottom:2px;color:#16202c">${esc(s[0])}</b>${esc(s[1])}
+      <span style="display:block;font-size:12px;color:var(--brand2);font-weight:700;margin-top:4px">🧰 ${esc(s[2])}</span></div></div>`).join('') +
+    `</div><div class="warn">⚠ ${v?'Điểm dừng (Hold): bước 2 (fit-up), bước 6 (VT), bước 8 (NDT) — chưa đạt là không đi tiếp. Chi tiết ai làm/ai kiểm: tab 🗂 ITP.':'Hold points: steps 2, 6, 8 — see ITP tab.'}</div>`;
+}
+
 /* ===== render all ===== */
-function renderAll() { renderVT(); renderDetail(); renderNDT(); renderCK(); renderSym(); renderTools(); }
+function renderAll() { renderQT(); renderVT(); renderDetail(); renderNDT(); renderCK(); renderSym(); renderTools(); }
 setLang(LANG);
 initPhoto();
 if (window.QCITP && window.ITP_DATA) QCITP.mount(document.getElementById('itpMount'), ITP_DATA.han, { color: '#7c2d12' });

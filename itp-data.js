@@ -37,7 +37,7 @@
     },
 
     bulong: {
-      module: 'QC Bu lông', title: 'ITP — Liên kết bu lông dự ứng lực',
+      module: 'Cách kiểm tra siết bu lông', title: 'ITP — Liên kết bu lông dự ứng lực',
       scope: 'Áp dụng cho liên kết bu lông cường độ cao theo EN 1090-2 Cl.8 / AISC-RCSC (chọn hệ theo hợp đồng).',
       stages: [
         { act: 'Kiểm bộ bu lông nhập: CoC, k-class (EN) / lot test (RCSC), bảo quản', doc: 'EN 14399 / ASTM F3125', resp: 'Kho + QC', check: 'QC', point: 'R', record: 'CoC + biên bản nhập', tool: { url: '../bulong/', label: 'tab Vật tư' } },

@@ -123,7 +123,8 @@
 </header>
 
 <nav class="nav">
-  <button data-tab="surf" class="on"><span class="ic">🧹</span><span data-vi="Bề mặt" data-en="Surface">Bề mặt</span></button>
+  <button data-tab="qt" class="on"><span class="ic">🪜</span><span data-vi="Quy trình" data-en="Steps">Quy trình</span></button>
+  <button data-tab="surf"><span class="ic">🧹</span><span data-vi="Bề mặt" data-en="Surface">Bề mặt</span></button>
   <button data-tab="env"><span class="ic">🌡</span><span data-vi="Môi trường" data-en="Climate">Môi trường</span></button>
   <button data-tab="dft"><span class="ic">📏</span><span data-vi="DFT" data-en="DFT">DFT</span></button>
   <button data-tab="test"><span class="ic">🔬</span><span data-vi="Kiểm tra" data-en="Tests">Kiểm tra</span></button>
@@ -135,7 +136,8 @@
 </nav>
 
 <main class="main">
-  <section class="tab on" id="tab-surf"></section>
+  <section class="tab on" id="tab-qt"></section>
+  <section class="tab" id="tab-surf"></section>
   <section class="tab" id="tab-env"></section>
   <section class="tab" id="tab-dft"></section>
   <section class="tab" id="tab-test"></section>
@@ -247,6 +249,39 @@ const SK = {
 const measureCard = (title, sk, steps) => `<div class="seccard"><h3>📐 ${title}</h3>
   <div style="background:#fbfdf9;border:1px solid var(--line);border-radius:10px;padding:8px;max-width:430px;margin:0 auto">${sk}</div>
   <div style="font-size:13.5px;margin-top:10px;line-height:1.65">${steps}</div></div>`;
+
+/* ===== TAB QUY TRÌNH — 9 bước chi tiết ===== */
+function renderQT() {
+  const v = LANG === 'vi';
+  const S = v ? [
+    ['Nghiệm thu P-grade trước phun', 'Mối hàn/cạnh đạt P1/P2/P3 theo hợp đồng (mài cạnh sắc, bỏ spatter); QC Dim đã đạt — sơn xong không sửa kết cấu được nữa.', 'Tab Bề mặt (bảng P đã xác minh) + biên bản'],
+    ['Tẩy dầu mỡ + che chắn', 'Solvent clean toàn bộ trước phun hạt; che ren/mặt gia công không sơn.', 'SSPC-SP1 + băng che'],
+    ['Phun hạt + nghiệm thu 4 phép (ĐIỂM DỪNG)', 'Cấp sạch (thường Sa 2½) so ảnh chuẩn + độ nhám replica tape + bụi tape test + muối Bresle — đạt cả 4 mới sơn lót; lớp lót phải phủ trong 4h (hoặc trước khi gỉ lại).', 'Tab Bề mặt — 4 phép có hình cách đo'],
+    ['Đo môi trường TRƯỚC khi mở sơn', 'Ts ≥ điểm sương +3°C, RH ≤ 85%, nhiệt độ trong dải PDS — nhập 3 số ra ĐƯỢC/KHÔNG; đo lại mỗi 2–4h.', 'Tab Môi trường (calculator điểm sương)'],
+    ['Trộn sơn đúng PDS', 'Đúng tỷ lệ A:B bằng cân/đong, khuấy máy, đủ induction time, theo dõi pot life — hết pot life là bỏ.', 'PDS + cân + đồng hồ'],
+    ['Stripe coat trước', 'Chổi/rulo cạnh, bu lông, mối hàn, góc khuất TRƯỚC mỗi lớp phun — nơi hỏng sơn số 1 nếu bỏ qua.', 'Chổi + rulo nhỏ'],
+    ['Phun + kiểm WFT từng lớp', 'WFT bằng lược ngay khi ướt (WFT = NDFT/%VS); đúng kỹ thuật chồng 50%; tuân thủ thời gian phủ lại min/max theo nhiệt độ.', 'Lược WFT + PDS'],
+    ['DFT cuối + ngoại quan (ĐIỂM DỪNG)', 'Dán cả loạt số đo vào ô tính — app kiểm đủ 4 điều kiện ISO 19840; soi 100% lỗi sơn (chảy, lỗ kim, dry spray...); mạ kẽm kiểm theo tab Mạ kẽm.', 'Tab DFT + tab Lỗi sơn + tab Mạ kẽm'],
+    ['Kiểm bổ sung + hồ sơ', 'Bám dính/holiday nếu spec; lưu kết quả Nhật ký QC; in checklist thành biên bản; ảnh hoàn công.', 'Tab Kiểm tra + 🖨 In + Nhật ký QC']
+  ] : [
+    ['P-grade acceptance', 'Welds/edges to P1–P3 before blasting.', 'Surface tab'],
+    ['Degrease + masking', 'Solvent clean; mask threads/machined faces.', 'SSPC-SP1'],
+    ['Blast + 4 checks (HOLD)', 'Sa grade, profile, dust, salts — prime within 4h.', 'Surface tab'],
+    ['Climate before opening paint', 'Ts ≥ Td+3°C, RH ≤ 85%; recheck 2–4h.', 'Climate tab'],
+    ['Mix per PDS', 'Ratio, induction, pot life.', 'PDS'],
+    ['Stripe coat first', 'Edges, bolts, welds before each spray coat.', 'Brush/roller'],
+    ['Spray + WFT', 'WFT comb; 50% overlap; overcoat windows.', 'WFT comb'],
+    ['Final DFT + visual (HOLD)', 'ISO 19840 4 conditions; 100% visual; galvanizing tab.', 'DFT tab'],
+    ['Extra tests + records', 'Adhesion/holiday if specified; log; print report.', 'Tests tab']
+  ];
+  document.getElementById('tab-qt').innerHTML = `<div class="h2x">🪜 ${v?'Quy trình QC Coating — 9 bước':'Coating QC — 9 steps'}</div>
+    <div class="seccard">` +
+    S.map((s, i) => `<div style="display:flex;gap:12px;padding:11px 0;border-top:1px dashed var(--line)">
+      <div style="width:28px;height:28px;border-radius:50%;background:var(--brand);color:#fff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex:none;margin-top:1px">${i+1}</div>
+      <div style="font-size:13.5px;flex:1"><b style="display:block;font-size:14.5px;margin-bottom:2px;color:#16202c">${esc(s[0])}</b>${esc(s[1])}
+      <span style="display:block;font-size:12px;color:var(--brand2);font-weight:700;margin-top:4px">🧰 ${esc(s[2])}</span></div></div>`).join('') +
+    `</div><div class="warn">⚠ ${v?'Hai ĐIỂM DỪNG bắt buộc: bước 3 (bề mặt sau phun — sẽ bị che vĩnh viễn) và bước 8 (DFT cuối). Ai làm/ai kiểm: tab 🗂 ITP.':'Hold points: steps 3 & 8 — see ITP tab.'}</div>`;
+}
 
 /* ===== SURFACE ===== */
 function renderSurf() {
@@ -575,7 +610,7 @@ function renderCK() {
   };
 }
 
-function renderAll() { renderSurf(); renderEnv(); renderDft(); renderTest(); renderDef(); renderZn(); renderCK(); }
+function renderAll() { renderQT(); renderSurf(); renderEnv(); renderDft(); renderTest(); renderDef(); renderZn(); renderCK(); }
 setLang(LANG);
 if (window.PhotoTool) PhotoTool.mount(document.getElementById('photoMount'), { key: 'son_photos_v1' });
 if (window.QCITP && window.ITP_DATA) QCITP.mount(document.getElementById('itpMount'), ITP_DATA.son, { color: '#14532d' });

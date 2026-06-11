@@ -1,4 +1,4 @@
-const CACHE = 'han-v9';
+const CACHE = 'han-v10';
 const ASSETS = ['./', './index.html', './data.js', './sketches.js', '../report.js', '../itp.js', '../itp-data.js', '../qclog.js', './manifest.webmanifest'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));

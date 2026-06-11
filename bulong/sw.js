@@ -1,4 +1,4 @@
-const CACHE = 'bulong-v4';
+const CACHE = 'bulong-v5';
 const ASSETS = ['./', './index.html', './data.js', '../report.js', '../itp.js', '../itp-data.js', './manifest.webmanifest'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
