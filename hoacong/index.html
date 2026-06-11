@@ -51,7 +51,7 @@ th{background:#f8fafc;font-size:11px;text-transform:uppercase;letter-spacing:.4p
 <div class="appbar">
   <a href="../">←</a>
   <h1>🔥 Thư viện Nắn chỉnh Hỏa công</h1>
-  <span class="doc">QHPS-QAC-F-001</span>
+  <span class="doc">TL Hỏa công nội bộ</span>
 </div>
 <div class="nav" id="nav"></div>
 <div class="wrap">
@@ -60,16 +60,19 @@ th{background:#f8fafc;font-size:11px;text-transform:uppercase;letter-spacing:.4p
   <div class="tab" id="tb-tt"></div>
   <div class="tab" id="tb-pp"></div>
   <div class="tab" id="tb-gh"></div>
+  <div class="tab" id="tb-itp"></div>
   <div class="tab" id="tb-ck"></div>
 </div>
 
 <script src="data.js"></script>
 <script src="../qclog.js"></script>
 <script src="../report.js"></script>
+<script src="../itp-data.js"></script>
+<script src="../itp.js"></script>
 <script>
 'use strict';
 const D = window.HC_DATA;
-const TABS = [['qt','📋 Quy trình'],['kt','🔥 4 mẫu gia nhiệt'],['tt','🔢 Trình tự'],['pp','🛠 Phương pháp'],['gh','✅ Giới hạn & tiêu chí'],['ck','☑ Checklist']];
+const TABS = [['qt','📋 Quy trình'],['kt','🔥 4 mẫu gia nhiệt'],['tt','🔢 Trình tự'],['pp','🛠 Phương pháp'],['gh','✅ Giới hạn & tiêu chí'],['itp','📑 ITP'],['ck','☑ Checklist']];
 
 /* ===== SVG minh họa (label ngắn) ===== */
 const SK = {
@@ -124,14 +127,14 @@ edge:`<svg class="sk" viewBox="0 0 320 135" xmlns="http://www.w3.org/2000/svg">
 function rQT(){
   let h = '<div class="card"><h3>Quy trình hỏa công nắn phẳng — 8 bước</h3>';
   D.STEPS.forEach((s,i)=>{ h += `<div class="step"><div class="n">${i+1}</div><div><b>${s.t.replace(/^\d+\.\s*/,'')}</b>${s.d}<div class="ref">📖 ${s.ref}</div></div></div>`; });
-  h += `<div class="ev">"Hoả công nắn phẳng phải được thực hiện trước khi thử kín (nếu có), kiểm tra, nghiệm thu kết cấu hàn." — QHPS-QAC-F-001 mục 5.3 · đã xác minh</div></div>`;
+  h += `<div class="ev">"Hoả công nắn phẳng phải được thực hiện trước khi thử kín (nếu có), kiểm tra, nghiệm thu kết cấu hàn." — TL Hỏa công nội bộ mục 5.3 · đã xác minh</div></div>`;
   document.getElementById('tb-qt').innerHTML = h;
 }
 function rKT(){
   const m = { diem:SK.diem, duong:SK.duong, chuv:SK.chuv, khoi:SK.khoi };
   let h = '';
   D.PATTERNS.forEach(p=>{ h += `<div class="card"><h3>${p.name}</h3><div>${p.use}</div>${m[p.id]||''}<div class="note">💡 ${p.note}</div></div>`; });
-  h += `<div class="ev">"Có bốn mẫu gia nhiệt... dùng riêng rẽ hay kết hợp. Gia nhiệt theo đường (khuyến cáo nên dùng). Chú ý: chỉ đốt ngấm ¾ chiều dày." — QHPS-QAC-F-001 mục 6 · đã xác minh</div>`;
+  h += `<div class="ev">"Có bốn mẫu gia nhiệt... dùng riêng rẽ hay kết hợp. Gia nhiệt theo đường (khuyến cáo nên dùng). Chú ý: chỉ đốt ngấm ¾ chiều dày." — TL Hỏa công nội bộ mục 6 · đã xác minh</div>`;
   document.getElementById('tb-kt').innerHTML = h;
 }
 function rTT(){
@@ -143,12 +146,12 @@ function rTT(){
 <div class="step"><div class="n">B</div><div>Biến dạng sâu/rộng khác nhau → nắn từ <b>biến dạng trung bình</b> trước.</div></div>
 <div class="step"><div class="n">C</div><div>Khu vực nắn phải <b>hàn xong</b>, ngoài vùng nhiệt hàn lân cận.</div></div>
 <div class="step"><div class="n">D</div><div>Chọn sai khu vực nung / chế độ nung → biến dạng <b>phức tạp thêm</b> (mục 1).</div></div>
-<div class="ev">"Việc hoả công nắn phẳng phải bắt đầu từ các chi tiết kết cấu có độ cứng lớn nhất." — QHPS-QAC-F-001 mục 9 · đã xác minh</div></div>`;
+<div class="ev">"Việc hoả công nắn phẳng phải bắt đầu từ các chi tiết kết cấu có độ cứng lớn nhất." — TL Hỏa công nội bộ mục 9 · đã xác minh</div></div>`;
   document.getElementById('tb-tt').innerHTML = h;
 }
 function rPP(){
   let h = '';
-  D.METHODS.forEach((x,i)=>{ h += `<div class="card"><h3>${i+1}. ${x.name}</h3><div>${x.how}</div><div class="ref" style="font-size:11px;color:var(--muted);margin-top:5px">📖 QHPS-QAC-F-001 ${x.ref} · đã xác minh</div></div>`; });
+  D.METHODS.forEach((x,i)=>{ h += `<div class="card"><h3>${i+1}. ${x.name}</h3><div>${x.how}</div><div class="ref" style="font-size:11px;color:var(--muted);margin-top:5px">📖 TL Hỏa công nội bộ ${x.ref} · đã xác minh</div></div>`; });
   h += `<div class="card"><h3>Minh họa mép tự do</h3>${SK.edge}</div>`;
   document.getElementById('tb-pp').innerHTML = h;
 }
@@ -193,7 +196,7 @@ function ckPrint(){
     const boxes=document.querySelectorAll('#tb-ck input[type=checkbox]');
     let flat=[]; D.CHECKLIST.forEach(x=>x.items.forEach(y=>flat.push(y)));
     const gi = flat.indexOf(it);
-    return { ok: boxes[gi] ? boxes[gi].checked : false, text: it, ref: 'QHPS-QAC-F-001' };
+    return { ok: boxes[gi] ? boxes[gi].checked : false, text: it, ref: 'TL Hỏa công nội bộ' };
   })}));
   QCReport.print({ module:'Hỏa công nắn phẳng', color:'#b3411f', title:'BIÊN BẢN HỎA CÔNG NẮN PHẲNG', groups });
 }
@@ -208,6 +211,7 @@ function show(id){
   localStorage.setItem('hc_tab', id);
 }
 rQT(); rKT(); rTT(); rPP(); rGH(); rCK();
+try { if (window.QCITP && window.ITP_DATA && ITP_DATA.hoacong) QCITP.mount(document.getElementById('tb-itp'), ITP_DATA.hoacong, { color: '#b3411f' }); } catch(e) {}
 show(localStorage.getItem('hc_tab') || 'qt');
 </script>
 <script src="../assistant.js"></script>

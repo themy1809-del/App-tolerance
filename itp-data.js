@@ -92,6 +92,20 @@
       ]
     },
 
+    hoacong: {
+      module: 'Hỏa công nắn phẳng', title: 'ITP — Nắn chỉnh hỏa công',
+      scope: 'Kiểm soát nắn nóng kết cấu biến dạng sau hàn theo TL Hỏa công nội bộ — từ đo biến dạng đến nghiệm thu sau nắn.',
+      stages: [
+        { act: 'Đo & lập danh sách biến dạng vượt dung sai (giá trị, vị trí, phạm vi)', doc: 'ISO 13920 / spec dự án', resp: 'QC', check: 'QC trưởng', point: 'R', record: 'Phiếu đo trước nắn + ảnh', tool: { url: '../hoacong/', label: 'Thư viện Hỏa công' } },
+        { act: 'Lập phương án nắn: mẫu gia nhiệt (điểm/đường/V/khối), tuyến đốt đánh dấu, trình tự', doc: 'TL Hỏa công nội bộ mục 6, 8', resp: 'Kỹ thuật + QC', check: 'QC trưởng DUYỆT', point: 'H', record: 'Phương án nắn có chữ ký' },
+        { act: 'Kiểm điều kiện trước nắn: khu vực đã hàn xong, ngoài vùng nhiệt hàn, TRƯỚC thử kín/nghiệm thu', doc: 'TL Hỏa công nội bộ mục 5.1–5.3', resp: 'QC', check: 'QC', point: 'H', record: 'Xác nhận trên phương án' },
+        { act: 'Chỉ dẫn thợ hỏa công + chuẩn bị PCCC, mỏ đốt, bút nhiệt/súng IR', doc: 'TL Hỏa công nội bộ mục 8', resp: 'Tổ trưởng', check: 'QC', point: 'S', record: 'Biên bản toolbox' },
+        { act: 'Gia nhiệt theo phương án: ~650°C, ngấm ¾ chiều dày, phía lồi, từ chi tiết cứng nhất; cấm làm mát nước vùng mối nối', doc: 'TL Hỏa công nội bộ mục 6, 9, 17', resp: 'Thợ hỏa công', check: 'QC GIÁM SÁT', point: 'W', record: 'Nhật ký nắn (nhiệt độ, vị trí)' },
+        { act: 'Nguội tự nhiên → đo lại kích thước + VT vùng đốt (không nứt; nghi ngờ → MT)', doc: 'ISO 13920 + EN 1090-2 6.4.4 (≤450HV10 khi yêu cầu)', resp: 'QC', check: 'QC trưởng', point: 'H', record: 'Phiếu đo sau nắn', tool: { url: '../hoacong/', label: 'Calculator đánh giá sau nắn' } },
+        { act: 'Biên bản nắn hoàn chỉnh (trước/sau + ảnh) — lưu hồ sơ, nhật ký QC', doc: 'EN 1090-2 6.5.3 (quy trình văn bản)', resp: 'QC', check: 'QC trưởng', point: 'R', record: 'Biên bản A4 + Nhật ký QC' }
+      ]
+    },
+
     wps: {
       module: 'Thư viện WPS', title: 'ITP — Kiểm soát quy trình hàn (WPS/PQR/WQT)',
       scope: 'Quy trình lập, chứng nhận, ban hành và kiểm soát tài liệu hàn trước & trong sản xuất.',

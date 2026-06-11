@@ -1,17 +1,17 @@
 /* ===== HC_DATA — Thư viện Nắn chỉnh Hỏa công =====
-   Nguồn chính: QHPS-QAC-F-001 "Tài liệu hướng dẫn Hỏa công nắn phẳng" (15/10/2021) — tài liệu nội bộ, đã xác minh.
+   Nguồn chính: TL Hỏa công nội bộ "Tài liệu hướng dẫn Hỏa công nắn phẳng" (15/10/2021) — tài liệu nội bộ, đã xác minh.
    Tham chiếu thêm: EN 1090-2 (nắn nóng phải có quy trình văn bản — tham khảo), ISO 13920 (dung sai sau nắn). */
 window.HC_DATA = {
-  doc: 'QHPS-QAC-F-001 · 15/10/2021',
+  doc: 'TL Hỏa công nội bộ · 2021',
 
   STEPS: [
-    { t: '1. Xác định biến dạng', d: 'Đo độ võng / lồi lõm bằng thước thẳng 1m + thước nêm (taper gauge) hoặc căng dây. Ghi giá trị, vị trí, phạm vi. So với dung sai chế tạo (ISO 13920 / EN 1090-2) → chỉ nắn khi VƯỢT dung sai.', ref: 'QHPS-QAC-F-001 mục 8' },
-    { t: '2. Lập phương án nắn', d: 'Chọn mẫu gia nhiệt (điểm / đường / chữ V / khối — khuyến cáo dùng GIA NHIỆT THEO ĐƯỜNG), xác định vị trí + trình tự đốt, đánh dấu tuyến và tâm tuyến đốt lên kết cấu trước khi châm lửa.', ref: 'QHPS-QAC-F-001 mục 6, 8' },
-    { t: '3. Kiểm điều kiện trước nắn', d: 'Khu vực nắn đã HÀN XONG toàn bộ chi tiết; không nằm trong vùng sắp hàn và không bị nhiệt hàn lân cận ảnh hưởng; nắn TRƯỚC khi thử kín (nếu có), trước kiểm tra — nghiệm thu.', ref: 'QHPS-QAC-F-001 mục 5.1–5.3' },
-    { t: '4. Chuẩn bị thiết bị & con người', d: 'Mỏ đốt đúng loại (1 đầu / nhiều đầu theo phương án), bút đo nhiệt hoặc súng IR, dụng cụ làm mát (chỉ nơi cho phép), chỉ dẫn thợ hỏa công các lưu ý trước khi làm. PCCC: bình chữa cháy, dọn vật cháy quanh khu vực.', ref: 'QHPS-QAC-F-001 mục 8' },
-    { t: '5. Gia nhiệt theo phương án', d: 'Bắt đầu từ chi tiết có ĐỘ CỨNG LỚN NHẤT. Nhiệt độ vùng đốt ~650°C (thép đỏ sẫm). Chỉ đốt ngấm ¾ chiều dày tấm. Biến dạng nhiều mức khác nhau → nắn từ biến dạng TRUNG BÌNH trước.', ref: 'QHPS-QAC-F-001 mục 6, 7, 9' },
-    { t: '6. Kiểm soát trong khi đốt', d: 'KHÔNG làm mát bằng nước/khí nén ở vùng mối hàn nối tấm (tránh tôi cứng, giòn). Mép kết cấu đã cố định → dừng đốt cách mép 300mm. Gia cường: đốt dải ĐỨT ĐOẠN để gia cường không biến dạng theo.', ref: 'QHPS-QAC-F-001 mục 7, chú ý' },
-    { t: '7. Nguội & đo lại', d: 'Chờ nguội tự nhiên rồi mới đo. Chưa đạt → đốt dải tiếp theo ở vị trí gián tiếp (không đốt lại chỗ cũ khi chưa nguội). Lặp đến khi đạt dung sai.', ref: 'QHPS-QAC-F-001 mục 13, 20' },
+    { t: '1. Xác định biến dạng', d: 'Đo độ võng / lồi lõm bằng thước thẳng 1m + thước nêm (taper gauge) hoặc căng dây. Ghi giá trị, vị trí, phạm vi. So với dung sai chế tạo (ISO 13920 / EN 1090-2) → chỉ nắn khi VƯỢT dung sai.', ref: 'TL Hỏa công nội bộ mục 8' },
+    { t: '2. Lập phương án nắn', d: 'Chọn mẫu gia nhiệt (điểm / đường / chữ V / khối — khuyến cáo dùng GIA NHIỆT THEO ĐƯỜNG), xác định vị trí + trình tự đốt, đánh dấu tuyến và tâm tuyến đốt lên kết cấu trước khi châm lửa.', ref: 'TL Hỏa công nội bộ mục 6, 8' },
+    { t: '3. Kiểm điều kiện trước nắn', d: 'Khu vực nắn đã HÀN XONG toàn bộ chi tiết; không nằm trong vùng sắp hàn và không bị nhiệt hàn lân cận ảnh hưởng; nắn TRƯỚC khi thử kín (nếu có), trước kiểm tra — nghiệm thu.', ref: 'TL Hỏa công nội bộ mục 5.1–5.3' },
+    { t: '4. Chuẩn bị thiết bị & con người', d: 'Mỏ đốt đúng loại (1 đầu / nhiều đầu theo phương án), bút đo nhiệt hoặc súng IR, dụng cụ làm mát (chỉ nơi cho phép), chỉ dẫn thợ hỏa công các lưu ý trước khi làm. PCCC: bình chữa cháy, dọn vật cháy quanh khu vực.', ref: 'TL Hỏa công nội bộ mục 8' },
+    { t: '5. Gia nhiệt theo phương án', d: 'Bắt đầu từ chi tiết có ĐỘ CỨNG LỚN NHẤT. Nhiệt độ vùng đốt ~650°C (thép đỏ sẫm). Chỉ đốt ngấm ¾ chiều dày tấm. Biến dạng nhiều mức khác nhau → nắn từ biến dạng TRUNG BÌNH trước.', ref: 'TL Hỏa công nội bộ mục 6, 7, 9' },
+    { t: '6. Kiểm soát trong khi đốt', d: 'KHÔNG làm mát bằng nước/khí nén ở vùng mối hàn nối tấm (tránh tôi cứng, giòn). Mép kết cấu đã cố định → dừng đốt cách mép 300mm. Gia cường: đốt dải ĐỨT ĐOẠN để gia cường không biến dạng theo.', ref: 'TL Hỏa công nội bộ mục 7, chú ý' },
+    { t: '7. Nguội & đo lại', d: 'Chờ nguội tự nhiên rồi mới đo. Chưa đạt → đốt dải tiếp theo ở vị trí gián tiếp (không đốt lại chỗ cũ khi chưa nguội). Lặp đến khi đạt dung sai.', ref: 'TL Hỏa công nội bộ mục 13, 20' },
     { t: '8. Nghiệm thu & hồ sơ', d: 'VT bề mặt vùng đốt: không nứt, không cháy lõm; nghi ngờ → MT. Đo kích thước đạt dung sai. Biên bản nắn (vị trí, mẫu gia nhiệt, nhiệt độ, kết quả đo trước/sau) + ảnh, lưu Nhật ký QC.', ref: 'EN 1090-2 (quy trình văn bản) — tham khảo' }
   ],
 
@@ -45,11 +45,11 @@ window.HC_DATA = {
 
   /* Giới hạn cứng — tiêu chí chấp nhận */
   LIMITS: [
-    { t: 'Nhiệt độ vùng đốt', v: '~650°C (đỏ sẫm) — không vượt quá', ref: 'QHPS-QAC-F-001 mục 17 · đã xác minh' },
-    { t: 'Chiều sâu ngấm nhiệt', v: 'Chỉ đốt ngấm ¾ chiều dày tấm', ref: 'QHPS-QAC-F-001 mục 6 · đã xác minh' },
-    { t: 'Làm mát vùng mối hàn nối tấm', v: 'CẤM nước / khí nén — chỉ nguội tự nhiên', ref: 'QHPS-QAC-F-001 mục 17 · đã xác minh' },
-    { t: 'Khoảng cách tới mép đã cố định', v: 'Dừng đốt cách mép 300mm (mép tự do tôn bao: 200mm theo hình mục 19)', ref: 'QHPS-QAC-F-001 mục 12, 19 · đã xác minh' },
-    { t: 'Dải đốt trên cạnh mép gia cường', v: 'Rộng 20–30mm; khoảng cách dải 400–600mm; tam giác cao 1/3–1/2 mép', ref: 'QHPS-QAC-F-001 mục 13 · đã xác minh' },
+    { t: 'Nhiệt độ vùng đốt', v: '~650°C (đỏ sẫm) — không vượt quá', ref: 'TL Hỏa công nội bộ mục 17 · đã xác minh' },
+    { t: 'Chiều sâu ngấm nhiệt', v: 'Chỉ đốt ngấm ¾ chiều dày tấm', ref: 'TL Hỏa công nội bộ mục 6 · đã xác minh' },
+    { t: 'Làm mát vùng mối hàn nối tấm', v: 'CẤM nước / khí nén — chỉ nguội tự nhiên', ref: 'TL Hỏa công nội bộ mục 17 · đã xác minh' },
+    { t: 'Khoảng cách tới mép đã cố định', v: 'Dừng đốt cách mép 300mm (mép tự do tôn bao: 200mm theo hình mục 19)', ref: 'TL Hỏa công nội bộ mục 12, 19 · đã xác minh' },
+    { t: 'Dải đốt trên cạnh mép gia cường', v: 'Rộng 20–30mm; khoảng cách dải 400–600mm; tam giác cao 1/3–1/2 mép', ref: 'TL Hỏa công nội bộ mục 13 · đã xác minh' },
     { t: 'Sau nắn — kích thước', v: 'Đạt dung sai chế tạo ISO 13920 / EN 1090-2 Annex B (tra Thư viện Dung sai)', ref: 'ISO 13920:2023 · đã xác minh trong app' },
     { t: 'Sau nắn — bề mặt', v: 'VT 100% vùng đốt: không nứt, không cháy thủng; nghi ngờ nứt → MT', ref: 'Thực hành QC — tham khảo' },
     { t: 'Sau nắn — độ cứng (khi spec yêu cầu)', v: '≤ 450 HV10 vùng ảnh hưởng nhiệt', ref: 'EN 1090-2:2018 mục 6.4.4 · đã xác minh' },

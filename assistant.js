@@ -305,7 +305,7 @@
     let s = [], n = 0;
     s.push(step(++n, `<b>Đo & ghi biến dạng:</b> thước thẳng 1m + thước nêm hoặc căng dây — chỉ nắn khi VƯỢT dung sai (tra ${lk('dungsai/', 'Thư viện Dung sai')}).`));
     s.push(step(++n, `<b>Chọn mẫu gia nhiệt:</b> ĐIỂM (lồi nhỏ cục bộ) · ĐƯỜNG ★ khuyến cáo (đa số trường hợp) · CHỮ V (nắn cong dầm) · KHỐI/tam giác (mép gia cường, cao 1/3–1/2 mép).${sub('🔥 Hình minh họa: ' + lk('hoacong/', 'Thư viện Hỏa công → 4 mẫu gia nhiệt'))}`));
-    s.push(step(++n, `<b>Điều kiện trước nắn:</b> khu vực đã hàn xong · ngoài vùng nhiệt hàn lân cận · nắn TRƯỚC thử kín/nghiệm thu (QHPS-QAC-F-001 mục 5).`));
+    s.push(step(++n, `<b>Điều kiện trước nắn:</b> khu vực đã hàn xong · ngoài vùng nhiệt hàn lân cận · nắn TRƯỚC thử kín/nghiệm thu (TL Hỏa công nội bộ mục 5).`));
     s.push(step(++n, `<b>Đốt đúng giới hạn:</b> ~650°C (đỏ sẫm) · ngấm ¾ chiều dày · phía LỒI · bắt đầu từ chi tiết CỨNG NHẤT · dừng cách mép cố định 300mm.`));
     s.push(step(++n, `<b>Cấm tuyệt đối:</b> làm mát bằng nước/khí nén vùng mối hàn nối tấm (thép bị tôi → giòn, mất cơ tính).`));
     s.push(step(++n, `<b>Sau nắn:</b> nguội tự nhiên → đo lại → VT không nứt (nghi ngờ → MT) → biên bản + ảnh.${sub('🧮 Calculator đánh giá + in biên bản: ' + lk('hoacong/', 'Thư viện Hỏa công'))}`));
@@ -459,53 +459,4 @@
             })
           });
           if (res.ok) {
-            const j = await res.json();
-            const txt = (((j.candidates || [])[0] || {}).content || { parts: [] }).parts.map(p => p.text || '').join('\n');
-            if (txt) return txt + '\n\n— Gemini ' + mdl.replace('gemini-', '').replace('-flash', ' Flash').replace('-pro', ' Pro');
-          }
-          lastRes = res;
-          /* 429 (hết hạn mức) / 404 / 403 / 5xx (máy chủ quá tải) → thử model tiếp theo */
-          if (![429, 404, 403, 500, 503, 504].includes(res.status) && !res.ok) break;
-        }
-        fail(lastRes || { status: 0 }, 'Gemini');
-      }
-      /* ---- CLAUDE (Anthropic, key sk-ant-...) ---- */
-      if (/^sk-ant-/.test(key)) {
-        const res = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: {
-            'x-api-key': key,
-            'anthropic-version': '2023-06-01',
-            'content-type': 'application/json',
-            'anthropic-dangerous-direct-browser-access': 'true'
-          },
-          body: JSON.stringify({
-            model: 'claude-haiku-4-5-20251001',
-            max_tokens: 1200,
-            system: SYS,
-            messages: [{ role: 'user', content: USER }]
-          })
-        });
-        if (!res.ok) fail(res, 'Claude');
-        const j = await res.json();
-        return (j.content || []).map(c => c.text || '').join('\n');
-      }
-      /* ---- CHATGPT (OpenAI, key sk-...) ---- */
-      if (/^sk-/.test(key)) {
-        const res = await fetch('https://api.openai.com/v1/chat/completions', {
-          method: 'POST',
-          headers: { 'content-type': 'application/json', 'authorization': 'Bearer ' + key },
-          body: JSON.stringify({
-            model: 'gpt-4o-mini',
-            max_tokens: 1200,
-            messages: [{ role: 'system', content: SYS }, { role: 'user', content: USER }]
-          })
-        });
-        if (!res.ok) fail(res, 'ChatGPT');
-        const j = await res.json();
-        return (((j.choices || [])[0] || {}).message || {}).content || '(ChatGPT không trả về nội dung)';
-      }
-      throw new Error('Không nhận diện được key. Key hợp lệ: AIza... (Gemini — miễn phí) · sk-ant-... (Claude) · sk-... (ChatGPT)');
-    }
-  };
-})();
+            const j = await

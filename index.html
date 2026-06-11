@@ -274,7 +274,7 @@
       <div class="mic">🔥</div>
       <div class="mbody">
         <div class="mtt"><span class="no">6</span>Thư viện Nắn chỉnh Hỏa công</div>
-        <div class="mds">4 mẫu gia nhiệt · trình tự · 650°C · QHPS-QAC-F-001</div>
+        <div class="mds">4 mẫu gia nhiệt · trình tự · 650°C · TL Hỏa công nội bộ</div>
       </div><span class="go">→</span>
     </a>
   </div>
@@ -515,63 +515,4 @@ async function gsAskClaude() {
       '<div style="font-size:13.5px;white-space:pre-wrap;line-height:1.65">' + ans.replace(/</g, '&lt;').replace(/\*\*([^*\n]+)\*\*/g, '<b>$1</b>').replace(/^[*-] /gm, '• ') + '</div>' +
       '<div style="font-size:11px;color:#8b97a3;margin-top:10px;border-top:1px solid #eef1f5;padding-top:8px">⚠ Câu trả lời AI có thể sai — đối chiếu số liệu với module tương ứng (có trích dẫn điều khoản đã xác minh) trước khi dùng nghiệm thu.</div></div>';
   } catch (e) {
-    out.innerHTML = '<div style="background:#fbeae2;border:1px solid #f0c4b3;border-radius:12px;padding:14px;margin-bottom:14px;font-size:13px;color:#aa4322"><b>Lỗi gọi AI:</b> ' + String(e.message || e).replace(/</g, '&lt;') + '<br><span style="font-size:12px">Kiểm tra API key (⚙), kết nối mạng, hoặc dùng kế hoạch offline phía trên.</span></div>';
-  }
-}
-
-const gqEl = document.getElementById('gq');
-gqEl.addEventListener('focus', gsBuild, { once: true });
-
-/* === AI gắn thẳng vào thanh tìm kiếm ===
-   - Ngừng gõ 1.6s + là câu hỏi + có key → AI TỰ trả lời
-   - Nhấn Enter → hỏi AI ngay lập tức */
-let GS_AI_T = null, GS_AI_LAST = '';
-function gsAiAuto() {
-  clearTimeout(GS_AI_T);
-  const q = gqEl.value.trim();
-  if (!localStorage.getItem('qc_ai_key') || q.length < 8) return;
-  /* Nhận cả câu hỏi từ ngữ đời thường: là câu hỏi QC HOẶC câu ≥3 từ */
-  const laCauHoi = window.QCAssistant && QCAssistant.isQuestion && QCAssistant.isQuestion(q);
-  const cauDai = q.split(/\s+/).length >= 3 && q.length >= 12;
-  if (!laCauHoi && !cauDai) return;
-  GS_AI_T = setTimeout(() => {
-    const now = gqEl.value.trim();
-    if (now !== q || now === GS_AI_LAST) return;
-    GS_AI_LAST = now;
-    gsAskClaude();
-  }, 1600);
-}
-gqEl.addEventListener('input', () => { gsBuild(); gsRun(); gsAiAuto(); });
-gqEl.addEventListener('keydown', e => {
-  if (e.key !== 'Enter') return;
-  e.preventDefault();
-  clearTimeout(GS_AI_T);
-  gsBuild(); gsRun();
-  if (localStorage.getItem('qc_ai_key') && gqEl.value.trim().length >= 4) {
-    GS_AI_LAST = gqEl.value.trim();
-    gsAskClaude();
-  }
-});
-
-/* chip câu hỏi mẫu */
-(function () {
-  const ex = (window.QCAssistant && QCAssistant.EXAMPLES) || [];
-  const box = document.getElementById('gsEx');
-  if (!box || !ex.length) return;
-  box.innerHTML = ex.map(e =>
-    '<button type="button" data-q="' + e.replace(/"/g, '&quot;') + '">' + e + '</button>'
-  ).join('');
-  box.addEventListener('click', ev => {
-    const b = ev.target.closest('button[data-q]');
-    if (!b) return;
-    const gq = document.getElementById('gq');
-    gq.value = b.dataset.q;
-    gq.focus();
-    gsBuild();
-    gsRun();
-    gsAiAuto();
-  });
-})();
-</script>
-</body>
-</html>
+    out.innerHTML = '<div style="background:#fbeae2;border:1px solid #f0c4b3;border-radius:12px;padding:14px;margin-bottom:14px;font-size:
