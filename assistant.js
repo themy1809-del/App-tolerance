@@ -40,7 +40,11 @@
     if (q.trim().length < 8) return false;
     if (/\?|nhu the nao|lam sao|the nao|cach nao|kiem tra gi|can (kiem tra|do|lam|gi)|quy trinh|huong dan|bao nhieu|cach (do|kiem|lam|chon|xu ly)|nen dung|chon (phuong phap|cach|wps)|duoc khong|co (duoc|nen|son|han)|xu ly (sao|the nao)|khac phuc|tai sao|vi sao|giay to|ho so|la gi|nghia la|muon (kiem tra|do|nghiem thu|biet|hoi|danh gia|kiem)|toi (muon|can)|giup toi|huong dan toi|sua (sao|gi|the nao|nhu the nao|duoc khong|kieu gi)|bi sai|sai kich thuoc|neu .{2,30}(thi|lam)|lam gi (bay gio|day|tiep)/.test(qn)) return true;
     /* "kiểm tra/nghiệm thu/đo + đối tượng" cũng là câu hỏi */
-    return /(kiem tra|nghiem thu|danh gia|\bdo\b)/.test(qn) && ENT.some(e => e.re.test(qn));
+    if (/(kiem tra|nghiem thu|danh gia|\bdo\b)/.test(qn) && ENT.some(e => e.re.test(qn))) return true;
+    /* TỔNG QUÁT: từ chuyên môn QC + từ hỏi/sự cố = câu hỏi (chống lọt lưới) */
+    const DOMAIN = /\bhan\b|moi han|\but\b|\bndt\b|\brt\b|\bmt\b|\bpt\b|\bvt\b|sieu am|\bson\b|dft|ma kem|bu long|bulong|xiet|kich thuoc|dung sai|fit.?up|ga lap|packing|lashing|vat tu|thep|wps|pqr|exc|camber|cong venh|khe ho|undercut|ro khi|nut\b|que han|preheat|\blo\b|cat\b|vat mep|ket cau|cau kien|khung|\bdam\b|\bcot\b|gian\b/;
+    const ASK = /\bsao\b|\bgi\b|the nao|lam (sao|gi)|\bcan\b|\bphai\b|\bsua\b|xu l(y|i)|khong (dat|pass)|\bfail\b|bi loai|\bloi\b|bao nhieu|kiem tra|nghiem thu|huong dan|khac phuc|tai sao|vi sao|chon\b|\bnen\b|duoc khong/;
+    return DOMAIN.test(qn) && ASK.test(qn);
   }
 
   /* ---------- tính số thật từ dataset ---------- */
@@ -295,6 +299,17 @@
     s.push(step(++n, `<b>Kết quả tìm kiếm liên quan</b> hiển thị ngay bên dưới câu trả lời này — bấm mục đúng để mở.`));
     return { title: 'Tra dung sai — làm thế nào', body: s.join('') };
   }
+  function planWeldRepair() {
+    let s = [], n = 0;
+    s.push(step(++n, `<b>Đọc kỹ báo cáo UT/NDT:</b> vị trí, độ sâu, chiều dài từng chỉ thị — đánh dấu CHÍNH XÁC lên mối hàn thực (sơn/phấn) trước khi động dao.${sub('📡 Loại chỉ thị (Class A–D theo AWS Table 8.2) quyết định bắt buộc sửa hay được phép giữ')}`));
+    s.push(step(++n, `<b>Mở NCR + phương án sửa:</b> mối quan trọng/EXC3-4 phải có quy trình sửa ĐƯỢC DUYỆT trước khi làm; ghi số lần đã sửa của mối này.${sub('📋 ' + lk('luongdu/', 'Tạo NCR một chạm') + ' — sửa lặp nhiều lần cùng một mối phải có chấp thuận Engineer')}`));
+    s.push(step(++n, `<b>Đào khuyết tật:</b> mài hoặc dũi carbon-arc tới HẾT khuyết tật + vát mở rãnh đủ thao tác hàn lại; rãnh đào nhẵn, không khía nhọn.${sub('🧰 Máy mài / máy dũi + đèn soi')}`));
+    s.push(step(++n, `<b>Kiểm rãnh đào TRƯỚC khi hàn lại:</b> MT/PT xác nhận đã sạch khuyết tật (đặc biệt nứt) — hàn đè lên khuyết tật còn sót là sửa lần 2 chắc chắn.${sub('📡 MT cho thép từ tính, PT khi không dùng được MT')}`));
+    s.push(step(++n, `<b>Hàn sửa theo WPS sửa:</b> thợ đúng chứng chỉ; preheat thường CAO HƠN mối gốc (vật liệu đã chịu chu trình nhiệt); que hydro thấp sấy đúng.${sub('📖 ' + lk('wps/', 'WPS') + ' + ' + lk('han/', 'QC Hàn — preheat ở tab Công cụ'))}`));
+    s.push(step(++n, `<b>Kiểm lại sau sửa:</b> VT 100% vùng sửa → chờ đủ hold time → kiểm lại bằng ĐÚNG phương pháp đã phát hiện lỗi (UT) trên 100% vùng sửa + lân cận.${sub('🧮 Hold time theo Q: ' + lk('han/', 'QC Hàn → Công cụ'))}`));
+    s.push(step(++n, `<b>Đóng hồ sơ:</b> báo cáo UT đạt → đóng NCR, cập nhật weld map, lưu Nhật ký QC; phân tích nguyên nhân (thông số? que ẩm? thợ? fit-up?) để không tái diễn.${sub('📊 Lỗi vào ' + lk('thongke/', 'Thống kê chất lượng') + ' theo Ishikawa')}`));
+    return { title: 'Hàn UT/NDT không đạt — quy trình sửa đúng chuẩn', body: s.join('') };
+  }
   function planDimFix(len) {
     let s = [], n = 0;
     s.push(step(++n, `<b>Dừng — không "nắn đại".</b> Đánh dấu/cách ly cấu kiện sai; nắn tùy tiện (gò nguội quá tay, hơ lửa vô tội vạ) có thể làm hỏng vật liệu và mất luôn quyền sửa.`));
@@ -316,7 +331,8 @@
 
   /* ============================ ROUTER ============================ */
   const SPECIALS = [
-    { re: /sai kich thuoc|lech kich thuoc|kich thuoc.*(sai|lech|sua)|sua kich thuoc|bi (cong|venh)|cong venh.*(sua|xu ly|lam sao)|nan (thang|nhiet|co)/, fn: (q, len) => planDimFix(len) },
+    { re: /(\but\b|\bndt\b|\brt\b|\bmt\b|sieu am|moi han|\bhan\b).*(khong dat|khong pass|\bfail\b|bi loai|truot)|((khong dat|\bfail\b).*(\but\b|\bndt\b|moi han))|sua moi han|han lai|dao (khuyet tat|moi han)|repair weld/, fn: () => planWeldRepair() },
+    { re: /sai kich thuoc|lech kich thuoc|kich thuoc.*(sai|lech|sua)|sua kich thuoc|bi (cong|venh)|cong venh.*(sua|xu l(y|i)|lam sao)|nan (thang|nhiet|co)/, fn: (q, len) => planDimFix(len) },
     { re: /packing|dong (hang|kien|goi|container)|lashing|chang buoc|xuat hang|tem nhan|shipping mark|len cont|dong cont/, fn: () => planPacking() },
     { re: /thao ra.*(dung lai|xai lai|su dung)|dung lai bu long|tai su dung bu long|bu long cu/, fn: () => planReuseBolt() },
     { re: /troi (mua|am|noi)|do am.*(son|cao)|(\d{2,3})\s*%.*son|son.*duoc khong|dew|diem suong/, fn: q => planEnvPaint(q) },
@@ -333,6 +349,7 @@
     EXAMPLES: [
       'Tôi muốn kiểm tra khung dầm 24m',
       'Bị sai kích thước thì sửa sao?',
+      'Hàn UT không đạt phải xử lý sao?',
       'EXC là gì?',
       'Giàn 50m kiểm tra như thế nào?',
       'Trời ẩm 90% có sơn được không?',
@@ -359,7 +376,7 @@
       const sp = !plan && SPECIALS.find(s => s.re.test(qn));
       if (sp) plan = sp.fn(q, len);
       /* 2) lỗi / sai hỏng */
-      if (!plan && /loi |bi (nut|ro|cong|venh|chay|phong|bong|thung)|defect|khac phuc|nguyen nhan|sai hong|xu ly/.test(qn)) plan = planDefect();
+      if (!plan && /loi |bi (nut|ro|cong|venh|chay|phong|bong|thung)|defect|khac phuc|nguyen nhan|sai hong|xu l(y|i)|khong dat|\bfail\b/.test(qn)) plan = planDefect();
       /* 3) theo đối tượng */
       if (!plan) {
         const { ent, entVi } = detect(qn);
