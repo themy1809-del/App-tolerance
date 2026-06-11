@@ -1,7 +1,7 @@
 /* Service worker — offline + tự cập nhật khi online (network-first) */
-const CACHE = "tol-cache-v12";
+const CACHE = "tol-cache-v13";
 const ASSETS = [
-  "./", "index.html", "tolerances-data.js", "tolerances-tier1.js", "tolerances-tier2.js", "tolerances-tier3.js", "tolerances-tier4-mech.js", "sketches.js", "sketches-v2.js", "sketches-v3-mech.js", "sketch-bind.js", "sketch-overlay.js", "smart-search.js", "manifest.webmanifest",
+  "./", "index.html", "tolerances-data.js", "tolerances-tier1.js", "tolerances-tier2.js", "tolerances-tier3.js", "tolerances-tier4-mech.js", "sketches.js", "sketches-v2.js", "sketches-v3-mech.js", "sketch-bind.js", "sketch-overlay.js", "smart-search.js", "../photo-tool.js", "manifest.webmanifest",
   "../icons/icon-192.png", "../icons/icon-512.png", "../icons/icon-180.png", "../icons/maskable-512.png"
 ];
 self.addEventListener("install", e => {

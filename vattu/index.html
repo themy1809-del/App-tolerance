@@ -60,6 +60,11 @@
     </div>
   </details>
 
+  <details class="more" style="margin-bottom:12px">
+    <summary>📷 Đo ảnh khuyết tật vật tư & hồ sơ (bấm mở)</summary>
+    <div class="body" style="display:block"><div id="photoMount"></div></div>
+  </details>
+
   <div class="section" id="catSect">
     <h3>📂 Chọn nhóm để xem</h3>
     <div class="mosaic" id="catGrid"></div>
@@ -92,8 +97,10 @@
 <script src="sketches.js?v=1"></script>
 <script src="data.js?v=2"></script>
 <script src="app.js?v=2"></script>
+<script src="../photo-tool.js"></script>
 <script src="smart-search.js?v=1" defer></script>
 <script>
+if (window.PhotoTool) PhotoTool.mount(document.getElementById('photoMount'), { key: 'vt_photos_v1' });
 /* ===== Checklist nghiệm thu vật tư đầu vào ===== */
 (function(){
   var ITEMS = [

@@ -122,6 +122,7 @@
   <button data-tab="dft"><span class="ic">📏</span><span data-vi="DFT" data-en="DFT">DFT</span></button>
   <button data-tab="test"><span class="ic">🔬</span><span data-vi="Kiểm tra" data-en="Tests">Kiểm tra</span></button>
   <button data-tab="def"><span class="ic">⚠️</span><span data-vi="Lỗi sơn" data-en="Defects">Lỗi sơn</span></button>
+  <button data-tab="do"><span class="ic">📷</span><span data-vi="Đo ảnh" data-en="Photo">Đo ảnh</span></button>
   <button data-tab="ck"><span class="ic">☑️</span><span data-vi="Checklist" data-en="Checklist">Checklist</span></button>
 </nav>
 
@@ -131,10 +132,15 @@
   <section class="tab" id="tab-dft"></section>
   <section class="tab" id="tab-test"></section>
   <section class="tab" id="tab-def"></section>
+  <section class="tab" id="tab-do">
+    <div class="h2x">📷 Đo lỗi sơn trên ảnh</div>
+    <div class="seccard" id="photoMount"></div>
+  </section>
   <section class="tab" id="tab-ck"></section>
 </main>
 
 <script src="data.js"></script>
+<script src="../photo-tool.js"></script>
 <script>
 const D = window.SON_DATA;
 let LANG = localStorage.getItem('son_lang') || 'vi';
@@ -342,6 +348,7 @@ function renderDft() {
   h += `<div class="seccard"><h3>${esc(T(D.DFT.iso19840.title))}</h3>
     <ul class="tight">${D.DFT.iso19840.rules.map(r => `<li>${esc(T(r))}</li>`).join('')}</ul>
     <div class="note">${esc(T(D.DFT.iso19840.sampling))}</div>
+    ${D.DFT.iso19840.quote ? `<div class="evidence"><div class="h">${v?'Dẫn chứng (nguyên văn)':'Evidence (verbatim)'}</div><div class="quote">"${esc(D.DFT.iso19840.quote)}"</div></div>` : ''}
     <div class="note">📎 ${esc(D.DFT.iso19840.ref)}</div>${D.DFT.iso19840.soft?softWarn():''}</div>`;
   h += `<div class="seccard"><h3>${esc(T(D.DFT.sspc.title))}</h3>
     <ul class="tight">${D.DFT.sspc.rules.map(r => `<li>${esc(T(r))}</li>`).join('')}</ul>
@@ -363,13 +370,17 @@ function renderDft() {
     const mean = reads.reduce((a, b) => a + b, 0) / reads.length;
     const min = Math.min(...reads), max = Math.max(...reads);
     const below80 = reads.filter(r => r < 0.8 * N);
+    const band = reads.filter(r => r >= 0.8 * N && r < N);
     const okMean = mean >= N, ok80 = below80.length === 0, okMax = max <= M;
+    const okBand = band.length < 0.2 * reads.length;
+    const allOk = okMean && ok80 && okMax && okBand;
     document.getElementById('dOut').innerHTML = `
       <div class="res"><div class="lbl">${LANG==='vi'?'Kết quả':'Result'} (n = ${reads.length})</div><div class="big">
-        ${LANG==='vi'?'Trung bình':'Mean'} = <b>${Math.round(mean)}µm</b> ${okMean?'≥':'<'} NDFT ${N}µm ${okMean?'✓':'✗'}<br>
-        Min = ${min}µm (80% NDFT = ${Math.round(0.8*N)}µm) ${ok80?'✓':'✗ — '+below80.length+(LANG==='vi'?' điểm dưới 80%':' readings < 80%')}<br>
-        Max = ${max}µm (${LANG==='vi'?'giới hạn':'limit'} ${Math.round(M)}µm) ${okMax?'✓':'✗'}</div></div>
-      <div class="verdict ${okMean&&ok80&&okMax?'pass':'fail'}">${okMean&&ok80&&okMax?(LANG==='vi'?'✓ ĐẠT theo ISO 19840':'✓ PASS per ISO 19840'):(LANG==='vi'?'✗ KHÔNG ĐẠT':'✗ FAIL')}</div>`;
+        a) ${LANG==='vi'?'Trung bình':'Mean'} = <b>${Math.round(mean)}µm</b> ${okMean?'≥':'<'} NDFT ${N}µm ${okMean?'✓':'✗'}<br>
+        b) Min = ${min}µm (80% NDFT = ${Math.round(0.8*N)}µm) ${ok80?'✓':'✗ — '+below80.length+(LANG==='vi'?' điểm dưới 80%':' readings < 80%')}<br>
+        c) ${LANG==='vi'?'Số điểm 80–100% NDFT':'Readings at 80–100% NDFT'} = ${band.length}/${reads.length} (${LANG==='vi'?'phải':'must be'} &lt; 20% = ${Math.round(0.2*reads.length*10)/10}) ${okBand?'✓':'✗'}<br>
+        d) Max = ${max}µm (${LANG==='vi'?'giới hạn':'limit'} ${Math.round(M)}µm) ${okMax?'✓':'✗'}</div></div>
+      <div class="verdict ${allOk?'pass':'fail'}">${allOk?(LANG==='vi'?'✓ ĐẠT theo ISO 19840:2012 mục 9 (a–d)':'✓ PASS per ISO 19840:2012 Cl.9'):(LANG==='vi'?'✗ KHÔNG ĐẠT':'✗ FAIL')}</div>`;
   };
   ['dN','dM','dR'].forEach(id => document.getElementById(id).addEventListener('input', run));
   run();
@@ -491,6 +502,7 @@ function renderCK() {
 
 function renderAll() { renderSurf(); renderEnv(); renderDft(); renderTest(); renderDef(); renderCK(); }
 setLang(LANG);
+if (window.PhotoTool) PhotoTool.mount(document.getElementById('photoMount'), { key: 'son_photos_v1' });
 
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   navigator.serviceWorker.register('sw.js').catch(()=>{});

@@ -50,12 +50,12 @@
         { life: B("< 7 năm", "< 7 years"), cat: B("Mọi cấp", "All"), p: "P1" }
       ],
       pDesc: [
-        { p: "P1", d: B("Chuẩn bị nhẹ: không xử lý hoặc xử lý tối thiểu (mép cắt không cần mài, spatter còn được nếu bám chắc)", "Light preparation: no/minimal treatment") },
-        { p: "P2", d: B("Chuẩn bị kỹ: loại bỏ hầu hết khuyết tật — mài tròn mép cắt, loại bỏ spatter rời, mài gồ ghề mối hàn", "Thorough preparation: most imperfections removed — edges rounded, loose spatter removed") },
-        { p: "P3", d: B("Chuẩn bị rất kỹ: bề mặt không còn khuyết tật đáng kể — mép tròn r ≥ 2mm, mọi spatter loại bỏ, mối hàn mài nhẵn", "Very thorough: surface free of significant imperfections — radius ≥ 2mm, all spatter removed, welds dressed") }
+        { p: "P1", d: B("Chuẩn bị nhẹ: sạch spatter BÁM LỎNG, mép cắt chỉ cần làm cùn (deburr), mối hàn không cần sửa biên dạng", "Light: free of loose spatter; edges deburred; no weld profile dressing") },
+        { p: "P2", d: B("Chuẩn bị kỹ: sạch spatter rời + bám nhẹ; mài bỏ cạnh sắc mối hàn; mép cắt vê tròn/vát ≥ 1mm mỗi phía; crater hở đủ cho sơn thấm", "Thorough: loose + lightly adhering spatter removed; sharp weld profiles dressed; edges rounded/chamfered ≥ 1mm each side") },
+        { p: "P3", d: B("Chuẩn bị rất kỹ: sạch TOÀN BỘ spatter; mối hàn mài trơn (hoặc bo tròn/vát 3 đường); KHÔNG còn rỗ nhìn thấy; mép tròn r ≥ 2mm hoặc vát 3 đường ≥ 2mm mỗi phía. Lưu ý: P3 có thể không đạt được với thép < 3mm", "Very thorough: ALL spatter removed; weld topography smooth; no visible pores; edges rounded r ≥ 2mm or 3-pass chamfered ≥ 2mm each side") }
       ],
-      quote: "Table 22 — Preparation grade: >15 years: C1→P1, C2-C3→P2, above C3→P2 or P3 as specified; 7-15 years: C1-C3→P1, above C3→P2; <7 years→P1.",
-      ref: "EN 1090-2:2018+A1:2024, 10.2 & Table 22; mô tả P1–P3 theo EN ISO 8501-3"
+      quote: "Table 22 (EN 1090-2): >15 years: C1→P1, C2-C3→P2, above C3→P2 or P3; 7-15 years: C1-C3→P1, above C3→P2; <7 years→P1. — ISO 8501-3:2025 Table 1: P3 'Surface shall be free of all welding spatter... Edges shall be rounded with a radius of not less than 2 mm or by 3 passes chamfering at least 2 mm from each side.'",
+      ref: "EN 1090-2:2018+A1:2024, 10.2 & Table 22 + ISO 8501-3:2025, Table 1 — cả hai đã đối chiếu bản gốc PDF"
     },
     profile: {
       title: B("Độ nhám bề mặt sau phun — ISO 8503", "Surface profile after blasting — ISO 8503"),
@@ -95,17 +95,20 @@
   /* ---------- 3. DFT — CHIỀU DÀY MÀNG SƠN ---------- */
   const DFT = {
     iso19840: {
-      title: B("Quy tắc nghiệm thu DFT — ISO 19840", "DFT acceptance — ISO 19840"),
+      title: B("Quy tắc nghiệm thu DFT — ISO 19840:2012, mục 9 (ĐÃ XÁC MINH bản gốc)", "DFT acceptance — ISO 19840:2012, Clause 9 (verified)"),
       rules: [
-        B("Giá trị TRUNG BÌNH của tất cả các điểm đo ≥ NDFT (chiều dày danh nghĩa).", "ARITHMETIC MEAN of all individual DFT ≥ NDFT."),
-        B("MỌI giá trị đơn lẻ ≥ 80% NDFT. Giá trị trong khoảng 80–100% NDFT được chấp nhận nếu trung bình đạt.", "ALL individual values ≥ 80% NDFT; values 80–100% NDFT acceptable provided mean ≥ NDFT."),
-        B("Mọi giá trị ≤ chiều dày tối đa quy định (mặc định khuyến nghị: ≤ 3× NDFT nếu spec không nêu; nhiều PDS giới hạn 2× NDFT).", "All values ≤ specified maximum (commonly ≤ 3× NDFT default, often 2× per PDS)."),
-        B("Hiệu chỉnh độ nhám: trừ giá trị hiệu chỉnh khi đo trên bề mặt phun hạt — mặc định 25 µm cho profile Trung bình (nếu không xác định được: 25 µm).", "Roughness correction subtracted on blast-cleaned surfaces — default 25 µm for Medium profile."),
-        B("Hiệu chuẩn máy đo trên tấm chuẩn (foil) đặt trên bề mặt nhẵn, kiểm tra đầu ca & sau va chạm.", "Calibrate gauge with foils, verify each shift & after impact.")
+        B("a) TRUNG BÌNH cộng của mọi giá trị DFT đơn lẻ ≥ NDFT (chiều dày danh nghĩa).", "a) Arithmetic mean of all individual DFT ≥ NDFT."),
+        B("b) MỌI giá trị đơn lẻ ≥ 80% NDFT.", "b) All individual values ≥ 80% NDFT."),
+        B("c) Số điểm có giá trị trong khoảng 80%–100% NDFT phải DƯỚI 20% tổng số điểm đo.", "c) Readings between 80% and 100% NDFT must be FEWER than 20% of total measurements."),
+        B("d) Mọi giá trị ≤ chiều dày tối đa quy định; nếu spec không nêu → theo ISO 12944-5 (thông lệ ≤ 3× NDFT).", "d) All values ≤ specified maximum; if unspecified see ISO 12944-5 (commonly ≤ 3× NDFT)."),
+        B("Hiệu chỉnh độ nhám (Table 2): trừ vào TỪNG số đọc — Fine 10 µm · Medium 25 µm · Coarse 40 µm; KHÔNG RÕ profile → 25 µm.", "Roughness correction (Table 2) subtracted from EACH reading — Fine 10 · Medium 25 · Coarse 40 µm; unknown profile → 25 µm."),
+        B("Hiệu chuẩn (6.2): kiểm trên tấm thép trần (zero) + foil chuẩn trên và dưới dải NDFT; kiểm lại sau loạt đo — lệch thì LOẠI kết quả.", "Verify on uncoated plate (zero) + foils above/below NDFT; re-verify after series — out of range → reject results."),
+        B("Điểm không đạt được đo lại 1 lần trong phạm vi 10mm (6.3); số lần thay tối đa theo Table 1 và phải ghi vào báo cáo.", "Failed reading may be re-measured once within 10mm (6.3); max replacements per Table 1, recorded in report.")
       ],
-      sampling: B("Số vị trí đo theo diện tích (ISO 19840 Table 1): tăng theo diện tích khu vực kiểm tra; thực hành phổ biến tối thiểu 5 vị trí ngẫu nhiên cho khu vực nhỏ, mỗi vị trí có thể lấy nhiều số đọc. Với kết cấu phức tạp chia theo cấu kiện.",
-        "Number of measurement positions per ISO 19840 Table 1 increases with area; common practice min 5 random positions for small areas."),
-      ref: "ISO 19840 (Paints — Measurement of, and acceptance criteria for, the thickness of dry films on rough surfaces)", soft: true
+      sampling: B("Số điểm đo tối thiểu (Table 1 — đã xác minh): ≤1m²: 5 điểm · 1–3m²: 10 · 3–10m²: 15 · 10–30m²: 20 · 30–100m²: 30 · trên 100m²: +10 điểm cho mỗi 100m². Khu vực khó (sườn, bracket, ống đính kèm) đo BỔ SUNG theo diện tích của nó.",
+        "Minimum measurements (Table 1 — verified): ≤1m²: 5 · 1–3: 10 · 3–10: 15 · 10–30: 20 · 30–100: 30 · above 100m²: +10 per 100m². Difficult areas measured additionally."),
+      quote: "9 a) the arithmetic mean of all the individual dry-film thicknesses shall be equal to or greater than the NDFT; b) all individual dry-film thicknesses shall be equal to or above 80 % of the NDFT; c) individual dry-film thicknesses between 80 % of the NDFT and the NDFT are acceptable provided that the number of these measurements is less than 20 % of the total number; d) all individual dry-film thicknesses shall be less than or equal to the specified maximum.",
+      ref: "ISO 19840:2012, Clause 6–9, Tables 1–2 — đã đối chiếu bản gốc PDF"
     },
     sspc: {
       title: B("SSPC-PA2 (thực hành Mỹ)", "SSPC-PA2 (US practice)"),

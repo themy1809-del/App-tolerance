@@ -134,7 +134,7 @@ window.LD_DATA = {
 
   /* ===== B. NGUYÊN NHÂN SAI HỎNG — Defect root cause matrix ===== */
   defects: [
-    { id:'undercut', cat:'weld', rootCause:'man', acceptance:{ok:'h ≤ 0.5 mm (cấp B nghiêm ngặt cho fatigue cao)', notok:'h > 1 mm (cấp D — đào sạch + hàn lại)', table:[['Cấp B (Stringent)','h ≤ 0.5 mm','pass'],['Cấp C (Intermediate)','h ≤ 0.5 mm hoặc 0.1t (t<3) · h ≤ 1 mm (t≥3)','warn'],['Cấp D (Moderate)','h ≤ 0.5 mm hoặc 0.2t (t<3) · h ≤ 1 mm (t≥3)','warn']], ref:'ISO 5817:2023 §5.10 Table 1'}, name:'Cháy chân (Undercut)', severity:'medium',
+    { id:'undercut', cat:'weld', rootCause:'man', acceptance:{ok:'h ≤ 0.05t, max 0.5 mm (cấp B, t>3)', notok:'h > 0.2t hoặc > 1 mm (vượt cấp D — đào sạch + hàn lại)', table:[['Cấp B (Stringent)','h ≤ 0.05t, max 0.5 mm (t>3) · không cho phép (t≤3)','pass'],['Cấp C (Intermediate)','h ≤ 0.1t, max 0.5 mm (t>3) · 0.1t khuyết tật ngắn (t≤3)','warn'],['Cấp D (Moderate)','h ≤ 0.2t, max 1 mm (t>3) · 0.2t khuyết tật ngắn (t≤3)','warn']], ref:'ISO 5817:2023 Table 1 No.1.7/1.8 (5011/5012) — ĐÃ XÁC MINH bản gốc'}, name:'Cháy chân (Undercut)', severity:'medium',
       symptom:'Rãnh khuyết tại chân mối hàn, song song mối hàn',
       causes:['Dòng hàn I quá cao','Hồ quang dài (V cao)','Tốc độ di chuyển nhanh','Góc que/đầu hàn sai','Không lưu vũ chuyển trên kim loại cơ bản'],
       remedies:['Giảm I 10-20A','Hạ chiều dài hồ quang','Chậm lại 10-15%','Chỉnh góc 70-80° cho fillet','Lưu chuyển tại chân 1-2 giây'],
@@ -170,7 +170,7 @@ window.LD_DATA = {
       remedies:['Mở khe gốc 3-5mm','Mài root face xuống ≤ 1.5mm','Tăng I 20%','Hàn lớp gốc chậm + lưu chuyển','Đổi que nhỏ hơn (Ø2.5 thay Ø3.2)'],
       ref:'AWS D1.1 §7.13 + EN 287-1', sketch:'def_lop' },
 
-    { id:'slag-inclusion', cat:'weld', rootCause:'man', acceptance:{ok:'h ≤ 0.2s (cấp B)', notok:'h > 0.4s — đào sạch + hàn lại', table:[['Cấp B','h ≤ 0.2s, max 2 mm','pass'],['Cấp C','h ≤ 0.3s, max 3 mm','warn'],['Cấp D','h ≤ 0.4s, max 4 mm','warn']], ref:'ISO 5817:2014 Table 1 No.2.7 (301/302/303) — solid inclusions (h = kích thước khuyết tật, s = chiều dày mối hàn)'}, name:'Xỉ kẹt (Slag Inclusion)', severity:'medium',
+    { id:'slag-inclusion', cat:'weld', rootCause:'man', acceptance:{ok:'h ≤ 0.2s (cấp B)', notok:'h > 0.4s — đào sạch + hàn lại', table:[['Cấp B','h ≤ 0.2s, max 2 mm','pass'],['Cấp C','h ≤ 0.3s, max 3 mm','warn'],['Cấp D','h ≤ 0.4s, max 4 mm','warn']], ref:'ISO 5817:2023 Table 1 No.2.9 (300–304) — solid inclusions, butt weld (h = kích thước khuyết tật, s = chiều dày mối hàn) — ĐÃ XÁC MINH bản gốc'}, name:'Xỉ kẹt (Slag Inclusion)', severity:'medium',
       symptom:'Xỉ bị giam giữa các lớp hàn. Phát hiện qua RT (vùng tối không tròn như rỗ).',
       causes:['Vệ sinh xỉ kém giữa lớp','Profile lớp lõm (concave)','Hàn ngược chiều với lớp trước','Tốc độ quá chậm tạo xỉ chìm','Que/dây dòng quá thấp'],
       remedies:['Đánh xỉ + đánh thép bằng bàn chải kim','Giữ profile lồi nhẹ','Hàn cùng chiều với lớp trước','Tăng I tăng tốc nhẹ','Đảo chỉ điều chỉnh'],

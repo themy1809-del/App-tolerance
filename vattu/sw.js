@@ -1,5 +1,5 @@
-const CACHE = 'vt-v3';
-const SHELL = ['./', './index.html', './app.js', './app.css', './data.js', './sketches.js', './smart-search.js', './manifest.webmanifest'];
+const CACHE = 'vt-v4';
+const SHELL = ['./', './index.html', './app.js', './app.css', './data.js', './sketches.js', './smart-search.js', '../photo-tool.js', './manifest.webmanifest'];
 self.addEventListener('install', e => e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(()=>self.skipWaiting())));
 self.addEventListener('activate', e => e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k=>k.startsWith('vt-') && k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch', e => {

@@ -4,7 +4,7 @@
    - AWS D1.1/D1.1M:2020, Table 8.1 (Visual Inspection Acceptance Criteria, tr.239)
    - EN 1090-2:2018+A1:2024, 7.6.1 (mức chất lượng ISO 5817 theo EXC),
      Table 23 (hold time), Table 24 (phạm vi NDT bổ sung)
-   - EN ISO 5817:2014, Table 1 (mức B/C/D)
+   - EN ISO 5817:2023, Table 1 (mức B/C/D)
    - JASS 6 (tham khảo thực hành Nhật)
    Cách thêm rule mới: copy 1 object trong WELD_VT, sửa id/std/title/criteria,
    thêm calc nếu cần (inputs[] + evaluate(vals) trả {limitText, pass}).
@@ -15,7 +15,7 @@
   /* ---------- 1. TIÊU CHUẨN ---------- */
   const STDS = [
     { code: "AWS D1.1:2020", region: "US", title: B("Quy phạm hàn kết cấu — Thép", "Structural Welding Code — Steel") },
-    { code: "ISO 5817:2014", region: "ISO", title: B("Mức chất lượng khuyết tật mối hàn (B/C/D)", "Quality levels for imperfections (B/C/D)") },
+    { code: "ISO 5817:2023", region: "ISO", title: B("Mức chất lượng khuyết tật mối hàn (B/C/D)", "Quality levels for imperfections (B/C/D)") },
     { code: "EN 1090-2:2018+A1:2024", region: "EU", title: B("Thi công kết cấu thép — Yêu cầu kỹ thuật", "Execution of steel structures") },
     { code: "JASS 6", region: "JP", title: B("Tiêu chuẩn kiến trúc Nhật — Công tác thép", "Japanese Architectural Standard — Steel Work") }
   ];
@@ -188,23 +188,23 @@
       }
     },
 
-    /* ========== ISO 5817:2014 — Table 1 (mức B/C/D) ==========
+    /* ========== ISO 5817:2023 — Table 1 (mức B/C/D) ==========
        LIMS: {D,C,B} mỗi mức là hàm (t,a,b,s,h...) trả {lim, txt} hoặc null = cấm */
     {
-      id: "iso_crack", std: "ISO 5817:2014", group: "CRACK", load: B("Mọi mức", "All levels"),
+      id: "iso_crack", std: "ISO 5817:2023", group: "CRACK", load: B("Mọi mức", "All levels"),
       title: B("100 — Nứt", "100 — Crack"),
       criteria: B("Không cho phép ở cả 3 mức B, C, D (trừ nứt tế vi crater 104x xét riêng).",
         "Not permitted at levels B, C and D."),
       acceptance: B("Không nứt → ĐẠT mọi mức.", "No crack → PASS all levels."),
-      clause: { ref: "ISO 5817:2014, Table 1 No.1 (100)", quote: "Cracks: not permitted (B, C, D)." }
+      clause: { ref: "ISO 5817:2023, Table 1 No.1 (100)", quote: "Cracks: not permitted (B, C, D)." }
     },
     {
-      id: "iso_undercut", std: "ISO 5817:2014", group: "UNDERCUT", load: B("B/C/D", "B/C/D"),
+      id: "iso_undercut", std: "ISO 5817:2023", group: "UNDERCUT", load: B("B/C/D", "B/C/D"),
       title: B("5011/5012 — Cháy chân liên tục/gián đoạn", "5011/5012 — Continuous/intermittent undercut"),
       criteria: B("t > 3mm: mức D: h ≤ 0.2t, max 1mm · mức C: h ≤ 0.1t, max 0.5mm · mức B: h ≤ 0.05t, max 0.5mm. Yêu cầu chuyển tiếp trơn tru.",
         "t > 3mm: D: h ≤ 0.2t max 1mm · C: h ≤ 0.1t max 0.5mm · B: h ≤ 0.05t max 0.5mm. Smooth transition required."),
       acceptance: B("Độ sâu h ≤ giới hạn theo mức yêu cầu → ĐẠT.", "Depth h ≤ limit of required level → PASS."),
-      clause: { ref: "ISO 5817:2014, Table 1 No.1.7 (5011, 5012)", quote: "D: h ≤ 0,2 × t but max. 1 mm; C: h ≤ 0,1 × t but max. 0,5 mm; B: h ≤ 0,05 × t but max. 0,5 mm" },
+      clause: { ref: "ISO 5817:2023, Table 1 No.1.7 (5011, 5012)", quote: "D: h ≤ 0,2 × t but max. 1 mm; C: h ≤ 0,1 × t but max. 0,5 mm; B: h ≤ 0,05 × t but max. 0,5 mm" },
       calc: {
         inputs: [
           { k: "t", label: B("Chiều dày t (mm)", "Thickness t (mm)"), def: 10 },
@@ -220,12 +220,12 @@
       }
     },
     {
-      id: "iso_excess_butt", std: "ISO 5817:2014", group: "PROFILE", load: B("B/C/D", "B/C/D"),
+      id: "iso_excess_butt", std: "ISO 5817:2023", group: "PROFILE", load: B("B/C/D", "B/C/D"),
       title: B("502 — Gia cường quá cao (hàn giáp mối)", "502 — Excess weld metal (butt weld)"),
       criteria: B("D: h ≤ 1mm + 0.25b, max 10mm · C: h ≤ 1mm + 0.15b, max 7mm · B: h ≤ 1mm + 0.1b, max 5mm (b = bề rộng mối hàn).",
         "D: h ≤ 1 + 0.25b max 10 · C: h ≤ 1 + 0.15b max 7 · B: h ≤ 1 + 0.1b max 5 (b = weld width)."),
       acceptance: B("h ≤ giới hạn mức yêu cầu → ĐẠT.", "h within level limit → PASS."),
-      clause: { ref: "ISO 5817:2014, Table 1 No.1.9 (502)", quote: "D: h ≤ 1 mm + 0,25 b, max 10 mm; C: h ≤ 1 mm + 0,15 b, max 7 mm; B: h ≤ 1 mm + 0,1 b, max 5 mm" },
+      clause: { ref: "ISO 5817:2023, Table 1 No.1.9 (502)", quote: "D: h ≤ 1 mm + 0,25 b, max 10 mm; C: h ≤ 1 mm + 0,15 b, max 7 mm; B: h ≤ 1 mm + 0,1 b, max 5 mm" },
       calc: {
         inputs: [
           { k: "b", label: B("Bề rộng mối hàn b (mm)", "Weld width b (mm)"), def: 14 },
@@ -240,12 +240,12 @@
       }
     },
     {
-      id: "iso_convex_fillet", std: "ISO 5817:2014", group: "PROFILE", load: B("B/C/D", "B/C/D"),
+      id: "iso_convex_fillet", std: "ISO 5817:2023", group: "PROFILE", load: B("B/C/D", "B/C/D"),
       title: B("503 — Lồi quá mức (hàn góc)", "503 — Excessive convexity (fillet)"),
       criteria: B("D: h ≤ 1mm + 0.25b, max 5mm · C: h ≤ 1mm + 0.15b, max 4mm · B: h ≤ 1mm + 0.1b, max 3mm.",
         "D: h ≤ 1 + 0.25b max 5 · C: h ≤ 1 + 0.15b max 4 · B: h ≤ 1 + 0.1b max 3."),
       acceptance: B("h ≤ giới hạn → ĐẠT.", "h within limit → PASS."),
-      clause: { ref: "ISO 5817:2014, Table 1 No.1.10 (503)", quote: "D: h ≤ 1 mm + 0,25 b, max 5 mm; C: h ≤ 1 mm + 0,15 b, max 4 mm; B: h ≤ 1 mm + 0,1 b, max 3 mm" },
+      clause: { ref: "ISO 5817:2023, Table 1 No.1.10 (503)", quote: "D: h ≤ 1 mm + 0,25 b, max 5 mm; C: h ≤ 1 mm + 0,15 b, max 4 mm; B: h ≤ 1 mm + 0,1 b, max 3 mm" },
       calc: {
         inputs: [
           { k: "b", label: B("Bề rộng mặt hàn b (mm)", "Face width b (mm)"), def: 10 },
@@ -260,12 +260,12 @@
       }
     },
     {
-      id: "iso_excess_pen", std: "ISO 5817:2014", group: "PROFILE", load: B("B/C/D", "B/C/D"),
+      id: "iso_excess_pen", std: "ISO 5817:2023", group: "PROFILE", load: B("B/C/D", "B/C/D"),
       title: B("504 — Chân ngấu quá mức (excess penetration)", "504 — Excess penetration"),
-      criteria: B("D: h ≤ 1mm + 1.0b, max 5mm · C: h ≤ 1mm + 0.6b, max 4mm · B: h ≤ 1mm + 0.2b, max 3mm (b = bề rộng chân ngấu).",
-        "D: h ≤ 1 + 1.0b max 5 · C: h ≤ 1 + 0.6b max 4 · B: h ≤ 1 + 0.2b max 3 (b = root bead width)."),
+      criteria: B("t > 3mm — D: h ≤ 1mm + 1.0b, max 5mm · C: h ≤ 1mm + 0.45b, max 4mm · B: h ≤ 1mm + 0.2b, max 3mm (b = bề rộng chân ngấu). LƯU Ý: bản 2023 đổi mức C từ 0.6b (bản 2014) xuống 0.45b.",
+        "t > 3mm — D: h ≤ 1 + 1.0b max 5 · C: h ≤ 1 + 0.45b max 4 · B: h ≤ 1 + 0.2b max 3. NOTE: 2023 edition tightened level C from 0.6b to 0.45b."),
       acceptance: B("h ≤ giới hạn → ĐẠT.", "h within limit → PASS."),
-      clause: { ref: "ISO 5817:2014, Table 1 No.1.11 (504)", quote: "D: h ≤ 1 mm + 1,0 b, max 5 mm; C: h ≤ 1 mm + 0,6 b, max 4 mm; B: h ≤ 1 mm + 0,2 b, max 3 mm" },
+      clause: { ref: "ISO 5817:2023, Table 1 No.1.11 (504) — đã xác minh bản gốc", quote: "D: h ≤ 1,0 b + 1 mm, but max. 5 mm; C: h ≤ 0,45 b + 1 mm, but max. 4 mm; B: h ≤ 0,2 b + 1 mm, but max. 3 mm" },
       calc: {
         inputs: [
           { k: "b", label: B("Bề rộng chân ngấu b (mm)", "Root bead width b (mm)"), def: 4 },
@@ -273,27 +273,27 @@
           { k: "lv", label: B("Mức (1=B,2=C,3=D)", "Level"), def: 2 }
         ],
         evaluate(v) {
-          const L = { 1: Math.min(1 + 0.2 * v.b, 3), 2: Math.min(1 + 0.6 * v.b, 4), 3: Math.min(1 + 1.0 * v.b, 5) };
+          const L = { 1: Math.min(1 + 0.2 * v.b, 3), 2: Math.min(1 + 0.45 * v.b, 4), 3: Math.min(1 + 1.0 * v.b, 5) };
           const name = { 1: "B", 2: "C", 3: "D" }[v.lv] || "C"; const lim = L[v.lv] ?? L[2];
           return { limitText: `Mức ${name}: h ≤ ${num(lim)} mm`, detail: `Đo h = ${v.h} mm`, pass: v.h <= lim };
         }
       }
     },
     {
-      id: "iso_overlap", std: "ISO 5817:2014", group: "PROFILE", load: B("B/C/D", "B/C/D"),
+      id: "iso_overlap", std: "ISO 5817:2023", group: "PROFILE", load: B("B/C/D", "B/C/D"),
       title: B("506 — Chờm phủ (overlap)", "506 — Overlap"),
       criteria: B("D: h ≤ 0.2b · C và B: KHÔNG cho phép. (EN 1090-2: EXC2 được phép áp mức D cho 506.)",
         "D: h ≤ 0.2b · C and B: not permitted. (EN 1090-2 allows level D for 506 at EXC2.)"),
       acceptance: B("Mức C/B: không có overlap → ĐẠT. Mức D: h ≤ 0.2b.", "C/B: none → PASS. D: h ≤ 0.2b."),
-      clause: { ref: "ISO 5817:2014, Table 1 No.1.12 (506)", quote: "D: h ≤ 0,2 b; C: not permitted; B: not permitted" }
+      clause: { ref: "ISO 5817:2023, Table 1 No.1.12 (506)", quote: "D: h ≤ 0,2 b; C: not permitted; B: not permitted" }
     },
     {
-      id: "iso_sagging", std: "ISO 5817:2014", group: "PROFILE", load: B("B/C/D", "B/C/D"),
+      id: "iso_sagging", std: "ISO 5817:2023", group: "PROFILE", load: B("B/C/D", "B/C/D"),
       title: B("509/511 — Lõm bề mặt / điền không đầy rãnh", "509/511 — Sagging / incompletely filled groove"),
       criteria: B("Khuyết tật dạng ngắn: D: h ≤ 0.25t, max 2mm · C: h ≤ 0.1t, max 1mm · B: h ≤ 0.05t, max 0.5mm. Yêu cầu chuyển tiếp trơn.",
         "Short imperfections: D: h ≤ 0.25t max 2 · C: h ≤ 0.1t max 1 · B: h ≤ 0.05t max 0.5. Smooth transition."),
       acceptance: B("h ≤ giới hạn mức → ĐẠT.", "h within limit → PASS."),
-      clause: { ref: "ISO 5817:2014, Table 1 No.1.14/1.16 (509, 511)", quote: "D: h ≤ 0,25 t, max 2 mm; C: h ≤ 0,1 t, max 1 mm; B: h ≤ 0,05 t, max 0,5 mm" },
+      clause: { ref: "ISO 5817:2023, Table 1 No.1.14/1.16 (509, 511)", quote: "D: h ≤ 0,25 t, max 2 mm; C: h ≤ 0,1 t, max 1 mm; B: h ≤ 0,05 t, max 0,5 mm" },
       calc: {
         inputs: [
           { k: "t", label: B("Chiều dày t (mm)", "Thickness t (mm)"), def: 10 },
@@ -308,19 +308,19 @@
       }
     },
     {
-      id: "iso_burnthrough", std: "ISO 5817:2014", group: "OTHER", load: B("B/C/D", "B/C/D"),
+      id: "iso_burnthrough", std: "ISO 5817:2023", group: "OTHER", load: B("B/C/D", "B/C/D"),
       title: B("510 — Thủng (burn-through)", "510 — Burn-through"),
       criteria: B("KHÔNG cho phép ở cả 3 mức B, C, D.", "Not permitted at B, C and D."),
       acceptance: B("Không thủng → ĐẠT.", "No burn-through → PASS."),
-      clause: { ref: "ISO 5817:2014, Table 1 No.1.15 (510)", quote: "Burn-through: not permitted (B, C, D)." }
+      clause: { ref: "ISO 5817:2023, Table 1 No.1.15 (510)", quote: "Burn-through: not permitted (B, C, D)." }
     },
     {
-      id: "iso_pore", std: "ISO 5817:2014", group: "POROSITY", load: B("B/C/D", "B/C/D"),
+      id: "iso_pore", std: "ISO 5817:2023", group: "POROSITY", load: B("B/C/D", "B/C/D"),
       title: B("2017 — Rỗ khí bề mặt", "2017 — Surface pore"),
       criteria: B("t > 3mm — Hàn giáp mối: D: d ≤ 0.3s, max 3mm · C: d ≤ 0.2s, max 2mm · B: KHÔNG cho phép. Hàn góc: thay s bằng a (chiều dày tính toán).",
         "t > 3mm — Butt: D: d ≤ 0.3s max 3 · C: d ≤ 0.2s max 2 · B: not permitted. Fillet: use a instead of s."),
       acceptance: B("Đường kính rỗ d ≤ giới hạn (mức B: không rỗ) → ĐẠT.", "Pore dia within limit (B: none) → PASS."),
-      clause: { ref: "ISO 5817:2014, Table 1 No.1.3 (2017)", quote: "D: d ≤ 0,3 s (0,3 a), max 3 mm; C: d ≤ 0,2 s (0,2 a), max 2 mm; B: not permitted" },
+      clause: { ref: "ISO 5817:2023, Table 1 No.1.3 (2017)", quote: "D: d ≤ 0,3 s (0,3 a), max 3 mm; C: d ≤ 0,2 s (0,2 a), max 2 mm; B: not permitted" },
       calc: {
         inputs: [
           { k: "s", label: B("Chiều dày mối hàn s/a (mm)", "Weld throat s/a (mm)"), def: 8 },
@@ -335,12 +335,12 @@
       }
     },
     {
-      id: "iso_throat_under", std: "ISO 5817:2014", group: "SIZE", load: B("B/C/D", "B/C/D"),
+      id: "iso_throat_under", std: "ISO 5817:2023", group: "SIZE", load: B("B/C/D", "B/C/D"),
       title: B("5213 — Thiếu chiều dày tính toán (hàn góc)", "5213 — Insufficient throat thickness (fillet)"),
       criteria: B("Khuyết tật ngắn: D: h ≤ 0.3mm + 0.1a, max 2mm · C: h ≤ 0.3mm + 0.1a, max 1mm · B: KHÔNG cho phép.",
         "Short imperfections: D: h ≤ 0.3 + 0.1a max 2 · C: h ≤ 0.3 + 0.1a max 1 · B: not permitted."),
       acceptance: B("Hụt throat h ≤ giới hạn → ĐẠT.", "Throat shortfall within limit → PASS."),
-      clause: { ref: "ISO 5817:2014, Table 1 No.1.17 (5213)", quote: "D: h ≤ 0,3 mm + 0,1 a, max 2 mm; C: h ≤ 0,3 mm + 0,1 a, max 1 mm; B: not permitted" },
+      clause: { ref: "ISO 5817:2023, Table 1 No.1.17 (5213)", quote: "D: h ≤ 0,3 mm + 0,1 a, max 2 mm; C: h ≤ 0,3 mm + 0,1 a, max 1 mm; B: not permitted" },
       calc: {
         inputs: [
           { k: "a", label: B("Throat danh nghĩa a (mm)", "Nominal throat a (mm)"), def: 6 },
@@ -355,12 +355,12 @@
       }
     },
     {
-      id: "iso_asym", std: "ISO 5817:2014", group: "SIZE", load: B("B/C/D", "B/C/D"),
+      id: "iso_asym", std: "ISO 5817:2023", group: "SIZE", load: B("B/C/D", "B/C/D"),
       title: B("512 — Hàn góc lệch cạnh quá mức", "512 — Excessive asymmetry of fillet weld"),
       criteria: B("Trường hợp không quy định lệch cạnh chủ ý: D: h ≤ 2mm + 0.2a · C: h ≤ 2mm + 0.15a · B: h ≤ 1.5mm + 0.15a.",
         "Where asymmetry not specified: D: h ≤ 2 + 0.2a · C: h ≤ 2 + 0.15a · B: h ≤ 1.5 + 0.15a."),
       acceptance: B("Chênh lệch 2 cạnh h (z1−z2) ≤ giới hạn → ĐẠT.", "Leg difference within limit → PASS."),
-      clause: { ref: "ISO 5817:2014, Table 1 No.1.18 (512)", quote: "D: h ≤ 2 mm + 0,2 a; C: h ≤ 2 mm + 0,15 a; B: h ≤ 1,5 mm + 0,15 a" },
+      clause: { ref: "ISO 5817:2023, Table 1 No.1.18 (512)", quote: "D: h ≤ 2 mm + 0,2 a; C: h ≤ 2 mm + 0,15 a; B: h ≤ 1,5 mm + 0,15 a" },
       calc: {
         inputs: [
           { k: "a", label: B("Throat a (mm)", "Throat a (mm)"), def: 6 },
@@ -375,29 +375,29 @@
       }
     },
     {
-      id: "iso_stray", std: "ISO 5817:2014", group: "OTHER", load: B("B/C/D", "B/C/D"),
+      id: "iso_stray", std: "ISO 5817:2023", group: "OTHER", load: B("B/C/D", "B/C/D"),
       title: B("601 — Vết hồ quang lạc (stray arc)", "601 — Stray arc"),
       criteria: B("Mức D: cho phép NẾU tính chất kim loại nền không bị ảnh hưởng. Mức C, B: KHÔNG cho phép. (EN 1090-2: EXC2 áp mức D cho 601.)",
         "D: permitted if parent metal properties not affected. C, B: not permitted."),
       acceptance: B("Không có vết hồ quang ngoài rãnh hàn → ĐẠT mức B/C.", "No arc strikes outside groove → PASS B/C."),
-      clause: { ref: "ISO 5817:2014, Table 1 No.3.1 (601)", quote: "D: Permitted, if the properties of the parent metal are not affected; C, B: not permitted" }
+      clause: { ref: "ISO 5817:2023, Table 1 No.3.1 (601)", quote: "D: Permitted, if the properties of the parent metal are not affected; C, B: not permitted" }
     },
     {
-      id: "iso_spatter", std: "ISO 5817:2014", group: "OTHER", load: B("B/C/D", "B/C/D"),
+      id: "iso_spatter", std: "ISO 5817:2023", group: "OTHER", load: B("B/C/D", "B/C/D"),
       title: B("602 — Bắn tóe (spatter)", "602 — Spatter"),
       criteria: B("Mức chấp nhận phụ thuộc ứng dụng (vd: chuẩn bị sơn phủ, mỏi). Thực hành: phải làm sạch spatter bám dính trước sơn — xem EN ISO 8501-3 (P2/P3 yêu cầu loại bỏ).",
         "Acceptance depends on application (e.g., coating, fatigue). Practice: adherent spatter must be removed before coating — see EN ISO 8501-3 (P2/P3)."),
       acceptance: B("Theo yêu cầu hợp đồng/spec sơn; mặc định loại bỏ spatter bám.", "Per contract/coating spec; default remove adherent spatter."),
-      clause: { ref: "ISO 5817:2014, Table 1 No.3.2 (602)", quote: "Acceptance depends on application, e.g. material, corrosion protection." }
+      clause: { ref: "ISO 5817:2023, Table 1 No.3.2 (602)", quote: "Acceptance depends on application, e.g. material, corrosion protection." }
     },
     {
-      id: "iso_pen402", std: "ISO 5817:2014", group: "FUSION", load: B("B/C/D", "B/C/D"),
+      id: "iso_pen402", std: "ISO 5817:2023", group: "FUSION", load: B("B/C/D", "B/C/D"),
       title: B("402 — Không ngấu hết (incomplete penetration)", "402 — Lack of penetration"),
-      criteria: B("Khuyết tật ngắn: D: h ≤ 0.2t, max 2mm · C: h ≤ 0.1t, max 1.5mm · B: KHÔNG cho phép.",
-        "Short imperfections: D: h ≤ 0.2t max 2 · C: h ≤ 0.1t max 1.5 · B: not permitted."),
-      acceptance: B("Chỉ áp dụng khi thiết kế không yêu cầu ngấu hoàn toàn. CJP: mọi thiếu ngấu → KHÔNG ĐẠT.",
-        "Applies only where full penetration not required. CJP: any lack of penetration → FAIL."),
-      clause: { ref: "ISO 5817:2014, Table 1 No.1.6 (402)", quote: "D: h ≤ 0,2 t, max 2 mm; C: h ≤ 0,1 t, max 1,5 mm; B: not permitted" }
+      criteria: B("Mối nối ngấu một phần (PJP): khuyết tật ngắn — D: h ≤ 0.2s (hoặc 0.2i), max 2mm · C: h ≤ 0.1s (hoặc 0.1i), max 1.5mm · B: KHÔNG cho phép. Mối giáp mối ngấu hoàn toàn: D: h ≤ 0.2t max 2mm (khuyết tật ngắn); C, B: không cho phép.",
+        "Partial penetration joints: short imperfections — D: h ≤ 0.2s (or 0.2i) max 2 · C: h ≤ 0.1s (or 0.1i) max 1.5 · B: not permitted. Full-penetration butt: D only, h ≤ 0.2t max 2."),
+      acceptance: B("Chỉ áp dụng khi thiết kế không yêu cầu ngấu hoàn toàn. CJP mức C/B: mọi thiếu ngấu → KHÔNG ĐẠT.",
+        "Applies only where full penetration not required. CJP at C/B: any lack of penetration → FAIL."),
+      clause: { ref: "ISO 5817:2023, Table 1 No.2.13 (402) — đã xác minh bản gốc", quote: "D: Short imperfections: h ≤ 0,2 s or h ≤ 0,2 i, but max. 2 mm; C: h ≤ 0,1 s or h ≤ 0,1 i, but max. 1,5 mm; B: Not permitted" }
     },
 
     /* ========== JASS 6 (thực hành Nhật — tham khảo) ========== */
