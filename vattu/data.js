@@ -8,7 +8,8 @@ window.VT_DATA = {
     {id:'spec',       name_vi:'Spec vật liệu',     name_en:'Material spec',       icon:'🧪', color:'#3b6d11'},
     {id:'cert',       name_vi:'Chứng từ (MTC)',    name_en:'Mill Test Cert',      icon:'📋', color:'#5f6b7a'},
     {id:'surface',    name_vi:'Bề mặt + Gỉ',       name_en:'Surface + Rust',      icon:'🎨', color:'#7a2024'},
-    {id:'ndt',        name_vi:'NDT vật tư',         name_en:'NDT incoming',       icon:'📡', color:'#534ab7'}
+    {id:'ndt',        name_vi:'NDT vật tư',         name_en:'NDT incoming',       icon:'📡', color:'#534ab7'},
+    {id:'coil',       name_vi:'Coil HGI/GL/PPGL',   name_en:'Coated coils',       icon:'🧻', color:'#0e7490'}
   ],
 
   /* =========== STANDARDS =========== */
@@ -45,11 +46,87 @@ window.VT_DATA = {
     {code:'JIS G3466',   name:'STKR — Hộp vuông/CN', region:'JP'},
     {code:'GB/T 700',    name:'Q235 — Cacbon thường', region:'CN'},
     {code:'GB/T 1591',   name:'Q345/Q355/Q460 — Hợp kim thấp', region:'CN'},
-    {code:'ISO 8501-1',  name:'Cấp gỉ & cấp làm sạch bề mặt', region:'INT'}
+    {code:'ISO 8501-1',  name:'Cấp gỉ & cấp làm sạch bề mặt', region:'INT'},
+    {code:'AS 1397',     name:'Coil mạ kẽm liên tục (G=YS, Z=khối lượng mạ)', region:'AU'},
+    {code:'AS 1365',     name:'Dung sai kích thước coil mạ', region:'AU'},
+    {code:'ASTM A653',   name:'Coil mạ kẽm nhúng nóng (HGI)', region:'US'},
+    {code:'ASTM A792',   name:'Coil mạ 55% nhôm-kẽm (GL)', region:'US'},
+    {code:'ASTM A755',   name:'Coil mạ sơn màu (PPGL)', region:'US'},
+    {code:'ASTM A924',   name:'Yêu cầu chung + dung sai coil mạ', region:'US'},
+    {code:'JIS G3321',   name:'Coil mạ 55% nhôm-kẽm (GL) — JIS', region:'JP'},
+    {code:'JIS G3322',   name:'Coil mạ nhôm-kẽm sơn màu (PPGL) — JIS', region:'JP'}
   ],
 
   /* =========== ITEMS =========== */
   items: [
+    /* ===== COIL HGI / GL / PPGL — TL Kiểm vật tư đầu vào (2022), đã xác minh ===== */
+    {id:'COIL-ITP', cat:'coil', std:'TL nội bộ 2022',
+     title_vi:'ITP kiểm coil nhập kho — 4 bước (HGI & GL/PPGL)',
+     title_en:'Incoming coil ITP — 4 steps',
+     element:'coil', region:'INT',
+     spec:[
+       {label:'1. Ngoại quan', value:'Tối thiểu 1 cuộn/lô (cùng heat no., chiều dày): nhận dạng, móp méo, trầy xước, gỉ, tình trạng bề mặt'},
+       {label:'2. Kích thước', value:'Tối thiểu 1 cuộn/lô: chiều dày, khổ rộng, chiều dài'},
+       {label:'3. Hồ sơ nhà SX', value:'100%: CO, CQ, MTC — nhận dạng, kích thước, cơ-hóa tính, KHỐI LƯỢNG MẠ'},
+       {label:'4. Thử mẫu tại lab', value:'2 mẫu/50 tấn (cùng chiều dày) hoặc theo ITP dự án: hóa nghiệm, kéo, uốn, độ cứng, thử lớp mạ'}
+     ],
+     note_vi:'Áp dụng chung cho thép tấm/hình/ống và coil. Coil thêm yêu cầu kiểm KHỐI LƯỢNG MẠ so với MTC.',
+     clause:'TL Kiểm tra vật tư đầu vào (30/06/2022) mục III–V · đã xác minh'},
+
+    {id:'COIL-HGI', cat:'coil', std:'AS 1397',
+     title_vi:'Coil HGI (xà gồ/girt-purlin) — đọc mã & tiêu chí',
+     title_en:'HGI coil (girt/purlin) — designation & criteria',
+     element:'coil', region:'AU',
+     spec:[
+       {label:'Cách đọc AS 1397 G450 Z275', value:'G450 = giới hạn chảy 450 MPa · Z275 = 275 g/m² kẽm TỔNG 2 MẶT'},
+       {label:'Cách đọc ASTM A653M G340 Z275', value:'Tương tự: G = YS (MPa) · Z = khối lượng mạ kẽm 2 mặt (g/m²)'},
+       {label:'Cơ-hóa tính', value:'AS 1397 / ASTM A653 — đối chiếu MTC với spec dự án'},
+       {label:'Dung sai kích thước', value:'AS 1365 / ASTM A924'}
+     ],
+     note_vi:'Z = mạ kẽm thuần (zinc). Kiểm khối lượng mạ bằng thử lab hoặc đo DFT quy đổi.',
+     clause:'TL Kiểm tra vật tư đầu vào (2022) mục IV · đã xác minh'},
+
+    {id:'COIL-ZN-DFT', cat:'coil', std:'ASTM A653',
+     title_vi:'Quy đổi khối lượng mạ kẽm ↔ chiều dày (HGI)',
+     title_en:'Zinc coating mass ↔ thickness conversion',
+     element:'coil', region:'US',
+     spec:[
+       {label:'Hệ số kẽm (A653 mục 8.1.2.2)', value:'1 µm = 7.14 g/m² (mỗi mặt)'},
+       {label:'Ví dụ Z275', value:'275/2 = 137.5 g/m²/mặt → DFT = 137.5 ÷ 7.14 ≈ 19.2 µm/mặt'},
+       {label:'Cách kiểm nhanh', value:'Đo DFT lớp mạ → nhân 7.14 → so khối lượng mạ ghi trên MTC'}
+     ],
+     note_vi:'Dùng máy đo DFT từ tính như đo sơn. Giá trị Z là TỔNG 2 MẶT — chia đôi trước khi quy đổi.',
+     clause:'ASTM A653/A653M 8.1.2.2 · đã xác minh từ TL 2022'},
+
+    {id:'COIL-GL', cat:'coil', std:'ASTM A792',
+     title_vi:'Coil GL/PPGL (tôn bao che) — đọc mã & quy đổi AZ',
+     title_en:'GL/PPGL coil (cladding) — designation & AZ conversion',
+     element:'coil', region:'US',
+     spec:[
+       {label:'Cách đọc ASTM A792M G550 AZM150', value:'G550 = YS 550 MPa · AZM150 = 150 g/m² hợp kim 55% nhôm-kẽm TỔNG 2 MẶT'},
+       {label:'Hệ số nhôm-kẽm (A792 mục 8.1.2.2)', value:'1 µm = 3.75 g/m² (nhẹ hơn kẽm thuần)'},
+       {label:'Ví dụ AZM150', value:'150/2 = 75 g/m²/mặt → DFT = 75 ÷ 3.75 = 20 µm/mặt'},
+       {label:'PPGL (sơn màu)', value:'Thêm ASTM A755 (hoặc JIS G3322): kiểm màu, độ bám sơn, độ dày lớp sơn'},
+       {label:'Hệ JIS', value:'GL: JIS G3321 · PPGL: JIS G3322'}
+     ],
+     note_vi:'GL nhẹ + chống ăn mòn tốt hơn kẽm thuần cùng khối lượng. Đừng nhầm hệ số 3.75 (AZ) với 7.14 (Z).',
+     clause:'TL Kiểm tra vật tư đầu vào (2022) mục V · đã xác minh'},
+
+    {id:'STEEL-NAME', cat:'cert', std:'Đa hệ',
+     title_vi:'Đọc tên mác thép các hệ — đối chiếu MTC nhanh',
+     title_en:'Steel grade designation decoder',
+     element:'all', region:'INT',
+     spec:[
+       {label:'EN 10025-2 S355JR', value:'S=kết cấu · 355=YS (MPa) · JR=độ dai va đập 27J @ +20°C (J0: 0°C, J2: −20°C)'},
+       {label:'JIS G3101 SS400', value:'SS=kết cấu thường · 400=TS kéo (MPa) — chú ý JIS dùng TS, không phải YS'},
+       {label:'JIS G3106 SM490YA', value:'SM=kết cấu hàn · 490=TS · Y=YS nâng cao · A=cấp va đập'},
+       {label:'JIS G3444 STK400', value:'STK=ống kết cấu · 400=TS'},
+       {label:'GB/T 1591 Q345C', value:'Q=giới hạn chảy (phiên âm TQ) · 345=YS · C=cấp chất lượng A→E (va đập tăng dần)'},
+       {label:'ASTM A572 Gr.50', value:'Gr.50 = YS 50 ksi · 1 ksi = 6.895 MPa → 50 ksi ≈ 345 MPa'}
+     ],
+     note_vi:'Bẫy hay gặp: JIS ghi theo TS (SS400 ≈ YS 245), EN/GB/ASTM ghi theo YS. So MTC phải đúng cột.',
+     clause:'TL Kiểm tra vật tư đầu vào (2022) mục III.2 · đã xác minh'},
+
     /* ===== EN 10029 — Tấm dung sai ===== */
     {id:'EN10029-thk-A', sketch:'plate_thickness', cat:'plate_tol', std:'EN 10029',
      title_vi:'Dung sai chiều dày tấm — Cấp A (Class A — chuẩn)',

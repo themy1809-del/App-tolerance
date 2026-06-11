@@ -42,7 +42,7 @@
     /* "kiểm tra/nghiệm thu/đo + đối tượng" cũng là câu hỏi */
     if (/(kiem tra|nghiem thu|danh gia|\bdo\b)/.test(qn) && ENT.some(e => e.re.test(qn))) return true;
     /* TỔNG QUÁT: từ chuyên môn QC + từ hỏi/sự cố = câu hỏi (chống lọt lưới) */
-    const DOMAIN = /\bhan\b|moi han|\but\b|\bndt\b|\brt\b|\bmt\b|\bpt\b|\bvt\b|sieu am|\bson\b|dft|ma kem|bu long|bulong|xiet|kich thuoc|dung sai|fit.?up|ga lap|packing|lashing|vat tu|thep|wps|pqr|exc|camber|cong venh|khe ho|undercut|ro khi|nut\b|que han|preheat|\blo\b|cat\b|vat mep|ket cau|cau kien|khung|\bdam\b|\bcot\b|gian\b|lo dot|\bvong\b|thang dung|container|di bien|tem nhan|bien ban|hold time|\bdo vong\b|rap thu|lap thu|trial|lap dung/;
+    const DOMAIN = /\bhan\b|moi han|\but\b|\bndt\b|\brt\b|\bmt\b|\bpt\b|\bvt\b|sieu am|\bson\b|dft|ma kem|bu long|bulong|xiet|kich thuoc|dung sai|fit.?up|ga lap|packing|lashing|vat tu|thep|wps|pqr|exc|camber|cong venh|khe ho|undercut|ro khi|nut\b|que han|preheat|\blo\b|cat\b|vat mep|ket cau|cau kien|khung|\bdam\b|\bcot\b|gian\b|lo dot|\bvong\b|thang dung|container|di bien|tem nhan|bien ban|hold time|\bdo vong\b|rap thu|lap thu|trial|lap dung|\bcoil\b|\bhgi\b|\bppgl\b|\bgl\b|ton bao|ma kem coil|z275|az150|azm/;
     const ASK = /\bsao\b|\bgi\b|the nao|lam (sao|gi)|\bcan\b|\bphai\b|\bsua\b|xu l(y|i)|khong (dat|pass)|\bfail\b|bi loai|\bloi\b|bao nhieu|kiem tra|nghiem thu|huong dan|khac phuc|tai sao|vi sao|chon\b|\bnen\b|duoc khong|dat khong|co sao|bao lau|ai ky|can ai|chong gi|khac (gi|nhau)|bi (vong|cong|tray|bong|chay)|ba via|dung sai/;
     return DOMAIN.test(qn) && ASK.test(qn);
   }
