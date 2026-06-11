@@ -150,6 +150,8 @@
       { t: B("Khe hở gốc trong dung sai (calculator tab Kiểm tra) — đo nhiều điểm dọc mối", "Root opening within tolerance — multiple points"), ref: "AWS 7.21.1 / Fig 7.3" },
       { t: B("Lệch mép (hi-lo) ≤ min(10%t; 3mm) — hoặc theo ISO 5817 nếu dự án EN", "Hi-lo within limit"), ref: "AWS 7.21.3 / ISO 5817 5071" },
       { t: B("Góc rãnh +10°/−5° và root face ±2mm so bản vẽ", "Groove angle & root face within Fig 7.3"), ref: "AWS Fig 7.3" },
+      { t: B("KÍCH THƯỚC HÌNH HỌC cụm gá: kích thước tổng + đường chéo (vuông góc) trong dung sai class", "Assembly geometry: overall dims + diagonals within class"), ref: "ISO 13920 / EN 1090-2 Annex B — tab Kích thước" },
+      { t: B("Vị trí chi tiết hàn kèm (sườn, bản mã, tai cẩu, lỗ) đo từ DATUM đúng bản vẽ", "Attachment & hole positions from datum per drawing"), ref: "Bản vẽ / Annex B — tab Kích thước" },
       { t: B("Hàn máy (SAW/FCAW/GMAW): biến thiên khe hở dọc mối ≤ 3mm", "Mechanized: gap variation ≤ 3mm"), ref: "AWS 5.4.1.7" },
       { t: B("Tack: đủ dài/size, không nứt, bởi thợ có chứng chỉ, vị trí không trùng điểm dừng xấu", "Tacks sized, sound, by qualified welder"), ref: "AWS 7.18" },
       { t: B("Backing (nếu dùng): áp khít ≤ 2mm, vật liệu tương thích, nối backing đúng quy định", "Backing tight ≤2mm, compatible"), ref: "AWS 7.21.1.1 / 7.10" }
@@ -190,7 +192,112 @@
       tool: B("☑️ Checklist → 🖨 In biên bản · 📷 Đo ảnh · Nhật ký QC", "Checklist print + photo + log") }
   ];
 
-  window.FU_DATA = { STEPS, RULES, FIXES, CHECKLIST,
+  /* ---------- KÍCH THƯỚC HÌNH HỌC KHI GÁ TỔ HỢP ----------
+     Bảng ISO 13920:2023 Table 1 (đã xác minh từ PDF trong module Dung sai) */
+  const ISO_RANGES = [
+    { from: 2, to: 30, l: "2–30" }, { from: 30, to: 120, l: "30–120" }, { from: 120, to: 400, l: "120–400" },
+    { from: 400, to: 1000, l: "400–1000" }, { from: 1000, to: 2000, l: "1000–2000" }, { from: 2000, to: 4000, l: "2000–4000" },
+    { from: 4000, to: 8000, l: "4000–8000" }, { from: 8000, to: 12000, l: "8000–12000" }, { from: 12000, to: 16000, l: "12000–16000" },
+    { from: 16000, to: 20000, l: "16000–20000" }, { from: 20000, to: 1e12, l: ">20000" }
+  ];
+  const ISO_CELLS = {
+    A: [1, 1, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+    B: [1, 2, 2, 3, 4, 6, 8, 10, 12, 14, 16],
+    C: [1, 3, 4, 6, 8, 11, 14, 18, 21, 24, 27],
+    D: [1, 4, 7, 9, 12, 16, 21, 27, 32, 36, 40]
+  };
+  function iso13920(Lmm, cls) {
+    let i = ISO_RANGES.findIndex(b => Lmm > b.from && Lmm <= b.to);
+    if (i < 0) i = ISO_RANGES.length - 1;
+    return { band: ISO_RANGES[i].l, lim: ISO_CELLS[cls] ? ISO_CELLS[cls][i] : ISO_CELLS.C[i] };
+  }
+
+  const GEO = {
+    /* CẦN CHUẨN GÌ — bảng phân loại */
+    stds: [
+      { obj: B("Mối ghép hàn (khe hở, góc vát, lệch mép)", "Weld joint prep"), std: "AWS D1.1 7.21 + Fig 7.3 (đã xác minh) / ISO 9692-1 / WPS", where: B("Tab 📐 Kiểm tra của module này", "Inspect tab here") },
+      { obj: B("Kích thước TỔNG của cụm sau gá (dài/rộng/cao)", "Overall assembly dimensions"), std: "Bản vẽ + ISO 13920 class A–D (đã xác minh) hoặc EN 1090-2 Annex B theo hợp đồng", where: B("Calculator bên dưới + module Dung sai", "Calculator below + Tolerance module") },
+      { obj: B("Vuông góc / méo khung (đường chéo)", "Squareness (diagonals)"), std: B("Bản vẽ; tham chiếu ISO 13920 (góc) / EN 1090-2 Annex B", "Drawing; ISO 13920 angular / EN 1090-2 B"), where: B("Calculator đường chéo bên dưới", "Diagonal calculator below") },
+      { obj: B("Vị trí chi tiết hàn kèm: sườn tăng cứng, bản mã, tai cẩu", "Attachment positions: stiffeners, gussets"), std: "Bản vẽ + EN 1090-2 Annex B (tra điều khoản đã xác minh trong module Dung sai)", where: B("Calculator vị trí bên dưới", "Position calculator below") },
+      { obj: B("Vị trí & khoảng cách nhóm lỗ bu lông", "Bolt hole positions & spacing"), std: "Bản vẽ + EN 1090-2 (D.2.8 / Annex B) hoặc AISC 303 theo hợp đồng", where: B("Module Dung sai → tìm 'lỗ'", "Tolerance module → 'hole'") },
+      { obj: B("Độ thẳng, camber, độ vồng đặt sẵn", "Straightness, preset camber"), std: "Bản vẽ + EN 1090-2 Annex B / AISC 303", where: B("Module Dung sai (có hình cách đo)", "Tolerance module") }
+    ],
+    /* CALCULATOR hình học */
+    checks: [
+      {
+        id: "geo_len",
+        title: B("Kích thước tổng sau gá — ISO 13920 class A–D", "Overall dimension vs ISO 13920"),
+        criteria: B("Đo dài/rộng/cao/khoảng cách trục của cụm SAU KHI GÁ + TACK (trước hàn chính — còn sửa được). Class theo hợp đồng (thông dụng B hoặc C). Nhớ chừa lượng dư co rút hàn so với kích thước hoàn thiện.",
+          "Measure overall dims after tack, before full weld. Class per contract (commonly B/C)."),
+        measure: B("Thước cuộn có chứng chỉ, kéo đủ lực căng; đo dài >10m ghi nhiệt độ để bù giãn nở.", "Calibrated tape, proper tension; temperature correction for long dims."),
+        quote: "ISO 13920:2023 Table 1 — linear dimensions, classes A–D (giá trị nhúng từ bảng đã xác minh trong module Dung sai)",
+        calc: {
+          inputs: [
+            { k: "L", label: B("Kích thước danh nghĩa (mm)", "Nominal (mm)"), def: 6000 },
+            { k: "m", label: B("Đo được (mm)", "Measured (mm)"), def: 6004 },
+            { k: "cls", label: B("Class (1=A,2=B,3=C,4=D)", "Class"), def: 2 }
+          ],
+          evaluate(v) {
+            const cl = ["A", "B", "C", "D"][Math.min(Math.max(Math.round(v.cls), 1), 4) - 1];
+            const r = iso13920(v.L, cl);
+            const dev = Math.abs(v.m - v.L);
+            return { limitText: `Class ${cl}, dải ${r.band}mm → ±${r.lim} mm`, detail: `Sai lệch |${v.m} − ${v.L}| = ${num(dev)} mm`, pass: dev <= r.lim };
+          }
+        }
+      },
+      {
+        id: "geo_diag",
+        title: B("Vuông góc khung — chênh hai đường chéo", "Frame squareness — diagonal difference"),
+        criteria: B("Khung/panel vuông thì 2 đường chéo bằng nhau. Đo d1, d2 → chênh |d1−d2| so với dung sai bản vẽ; nếu bản vẽ không ghi, thông lệ lấy theo dung sai cạnh tương ứng (ISO 13920 cho chiều dài đường chéo) — app tính sẵn giá trị tham chiếu này.",
+          "Square frame → equal diagonals. |d1−d2| vs drawing tolerance; reference = ISO 13920 limit for diagonal length."),
+        measure: B("Đo 2 đường chéo bằng cùng một thước, cùng lực căng, cùng người đo; khung lớn dùng máy toàn đạc.", "Same tape, tension, person for both diagonals; total station for large frames."),
+        quote: "Thực hành kiểm vuông góc bằng đường chéo + ISO 13920 Table 1 làm tham chiếu khi bản vẽ không quy định",
+        calc: {
+          inputs: [
+            { k: "d1", label: B("Đường chéo 1 (mm)", "Diagonal 1 (mm)"), def: 7211 },
+            { k: "d2", label: B("Đường chéo 2 (mm)", "Diagonal 2 (mm)"), def: 7216 },
+            { k: "tol", label: B("Dung sai bản vẽ |Δd| (mm, 0 = dùng ISO 13920 B)", "Drawing tol (0 = ISO 13920 B)"), def: 0 }
+          ],
+          evaluate(v) {
+            const d = Math.abs(v.d1 - v.d2);
+            const ref = iso13920(Math.max(v.d1, v.d2), "B").lim;
+            const lim = v.tol > 0 ? v.tol : ref;
+            return { limitText: v.tol > 0 ? `|Δd| ≤ ${v.tol} mm (bản vẽ)` : `|Δd| ≤ ${ref} mm (tham chiếu ISO 13920 B cho L=${Math.max(v.d1, v.d2)})`, detail: `|${v.d1} − ${v.d2}| = ${num(d)} mm`, pass: d <= lim };
+          }
+        }
+      },
+      {
+        id: "geo_pos",
+        title: B("Vị trí chi tiết hàn kèm (sườn / bản mã / tai cẩu / lỗ)", "Attachment & hole position"),
+        criteria: B("Khoảng cách từ DATUM tới chi tiết so với bản vẽ. Dung sai lấy theo bản vẽ; nếu không ghi → tra điều khoản tương ứng EN 1090-2 Annex B trong module Dung sai (có trích dẫn đã xác minh) rồi nhập vào đây.",
+          "Distance from datum vs drawing. Tolerance per drawing; otherwise look up EN 1090-2 Annex B clause in Tolerance module."),
+        measure: B("Đo từ MỘT datum thống nhất (không đo nối tiếp chi tiết này sang chi tiết kia — tích lũy sai số!).", "Measure each from ONE datum — chained measurements accumulate error."),
+        quote: "EN 1090-2:2018+A1:2024 Annex B — vị trí chi tiết/lỗ theo điều khoản tương ứng (tra trong module Dung sai)",
+        calc: {
+          inputs: [
+            { k: "d", label: B("Vị trí thiết kế từ datum (mm)", "Design position (mm)"), def: 1500 },
+            { k: "m", label: B("Đo được (mm)", "Measured (mm)"), def: 1503 },
+            { k: "tol", label: B("Dung sai ± (mm, theo bản vẽ/Annex B)", "Tolerance ± (mm)"), def: 3 }
+          ],
+          evaluate(v) {
+            const dev = Math.abs(v.m - v.d);
+            return { limitText: `±${v.tol} mm`, detail: `Sai lệch ${num(dev)} mm`, pass: dev <= v.tol };
+          }
+        }
+      }
+    ],
+    /* BIỆN PHÁP KIỂM SOÁT */
+    controls: [
+      { t: B("Datum thống nhất", "Single datum"), d: B("Chọn 1 mốc chuẩn (mặt/đường/lỗ chuẩn) dùng XUYÊN SUỐT từ gá → nghiệm thu → lắp dựng; ghi datum lên biên bản. Mọi chi tiết đo từ datum, không đo chuyền.", "One datum from fit-up through erection; all positions measured from it.") },
+      { t: B("Jig / dưỡng / template cho chi tiết lặp", "Jigs & templates"), d: B("Cụm lặp nhiều (sườn, bản mã, lỗ) làm dưỡng kiểm/đồ gá định vị — nhanh hơn và loại sai số người đo; dưỡng phải được kiểm định kỳ.", "Repeat details: use verified templates/jigs.") },
+      { t: B("Đo 2 thời điểm: sau TACK và sau HÀN", "Measure after tack AND after weld"), d: B("Sau tack: còn sửa được — đây là điểm kiểm chính. Sau hàn: đo lại để biết co rút thực tế → hiệu chỉnh lượng dư cho cụm sau (vòng lặp cải tiến với module Lượng dư).", "After tack: correctable. After weld: learn actual shrinkage → feed back to allowance.") },
+      { t: B("Kiểm vuông góc bằng đường chéo + cao độ bằng máy", "Diagonals + instrument levels"), d: B("Khung/panel luôn kéo 2 đường chéo; cao độ/độ phẳng bàn gá kiểm bằng máy thủy bình trước khi đặt chi tiết (bàn gá vênh = cả cụm vênh).", "Always pull diagonals; check fixture table flatness first.") },
+      { t: B("Bù nhiệt độ khi đo dài", "Temperature correction"), d: B("Thép giãn ~12µm/m/°C — cụm 12m chênh 15°C lệch hơn 2mm. Ghi nhiệt độ lúc đo, quy về 20°C.", "12µm/m/°C — record temp, normalize to 20°C.") },
+      { t: B("Điểm dừng theo ITP + hồ sơ", "ITP points + records"), d: B("Mối/cụm quan trọng: fit-up là điểm W (EXC3-4 thường nâng H) — lập biên bản (in từ Checklist), lưu Nhật ký QC, chụp ảnh; vượt dung sai → NCR, không hàn đè.", "Critical assemblies: W/H point — signed report, QC log, photos; out-of-tolerance → NCR.") }
+    ]
+  };
+
+  window.FU_DATA = { STEPS, RULES, FIXES, CHECKLIST, GEO,
     intro: B("Fit-up đạt thì mối hàn mới có cơ hội đạt — kiểm TRƯỚC khi hàn, sau khi hàn không sửa được gốc nữa. Giá trị chuẩn lấy theo WPS/bản vẽ; dung sai dưới đây theo AWS D1.1:2020 (đã đối chiếu PDF gốc) + ISO 5817:2023 cho dự án EN.",
       "Good fit-up enables good welds. Inspect BEFORE welding. Tolerances per AWS D1.1:2020 (verified) + ISO 5817:2023 for EN projects.")
   };

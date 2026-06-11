@@ -100,7 +100,8 @@
 
 <nav class="nav">
   <button data-tab="qt" class="on"><span class="ic">🪜</span><span data-vi="Quy trình" data-en="Steps">Quy trình</span></button>
-  <button data-tab="kt"><span class="ic">📐</span><span data-vi="Kiểm tra" data-en="Inspect">Kiểm tra</span></button>
+  <button data-tab="kt"><span class="ic">🔩</span><span data-vi="Mối ghép" data-en="Joint">Mối ghép</span></button>
+  <button data-tab="geo"><span class="ic">📏</span><span data-vi="Kích thước" data-en="Geometry">Kích thước</span></button>
   <button data-tab="fix"><span class="ic">🔧</span><span data-vi="Xử lý lỗi" data-en="Fixes">Xử lý lỗi</span></button>
   <button data-tab="photo"><span class="ic">📷</span><span data-vi="Đo ảnh" data-en="Photo">Đo ảnh</span></button>
   <button data-tab="ck"><span class="ic">☑️</span><span data-vi="Checklist" data-en="Checklist">Checklist</span></button>
@@ -109,6 +110,7 @@
 <main class="main">
   <section class="tab on" id="tab-qt"></section>
   <section class="tab" id="tab-kt"></section>
+  <section class="tab" id="tab-geo"></section>
   <section class="tab" id="tab-fix"></section>
   <section class="tab" id="tab-photo">
     <div class="h2x">📷 Đo fit-up trên ảnh</div>
@@ -229,6 +231,61 @@ function renderKT() {
   });
 }
 
+/* ===== TAB KÍCH THƯỚC HÌNH HỌC (cụm gá tổ hợp) ===== */
+function renderGeo() {
+  const v = LANG === 'vi';
+  const G = D.GEO;
+  let h = `<div class="h2x">📏 ${v?'Kích thước hình học khi gá tổ hợp':'Assembly geometry at fit-up'}</div>`;
+
+  /* CẦN CHUẨN GÌ */
+  h += `<div class="seccard"><h3>📚 ${v?'Cần chuẩn gì — đối tượng nào áp chuẩn nào':'Which standard for what'}</h3>
+    <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12.5px">
+    <tr><th style="background:var(--soft);color:var(--brand);border:1px solid var(--line);padding:8px;text-align:left">${v?'Đối tượng kiểm':'Object'}</th>
+        <th style="background:var(--soft);color:var(--brand);border:1px solid var(--line);padding:8px;text-align:left">${v?'Chuẩn áp dụng':'Standard'}</th>
+        <th style="background:var(--soft);color:var(--brand);border:1px solid var(--line);padding:8px;text-align:left">${v?'Công cụ trong app':'In-app tool'}</th></tr>
+    ${G.stds.map(s => `<tr><td style="border:1px solid var(--line);padding:8px"><b>${esc(T(s.obj))}</b></td>
+      <td style="border:1px solid var(--line);padding:8px">${esc(typeof s.std==='object'?T(s.std):s.std)}</td>
+      <td style="border:1px solid var(--line);padding:8px">${esc(T(s.where))}</td></tr>`).join('')}</table></div>
+    <div class="note">${v?'Thứ tự ưu tiên: ① spec hợp đồng → ② bản vẽ → ③ tiêu chuẩn dẫn chiếu (EN 1090-2 Annex B / ISO 13920 / AISC 303). Giá trị có trích dẫn đã xác minh nằm trong':'Priority: contract → drawing → referenced standard. Verified clauses in'} <a href="../dungsai/" style="color:var(--brand);font-weight:700">module Dung sai</a>.</div></div>`;
+
+  /* CALCULATORS */
+  h += G.checks.map((r, i) => `
+    <div class="seccard">
+      <h3>${esc(T(r.title))}</h3>
+      <div style="font-size:13.5px">${esc(T(r.criteria))}</div>
+      <div class="measure">📏 <b>${v?'Cách đo':'How'}:</b> ${esc(T(r.measure))}</div>
+      <div style="margin-top:10px" id="gcalc_${i}">
+        ${r.calc.inputs.map(inp => `<div class="inrow"><span class="lab">${esc(T(inp.label))}</span><input type="number" step="any" data-k="${inp.k}" value="${inp.def}"></div>`).join('')}
+        <div class="cout"></div>
+      </div>
+      <div class="evidence"><div class="h">${v?'Căn cứ':'Basis'}</div><div class="quote">${esc(r.quote)}</div></div>
+    </div>`).join('');
+
+  /* BIỆN PHÁP KIỂM SOÁT */
+  h += `<div class="seccard"><h3>🛡 ${v?'Biện pháp kiểm tra – kiểm soát':'Inspection & control measures'}</h3>
+    ${G.controls.map((c, i) => `<div style="display:flex;gap:12px;padding:11px 0;border-top:1px dashed var(--line)">
+      <div style="width:28px;height:28px;border-radius:50%;background:var(--brand);color:#fff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex:none">${i+1}</div>
+      <div style="font-size:13.5px;flex:1"><b style="display:block;font-size:14px;margin-bottom:2px">${esc(T(c.t))}</b>${esc(T(c.d))}</div>
+    </div>`).join('')}</div>`;
+
+  document.getElementById('tab-geo').innerHTML = h;
+
+  G.checks.forEach((r, i) => {
+    const box = document.getElementById('gcalc_' + i);
+    const run = () => {
+      const vals = {};
+      box.querySelectorAll('input').forEach(inp => vals[inp.dataset.k] = parseFloat(inp.value) || 0);
+      const out = r.calc.evaluate(vals);
+      box.querySelector('.cout').innerHTML =
+        `<div class="res"><div class="lbl">${LANG==='vi'?'Giới hạn':'Limit'}</div><div class="big">${esc(out.limitText)}<br><span style="font-size:12.5px;opacity:.8">${esc(out.detail||'')}</span></div></div>
+         <div class="verdict ${out.pass?'pass':'fail'}">${out.pass?(LANG==='vi'?'✓ ĐẠT':'✓ PASS'):(LANG==='vi'?'✗ KHÔNG ĐẠT':'✗ FAIL')}</div>` +
+        (window.QCLog ? QCLog.saveButton('QC Fit-up', T(r.title), out.pass, (out.detail||'') + ' | ' + out.limitText) : '');
+    };
+    box.querySelectorAll('input').forEach(inp => inp.addEventListener('input', run));
+    run();
+  });
+}
+
 /* ===== TAB XỬ LÝ LỖI ===== */
 function renderFix() {
   const v = LANG === 'vi';
@@ -287,7 +344,7 @@ function renderCK() {
   };
 }
 
-function renderAll() { renderQT(); renderKT(); renderFix(); renderCK(); }
+function renderAll() { renderQT(); renderKT(); renderGeo(); renderFix(); renderCK(); }
 setLang(LANG);
 if (window.PhotoTool) PhotoTool.mount(document.getElementById('photoMount'), { key: 'fu_photos_v1' });
 
