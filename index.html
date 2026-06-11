@@ -48,6 +48,12 @@
   .gsearch input::placeholder{color:rgba(255,255,255,.5)}
   .gsearch input:focus{background:#fff;color:var(--ink);border-color:var(--cyan);box-shadow:0 0 0 3px rgba(56,189,248,.3)}
   .gsearch input:focus::placeholder{color:#9aa7b3}
+  .gsearch input{padding-right:96px}
+  #gsKeyBtn{position:absolute;right:6px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:4px;
+    padding:7px 11px;border:0;border-radius:9px;cursor:pointer;font-family:inherit;font-size:11.5px;font-weight:800;
+    background:linear-gradient(135deg,#7c3aed,#5f4ab7);color:#fff;box-shadow:0 2px 8px rgba(124,58,237,.35);transition:.15s}
+  #gsKeyBtn:hover{filter:brightness(1.12)}
+  #gsKeyBtn.ok{background:linear-gradient(135deg,#0e9f6e,#0b7a55);box-shadow:0 2px 8px rgba(14,159,110,.3)}
   .gs-ex{display:flex;gap:6px;margin-top:9px;overflow-x:auto;padding-bottom:3px;scrollbar-width:none}
   .gs-ex::-webkit-scrollbar{display:none}
   .gs-ex button{font-size:11px;font-weight:600;padding:5px 11px;border-radius:999px;cursor:pointer;white-space:nowrap;flex:none;
@@ -150,6 +156,7 @@
     <div class="gsearch">
       <span class="gs-ic">🔍</span>
       <input id="gq" type="search" placeholder="Hỏi hoặc tìm: giàn 50m kiểm tra như thế nào? · undercut · M20..." autocomplete="off">
+      <button type="button" id="gsKeyBtn" onclick="gsAiKey()" title="Cài API key AI (Gemini miễn phí / Claude / ChatGPT)">✨<span id="gsKeyTxt">Cài AI</span></button>
     </div>
     <div class="gs-ex" id="gsEx"></div>
   </div>
@@ -467,8 +474,19 @@ function gsAiKey() {
     alert('✓ Đã lưu key — dùng ' + ten + '.');
   }
   else { localStorage.removeItem('qc_ai_key'); alert('Đã xóa API key.'); }
+  gsKeyBtnSync();
   gsRun();
 }
+function gsKeyBtnSync() {
+  const btn = document.getElementById('gsKeyBtn');
+  const txt = document.getElementById('gsKeyTxt');
+  if (!btn) return;
+  const k = localStorage.getItem('qc_ai_key');
+  const ten = k && window.QCAssistant ? QCAssistant.aiProvider(k) : null;
+  if (ten) { btn.classList.add('ok'); txt.textContent = ' ' + ten.split(' ')[0] + ' ✓'; btn.title = 'Đang dùng ' + ten + ' — bấm để đổi/xóa key'; }
+  else { btn.classList.remove('ok'); txt.textContent = ' Cài AI'; btn.title = 'Cài API key AI (Gemini miễn phí / Claude / ChatGPT)'; }
+}
+gsKeyBtnSync();
 async function gsAskClaude() {
   const key = localStorage.getItem('qc_ai_key');
   if (!key) { gsAiKey(); return; }
