@@ -436,7 +436,7 @@ function gsRun() {
     claudeBar = '<div style="display:flex;gap:8px;margin:-6px 0 14px;align-items:center">' +
       '<button onclick="gsAskClaude()" style="padding:10px 16px;border:0;border-radius:10px;background:linear-gradient(135deg,#7c3aed,#5f4ab7);color:#fff;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;box-shadow:0 4px 14px rgba(124,58,237,.3)">✨ Hỏi thêm AI</button>' +
       '<button onclick="gsAiKey()" title="Cấu hình API key" style="padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;cursor:pointer;font-size:13px">⚙</button>' +
-      '<span style="font-size:11px;color:var(--muted)">' + (localStorage.getItem('qc_ai_key') ? 'API key đã lưu trên máy này' : 'cần API key (bấm ⚙)') + '</span></div>' +
+      '<span style="font-size:11px;color:var(--muted)">' + (function(){ const k = localStorage.getItem('qc_ai_key'); if (!k) return 'cần API key (bấm ⚙) — Gemini MIỄN PHÍ'; const t = window.QCAssistant && QCAssistant.aiProvider(k); return t ? 'đang dùng ' + t : 'API key đã lưu'; })() + '</span></div>' +
       '<div id="aiOut"></div>';
   }
 
@@ -453,9 +453,19 @@ function gsRun() {
 
 function gsAiKey() {
   const cur = localStorage.getItem('qc_ai_key') || '';
-  const k = prompt('Dán API key AI (sk-ant-...) — key lưu CHỈ trên máy này.\nĐể trống và OK để xóa key.', cur);
+  const k = prompt(
+    'Dán API key AI — app TỰ NHẬN DIỆN hãng theo đầu key:\n' +
+    '• AIza...  → Gemini (Google) — MIỄN PHÍ, lấy tại aistudio.google.com/apikey\n' +
+    '• sk-ant-... → Claude (Anthropic) — console.anthropic.com\n' +
+    '• sk-...   → ChatGPT (OpenAI) — platform.openai.com\n' +
+    'Key lưu CHỈ trên máy này. Để trống và OK để xóa key.', cur);
   if (k === null) return;
-  if (k.trim()) { localStorage.setItem('qc_ai_key', k.trim()); alert('✓ Đã lưu API key.'); }
+  if (k.trim()) {
+    const ten = (window.QCAssistant && QCAssistant.aiProvider(k.trim())) || null;
+    if (!ten) { alert('⚠ Key không đúng định dạng. Key hợp lệ bắt đầu bằng AIza / sk-ant- / sk-'); return; }
+    localStorage.setItem('qc_ai_key', k.trim());
+    alert('✓ Đã lưu key — dùng ' + ten + '.');
+  }
   else { localStorage.removeItem('qc_ai_key'); alert('Đã xóa API key.'); }
   gsRun();
 }

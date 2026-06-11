@@ -401,25 +401,74 @@
     },
 
     /* Tầng 2 — AI qua API (tùy chọn, key người dùng tự nhập, lưu riêng máy) */
+    /* Nhận diện nhà cung cấp AI theo đầu key */
+    aiProvider(key) {
+      if (/^sk-ant-/.test(key)) return 'Claude (Anthropic)';
+      if (/^AIza/.test(key)) return 'Gemini (Google) — gói miễn phí';
+      if (/^sk-/.test(key)) return 'ChatGPT (OpenAI)';
+      return null;
+    },
     async askClaude(q, ctxText, key) {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'x-api-key': key,
-          'anthropic-version': '2023-06-01',
-          'content-type': 'application/json',
-          'anthropic-dangerous-direct-browser-access': 'true'
-        },
-        body: JSON.stringify({
-          model: 'claude-haiku-4-5-20251001',
-          max_tokens: 1200,
-          system: 'Bạn là trợ lý QC kết cấu thép của DaiDung. Trả lời bằng tiếng Việt, TẬN TÌNH theo bước đánh số (làm gì, dụng cụ gì, ghi chép gì), nêu tiêu chuẩn áp dụng (EN 1090-2, ISO 5817:2023, AWS D1.1, ISO 19840, AISC/RCSC...) và nhắc đối chiếu module tương ứng trong app (Dung sai, QC Hàn, QC Sơn, QC Bu lông, Vật tư, Lượng dư, WPS). Không bịa số liệu tiêu chuẩn; nếu không chắc hãy nói rõ.',
-          messages: [{ role: 'user', content: 'Câu hỏi: ' + q + (ctxText ? '\n\nDữ liệu liên quan trong app:\n' + ctxText : '') }]
-        })
-      });
-      if (!res.ok) throw new Error('API ' + res.status + (res.status === 401 ? ' — API key sai/hết hạn' : ''));
-      const j = await res.json();
-      return (j.content || []).map(c => c.text || '').join('\n');
+      const SYS = 'Bạn là trợ lý QC kết cấu thép của DaiDung. Trả lời bằng tiếng Việt, TẬN TÌNH theo bước đánh số (làm gì, dụng cụ gì, ghi chép gì), nêu tiêu chuẩn áp dụng (EN 1090-2, ISO 5817:2023, AWS D1.1, ISO 19840, AISC/RCSC...) và nhắc đối chiếu module tương ứng trong app (Dung sai, QC Hàn, QC Sơn, QC Bu lông, Vật tư, Lượng dư, WPS). Không bịa số liệu tiêu chuẩn; nếu không chắc hãy nói rõ.';
+      const USER = 'Câu hỏi: ' + q + (ctxText ? '\n\nDữ liệu liên quan trong app:\n' + ctxText : '');
+      const fail = (res, ten) => {
+        let extra = '';
+        if (res.status === 401 || res.status === 403) extra = ' — API key sai/hết hạn (' + ten + ')';
+        if (res.status === 429) extra = ' — vượt hạn mức, chờ 1 phút rồi thử lại';
+        throw new Error('API ' + res.status + extra);
+      };
+      /* ---- GEMINI (Google, key AIza..., có gói MIỄN PHÍ) ---- */
+      if (/^AIza/.test(key)) {
+        const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json', 'x-goog-api-key': key },
+          body: JSON.stringify({
+            systemInstruction: { parts: [{ text: SYS }] },
+            contents: [{ role: 'user', parts: [{ text: USER }] }],
+            generationConfig: { maxOutputTokens: 1500 }
+          })
+        });
+        if (!res.ok) fail(res, 'Gemini');
+        const j = await res.json();
+        return (((j.candidates || [])[0] || {}).content || { parts: [] }).parts.map(p => p.text || '').join('\n') || '(Gemini không trả về nội dung)';
+      }
+      /* ---- CLAUDE (Anthropic, key sk-ant-...) ---- */
+      if (/^sk-ant-/.test(key)) {
+        const res = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'x-api-key': key,
+            'anthropic-version': '2023-06-01',
+            'content-type': 'application/json',
+            'anthropic-dangerous-direct-browser-access': 'true'
+          },
+          body: JSON.stringify({
+            model: 'claude-haiku-4-5-20251001',
+            max_tokens: 1200,
+            system: SYS,
+            messages: [{ role: 'user', content: USER }]
+          })
+        });
+        if (!res.ok) fail(res, 'Claude');
+        const j = await res.json();
+        return (j.content || []).map(c => c.text || '').join('\n');
+      }
+      /* ---- CHATGPT (OpenAI, key sk-...) ---- */
+      if (/^sk-/.test(key)) {
+        const res = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json', 'authorization': 'Bearer ' + key },
+          body: JSON.stringify({
+            model: 'gpt-4o-mini',
+            max_tokens: 1200,
+            messages: [{ role: 'system', content: SYS }, { role: 'user', content: USER }]
+          })
+        });
+        if (!res.ok) fail(res, 'ChatGPT');
+        const j = await res.json();
+        return (((j.choices || [])[0] || {}).message || {}).content || '(ChatGPT không trả về nội dung)';
+      }
+      throw new Error('Không nhận diện được key. Key hợp lệ: AIza... (Gemini — miễn phí) · sk-ant-... (Claude) · sk-... (ChatGPT)');
     }
   };
 })();
