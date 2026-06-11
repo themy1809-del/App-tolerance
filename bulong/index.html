@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#37474f">
+<title>QC Bu lông — Liên kết bu lông kết cấu thép</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/icon-180.png">
+<style>
+  :root{
+    --bg:#f1f3f4; --ink:#1b2430; --muted:#5f6b7a; --line:#dde3e6;
+    --brand:#37474f; --brand2:#546e7a; --soft:#eceff1;
+    --pass:#0f6e56; --pass-soft:#e3f6ee; --fail:#aa4322; --fail-soft:#fbeae2;
+    --warn:#8a5a00; --warn-soft:#fdf3e2;
+    --r:14px; --sh:0 1px 2px rgba(30,40,48,.07),0 6px 20px rgba(30,40,48,.06);
+    --navh:62px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.5}
+  button{font-family:inherit;cursor:pointer;border:0;background:none}
+  input,select{font-family:inherit}
+  .appbar{position:sticky;top:0;z-index:40;background:linear-gradient(180deg,#37474f,#263238);color:#fff;
+    padding:max(10px,env(safe-area-inset-top)) 14px 10px;display:flex;align-items:center;gap:10px}
+  .appbar .back{color:#fff;font-size:15px;font-weight:700;padding:6px 8px 6px 0}
+  .appbar h1{font-size:16px;margin:0;font-weight:700;line-height:1.15}
+  .appbar .sub{font-size:11px;opacity:.8}
+  .appbar .sp{flex:1}
+  .lang{display:flex;background:rgba(255,255,255,.16);border-radius:8px;overflow:hidden}
+  .lang button{color:#fff;padding:6px 11px;font-size:13px;font-weight:700;opacity:.65}
+  .lang button.on{background:#fff;color:var(--brand);opacity:1}
+  .nav{position:fixed;bottom:0;left:0;right:0;z-index:40;background:#fff;border-top:1px solid var(--line);
+    display:flex;justify-content:space-around;padding:6px 4px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(0,0,0,.05)}
+  .nav button{display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--muted);font-size:11px;font-weight:600;padding:4px 8px;border-radius:10px;flex:1}
+  .nav button .ic{font-size:20px;line-height:1}
+  .nav button.on{color:var(--brand)}
+  @media(min-width:980px){
+    .nav{position:sticky;top:58px;bottom:auto;z-index:39;max-width:1180px;margin:10px auto 0;border:1px solid var(--line);border-radius:12px;justify-content:flex-start;gap:4px;padding:6px;box-shadow:var(--sh)}
+    .nav button{flex:none;flex-direction:row;gap:7px;font-size:14px;padding:9px 16px}
+    .nav button .ic{font-size:17px}
+    .nav button.on{background:var(--soft)}
+  }
+  .main{max-width:1180px;margin:0 auto;padding:12px 14px calc(var(--navh) + 24px)}
+  @media(min-width:980px){.main{padding-bottom:28px}}
+  .seccard{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:14px;padding:16px}
+  .seccard h3{margin:0 0 8px;font-size:16px;color:var(--brand)}
+  .seccard .note{font-size:12.5px;color:var(--muted);margin:8px 0 0}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{border:1px solid var(--line);padding:8px 9px;text-align:left;vertical-align:top}
+  th{background:var(--soft);color:var(--brand);font-size:11.5px;text-transform:uppercase;letter-spacing:.3px}
+  tr:nth-child(even) td{background:#f7f9fa}
+  .tblwrap{overflow-x:auto;margin-top:10px}
+  .evidence{background:#fafbfc;border:1px dashed var(--brand2);border-radius:12px;padding:12px 14px;margin-top:12px}
+  .evidence .h{font-size:11px;font-weight:800;letter-spacing:.5px;color:var(--brand);text-transform:uppercase}
+  .quote{font-style:italic;color:#33404e;border-left:3px solid var(--soft);padding-left:10px;margin-top:8px;font-size:12.5px}
+  .warn{background:var(--warn-soft);border:1px solid #f0d9a8;border-left:4px solid var(--warn);border-radius:10px;padding:10px 12px;font-size:12.5px;color:#6b4700;margin-top:10px}
+  .inrow{display:flex;gap:10px;align-items:center;margin:8px 0}
+  .inrow .lab{font-size:12px;color:var(--muted);flex:1}
+  .inrow input,.inrow select{width:150px;padding:9px 10px;border:1px solid var(--line);border-radius:10px;font-size:16px;text-align:right;background:#fff}
+  .res{background:#1d272c;color:#fff;border-radius:12px;padding:14px;margin-top:12px}
+  .res .lbl{font-size:11px;text-transform:uppercase;letter-spacing:.5px;opacity:.7}
+  .res .big{font-size:16px;font-weight:700;margin-top:4px;line-height:1.6}
+  .h2x{font-size:18px;font-weight:800;color:var(--brand);margin:14px 2px 10px}
+  .kpill{font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:7px;background:var(--soft);color:var(--brand);display:inline-block;margin-left:8px}
+  .ckphase{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:14px;overflow:hidden}
+  .ckphase .ph{display:flex;align-items:center;gap:10px;padding:13px 16px;background:var(--soft);font-weight:800;color:var(--brand);font-size:15px}
+  .ckphase .ph .pct{margin-left:auto;font-size:12.5px;font-weight:700;color:var(--muted)}
+  .ckitem{display:flex;gap:11px;padding:12px 16px;border-top:1px solid var(--line);cursor:pointer;align-items:flex-start}
+  .ckitem:hover{background:#f7f9fa}
+  .ckitem .box{width:22px;height:22px;border:2px solid #c2ccd2;border-radius:6px;flex:none;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;margin-top:1px}
+  .ckitem.done .box{background:var(--pass);border-color:var(--pass)}
+  .ckitem .tx{font-size:13.5px}
+  .ckitem.done .tx{color:var(--muted);text-decoration:line-through}
+  .ckitem .rf{display:block;font-size:11px;color:var(--brand2);font-weight:700;margin-top:3px}
+  .ckbar{display:flex;gap:8px;margin-bottom:12px}
+  .btn{padding:10px 16px;border-radius:10px;background:var(--brand);color:#fff;font-weight:700;font-size:13.5px}
+  .btn.alt{background:#e3e8ea;color:#37474f}
+  .tab{display:none}
+  .tab.on{display:block}
+</style>
+</head>
+<body>
+
+<header class="appbar">
+  <a class="back" href="../">←</a>
+  <div>
+    <h1>QC Bu lông — Liên kết bu lông</h1>
+    <div class="sub">EN 1090-2 Cl.8 (đã xác minh) · AISC J3.1/RCSC · EN 14399 · ASTM F3125</div>
+  </div>
+  <div class="sp"></div>
+  <div class="lang">
+    <button id="lvVi" class="on">VI</button>
+    <button id="lvEn">EN</button>
+  </div>
+</header>
+
+<nav class="nav">
+  <button data-tab="calc" class="on"><span class="ic">🧮</span><span data-vi="Lực xiết" data-en="Torque">Lực xiết</span></button>
+  <button data-tab="met"><span class="ic">🔧</span><span data-vi="Phương pháp" data-en="Methods">Phương pháp</span></button>
+  <button data-tab="rule"><span class="ic">📜</span><span data-vi="Quy tắc" data-en="Rules">Quy tắc</span></button>
+  <button data-tab="insp"><span class="ic">🔍</span><span data-vi="Kiểm tra" data-en="Inspect">Kiểm tra</span></button>
+  <button data-tab="mat"><span class="ic">🔩</span><span data-vi="Vật tư" data-en="Materials">Vật tư</span></button>
+  <button data-tab="ck"><span class="ic">☑️</span><span data-vi="Checklist" data-en="Checklist">Checklist</span></button>
+</nav>
+
+<main class="main">
+  <section class="tab on" id="tab-calc"></section>
+  <section class="tab" id="tab-met"></section>
+  <section class="tab" id="tab-rule"></section>
+  <section class="tab" id="tab-insp"></section>
+  <section class="tab" id="tab-mat"></section>
+  <section class="tab" id="tab-ck"></section>
+</main>
+
+<script src="data.js"></script>
+<script>
+const D = window.BL_DATA;
+let LANG = localStorage.getItem('bl_lang') || 'vi';
+const T = o => (o && typeof o === 'object') ? (o[LANG] || o.vi || '') : (o || '');
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+document.querySelectorAll('.nav button').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.nav button').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+    document.getElementById('tab-' + b.dataset.tab).classList.add('on');
+    window.scrollTo(0, 0);
+  });
+});
+function setLang(l) {
+  LANG = l; localStorage.setItem('bl_lang', l);
+  document.getElementById('lvVi').classList.toggle('on', l === 'vi');
+  document.getElementById('lvEn').classList.toggle('on', l === 'en');
+  document.querySelectorAll('[data-vi]').forEach(e => e.textContent = e.dataset[l]);
+  renderAll();
+}
+document.getElementById('lvVi').onclick = () => setLang('vi');
+document.getElementById('lvEn').onclick = () => setLang('en');
+
+/* ===== TAB LỰC XIẾT ===== */
+let SYS = localStorage.getItem('bl_sys') || 'EN';
+function setSys(s) { SYS = s; localStorage.setItem('bl_sys', s); renderCalc(); renderMet(); }
+function sysBar() {
+  const v = LANG === 'vi';
+  return `<div style="display:flex;gap:8px;margin:0 0 12px">
+    <button onclick="setSys('EN')" style="flex:1;padding:11px;border-radius:10px;font-weight:800;font-size:13.5px;border:2px solid ${SYS==='EN'?'var(--brand)':'var(--line)'};background:${SYS==='EN'?'var(--brand)':'#fff'};color:${SYS==='EN'?'#fff':'var(--muted)'}">🇪🇺 EN 1090-2 (${v?'đã xác minh':'verified'})</button>
+    <button onclick="setSys('US')" style="flex:1;padding:11px;border-radius:10px;font-weight:800;font-size:13.5px;border:2px solid ${SYS==='US'?'var(--brand)':'var(--line)'};background:${SYS==='US'?'var(--brand)':'#fff'};color:${SYS==='US'?'#fff':'var(--muted)'}">🇺🇸 AISC / RCSC</button>
+  </div>
+  <div class="warn">⚠ ${v?'Chọn hệ theo HỢP ĐỒNG dự án. Hai hệ khác nhau cả giá trị lực căng lẫn cách xiết — KHÔNG dùng lẫn (vd: góc turn-of-nut RCSC tính theo chiều dài bu lông, còn EN Table 21 tính theo tổng chiều dày kẹp).':'Select per project CONTRACT. The two systems differ in pretension values and procedures — do not mix.'}</div>`;
+}
+function renderCalc() {
+  const v = LANG === 'vi';
+  if (SYS === 'US') { renderCalcUS(); return; }
+  let h = `<div class="h2x">${v?'Lực căng & momen xiết':'Preload & tightening torque'}</div>` + sysBar();
+
+  h += `<div class="seccard"><h3>🧮 ${v?'Tính momen xiết — phương pháp Momen (8.5.3)':'Torque method calculator (8.5.3)'}</h3>
+    <div class="inrow"><span class="lab">${v?'Đường kính bu lông':'Bolt diameter'}</span>
+      <select id="cD">${D.DIA.map(d=>`<option value="${d}" ${d===20?'selected':''}>M${d}</option>`).join('')}</select></div>
+    <div class="inrow"><span class="lab">${v?'Cấp bền':'Property class'}</span>
+      <select id="cC"><option value="8.8">8.8</option><option value="10.9" selected>10.9</option></select></div>
+    <div class="inrow"><span class="lab">km (k-class K2, ${v?'theo CoC nhà sản xuất':'per manufacturer CoC'})</span>
+      <input type="number" step="0.001" id="cK" value="0.13"></div>
+    <div id="cOut"></div>
+    <div class="note">${v?'Mr,2 = km·d·Fp,C. Bước 1 ≈ 0.75·Mr,2 (xong toàn bộ liên kết) → Bước 2 = 1.10·Mr,2. km lấy từ chứng chỉ lô bu lông (thường 0.10–0.16 với K2) — KHÔNG dùng km mặc định cho nghiệm thu.':'Mr,2 = km·d·Fp,C. Step 1 ≈ 0.75·Mr,2 → Step 2 = 1.10·Mr,2. km from batch CoC (typically 0.10–0.16 for K2).'}</div>
+    <div class="evidence"><div class="h">${v?'Dẫn chứng':'Evidence'}</div><div class="quote">"${esc(D.quotes.fpc)}"</div></div></div>`;
+
+  h += `<div class="seccard"><h3>🧮 ${v?'Phương pháp Kết hợp (8.5.4): momen bước 1 + góc xoay bước 2':'Combined method: step-1 torque + step-2 rotation'}</h3>
+    <div class="inrow"><span class="lab">${v?'Đường kính':'Diameter'}</span>
+      <select id="bD">${D.DIA.map(d=>`<option value="${d}" ${d===20?'selected':''}>M${d}</option>`).join('')}</select></div>
+    <div class="inrow"><span class="lab">${v?'Cấp bền':'Class'}</span>
+      <select id="bC"><option value="8.8">8.8</option><option value="10.9" selected>10.9</option></select></div>
+    <div class="inrow"><span class="lab">${v?'Tổng chiều dày kẹp Σt (mm, gồm đệm)':'Total grip Σt (mm, incl. washers)'}</span>
+      <input type="number" step="any" id="bT" value="40"></div>
+    <div id="bOut"></div>
+    <div class="evidence"><div class="h">${v?'Dẫn chứng':'Evidence'}</div><div class="quote">"${esc(D.quotes.t21)}"</div></div></div>`;
+
+  h += `<div class="seccard"><h3>${v?'Bảng lực căng tối thiểu Fp,C [kN] — Table 18 (đã xác minh)':'Min preload Fp,C [kN] — Table 18 (verified)'}</h3>
+    <div class="tblwrap"><table><tr><th>${v?'Cấp':'Class'}</th>${D.DIA.map(d=>`<th>M${d}</th>`).join('')}</tr>
+      <tr><td><b>8.8</b></td>${D.DIA.map(d=>`<td>${D.FPC['8.8'][d]}</td>`).join('')}</tr>
+      <tr><td><b>10.9</b></td>${D.DIA.map(d=>`<td>${D.FPC['10.9'][d]}</td>`).join('')}</tr></table></div>
+    <div class="note">Fp,C = 0.7·fub·As — EN 1090-2 Table 18.</div></div>`;
+
+  h += `<div class="seccard"><h3>${v?'Bảng momen bước 1 combined 0.75·Mr,1 [Nm] — Table 20 (đã xác minh)':'Step-1 torque 0.75·Mr,1 [Nm] — Table 20 (verified)'}</h3>
+    <div class="tblwrap"><table><tr><th>${v?'Cấp':'Class'}</th>${D.DIA.map(d=>`<th>M${d}</th>`).join('')}</tr>
+      <tr><td><b>8.8</b></td>${D.DIA.map(d=>`<td>${D.M75['8.8'][d]}</td>`).join('')}</tr>
+      <tr><td><b>10.9</b></td>${D.DIA.map(d=>`<td>${D.M75['10.9'][d]}</td>`).join('')}</tr></table></div>
+    <div class="note">0.75·Mr,1 = 0.094·d·Fp,C — EN 1090-2 Table 20.</div></div>`;
+
+  document.getElementById('tab-calc').innerHTML = h;
+
+  const crun = () => {
+    const d = +document.getElementById('cD').value, c = document.getElementById('cC').value, km = +document.getElementById('cK').value || 0;
+    const F = D.FPC[c][d];
+    const Mr2 = km * d * F;
+    document.getElementById('cOut').innerHTML = `<div class="res"><div class="lbl">M${d} · ${c} · Fp,C = ${F} kN</div><div class="big">
+      Mr,2 = ${km} × ${d} × ${F} = <b>${Math.round(Mr2)} Nm</b><br>
+      ${LANG==='vi'?'Bước 1':'Step 1'} (0.75·Mr,2) ≈ <b>${Math.round(0.75*Mr2)} Nm</b><br>
+      ${LANG==='vi'?'Bước 2':'Step 2'} (1.10·Mr,2) = <b>${Math.round(1.10*Mr2)} Nm</b></div></div>`;
+  };
+  ['cD','cC','cK'].forEach(id => document.getElementById(id).addEventListener('input', crun)); crun();
+
+  const brun = () => {
+    const d = +document.getElementById('bD').value, c = document.getElementById('bC').value, t = +document.getElementById('bT').value || 0;
+    const M1 = D.M75[c][d], F = D.FPC[c][d];
+    let rot, frac, ok = true;
+    if (t < 2*d) { rot = 60; frac = '1/6'; }
+    else if (t < 6*d) { rot = 90; frac = '1/4'; }
+    else if (t <= 10*d) { rot = 120; frac = '1/3'; }
+    else { ok = false; }
+    document.getElementById('bOut').innerHTML = `<div class="res"><div class="lbl">M${d} · ${c} · Σt = ${t} mm (${(t/d).toFixed(1)}d)</div><div class="big">
+      ${LANG==='vi'?'Bước 1 — momen':'Step 1 — torque'}: <b>${M1} Nm</b> (Table 20; = 0.094·d·Fp,C, Fp,C = ${F} kN)<br>
+      ${ok ? (LANG==='vi'?'Bước 2 — xoay thêm':'Step 2 — rotate') + `: <b>${rot}° (${frac} ${LANG==='vi'?'vòng':'turn'})</b>`
+           : `<span style="color:#ffb4a0">Σt > 10d — ${LANG==='vi'?'ngoài phạm vi Table 21, xác định bằng thí nghiệm':'outside Table 21, determine by test'}</span>`}</div></div>`;
+  };
+  ['bD','bC','bT'].forEach(id => document.getElementById(id).addEventListener('input', brun)); brun();
+}
+
+/* ===== TAB LỰC XIẾT — HỆ MỸ ===== */
+function renderCalcUS() {
+  const v = LANG === 'vi';
+  const A = D.AISC;
+  let h = `<div class="h2x">${v?'Lực căng tối thiểu Tb & turn-of-nut — AISC/RCSC':'Min pretension Tb & turn-of-nut — AISC/RCSC'}</div>` + sysBar();
+
+  h += `<div class="seccard"><h3>🧮 ${v?'Turn-of-nut: góc xoay theo chiều dài bu lông (RCSC Table 8.2)':'Turn-of-nut rotation (RCSC Table 8.2)'}</h3>
+    <div class="inrow"><span class="lab">${v?'Đường kính bu lông (hệ mét)':'Bolt diameter (metric)'}</span>
+      <select id="uD">${A.metricDia.map(d=>`<option value="${d}" ${d===20?'selected':''}>M${d}</option>`).join('')}</select></div>
+    <div class="inrow"><span class="lab">${v?'Cấp':'Grade'}</span>
+      <select id="uC"><option value="A325M">A325M (Gr.A)</option><option value="A490M" selected>A490M (Gr.B)</option></select></div>
+    <div class="inrow"><span class="lab">${v?'Chiều dài bu lông L (mm, từ mặt dưới đầu tới mút)':'Bolt length L (mm)'}</span>
+      <input type="number" step="any" id="uL" value="80"></div>
+    <div id="uOut"></div>
+    <div class="note">${v?'Trình tự: snug-tight toàn liên kết → đánh dấu đai ốc/ren → xoay thêm theo kết quả. Dung sai góc ±30° (≤1/2 vòng) / ±45° (>1/2 vòng). Mặt tựa nghiêng không đệm vát → tăng góc theo RCSC Table 8.2.':'Snug whole joint → mark → rotate. Tolerance ±30°/±45°.'}</div></div>`;
+
+  h += `<div class="seccard"><h3>${v?'Bảng lực căng tối thiểu Tb — hệ mét (AISC Table J3.1M)':'Min pretension Tb — metric (J3.1M)'} [kN]</h3>
+    <div class="tblwrap"><table><tr><th>${v?'Cấp':'Grade'}</th>${A.metricDia.map(d=>`<th>M${d}</th>`).join('')}</tr>
+      <tr><td><b>A325M</b></td>${A.metricDia.map(d=>`<td>${A.Tb_M.A325M[d]}</td>`).join('')}</tr>
+      <tr><td><b>A490M</b></td>${A.metricDia.map(d=>`<td>${A.Tb_M.A490M[d]}</td>`).join('')}</tr></table></div></div>`;
+
+  h += `<div class="seccard"><h3>${v?'Bảng Tb — hệ inch (AISC Table J3.1)':'Tb — imperial (J3.1)'} [kips]</h3>
+    <div class="tblwrap"><table><tr><th>${v?'Cấp':'Grade'}</th>${A.impDia.map(d=>`<th>${d}</th>`).join('')}</tr>
+      <tr><td><b>A325</b></td>${A.Tb_I.A325.map(x=>`<td>${x}</td>`).join('')}</tr>
+      <tr><td><b>A490</b></td>${A.Tb_I.A490.map(x=>`<td>${x}</td>`).join('')}</tr></table></div>
+    <div class="note">1 kip ≈ 4.448 kN. Tb = 0.7×Fu×As (làm tròn).</div></div>`;
+
+  h += `<div class="seccard"><h3>${v?'Lưu ý RCSC':'RCSC notes'}</h3>
+    <div style="font-size:13.5px">${esc(T(A.notes))}</div>
+    <div class="warn">⚠ ${v?'RCSC CẤM dùng bảng momen in sẵn cho calibrated wrench — momen phải hiệu chuẩn HẰNG NGÀY bằng tension calibrator với ≥3 bu lông/lô (≥1.05×Tb).':'RCSC prohibits published torque tables — daily calibration with tension calibrator, ≥1.05×Tb.'}</div>
+    <div class="note">📎 ${esc(A.ref)} — ${v?'THAM KHẢO: chưa có PDF AISC 360/RCSC trong dự án, đối chiếu bản gốc trước nghiệm thu chính thức.':'Reference only — verify against original AISC 360/RCSC.'}</div></div>`;
+
+  document.getElementById('tab-calc').innerHTML = h;
+
+  const urun = () => {
+    const d = +document.getElementById('uD').value, c = document.getElementById('uC').value, L = +document.getElementById('uL').value || 0;
+    const Tb = A.Tb_M[c][d];
+    let turn, deg, ok = true;
+    if (L <= 4*d) { turn='1/3'; deg=120; }
+    else if (L <= 8*d) { turn='1/2'; deg=180; }
+    else if (L <= 12*d) { turn='2/3'; deg=240; }
+    else ok = false;
+    document.getElementById('uOut').innerHTML = `<div class="res"><div class="lbl">M${d} · ${c} · L = ${L} mm (${(L/d).toFixed(1)}d)</div><div class="big">
+      Tb = <b>${Tb} kN</b><br>
+      ${ok ? (LANG==='vi'?'Xoay thêm sau snug-tight':'Rotation after snug') + `: <b>${turn} ${LANG==='vi'?'vòng':'turn'} (${deg}°)</b>`
+           : `<span style="color:#ffb4a0">L > 12d — ${LANG==='vi'?'ngoài RCSC Table 8.2, xác định bằng thí nghiệm':'beyond Table 8.2, determine by test'}</span>`}</div></div>`;
+  };
+  ['uD','uC','uL'].forEach(id => document.getElementById(id).addEventListener('input', urun)); urun();
+}
+
+/* ===== TAB PHƯƠNG PHÁP ===== */
+function renderMet() {
+  const v = LANG === 'vi';
+  if (SYS === 'US') {
+    const A = D.AISC;
+    document.getElementById('tab-met').innerHTML = `<div class="h2x">${v?'4 phương pháp xiết theo RCSC':'4 RCSC pretensioning methods'}</div>` + sysBar() +
+      A.methods.map(m => `<div class="seccard"><h3>${esc(T(m.n))}</h3><div style="font-size:13.5px">${esc(T(m.d))}</div></div>`).join('') +
+      `<div class="seccard"><h3>RCSC Table 8.2 — turn-of-nut</h3><div class="tblwrap"><table><tr><th>${v?'Chiều dài bu lông':'Bolt length'}</th><th>${v?'Góc xoay thêm':'Rotation'}</th></tr>
+      ${A.turnOfNut.map(r=>`<tr><td>${esc(T(r.cond))}</td><td><b>${esc(T(r.turn))}</b></td></tr>`).join('')}</table></div>
+      <div class="note">📎 ${esc(A.ref)}</div></div>`;
+    return;
+  }
+  let h = `<div class="h2x">${v?'4 phương pháp xiết dự ứng lực (EN 1090-2, 8.5.3–8.5.6)':'4 preloaded tightening methods'}</div>` + sysBar();
+  h += `<div class="seccard"><h3>${v?'k-class theo phương pháp — Table 19 (đã xác minh)':'k-classes — Table 19 (verified)'}</h3>
+    <div class="tblwrap"><table><tr><th>${v?'Phương pháp':'Method'}</th><th>k-class</th></tr>
+    ${D.METHODS.map(m=>`<tr><td>${esc(T(m.name))}</td><td><b>${esc(m.kclass)}</b></td></tr>`).join('')}</table></div>
+    <div class="evidence"><div class="h">${v?'Dẫn chứng':'Evidence'}</div><div class="quote">"${esc(D.quotes.t19)}"</div></div></div>`;
+  h += D.METHODS.map(m => `<div class="seccard"><h3>${esc(T(m.name))}<span class="kpill">${esc(m.kclass)}</span></h3>
+    <div style="font-size:13.5px">${esc(T(m.how))}</div>
+    <div class="note">${esc(T(m.note))}</div>
+    <div class="evidence"><div class="h">${v?'Dẫn chứng':'Evidence'}</div><div class="quote">"${esc(m.quote)}"</div></div></div>`).join('');
+  document.getElementById('tab-met').innerHTML = h;
+}
+
+/* ===== TAB QUY TẮC ===== */
+function renderRule() {
+  const v = LANG === 'vi';
+  document.getElementById('tab-rule').innerHTML = `<div class="h2x">${v?'Quy tắc bắt buộc khi xiết':'Mandatory tightening rules'}</div>` +
+    D.RULES.map(r => `<div class="seccard"><h3>${esc(T(r.t))}</h3>
+      <div style="font-size:13.5px">${esc(T(r.d))}</div>
+      <div class="note">📎 ${esc(r.ref)}</div></div>`).join('');
+}
+
+/* ===== TAB KIỂM TRA ===== */
+function renderInsp() {
+  const v = LANG === 'vi';
+  document.getElementById('tab-insp').innerHTML = `<div class="h2x">${v?'Kiểm tra & nghiệm thu (EN 1090-2, 12.5)':'Inspection & acceptance (12.5)'}</div>` +
+    D.INSPECT.map(r => `<div class="seccard"><h3>${esc(T(r.t))}</h3>
+      <div style="font-size:13.5px">${esc(T(r.d))}</div></div>`).join('') +
+    `<div class="warn">⚠ ${v?'Phạm vi lấy mẫu kiểm lực chi tiết theo phương án tuần tự Annex M (EN 1090-2) tùy EXC và spec dự án — đối chiếu Annex M bản gốc khi lập kế hoạch kiểm tra.':'Detailed sampling per Annex M sequential plans by EXC — consult original Annex M when planning inspection.'}</div>`;
+}
+
+/* ===== TAB VẬT TƯ ===== */
+function renderMat() {
+  const v = LANG === 'vi';
+  document.getElementById('tab-mat').innerHTML = `<div class="h2x">${v?'Hệ bu lông & tiêu chuẩn vật tư':'Bolting systems & material standards'}</div>` +
+    `<div class="seccard"><div class="tblwrap"><table><tr><th>${v?'Tiêu chuẩn':'Standard'}</th><th>${v?'Nội dung':'Scope'}</th></tr>` +
+    D.MATERIALS.map(m => `<tr><td><b>${esc(m.t)}</b></td><td>${esc(T(m.d))}</td></tr>`).join('') +
+    `</table></div></div>` +
+    `<div class="warn">⚠ ${v?'EN 14399/EN 15048: chỉ dùng BỘ đồng bộ (bu lông + đai ốc + đệm) từ cùng nhà sản xuất theo hệ đã chứng nhận — không trộn linh kiện khác hệ/khác hãng.':'Use matched assemblies only — never mix components across systems/manufacturers.'}</div>`;
+}
+
+/* ===== CHECKLIST ===== */
+const CK_KEY = 'bl_ck_v1';
+function ckState() { try { return JSON.parse(localStorage.getItem(CK_KEY)) || {}; } catch (e) { return {}; } }
+function renderCK() {
+  const v = LANG === 'vi';
+  const st = ckState();
+  let h = `<div class="ckbar">
+    <button class="btn alt" id="ckReset">↺ ${v?'Làm mới':'Reset'}</button>
+    <button class="btn" id="ckCopy">📋 ${v?'Copy báo cáo':'Copy report'}</button></div>`;
+  D.CHECKLIST.forEach((ph, pi) => {
+    const done = ph.items.filter((_, ii) => st[pi + '_' + ii]).length;
+    h += `<div class="ckphase"><div class="ph">${ph.icon} ${esc(T(ph.phase))}<span class="pct">${done}/${ph.items.length}</span></div>
+      ${ph.items.map((it, ii) => `
+        <div class="ckitem ${st[pi+'_'+ii]?'done':''}" data-k="${pi}_${ii}">
+          <div class="box">${st[pi+'_'+ii]?'✓':''}</div>
+          <div class="tx">${esc(T(it.t))}<span class="rf">📎 ${esc(it.ref)}</span></div>
+        </div>`).join('')}</div>`;
+  });
+  const el = document.getElementById('tab-ck');
+  el.innerHTML = h;
+  el.querySelectorAll('.ckitem').forEach(c => c.onclick = () => {
+    const s = ckState(); s[c.dataset.k] = !s[c.dataset.k];
+    localStorage.setItem(CK_KEY, JSON.stringify(s)); renderCK();
+  });
+  el.querySelector('#ckReset').onclick = () => { localStorage.removeItem(CK_KEY); renderCK(); };
+  el.querySelector('#ckCopy').onclick = () => {
+    const s = ckState();
+    let txt = (v?'BÁO CÁO CHECKLIST QC BU LÔNG':'BOLTING QC CHECKLIST') + ' — ' + new Date().toLocaleString() + '\n';
+    D.CHECKLIST.forEach((ph, pi) => {
+      txt += '\n## ' + T(ph.phase) + '\n';
+      ph.items.forEach((it, ii) => txt += (s[pi+'_'+ii] ? '[x] ' : '[ ] ') + T(it.t) + ' (' + it.ref + ')\n');
+    });
+    (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(() => alert(v?'Đã copy!':'Copied!')).catch(()=>prompt('Copy:',txt));
+  };
+}
+
+function renderAll() { renderCalc(); renderMet(); renderRule(); renderInsp(); renderMat(); renderCK(); }
+setLang(LANG);
+
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+</script>
+</body>
+</html>

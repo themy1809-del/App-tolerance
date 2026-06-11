@@ -79,7 +79,23 @@
   .m-wps {--ac:#b4421f;--ac-soft:#fdeee8}
   .m-vt  {--ac:#3b6d11;--ac-soft:#eef6e6}
   .m-ld  {--ac:#5f4ab7;--ac-soft:#efecfa}
+  .m-bl  {--ac:#37474f;--ac-soft:#eceff1}
 
+  /* global search */
+  .gsearch{position:relative;margin-top:18px;max-width:660px}
+  .gsearch .gs-ic{position:absolute;left:15px;top:50%;transform:translateY(-50%);opacity:.55;font-size:16px}
+  .gsearch input{width:100%;padding:14px 16px 14px 44px;border:1px solid rgba(255,255,255,.25);border-radius:13px;
+    font-size:15.5px;background:rgba(255,255,255,.12);color:#fff;outline:none;font-family:inherit;backdrop-filter:blur(4px)}
+  .gsearch input::placeholder{color:rgba(255,255,255,.55)}
+  .gsearch input:focus{background:#fff;color:var(--ink);border-color:#fff}
+  .gsearch input:focus::placeholder{color:#9aa7b3}
+  .gs-box{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:8px 0;margin-bottom:22px;max-height:480px;overflow-y:auto}
+  .gs-grp{font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);padding:10px 18px 4px}
+  .gs-it{display:block;padding:9px 18px;border-left:3px solid transparent;cursor:pointer}
+  .gs-it:hover{background:#f5f8fb;border-left-color:var(--brand)}
+  .gs-it .t{font-size:14px;font-weight:700}
+  .gs-it .s{font-size:12px;color:var(--muted);margin-top:1px}
+  .gs-empty{padding:18px;text-align:center;color:var(--muted);font-size:13.5px}
   .footer{border-top:1px solid var(--line);background:#fff}
   .ft-in{max-width:1180px;margin:0 auto;padding:16px 22px calc(16px + env(safe-area-inset-bottom));
     display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
@@ -125,16 +141,22 @@
     <h1>Tra cứu tiêu chuẩn &amp; nghiệm thu —<br>tất cả trong một chỗ</h1>
     <p>Dung sai, mối hàn, sơn phủ, vật tư đầu vào, WPS và xử lý sai hỏng — kèm dẫn chứng điều khoản, hình cách đo và tính Đạt/Không đạt tự động. Hoạt động offline.</p>
     <div class="stats">
-      <span class="stat"><b>7</b> tiêu chuẩn quốc tế</span>
+      <span class="stat"><b>8</b> tiêu chuẩn quốc tế</span>
       <span class="stat"><b>75</b> WPS</span>
       <span class="stat"><b>45</b> lỗi + khắc phục</span>
-      <span class="stat"><b>20+</b> calculator</span>
+      <span class="stat"><b>25+</b> calculator</span>
       <span class="stat">📱 Offline / PWA</span>
+    </div>
+    <div class="gsearch">
+      <span class="gs-ic">🔍</span>
+      <input id="gq" type="search" placeholder="Tìm trong toàn bộ app: undercut, Sa 2.5, DFT, M20, co rút hàn, WPS..." autocomplete="off">
     </div>
   </div>
 </div>
 
 <div class="wrap">
+
+  <div id="gsRes" style="display:none"></div>
 
   <div class="sec-h"><span class="tt">📐 Tiêu chuẩn &amp; nghiệm thu</span><span class="ln"></span></div>
   <div class="grid">
@@ -189,6 +211,16 @@
       </div></div>
       <div class="mds">Nghiệm thu vật tư nhập kho: spec + dung sai, MTC &amp; heat number, cấp gỉ — kèm sketch cách đo.</div>
       <div class="mmeta"><span class="pill ac">44 vật tư</span><span class="pill">📐 Sketch cách đo</span><span class="pill">☑️ Checklist</span></div>
+    </a>
+
+    <a class="mcard m-bl" href="bulong/">
+      <span class="go">→</span>
+      <div class="mtop"><div class="mic">🔩</div><div>
+        <div class="msub">Liên kết · Xiết lực</div>
+        <div class="mtt">QC Bu lông</div>
+      </div></div>
+      <div class="mds">Lực căng & momen xiết theo cả 2 hệ: EN 1090-2 (Fp,C, k-class — đã xác minh) và AISC/RCSC (Tb, turn-of-nut) — chọn hệ theo hợp đồng.</div>
+      <div class="mmeta"><span class="pill ac">🇪🇺 EN · 🇺🇸 AISC</span><span class="pill">🧮 Momen + góc xoay</span><span class="pill">☑️ Checklist</span></div>
     </a>
 
     <a class="mcard m-ld" href="luongdu/">
@@ -276,6 +308,67 @@ document.getElementById('pwInp').addEventListener('keydown', e => {
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   navigator.serviceWorker.register('sw.js').catch(()=>{});
 }
+
+/* ===== TÌM KIẾM TOÀN CỤC ===== */
+let GS_IDX = null, GS_LOADING = false;
+const GS_SRC = [
+  'dungsai/tolerances-data.js', 'dungsai/tolerances-tier1.js', 'dungsai/tolerances-tier2.js',
+  'dungsai/tolerances-tier3.js', 'dungsai/tolerances-tier4-mech.js',
+  'han/data.js', 'son/data.js', 'vattu/data.js', 'luongdu/data.js', 'bulong/data.js', 'wps/wps-index.js'
+];
+const norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[đĐ]/g, 'd').toLowerCase();
+const gsTx = o => (o && typeof o === 'object') ? (o.vi || o.en || '') : (o || '');
+
+function gsLoadScript(src) {
+  return new Promise((res, rej) => {
+    const s = document.createElement('script');
+    s.src = src; s.onload = res; s.onerror = res; /* lỗi 1 file không chặn cả index */
+    document.head.appendChild(s);
+  });
+}
+async function gsBuild() {
+  if (GS_IDX || GS_LOADING) return;
+  GS_LOADING = true;
+  for (const src of GS_SRC) await gsLoadScript(src);
+  const idx = [];
+  const add = (m, url, t, s, extra) => { if (t) idx.push({ m, url, t, s: s || '', hay: norm(t + ' ' + (s || '') + ' ' + (extra || '')) }); };
+  try { (window.APP_DATA && APP_DATA.tolerances || []).forEach(r =>
+    add('📏 Dung sai', 'dungsai/', gsTx(r.title), r.standard + ' · ' + gsTx(r.element) + (r.clause ? ' · ' + r.clause.number : ''), gsTx(r.acceptance))); } catch(e){}
+  try { (window.HAN_DATA && HAN_DATA.WELD_VT || []).forEach(r =>
+    add('👁 QC Hàn', 'han/', gsTx(r.title), r.std, gsTx(r.criteria))); } catch(e){}
+  try { if (window.SON_DATA) { (SON_DATA.DEFECTS || []).forEach(d => add('🎨 QC Sơn', 'son/', gsTx(d.name), 'Lỗi sơn · ' + gsTx(d.sym).slice(0, 60), gsTx(d.cause)));
+    (SON_DATA.TESTS || []).forEach(t => add('🎨 QC Sơn', 'son/', gsTx(t.name), gsTx(t.std), gsTx(t.crit))); } } catch(e){}
+  try { (window.VT_DATA && VT_DATA.items || []).forEach(r =>
+    add('📦 Vật tư', 'vattu/', r.title_vi || r.title_en, (r.std || '') + ' · ' + (r.element || ''), r.spec)); } catch(e){}
+  try { if (window.LD_DATA) { (LD_DATA.allowance || []).forEach(r => add('⚙️ Lượng dư', 'luongdu/', r.title, 'Calculator · ' + (r.ref || ''), r.desc));
+    (LD_DATA.defects || []).forEach(r => add('⚙️ Sai hỏng', 'luongdu/', r.name, (r.symptom || '').slice(0, 70), (r.causes || []).join(' '))); } } catch(e){}
+  try { if (window.BL_DATA) { (BL_DATA.METHODS || []).forEach(r => add('🔩 Bu lông', 'bulong/', gsTx(r.name), 'k-class ' + r.kclass, gsTx(r.how)));
+    (BL_DATA.RULES || []).forEach(r => add('🔩 Bu lông', 'bulong/', gsTx(r.t), r.ref, gsTx(r.d)));
+    (BL_DATA.DIA || []).forEach(d => add('🔩 Bu lông', 'bulong/', 'Bu lông M' + d + ' — lực căng & momen xiết',
+      'Fp,C: 8.8 = ' + BL_DATA.FPC['8.8'][d] + ' kN · 10.9 = ' + BL_DATA.FPC['10.9'][d] + ' kN (EN 1090-2 Table 18)', 'M' + d + ' bolt preload torque')); } } catch(e){}
+  try { (window.WPS_DB && WPS_DB.items || []).forEach(r =>
+    add('🔥 WPS', 'wps/?id=' + encodeURIComponent(r.id), r.id, (r.process || '') + ' · ' + (r.base_metal || '').slice(0, 50), (r.position || '') + ' ' + (r.filler || ''))); } catch(e){}
+  GS_IDX = idx; GS_LOADING = false;
+  gsRun();
+}
+function gsRun() {
+  const q = norm(document.getElementById('gq').value.trim());
+  const box = document.getElementById('gsRes');
+  if (q.length < 2) { box.style.display = 'none'; return; }
+  box.style.display = 'block';
+  if (!GS_IDX) { box.innerHTML = '<div class="gs-box"><div class="gs-empty">⏳ Đang nạp dữ liệu các module...</div></div>'; return; }
+  const hits = GS_IDX.filter(r => r.hay.includes(q)).slice(0, 40);
+  if (!hits.length) { box.innerHTML = '<div class="gs-box"><div class="gs-empty">Không tìm thấy "' + document.getElementById('gq').value + '" — thử từ khóa khác.</div></div>'; return; }
+  const groups = {};
+  hits.forEach(h => { (groups[h.m] = groups[h.m] || []).push(h); });
+  box.innerHTML = '<div class="gs-box">' + Object.keys(groups).map(g =>
+    '<div class="gs-grp">' + g + ' · ' + groups[g].length + '</div>' +
+    groups[g].map(h => '<a class="gs-it" href="' + h.url + '"><div class="t">' + h.t.replace(/</g, '&lt;') + '</div><div class="s">' + h.s.replace(/</g, '&lt;') + '</div></a>').join('')
+  ).join('') + '</div>';
+}
+const gqEl = document.getElementById('gq');
+gqEl.addEventListener('focus', gsBuild, { once: true });
+gqEl.addEventListener('input', () => { gsBuild(); gsRun(); });
 </script>
 </body>
 </html>
