@@ -162,7 +162,35 @@
     ]}
   ];
 
-  window.FU_DATA = { RULES, FIXES, CHECKLIST,
+  /* ---------- QUY TRÌNH KIỂM TRA FIT-UP — các bước (giống phong cách Packing) ---------- */
+  const STEPS = [
+    { t: B("Nhận diện mối hàn & lấy chuẩn", "Identify joint & references"),
+      d: B("Xác định mối hàn theo weld map; mở bản vẽ + WPS đúng liên kết: loại rãnh (V/bevel/fillet), khe hở, góc vát, root face yêu cầu. KHÔNG gá theo trí nhớ.", "Identify joint per weld map; pull drawing + WPS: groove type, gap, angle, root face."),
+      tool: B("Bản vẽ rev mới nhất + WPS (tra nhanh trong Thư viện WPS)", "Drawing + WPS") },
+    { t: B("Kiểm vật liệu & chất lượng mép cắt", "Material & cut-edge check"),
+      d: B("Mác thép + heat number khớp; mép cắt không cháy khía sâu, không tách lớp lộ mép; vát đúng phương pháp (máy cắt/mài).", "Grade + heat no. match; cut edges sound, bevel by proper method."),
+      tool: B("MTC + đèn soi + kính lúp", "MTC + lamp") },
+    { t: B("Làm sạch rãnh hàn", "Clean the joint"),
+      d: B("Mài sạch tới kim loại sáng 25mm hai bên rãnh: hết gỉ, sơn, dầu, ẩm. Bề mặt ướt phải sấy/khò trước.", "Grind bright 25mm both sides: no rust, paint, oil, moisture."),
+      tool: B("Máy mài + bàn chải sắt + dung môi lau", "Grinder + wire brush + solvent") },
+    { t: B("Gá sơ bộ + căn chỉnh", "Pre-assemble & align"),
+      d: B("Đưa về đúng vị trí bằng đồ gá/nêm/bu lông kẹp; CHỪA LƯỢNG DƯ co rút theo tính toán (đừng gá đúng kích thước hoàn thiện!); kéo chỉnh lệch mép với độ nghiêng ≤ 12mm/300mm.", "Position with jigs/wedges; allow weld shrinkage; draw-in slope ≤ 12/300."),
+      tool: B("Đồ gá, nêm, máy thủy bình · lượng dư: module Lượng dư", "Jigs + shrinkage calculator") },
+    { t: B("ĐO 5 THÔNG SỐ — Đạt/Không đạt", "Measure the 5 parameters"),
+      d: B("① Khe hở chân ② Lệch mép hi-lo ③ Góc rãnh + root face ④ Khe hở mặt áp ⑤ Biến thiên khe hở (hàn máy). Đo nhiều điểm dọc mối, nhập số vào tab Kiểm tra để ra kết luận từng mục.", "Gap, hi-lo, angle + root face, faying gap, gap variation — multiple points, evaluate in Inspect tab."),
+      tool: B("Taper gauge, thước lá, dưỡng góc, thước thẳng → tab 📐 Kiểm tra", "Gauges → Inspect tab") },
+    { t: B("Hàn đính (tack)", "Tack welding"),
+      d: B("Tack theo WPS bởi thợ CÓ CHỨNG CHỈ: đủ chiều dài/size, khoảng cách đều, không đặt tại góc/điểm giao; soi từng tack — nứt là mài bỏ hàn lại.", "Tacks per WPS by qualified welder; inspect each — cracked tacks removed."),
+      tool: B("WPS + đèn soi + kính lúp", "WPS + lamp") },
+    { t: B("Xử lý điểm KHÔNG ĐẠT", "Rectify failures"),
+      d: B("Theo đúng tab Xử lý lỗi: khe hở lớn → buttering trong giới hạn; góc thiếu → mài mở; lệch mép → nắn từ từ. Sửa xong ĐO LẠI từ bước 5.", "Per Fixes tab; re-measure after rectification."),
+      tool: B("Tab 🔧 Xử lý lỗi + máy mài/máy dũi", "Fixes tab + grinder/gouger") },
+    { t: B("Nghiệm thu & thả hàn", "Accept & release to weld"),
+      d: B("Mối quan trọng/EXC3-4: lập BIÊN BẢN FIT-UP có chữ ký (điểm W/H theo ITP hàn); lưu kết quả vào Nhật ký QC + chụp ảnh; xác nhận preheat/che chắn sẵn sàng rồi bàn giao thợ hàn.", "Critical joints: signed fit-up report (ITP W/H point); save to QC Log + photos; confirm preheat → release."),
+      tool: B("☑️ Checklist → 🖨 In biên bản · 📷 Đo ảnh · Nhật ký QC", "Checklist print + photo + log") }
+  ];
+
+  window.FU_DATA = { STEPS, RULES, FIXES, CHECKLIST,
     intro: B("Fit-up đạt thì mối hàn mới có cơ hội đạt — kiểm TRƯỚC khi hàn, sau khi hàn không sửa được gốc nữa. Giá trị chuẩn lấy theo WPS/bản vẽ; dung sai dưới đây theo AWS D1.1:2020 (đã đối chiếu PDF gốc) + ISO 5817:2023 cho dự án EN.",
       "Good fit-up enables good welds. Inspect BEFORE welding. Tolerances per AWS D1.1:2020 (verified) + ISO 5817:2023 for EN projects.")
   };

@@ -99,14 +99,16 @@
 </header>
 
 <nav class="nav">
-  <button data-tab="kt" class="on"><span class="ic">📐</span><span data-vi="Kiểm tra" data-en="Inspect">Kiểm tra</span></button>
+  <button data-tab="qt" class="on"><span class="ic">🪜</span><span data-vi="Quy trình" data-en="Steps">Quy trình</span></button>
+  <button data-tab="kt"><span class="ic">📐</span><span data-vi="Kiểm tra" data-en="Inspect">Kiểm tra</span></button>
   <button data-tab="fix"><span class="ic">🔧</span><span data-vi="Xử lý lỗi" data-en="Fixes">Xử lý lỗi</span></button>
   <button data-tab="photo"><span class="ic">📷</span><span data-vi="Đo ảnh" data-en="Photo">Đo ảnh</span></button>
   <button data-tab="ck"><span class="ic">☑️</span><span data-vi="Checklist" data-en="Checklist">Checklist</span></button>
 </nav>
 
 <main class="main">
-  <section class="tab on" id="tab-kt"></section>
+  <section class="tab on" id="tab-qt"></section>
+  <section class="tab" id="tab-kt"></section>
   <section class="tab" id="tab-fix"></section>
   <section class="tab" id="tab-photo">
     <div class="h2x">📷 Đo fit-up trên ảnh</div>
@@ -177,6 +179,20 @@ const SK = {
     <line x1="172" y1="100" x2="148" y2="100" stroke="${DM}" stroke-width="1.3" marker-end="url(#fah)"/>
     ${lb(160,120,'khe hở gốc',DM)}`)
 };
+
+/* ===== TAB QUY TRÌNH (các bước — giống Packing) ===== */
+function renderQT() {
+  const v = LANG === 'vi';
+  document.getElementById('tab-qt').innerHTML = `<div class="h2x">🪜 ${v?'Quy trình kiểm tra fit-up — 8 bước':'Fit-up inspection — 8 steps'}</div>
+    <div class="seccard">` +
+    D.STEPS.map((s, i) => `<div class="step" style="display:flex;gap:12px;padding:11px 0;border-top:1px dashed var(--line)">
+      <div style="width:28px;height:28px;border-radius:50%;background:var(--brand);color:#fff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex:none;margin-top:1px">${i+1}</div>
+      <div style="font-size:13.5px;flex:1"><b style="display:block;font-size:14.5px;margin-bottom:2px;color:#16202c">${esc(T(s.t))}</b>${esc(T(s.d))}
+      <span style="display:block;font-size:12px;color:var(--brand2);font-weight:700;margin-top:4px">🧰 ${esc(T(s.tool))}</span></div>
+    </div>`).join('') +
+    `</div>
+    <div class="warn">⚠ ${v?'Bước 5 là lõi: mọi thông số phải ĐO bằng dụng cụ và đánh giá bằng calculator — không "nhìn ổn là hàn". Mối quan trọng phải có biên bản trước khi thả hàn (bước 8).':'Step 5 is the core: measure with gauges, never eyeball. Critical joints need a signed report before welding.'}</div>`;
+}
 
 /* ===== TAB KIỂM TRA ===== */
 function renderKT() {
@@ -271,7 +287,7 @@ function renderCK() {
   };
 }
 
-function renderAll() { renderKT(); renderFix(); renderCK(); }
+function renderAll() { renderQT(); renderKT(); renderFix(); renderCK(); }
 setLang(LANG);
 if (window.PhotoTool) PhotoTool.mount(document.getElementById('photoMount'), { key: 'fu_photos_v1' });
 
