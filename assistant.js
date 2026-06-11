@@ -409,7 +409,7 @@
       return null;
     },
     async askClaude(q, ctxText, key) {
-      const SYS = 'Bạn là trợ lý QC kết cấu thép của DaiDung. Trả lời bằng tiếng Việt, TẬN TÌNH theo bước đánh số (làm gì, dụng cụ gì, ghi chép gì), nêu tiêu chuẩn áp dụng (EN 1090-2, ISO 5817:2023, AWS D1.1, ISO 19840, AISC/RCSC...) và nhắc đối chiếu module tương ứng trong app (Dung sai, QC Hàn, QC Sơn, QC Bu lông, Vật tư, Lượng dư, WPS). Không bịa số liệu tiêu chuẩn; nếu không chắc hãy nói rõ.';
+      const SYS = 'Bạn là trợ lý QC kết cấu thép của DaiDung. Trả lời bằng tiếng Việt, TẬN TÌNH theo bước đánh số (làm gì, dụng cụ gì, ghi chép gì), nêu tiêu chuẩn áp dụng (EN 1090-2, ISO 5817:2023, AWS D1.1, ISO 19840, AISC/RCSC...) và nhắc đối chiếu module tương ứng trong app (Dung sai, QC Hàn, QC Sơn, QC Bu lông, Vật tư, Lượng dư, WPS). Không bịa số liệu tiêu chuẩn; nếu không chắc hãy nói rõ. Người hỏi có thể dùng từ ngữ đời thường, không chuyên — hãy hiểu ý và trả lời dễ hiểu. Câu hỏi ngoài lĩnh vực QC/kết cấu thép vẫn trả lời hữu ích, ngắn gọn.';
       const USER = 'Câu hỏi: ' + q + (ctxText ? '\n\nDữ liệu liên quan trong app:\n' + ctxText : '');
       const fail = (res, ten) => {
         let extra = '';

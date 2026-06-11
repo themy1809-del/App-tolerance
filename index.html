@@ -518,7 +518,10 @@ function gsAiAuto() {
   clearTimeout(GS_AI_T);
   const q = gqEl.value.trim();
   if (!localStorage.getItem('qc_ai_key') || q.length < 8) return;
-  if (!(window.QCAssistant && QCAssistant.isQuestion && QCAssistant.isQuestion(q))) return;
+  /* Nhận cả câu hỏi từ ngữ đời thường: là câu hỏi QC HOẶC câu ≥3 từ */
+  const laCauHoi = window.QCAssistant && QCAssistant.isQuestion && QCAssistant.isQuestion(q);
+  const cauDai = q.split(/\s+/).length >= 3 && q.length >= 12;
+  if (!laCauHoi && !cauDai) return;
   GS_AI_T = setTimeout(() => {
     const now = gqEl.value.trim();
     if (now !== q || now === GS_AI_LAST) return;
