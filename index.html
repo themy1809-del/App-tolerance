@@ -487,4 +487,20 @@ gqEl.addEventListener('input', () => { gsBuild(); gsRun(); });
 (function () {
   const ex = (window.QCAssistant && QCAssistant.EXAMPLES) || [];
   const box = document.getElementById('gsEx');
-  if (!box || !ex.length) ret
+  if (!box || !ex.length) return;
+  box.innerHTML = ex.map(e =>
+    '<button type="button" data-q="' + e.replace(/"/g, '&quot;') + '">' + e + '</button>'
+  ).join('');
+  box.addEventListener('click', ev => {
+    const b = ev.target.closest('button[data-q]');
+    if (!b) return;
+    const gq = document.getElementById('gq');
+    gq.value = b.dataset.q;
+    gq.focus();
+    gsBuild();
+    gsRun();
+  });
+})();
+</script>
+</body>
+</html>
