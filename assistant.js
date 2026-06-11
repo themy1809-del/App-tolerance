@@ -38,7 +38,7 @@
   function isQuestion(q) {
     const qn = norm(q);
     if (q.trim().length < 8) return false;
-    if (/\?|nhu the nao|lam sao|the nao|cach nao|kiem tra gi|can (kiem tra|do|lam|gi)|quy trinh|huong dan|bao nhieu|cach (do|kiem|lam|chon|xu ly)|nen dung|chon (phuong phap|cach|wps)|duoc khong|co (duoc|nen|son|han)|xu ly (sao|the nao)|khac phuc|tai sao|vi sao|giay to|ho so|la gi|nghia la|muon (kiem tra|do|nghiem thu|biet|hoi|danh gia|kiem)|toi (muon|can)|giup toi|huong dan toi/.test(qn)) return true;
+    if (/\?|nhu the nao|lam sao|the nao|cach nao|kiem tra gi|can (kiem tra|do|lam|gi)|quy trinh|huong dan|bao nhieu|cach (do|kiem|lam|chon|xu ly)|nen dung|chon (phuong phap|cach|wps)|duoc khong|co (duoc|nen|son|han)|xu ly (sao|the nao)|khac phuc|tai sao|vi sao|giay to|ho so|la gi|nghia la|muon (kiem tra|do|nghiem thu|biet|hoi|danh gia|kiem)|toi (muon|can)|giup toi|huong dan toi|sua (sao|gi|the nao|nhu the nao|duoc khong|kieu gi)|bi sai|sai kich thuoc|neu .{2,30}(thi|lam)|lam gi (bay gio|day|tiep)/.test(qn)) return true;
     /* "kiểm tra/nghiệm thu/đo + đối tượng" cũng là câu hỏi */
     return /(kiem tra|nghiem thu|danh gia|\bdo\b)/.test(qn) && ENT.some(e => e.re.test(qn));
   }
@@ -295,6 +295,16 @@
     s.push(step(++n, `<b>Kết quả tìm kiếm liên quan</b> hiển thị ngay bên dưới câu trả lời này — bấm mục đúng để mở.`));
     return { title: 'Tra dung sai — làm thế nào', body: s.join('') };
   }
+  function planDimFix(len) {
+    let s = [], n = 0;
+    s.push(step(++n, `<b>Dừng — không "nắn đại".</b> Đánh dấu/cách ly cấu kiện sai; nắn tùy tiện (gò nguội quá tay, hơ lửa vô tội vạ) có thể làm hỏng vật liệu và mất luôn quyền sửa.`));
+    s.push(step(++n, `<b>Định lượng mức lệch:</b> đo chính xác lệch BAO NHIÊU so giới hạn class — nhập vào calculator để biết đang vượt mức nào.${sub('🧮 ' + lk('qcdim/', 'QC Dim → tab Kiểm tra') + ' · giới hạn + trích dẫn: ' + lk('dungsai/', 'Thư viện Dung sai'))}`));
+    s.push(step(++n, `<b>Chọn cách sửa theo mức lệch:</b> lệch nhỏ → nắn CƠ (kích/ép từ từ, không tạo vết hằn); cong vênh do hàn → nắn NHIỆT (đường nhiệt cục bộ, nhiệt độ theo quy trình duyệt — thép carbon thường giới hạn ~650°C, thép QT thấp hơn và KHÔNG tưới nước nguội nhanh).${sub('📋 Phải có quy trình nắn được duyệt cho mối quan trọng/EXC3-4')}`));
+    s.push(step(++n, `<b>Đo lại 100% hạng mục đã sửa</b> + soi nứt bề mặt vùng nắn nhiệt (MT nếu nghi ngờ); ghi giá trị trước/sau vào hồ sơ.${sub('💾 Lưu kết quả vào Nhật ký QC')}`));
+    s.push(step(++n, `<b>Vượt khả năng nắn →</b> lập NCR + quyết định xử lý: sửa lớn (cắt ghép lại theo quy trình) / xin chấp nhận nguyên trạng (concession — khách duyệt) / loại.${sub('📋 ' + lk('luongdu/', 'Tạo NCR một chạm'))}`));
+    s.push(step(++n, `<b>Phòng tái diễn:</b> sai do co rút hàn → hiệu chỉnh lượng dư + trình tự hàn; sai do cắt → kiểm nesting/kerf; sai do gá → xem lại datum/gối kê.${sub('🧮 ' + lk('luongdu/', 'Lượng dư — calculator co rút') + ' · ' + lk('fitup/', 'Fit-up — kiểm soát gá'))}`));
+    return { title: 'Bị sai kích thước — sửa thế nào cho đúng', body: s.join('') };
+  }
   function planHelp() {
     let s = [], n = 0;
     s.push(step(++n, `<b>Hỏi theo công đoạn:</b> "khung dầm 24m kiểm tra như thế nào", "đóng hàng xuất cần kiểm gì", "fit-up cần đo gì"...`));
@@ -306,6 +316,7 @@
 
   /* ============================ ROUTER ============================ */
   const SPECIALS = [
+    { re: /sai kich thuoc|lech kich thuoc|kich thuoc.*(sai|lech|sua)|sua kich thuoc|bi (cong|venh)|cong venh.*(sua|xu ly|lam sao)|nan (thang|nhiet|co)/, fn: (q, len) => planDimFix(len) },
     { re: /packing|dong (hang|kien|goi|container)|lashing|chang buoc|xuat hang|tem nhan|shipping mark|len cont|dong cont/, fn: () => planPacking() },
     { re: /thao ra.*(dung lai|xai lai|su dung)|dung lai bu long|tai su dung bu long|bu long cu/, fn: () => planReuseBolt() },
     { re: /troi (mua|am|noi)|do am.*(son|cao)|(\d{2,3})\s*%.*son|son.*duoc khong|dew|diem suong/, fn: q => planEnvPaint(q) },
@@ -321,6 +332,7 @@
     isQuestion,
     EXAMPLES: [
       'Tôi muốn kiểm tra khung dầm 24m',
+      'Bị sai kích thước thì sửa sao?',
       'EXC là gì?',
       'Giàn 50m kiểm tra như thế nào?',
       'Trời ẩm 90% có sơn được không?',
