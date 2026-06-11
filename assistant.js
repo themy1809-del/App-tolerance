@@ -417,20 +417,31 @@
         if (res.status === 429) extra = ' — vượt hạn mức, chờ 1 phút rồi thử lại';
         throw new Error('API ' + res.status + extra);
       };
-      /* ---- GEMINI (Google, key AIza..., có gói MIỄN PHÍ) ---- */
+      /* ---- GEMINI (Google, key AIza...) ----
+         Thử model mạnh trước (tài khoản AI Pro dùng được), hết hạn mức/không có quyền → tự rớt xuống Flash */
       if (/^AIza/.test(key)) {
-        const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent', {
-          method: 'POST',
-          headers: { 'content-type': 'application/json', 'x-goog-api-key': key },
-          body: JSON.stringify({
-            systemInstruction: { parts: [{ text: SYS }] },
-            contents: [{ role: 'user', parts: [{ text: USER }] }],
-            generationConfig: { maxOutputTokens: 1500 }
-          })
-        });
-        if (!res.ok) fail(res, 'Gemini');
-        const j = await res.json();
-        return (((j.candidates || [])[0] || {}).content || { parts: [] }).parts.map(p => p.text || '').join('\n') || '(Gemini không trả về nội dung)';
+        const MODELS = ['gemini-2.5-pro', 'gemini-2.5-flash'];
+        let lastRes = null;
+        for (const mdl of MODELS) {
+          const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + mdl + ':generateContent', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json', 'x-goog-api-key': key },
+            body: JSON.stringify({
+              systemInstruction: { parts: [{ text: SYS }] },
+              contents: [{ role: 'user', parts: [{ text: USER }] }],
+              generationConfig: { maxOutputTokens: 1500 }
+            })
+          });
+          if (res.ok) {
+            const j = await res.json();
+            const txt = (((j.candidates || [])[0] || {}).content || { parts: [] }).parts.map(p => p.text || '').join('\n');
+            if (txt) return txt + '\n\n— ' + (mdl.includes('pro') ? 'Gemini 2.5 Pro' : 'Gemini 2.5 Flash');
+          }
+          lastRes = res;
+          /* 429 (hết hạn mức) / 404 / 403 → thử model tiếp theo */
+          if (![429, 404, 403].includes(res.status) && !res.ok) break;
+        }
+        fail(lastRes || { status: 0 }, 'Gemini');
       }
       /* ---- CLAUDE (Anthropic, key sk-ant-...) ---- */
       if (/^sk-ant-/.test(key)) {
