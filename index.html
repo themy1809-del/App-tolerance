@@ -155,7 +155,7 @@
     <h1><span class="em">🤖</span>Bạn cần kiểm tra gì? Tôi sẽ giải quyết giúp bạn.</h1>
     <div class="gsearch">
       <span class="gs-ic">🔍</span>
-      <input id="gq" type="search" placeholder="Hỏi hoặc tìm: giàn 50m kiểm tra như thế nào? · undercut · M20..." autocomplete="off">
+      <input id="gq" type="search" placeholder="Hỏi gì cũng được — gõ xong AI tự trả lời (Enter = hỏi ngay)" autocomplete="off">
       <button type="button" id="gsKeyBtn" onclick="gsAiKey()" title="Cài API key AI (Gemini miễn phí / Claude / ChatGPT)">✨<span id="gsKeyTxt">Cài AI</span></button>
     </div>
     <div class="gs-ex" id="gsEx"></div>
@@ -439,7 +439,7 @@ function gsRun() {
   GS_LAST_HITS = hits;
 
   let claudeBar = '';
-  if (aiHtml) {
+  if (aiHtml || localStorage.getItem('qc_ai_key')) {
     claudeBar = '<div style="display:flex;gap:8px;margin:-6px 0 14px;align-items:center">' +
       '<button onclick="gsAskClaude()" style="padding:10px 16px;border:0;border-radius:10px;background:linear-gradient(135deg,#7c3aed,#5f4ab7);color:#fff;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;box-shadow:0 4px 14px rgba(124,58,237,.3)">✨ Hỏi thêm AI</button>' +
       '<button onclick="gsAiKey()" title="Cấu hình API key" style="padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;cursor:pointer;font-size:13px">⚙</button>' +
@@ -498,9 +498,9 @@ async function gsAskClaude() {
   try {
     const ans = await QCAssistant.askClaude(q, ctx, key);
     out.innerHTML = '<div style="background:#fff;border:1px solid #dfd6f5;border-left:4px solid #5f4ab7;border-radius:14px;padding:16px 18px;margin-bottom:14px;box-shadow:var(--sh)">' +
-      '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span style="font-size:18px">✨</span><b style="color:#5f4ab7">AI trả lời</b>' +
+      '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span style="font-size:18px">✨</span><b style="color:#5f4ab7">' + ((window.QCAssistant && QCAssistant.aiProvider(key) || 'AI').split(' ')[0]) + ' trả lời</b>' +
       '<span style="margin-left:auto;font-size:10.5px;font-weight:800;background:#efecfa;color:#5f4ab7;padding:3px 8px;border-radius:6px">AI · CẦN KIỂM CHỨNG</span></div>' +
-      '<div style="font-size:13.5px;white-space:pre-wrap;line-height:1.65">' + ans.replace(/</g, '&lt;') + '</div>' +
+      '<div style="font-size:13.5px;white-space:pre-wrap;line-height:1.65">' + ans.replace(/</g, '&lt;').replace(/\*\*([^*\n]+)\*\*/g, '<b>$1</b>').replace(/^[*-] /gm, '• ') + '</div>' +
       '<div style="font-size:11px;color:#8b97a3;margin-top:10px;border-top:1px solid #eef1f5;padding-top:8px">⚠ Câu trả lời AI có thể sai — đối chiếu số liệu với module tương ứng (có trích dẫn điều khoản đã xác minh) trước khi dùng nghiệm thu.</div></div>';
   } catch (e) {
     out.innerHTML = '<div style="background:#fbeae2;border:1px solid #f0c4b3;border-radius:12px;padding:14px;margin-bottom:14px;font-size:13px;color:#aa4322"><b>Lỗi gọi AI:</b> ' + String(e.message || e).replace(/</g, '&lt;') + '<br><span style="font-size:12px">Kiểm tra API key (⚙), kết nối mạng, hoặc dùng kế hoạch offline phía trên.</span></div>';
@@ -509,7 +509,34 @@ async function gsAskClaude() {
 
 const gqEl = document.getElementById('gq');
 gqEl.addEventListener('focus', gsBuild, { once: true });
-gqEl.addEventListener('input', () => { gsBuild(); gsRun(); });
+
+/* === AI gắn thẳng vào thanh tìm kiếm ===
+   - Ngừng gõ 1.6s + là câu hỏi + có key → AI TỰ trả lời
+   - Nhấn Enter → hỏi AI ngay lập tức */
+let GS_AI_T = null, GS_AI_LAST = '';
+function gsAiAuto() {
+  clearTimeout(GS_AI_T);
+  const q = gqEl.value.trim();
+  if (!localStorage.getItem('qc_ai_key') || q.length < 8) return;
+  if (!(window.QCAssistant && QCAssistant.isQuestion && QCAssistant.isQuestion(q))) return;
+  GS_AI_T = setTimeout(() => {
+    const now = gqEl.value.trim();
+    if (now !== q || now === GS_AI_LAST) return;
+    GS_AI_LAST = now;
+    gsAskClaude();
+  }, 1600);
+}
+gqEl.addEventListener('input', () => { gsBuild(); gsRun(); gsAiAuto(); });
+gqEl.addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  e.preventDefault();
+  clearTimeout(GS_AI_T);
+  gsBuild(); gsRun();
+  if (localStorage.getItem('qc_ai_key') && gqEl.value.trim().length >= 4) {
+    GS_AI_LAST = gqEl.value.trim();
+    gsAskClaude();
+  }
+});
 
 /* chip câu hỏi mẫu */
 (function () {
@@ -527,6 +554,7 @@ gqEl.addEventListener('input', () => { gsBuild(); gsRun(); });
     gq.focus();
     gsBuild();
     gsRun();
+    gsAiAuto();
   });
 })();
 </script>
