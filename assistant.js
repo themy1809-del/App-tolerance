@@ -212,6 +212,19 @@
     return { title: 'Kiểm tra gá lắp (fit-up) trước khi hàn', body: s.join('') };
   }
 
+  function planPacking() {
+    let s = [], n = 0;
+    s.push(step(++n, `<b>Chỉ đóng hàng ĐÃ nghiệm thu:</b> QC đủ các khâu, NCR đóng, sơn khô đủ ngày theo PDS; touch-up trầy xước TRƯỚC khi bọc.${sub('🪜 Quy trình đủ 9 bước: ' + lk('packing/', 'Kiểm tra Packing → Quy trình'))}`));
+    s.push(step(++n, `<b>Đối chiếu packing list:</b> đếm từng piece mark; phụ kiện rời đóng thùng riêng kèm danh mục trong + ngoài.`));
+    s.push(step(++n, `<b>Bảo vệ trước khi đóng:</b> ren bôi mỡ + bịt đầu, mặt bích ốp che, bọc VCI chống ẩm; hàng xuất khẩu — gỗ kê phải có ${hi('dấu IPPC (ISPM 15)')} kẻo bị giữ tại cảng.`));
+    s.push(step(++n, `<b>Tem nhãn 2 mặt đối diện</b> đủ nội dung bắt buộc + ký hiệu ISO 780; kiện ≥1 tấn vẽ thêm CoG + điểm móc cẩu đúng vị trí thật.${sub('🏷️ Bảng nội dung + 8 ký hiệu vẽ sẵn: ' + lk('packing/', 'tab Tem nhãn'))}`));
+    s.push(step(++n, `<b>Sắp xếp:</b> nặng dưới – CoG giữa – dunnage thẳng hàng – chèn kín khe hở (hàng xê dịch là nguyên nhân hỏng số 1).${sub('📐 Hình minh họa: ' + lk('packing/', 'tab Sắp xếp'))}`));
+    s.push(step(++n, `<b>Lashing đúng kiểu:</b> top-over (ma sát, α≥75°) / loop theo cặp / direct cho hàng nặng có tai chằng — dây có nhãn LC/STF, nẹp góc mọi cạnh sắc, siết lại sau 50–100km đầu.${sub('🔗 4 hình minh họa + quy tắc: ' + lk('packing/', 'tab Lashing'))}`));
+    s.push(step(++n, `<b>Chụp ảnh hồ sơ 5 giai đoạn</b> (kiện → từng lớp → lashing → container trống → seal) — lưu trong ${lk('packing/', 'tab 📷 Ảnh hàng')}; đây là bằng chứng bảo hiểm duy nhất.`));
+    s.push(step(++n, `<b>Chốt:</b> tick ${lk('packing/', 'Checklist 21 mục')} → 🖨 in Biên bản nghiệm thu packing ký 3 bên + ghi số seal.`));
+    return { title: 'Quy trình kiểm tra packing / đóng hàng xuất', body: s.join('') };
+  }
+
   function planRecords() {
     let s = [], n = 0;
     s.push(step(++n, `<b>Vật tư:</b> MTC 3.1 + biên bản nghiệm thu đầu vào (in từ ${lk('vattu/', 'checklist Vật tư')}).`));
@@ -225,6 +238,7 @@
 
   /* ============================ ROUTER ============================ */
   const SPECIALS = [
+    { re: /packing|dong (hang|kien|goi|container)|lashing|chang buoc|xuat hang|tem nhan|shipping mark|len cont|dong cont/, fn: () => planPacking() },
     { re: /thao ra.*(dung lai|xai lai|su dung)|dung lai bu long|tai su dung bu long|bu long cu/, fn: () => planReuseBolt() },
     { re: /troi (mua|am|noi)|do am.*(son|cao)|(\d{2,3})\s*%.*son|son.*duoc khong|dew|diem suong/, fn: q => planEnvPaint(q) },
     { re: /gia nhiet|preheat|han.*(troi lanh|mua dong)|nhiet do.*(han|truoc khi han)/, fn: () => planPreheat() },
@@ -245,6 +259,8 @@
       'Mối hàn bị rỗ khí xử lý sao?',
       'Cắt phôi dầm 12m để dư bao nhiêu?',
       'Chọn WPS nào cho thép S355 dày 20mm?',
+      'Đóng hàng xuất cần kiểm tra gì?',
+      'Lashing hàng lên container thế nào?',
       'Hồ sơ nghiệm thu cần giấy tờ gì?'
     ],
     answer(q) {

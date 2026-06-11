@@ -85,6 +85,7 @@
   .m-vt  {--ac:#3b6d11;--ac-soft:#eef6e6}
   .m-ld  {--ac:#5f4ab7;--ac-soft:#efecfa}
   .m-bl  {--ac:#37474f;--ac-soft:#eceff1}
+  .m-pk  {--ac:#0e7490;--ac-soft:#e3f3f7}
 
   /* global search */
   .gsearch{position:relative;margin-top:18px;max-width:660px}
@@ -237,6 +238,16 @@
       <div class="mmeta"><span class="pill ac">🇪🇺 EN · 🇺🇸 AISC</span><span class="pill">🧮 Momen + góc xoay</span><span class="pill">☑️ Checklist</span></div>
     </a>
 
+    <a class="mcard m-pk" href="packing/">
+      <span class="go">→</span>
+      <div class="mtop"><div class="mic">📦</div><div>
+        <div class="msub">Xuất hàng · Đóng gói</div>
+        <div class="mtt">Kiểm tra Packing</div>
+      </div></div>
+      <div class="mds">Quy trình đóng hàng 9 bước, tem nhãn ISO 780, sắp xếp, 4 kiểu lashing có hình minh họa, hồ sơ ảnh từng container, checklist in biểu mẫu.</div>
+      <div class="mmeta"><span class="pill ac">🔗 Lashing · hình vẽ</span><span class="pill">🏷️ Tem nhãn</span><span class="pill">📷 Ảnh hàng</span></div>
+    </a>
+
     <a class="mcard m-ld" href="luongdu/">
       <span class="go">→</span>
       <div class="mtop"><div class="mic">⚙️</div><div>
@@ -329,7 +340,7 @@ let GS_IDX = null, GS_LOADING = false;
 const GS_SRC = [
   'dungsai/tolerances-data.js', 'dungsai/tolerances-tier1.js', 'dungsai/tolerances-tier2.js',
   'dungsai/tolerances-tier3.js', 'dungsai/tolerances-tier4-mech.js',
-  'han/data.js', 'son/data.js', 'vattu/data.js', 'luongdu/data.js', 'bulong/data.js', 'wps/wps-index.js'
+  'han/data.js', 'son/data.js', 'vattu/data.js', 'luongdu/data.js', 'bulong/data.js', 'packing/data.js', 'wps/wps-index.js'
 ];
 const norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[đĐ]/g, 'd').toLowerCase();
 const gsTx = o => (o && typeof o === 'object') ? (o.vi || o.en || '') : (o || '');
@@ -361,6 +372,12 @@ async function gsBuild() {
     (BL_DATA.RULES || []).forEach(r => add('🔩 Bu lông', 'bulong/', gsTx(r.t), r.ref, gsTx(r.d)));
     (BL_DATA.DIA || []).forEach(d => add('🔩 Bu lông', 'bulong/', 'Bu lông M' + d + ' — lực căng & momen xiết',
       'Fp,C: 8.8 = ' + BL_DATA.FPC['8.8'][d] + ' kN · 10.9 = ' + BL_DATA.FPC['10.9'][d] + ' kN (EN 1090-2 Table 18)', 'M' + d + ' bolt preload torque')); } } catch(e){}
+  try { if (window.PK_DATA) {
+    (PK_DATA.STEPS || []).forEach(s => add('📦 Packing', 'packing/', gsTx(s.t), 'Quy trình đóng hàng', gsTx(s.d)));
+    (PK_DATA.LASH.methods || []).forEach(m => add('📦 Packing', 'packing/', gsTx(m.name), 'Lashing — ' + gsTx(m.use).slice(0, 50), gsTx(m.d)));
+    (PK_DATA.STOW || []).forEach(s => add('📦 Packing', 'packing/', gsTx(s.t), 'Sắp xếp hàng', gsTx(s.d)));
+    (PK_DATA.LABEL.symbols || []).forEach(s => add('📦 Packing', 'packing/', gsTx(s.name), s.iso, 'tem nhan ky hieu'));
+  } } catch(e){}
   try { (window.WPS_DB && WPS_DB.items || []).forEach(r =>
     add('🔥 WPS', 'wps/?id=' + encodeURIComponent(r.id), r.id, (r.process || '') + ' · ' + (r.base_metal || '').slice(0, 50), (r.position || '') + ' ' + (r.filler || ''))); } catch(e){}
   GS_IDX = idx; GS_LOADING = false;

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0e7490">
+<title>Kiểm tra Packing — Đóng gói & xuất hàng</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/icon-180.png">
+<style>
+  :root{
+    --bg:#f0f4f5; --ink:#1b2430; --muted:#5f6b7a; --line:#dbe4e7;
+    --brand:#0e7490; --brand2:#1597b8; --soft:#e3f3f7;
+    --pass:#0f6e56; --pass-soft:#e3f6ee; --fail:#aa4322; --fail-soft:#fbeae2;
+    --warn:#8a5a00; --warn-soft:#fdf3e2;
+    --r:14px; --sh:0 1px 2px rgba(20,45,55,.07),0 6px 20px rgba(20,45,55,.06);
+    --navh:62px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.5}
+  button{font-family:inherit;cursor:pointer;border:0;background:none}
+  input{font-family:inherit}
+  .appbar{position:sticky;top:0;z-index:40;background:linear-gradient(180deg,#0e7490,#0b5c73);color:#fff;
+    padding:max(10px,env(safe-area-inset-top)) 14px 10px;display:flex;align-items:center;gap:10px}
+  .appbar .back{color:#fff;font-size:15px;font-weight:700;padding:6px 8px 6px 0}
+  .appbar h1{font-size:16px;margin:0;font-weight:700;line-height:1.15}
+  .appbar .sub{font-size:11px;opacity:.8}
+  .appbar .sp{flex:1}
+  .lang{display:flex;background:rgba(255,255,255,.16);border-radius:8px;overflow:hidden}
+  .lang button{color:#fff;padding:6px 11px;font-size:13px;font-weight:700;opacity:.65}
+  .lang button.on{background:#fff;color:var(--brand);opacity:1}
+  .nav{position:fixed;bottom:0;left:0;right:0;z-index:40;background:#fff;border-top:1px solid var(--line);
+    display:flex;justify-content:space-around;padding:6px 2px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(0,0,0,.05)}
+  .nav button{display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--muted);font-size:10px;font-weight:600;padding:4px 5px;border-radius:10px;flex:1}
+  .nav button .ic{font-size:19px;line-height:1}
+  .nav button.on{color:var(--brand)}
+  @media(min-width:980px){
+    .nav{position:sticky;top:58px;bottom:auto;z-index:39;max-width:1180px;margin:10px auto 0;border:1px solid var(--line);border-radius:12px;justify-content:flex-start;gap:4px;padding:6px;box-shadow:var(--sh)}
+    .nav button{flex:none;flex-direction:row;gap:7px;font-size:14px;padding:9px 16px}
+    .nav button .ic{font-size:17px}
+    .nav button.on{background:var(--soft)}
+  }
+  .main{max-width:1180px;margin:0 auto;padding:12px 14px calc(var(--navh) + 24px)}
+  @media(min-width:980px){.main{padding-bottom:28px}}
+  .seccard{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:14px;padding:16px;transition:box-shadow .15s ease}
+  .seccard:hover{box-shadow:0 2px 4px rgba(20,45,55,.08),0 10px 28px rgba(20,45,55,.1)}
+  .seccard h3{margin:0 0 8px;font-size:16px;color:var(--brand)}
+  .seccard .note{font-size:12.5px;color:var(--muted);margin:8px 0 0}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{border:1px solid var(--line);padding:8px 9px;text-align:left;vertical-align:top}
+  th{background:var(--soft);color:var(--brand);font-size:11.5px;text-transform:uppercase;letter-spacing:.3px}
+  tr:nth-child(even) td{background:#f7fafb}
+  .tblwrap{overflow-x:auto;margin-top:10px}
+  .warn{background:var(--warn-soft);border:1px solid #f0d9a8;border-left:4px solid var(--warn);border-radius:10px;padding:10px 12px;font-size:12.5px;color:#6b4700;margin-top:10px}
+  .h2x{font-size:18px;font-weight:800;color:var(--brand);margin:14px 2px 10px;display:flex;align-items:center;gap:10px}
+  .h2x::after{content:"";flex:1;height:1px;background:var(--line)}
+  .step{display:flex;gap:12px;padding:11px 0;border-top:1px dashed var(--line)}
+  .step:first-child{border-top:0}
+  .step .n{width:28px;height:28px;border-radius:50%;background:var(--brand);color:#fff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex:none;margin-top:1px}
+  .step .tx{font-size:13.5px;flex:1}
+  .step .tx b{display:block;font-size:14.5px;margin-bottom:2px;color:#16202c}
+  .step .tool{display:block;font-size:12px;color:var(--brand2);font-weight:700;margin-top:4px}
+  .symgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:10px}
+  .symcard{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
+  .symcard svg{width:74px;height:74px;display:block;margin:0 auto 6px}
+  .symcard b{font-size:12px;display:block}
+  .symcard span{font-size:10.5px;color:var(--muted)}
+  .lashfig{background:#fbfdfe;border:1px solid var(--line);border-radius:10px;padding:8px;max-width:430px;margin:10px auto 0}
+  .ckphase{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:14px;overflow:hidden}
+  .ckphase .ph{display:flex;align-items:center;gap:10px;padding:13px 16px;background:var(--soft);font-weight:800;color:var(--brand);font-size:15px}
+  .ckphase .ph .pct{margin-left:auto;font-size:12.5px;font-weight:700;color:var(--muted)}
+  .ckitem{display:flex;gap:11px;padding:12px 16px;border-top:1px solid var(--line);cursor:pointer;align-items:flex-start}
+  .ckitem:hover{background:#f7fafb}
+  .ckitem .box{width:22px;height:22px;border:2px solid #b9cdd4;border-radius:6px;flex:none;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;margin-top:1px}
+  .ckitem.done .box{background:var(--pass);border-color:var(--pass)}
+  .ckitem .tx{font-size:13.5px}
+  .ckitem.done .tx{color:var(--muted);text-decoration:line-through}
+  .ckitem .rf{display:block;font-size:11px;color:var(--brand2);font-weight:700;margin-top:3px}
+  .ckbar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+  .btn{padding:10px 16px;border-radius:10px;background:var(--brand);color:#fff;font-weight:700;font-size:13.5px}
+  .btn.alt{background:#e2ecef;color:#0b5c73}
+  .btn:active{transform:scale(.98)}
+  .tab{display:none}
+  .tab.on{display:block;animation:fadein .25s ease}
+  @keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<header class="appbar">
+  <a class="back" href="../">←</a>
+  <div>
+    <h1>Kiểm tra Packing</h1>
+    <div class="sub">CTU Code · EN 12195-1 · ISO 780 · ISPM 15</div>
+  </div>
+  <div class="sp"></div>
+  <div class="lang">
+    <button id="lvVi" class="on">VI</button>
+    <button id="lvEn">EN</button>
+  </div>
+</header>
+
+<nav class="nav">
+  <button data-tab="qt" class="on"><span class="ic">🪜</span><span data-vi="Quy trình" data-en="Steps">Quy trình</span></button>
+  <button data-tab="tem"><span class="ic">🏷️</span><span data-vi="Tem nhãn" data-en="Labels">Tem nhãn</span></button>
+  <button data-tab="stow"><span class="ic">📐</span><span data-vi="Sắp xếp" data-en="Stowage">Sắp xếp</span></button>
+  <button data-tab="lash"><span class="ic">🔗</span><span data-vi="Lashing" data-en="Lashing">Lashing</span></button>
+  <button data-tab="photo"><span class="ic">📷</span><span data-vi="Ảnh hàng" data-en="Photos">Ảnh hàng</span></button>
+  <button data-tab="ck"><span class="ic">☑️</span><span data-vi="Checklist" data-en="Checklist">Checklist</span></button>
+</nav>
+
+<main class="main">
+  <section class="tab on" id="tab-qt"></section>
+  <section class="tab" id="tab-tem"></section>
+  <section class="tab" id="tab-stow"></section>
+  <section class="tab" id="tab-lash"></section>
+  <section class="tab" id="tab-photo">
+    <div class="h2x">📷 Hồ sơ ảnh đóng hàng</div>
+    <div class="seccard" style="padding:12px 16px">
+      <b style="color:var(--brand)">Chụp đủ 5 giai đoạn cho mỗi container/lô:</b>
+      <div style="font-size:13px;margin-top:4px">① kiện trước khi đóng nắp → ② từng lớp xếp → ③ lashing hoàn chỉnh → ④ container trống trước khi đóng → ⑤ cửa đóng + seal. Ghi số kiện/container vào ô "Dự án".</div>
+    </div>
+    <div class="seccard" id="photoMount"></div>
+  </section>
+  <section class="tab" id="tab-ck"></section>
+</main>
+
+<script src="data.js"></script>
+<script src="../photo-tool.js"></script>
+<script src="../report.js"></script>
+<script>
+const D = window.PK_DATA;
+let LANG = localStorage.getItem('pk_lang') || 'vi';
+const T = o => (o && typeof o === 'object') ? (o[LANG] || o.vi || '') : (o || '');
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+document.querySelectorAll('.nav button').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.nav button').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+    document.getElementById('tab-' + b.dataset.tab).classList.add('on');
+    window.scrollTo(0, 0);
+  });
+});
+function setLang(l) {
+  LANG = l; localStorage.setItem('pk_lang', l);
+  document.getElementById('lvVi').classList.toggle('on', l === 'vi');
+  document.getElementById('lvEn').classList.toggle('on', l === 'en');
+  document.querySelectorAll('[data-vi]').forEach(e => e.textContent = e.dataset[l]);
+  renderAll();
+}
+document.getElementById('lvVi').onclick = () => setLang('vi');
+document.getElementById('lvEn').onclick = () => setLang('en');
+
+/* ===== SVG ký hiệu ISO 780 (vẽ đơn giản hóa) ===== */
+const SY = '#1b2430';
+function symSvg(id) {
+  const W = (inner) => `<svg viewBox="0 0 80 80"><rect x="2" y="2" width="76" height="76" rx="6" fill="#fff" stroke="${SY}" stroke-width="2.5"/>${inner}</svg>`;
+  switch (id) {
+    case 'up': return W(`<path d="M28,60 V34 M28,34 l-8,10 M28,34 l8,10 M52,60 V34 M52,34 l-8,10 M52,34 l8,10" stroke="${SY}" stroke-width="4" fill="none"/><line x1="14" y1="64" x2="66" y2="64" stroke="${SY}" stroke-width="3"/>`);
+    case 'fragile': return W(`<path d="M30,16 h20 l-4,18 q-6,6 -12,0 Z" fill="none" stroke="${SY}" stroke-width="3"/><path d="M40,40 V56 M30,60 h20" stroke="${SY}" stroke-width="3"/><path d="M54,18 l8,-6 M58,26 l10,-3" stroke="${SY}" stroke-width="2.5"/>`);
+    case 'dry': return W(`<path d="M40,14 q-20,22 -20,32 a20,18 0 0 0 40,0 q0,-10 -20,-32Z" fill="none" stroke="${SY}" stroke-width="3" transform="translate(0,-2) scale(.74) translate(14,8)"/><path d="M20,58 q6,-8 12,0 q6,8 12,0 q6,-8 12,0" fill="none" stroke="${SY}" stroke-width="3"/><path d="M40,12 q-14,16 -14,24 a14,13 0 0 0 28,0 q0,-8 -14,-24Z" fill="none" stroke="${SY}" stroke-width="3"/>`);
+    case 'cog': return W(`<circle cx="40" cy="40" r="16" fill="none" stroke="${SY}" stroke-width="3"/><path d="M40,24 a16,16 0 0 1 16,16 L40,40 Z" fill="${SY}"/><path d="M40,56 a16,16 0 0 1 -16,-16 L40,40 Z" fill="${SY}"/><line x1="40" y1="14" x2="40" y2="66" stroke="${SY}" stroke-width="2"/><line x1="14" y1="40" x2="66" y2="40" stroke="${SY}" stroke-width="2"/>`);
+    case 'sling': return W(`<path d="M20,30 Q40,8 60,30" fill="none" stroke="${SY}" stroke-width="3.5"/><rect x="16" y="30" width="48" height="26" fill="none" stroke="${SY}" stroke-width="3"/><path d="M14,62 h52" stroke="${SY}" stroke-width="3"/>`);
+    case 'nohook': return W(`<path d="M44,16 v18 a10,10 0 0 1 -20,2" fill="none" stroke="${SY}" stroke-width="4"/><circle cx="44" cy="14" r="4" fill="${SY}"/><line x1="16" y1="64" x2="64" y2="14" stroke="#c0241c" stroke-width="5"/>`);
+    case 'noforks': return W(`<rect x="18" y="22" width="30" height="22" fill="none" stroke="${SY}" stroke-width="3"/><path d="M22,44 v14 h6 v-10 M40,44 v14 h6 v-10" fill="none" stroke="${SY}" stroke-width="3"/><line x1="14" y1="66" x2="66" y2="12" stroke="#c0241c" stroke-width="5"/>`);
+    case 'stack': return W(`<rect x="22" y="42" width="36" height="20" fill="none" stroke="${SY}" stroke-width="3"/><rect x="22" y="20" width="36" height="18" fill="none" stroke="${SY}" stroke-width="3"/><text x="40" y="34" font-size="13" font-weight="800" text-anchor="middle" fill="${SY}">n</text><text x="40" y="57" font-size="12" font-weight="700" text-anchor="middle" fill="${SY}">max</text>`);
+    default: return W('');
+  }
+}
+
+/* ===== SVG minh họa lashing / sắp xếp ===== */
+const LK = '#1b2430', LD = '#c0241c', LG = '#0f6e56', LS = '#cdd6df', LW = '#b9893f';
+const fig = (inner, h) => `<svg viewBox="0 0 320 ${h||130}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">${inner}</svg>`;
+const deck = y => `<rect x="10" y="${y}" width="300" height="10" fill="${LS}" stroke="${LK}" stroke-width="1.5"/>`;
+const lbl2 = (x,y,t,c,a) => `<text x="${x}" y="${y}" font-size="11" font-weight="700" fill="${c||LD}" text-anchor="${a||'middle'}" font-family="Segoe UI,Arial">${t}</text>`;
+const LASHFIG = {
+  topover: () => fig(`${deck(104)}
+    <rect x="100" y="54" width="120" height="50" fill="${LW}" stroke="${LK}" stroke-width="1.5"/>
+    <path d="M70,104 L100,56 M220,56 L250,104" stroke="${LD}" stroke-width="2.5" fill="none"/>
+    <line x1="100" y1="56" x2="220" y2="56" stroke="${LD}" stroke-width="2.5"/>
+    <rect x="240" y="92" width="14" height="8" fill="#fff" stroke="${LK}"/>
+    ${lbl2(247,88,'tăng đơ',LK)}
+    <path d="M86,96 a40,40 0 0 1 10,-14" fill="none" stroke="${LG}" stroke-width="1.5"/>
+    ${lbl2(74,86,'α ≥ 75°',LG)}
+    ${lbl2(160,46,'dây ÉP hàng xuống — giữ bằng ma sát',LD)}`),
+  loop: () => fig(`${deck(104)}
+    <circle cx="130" cy="80" r="24" fill="${LW}" stroke="${LK}" stroke-width="1.5"/>
+    <circle cx="190" cy="80" r="24" fill="${LW}" stroke="${LK}" stroke-width="1.5"/>
+    <path d="M96,104 Q96,46 160,50 Q220,46 224,104" stroke="${LD}" stroke-width="2.5" fill="none"/>
+    ${lbl2(160,30,'vòng qua hàng, 2 đầu về CÙNG một bên',LD)}
+    ${lbl2(160,122,'luôn dùng THEO CẶP (mỗi bên 1 vòng), ≥2 cặp',LG)}`),
+  direct: () => fig(`${deck(104)}
+    <rect x="115" y="48" width="90" height="56" fill="${LW}" stroke="${LK}" stroke-width="1.5"/>
+    <circle cx="120" cy="56" r="4" fill="${LG}"/><circle cx="200" cy="56" r="4" fill="${LG}"/>
+    <path d="M120,56 L50,104 M200,56 L270,104" stroke="${LD}" stroke-width="2.5"/>
+    <path d="M120,56 L190,104 M200,56 L130,104" stroke="${LD}" stroke-width="1.8" stroke-dasharray="5,3"/>
+    ${lbl2(58,88,'30–60°',LG,'start')}
+    ${lbl2(160,38,'từ TAI CHẰNG trên hàng → neo sàn, chéo đối xứng',LD)}
+    ${lbl2(160,122,'cho hàng nặng có điểm chằng',LG)}`),
+  corner: () => fig(`${deck(104)}
+    <rect x="110" y="54" width="100" height="50" fill="${LW}" stroke="${LK}" stroke-width="1.5"/>
+    <path d="M80,104 L110,58 L210,58 L240,104" stroke="${LD}" stroke-width="2.5" fill="none"/>
+    <path d="M104,66 L116,52 L126,58" fill="none" stroke="${LG}" stroke-width="5" stroke-linecap="round"/>
+    <path d="M204,58 L216,52 L226,66" fill="none" stroke="${LG}" stroke-width="5" stroke-linecap="round"/>
+    ${lbl2(160,40,'nẹp góc tại MỌI cạnh sắc dây đi qua',LG)}
+    ${lbl2(160,122,'bảo vệ dây + sơn, chia đều lực 2 nhánh',LK)}`),
+  stow: () => fig(`<rect x="20" y="14" width="280" height="100" fill="none" stroke="${LK}" stroke-width="2"/>
+    <rect x="30" y="86" width="200" height="24" fill="${LW}" stroke="${LK}" stroke-width="1.4"/>
+    <rect x="40" y="58" width="150" height="24" fill="#d8c08c" stroke="${LK}" stroke-width="1.4"/>
+    <rect x="50" y="34" width="90" height="20" fill="#e8dcbd" stroke="${LK}" stroke-width="1.4"/>
+    <rect x="30" y="80" width="14" height="6" fill="${LS}" stroke="${LK}"/><rect x="120" y="80" width="14" height="6" fill="${LS}" stroke="${LK}"/><rect x="210" y="80" width="14" height="6" fill="${LS}" stroke="${LK}"/>
+    <rect x="40" y="52" width="14" height="6" fill="${LS}" stroke="${LK}"/><rect x="120" y="52" width="14" height="6" fill="${LS}" stroke="${LK}"/>
+    <rect x="236" y="62" width="58" height="48" fill="none" stroke="${LG}" stroke-width="1.6" stroke-dasharray="5,3"/>
+    ${lbl2(265,90,'chèn kín',LG)}
+    <circle cx="135" cy="74" r="7" fill="none" stroke="${LD}" stroke-width="2"/><line x1="128" y1="74" x2="142" y2="74" stroke="${LD}" stroke-width="2"/><line x1="135" y1="67" x2="135" y2="81" stroke="${LD}" stroke-width="2"/>
+    ${lbl2(160,128,'nặng DƯỚI · CoG giữa · gỗ kê thẳng hàng trên–dưới',LK)}`, 135)
+};
+
+/* ===== TABS ===== */
+function renderQT() {
+  const v = LANG === 'vi';
+  document.getElementById('tab-qt').innerHTML = `<div class="h2x">🪜 ${v?'Quy trình đóng hàng — 9 bước':'Packing process — 9 steps'}</div>
+    <div class="seccard">` +
+    D.STEPS.map((s, i) => `<div class="step"><div class="n">${i+1}</div><div class="tx"><b>${esc(T(s.t))}</b>${esc(T(s.d))}<span class="tool">🧰 ${esc(T(s.tool))}</span></div></div>`).join('') +
+    `</div><div class="warn">⚠ ${esc(T(D.note))}</div>`;
+}
+function renderTem() {
+  const v = LANG === 'vi';
+  const L = D.LABEL;
+  document.getElementById('tab-tem').innerHTML = `<div class="h2x">🏷️ ${v?'Tem nhãn & shipping mark':'Labels & shipping marks'}</div>
+    <div class="seccard"><h3>${v?'Nội dung tem từng kiện':'Label content per package'}</h3>
+    <div class="tblwrap"><table><tr><th>${v?'Nội dung':'Content'}</th><th>${v?'Bắt buộc':'Required'}</th></tr>
+    ${L.content.map(c => `<tr><td>${esc(T(c.k))}</td><td>${c.r ? '<b style="color:var(--fail)">✔ '+(v?'Bắt buộc':'Required')+'</b>' : (v?'Khuyến nghị':'Recommended')}</td></tr>`).join('')}</table></div></div>
+    <div class="seccard"><h3>${v?'Quy tắc dán/sơn':'Marking rules'}</h3>
+    ${L.rules.map(r => `<div class="step"><div class="n">✓</div><div class="tx">${esc(T(r))}</div></div>`).join('')}</div>
+    <div class="seccard"><h3>${v?'Ký hiệu handling — ISO 780:2015':'Handling symbols — ISO 780'}</h3>
+    <div class="symgrid">${L.symbols.map(s => `<div class="symcard">${symSvg(s.id)}<b>${esc(T(s.name))}</b><span>${esc(s.iso)}</span></div>`).join('')}</div>
+    <div class="note">📎 ${esc(L.ref)} — ${v?'ký hiệu vẽ đơn giản hóa, in stencil theo mẫu chuẩn ISO.':'Simplified drawings; stencil per ISO originals.'}</div></div>`;
+}
+function renderStow() {
+  const v = LANG === 'vi';
+  document.getElementById('tab-stow').innerHTML = `<div class="h2x">📐 ${v?'Nguyên tắc sắp xếp (stowage)':'Stowage principles'}</div>
+    <div class="seccard"><div class="lashfig">${LASHFIG.stow()}</div></div>` +
+    D.STOW.map(s => `<div class="seccard"><h3>${esc(T(s.t))}</h3><div style="font-size:13.5px">${esc(T(s.d))}</div></div>`).join('');
+}
+function renderLash() {
+  const v = LANG === 'vi';
+  document.getElementById('tab-lash').innerHTML = `<div class="h2x">🔗 ${v?'Chằng buộc (lashing) — 4 kiểu cơ bản':'Lashing — 4 basic methods'}</div>` +
+    D.LASH.methods.map(m => `<div class="seccard"><h3>${esc(T(m.name))}</h3>
+      <div class="lashfig">${LASHFIG[m.id] ? LASHFIG[m.id]() : ''}</div>
+      <div style="font-size:13.5px;margin-top:10px">${esc(T(m.d))}</div>
+      <div class="note">🎯 ${v?'Dùng cho':'Use for'}: ${esc(T(m.use))}</div></div>`).join('') +
+    `<div class="seccard"><h3>${v?'Quy tắc an toàn lashing':'Lashing safety rules'}</h3>
+    ${D.LASH.rules.map(r => `<div class="step"><div class="n">!</div><div class="tx">${esc(T(r))}</div></div>`).join('')}
+    <div class="note">📎 ${esc(D.LASH.ref)}</div></div>`;
+}
+
+/* ===== CHECKLIST ===== */
+const CK_KEY = 'pk_ck_v1';
+function ckState() { try { return JSON.parse(localStorage.getItem(CK_KEY)) || {}; } catch (e) { return {}; } }
+function renderCK() {
+  const v = LANG === 'vi';
+  const st = ckState();
+  let h = `<div class="ckbar">
+    <button class="btn alt" id="ckReset">↺ ${v?'Làm mới':'Reset'}</button>
+    <button class="btn" id="ckCopy">📋 ${v?'Copy báo cáo':'Copy report'}</button>
+    <button class="btn" id="ckPrint">🖨 ${v?'In / PDF':'Print / PDF'}</button></div>`;
+  D.CHECKLIST.forEach((ph, pi) => {
+    const done = ph.items.filter((_, ii) => st[pi + '_' + ii]).length;
+    h += `<div class="ckphase"><div class="ph">${ph.icon} ${esc(T(ph.phase))}<span class="pct">${done}/${ph.items.length}</span></div>
+      ${ph.items.map((it, ii) => `
+        <div class="ckitem ${st[pi+'_'+ii]?'done':''}" data-k="${pi}_${ii}">
+          <div class="box">${st[pi+'_'+ii]?'✓':''}</div>
+          <div class="tx">${esc(T(it.t))}<span class="rf">📎 ${esc(T(it.ref))}</span></div>
+        </div>`).join('')}</div>`;
+  });
+  const el = document.getElementById('tab-ck');
+  el.innerHTML = h;
+  el.querySelectorAll('.ckitem').forEach(c => c.onclick = () => {
+    const s = ckState(); s[c.dataset.k] = !s[c.dataset.k];
+    localStorage.setItem(CK_KEY, JSON.stringify(s)); renderCK();
+  });
+  el.querySelector('#ckReset').onclick = () => { localStorage.removeItem(CK_KEY); renderCK(); };
+  el.querySelector('#ckCopy').onclick = () => {
+    const s = ckState();
+    let txt = (v?'BÁO CÁO CHECKLIST NGHIỆM THU PACKING':'PACKING ACCEPTANCE CHECKLIST') + ' — ' + new Date().toLocaleString() + '\n';
+    D.CHECKLIST.forEach((ph, pi) => {
+      txt += '\n## ' + T(ph.phase) + '\n';
+      ph.items.forEach((it, ii) => txt += (s[pi+'_'+ii] ? '[x] ' : '[ ] ') + T(it.t) + ' (' + T(it.ref) + ')\n');
+    });
+    (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(() => alert(v?'Đã copy!':'Copied!')).catch(()=>prompt('Copy:',txt));
+  };
+  el.querySelector('#ckPrint').onclick = () => {
+    const s = ckState();
+    if (window.QCReport) QCReport.print({
+      module: 'Kiểm tra Packing', color: '#0e7490',
+      title: v ? 'BIÊN BẢN NGHIỆM THU PACKING / ĐÓNG HÀNG' : 'PACKING ACCEPTANCE REPORT',
+      groups: D.CHECKLIST.map((ph, pi) => ({
+        name: T(ph.phase),
+        items: ph.items.map((it, ii) => ({ ok: !!s[pi+'_'+ii], text: T(it.t), ref: T(it.ref) }))
+      }))
+    });
+  };
+}
+
+function renderAll() { renderQT(); renderTem(); renderStow(); renderLash(); renderCK(); }
+setLang(LANG);
+if (window.PhotoTool) PhotoTool.mount(document.getElementById('photoMount'), { key: 'pk_photos_v1' });
+
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+</script>
+</body>
+</html>
