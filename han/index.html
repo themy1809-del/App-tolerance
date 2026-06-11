@@ -154,6 +154,7 @@
   <button data-tab="ck"><span class="ic">☑️</span><span data-vi="Checklist" data-en="Checklist">Checklist</span></button>
   <button data-tab="sym"><span class="ic">⛯</span><span data-vi="Ký hiệu" data-en="Symbols">Ký hiệu</span></button>
   <button data-tab="tool"><span class="ic">🧮</span><span data-vi="Công cụ" data-en="Tools">Công cụ</span></button>
+  <button data-tab="itp"><span class="ic">🗂</span><span data-vi="ITP" data-en="ITP">ITP</span></button>
 </nav>
 
 <main class="main">
@@ -192,11 +193,20 @@
   <!-- TAB TOOLS -->
   <section class="tab" id="tab-tool"></section>
 
+  <!-- TAB ITP -->
+  <section class="tab" id="tab-itp">
+    <div class="h2x">🗂 Quy trình kiểm soát chất lượng (ITP)</div>
+    <div id="itpMount"></div>
+  </section>
+
 </main>
 
 <script src="data.js"></script>
 <script src="sketches.js"></script>
 <script src="../report.js"></script>
+<script src="../itp.js"></script>
+<script src="../itp-data.js"></script>
+<script src="../qclog.js"></script>
 <script>
 const D = window.HAN_DATA;
 let LANG = localStorage.getItem('han_lang') || 'vi';
@@ -337,7 +347,8 @@ function renderDetail() {
         <div class="res"><div class="lbl">${LANG==='vi'?'Giới hạn cho phép':'Permitted limit'}</div>
           <div class="big">${esc(out.limitText)}</div>
           <div style="font-size:12.5px;opacity:.8;margin-top:6px">${esc(out.detail||'')}</div></div>
-        <div class="verdict ${out.pass?'pass':'fail'}">${out.pass?(LANG==='vi'?'✓ ĐẠT':'✓ PASS'):(LANG==='vi'?'✗ KHÔNG ĐẠT':'✗ FAIL')}</div>`;
+        <div class="verdict ${out.pass?'pass':'fail'}">${out.pass?(LANG==='vi'?'✓ ĐẠT':'✓ PASS'):(LANG==='vi'?'✗ KHÔNG ĐẠT':'✗ FAIL')}</div>` +
+        (window.QCLog ? QCLog.saveButton('QC Hàn', T(r.title) + ' (' + r.std + ')', out.pass, (out.detail||'') + ' | ' + out.limitText) : '');
     };
     el.querySelectorAll('#calcBody input').forEach(i => i.addEventListener('input', run));
     run();
@@ -699,6 +710,7 @@ async function phRenderGallery() {
 function renderAll() { renderVT(); renderDetail(); renderNDT(); renderCK(); renderSym(); renderTools(); }
 setLang(LANG);
 initPhoto();
+if (window.QCITP && window.ITP_DATA) QCITP.mount(document.getElementById('itpMount'), ITP_DATA.han, { color: '#7c2d12' });
 
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   navigator.serviceWorker.register('sw.js').catch(()=>{});

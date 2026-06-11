@@ -1,5 +1,5 @@
 // Service worker for WPS Library (offline shell)
-const CACHE = 'wps-v6';
+const CACHE = 'wps-v7';
 const SHELL = [
   './',
   './index.html',

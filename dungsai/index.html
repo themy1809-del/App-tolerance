@@ -205,6 +205,8 @@
 
 <script src="../photo-tool.js"></script>
 <script src="../report.js"></script>
+<script src="../itp.js"></script>
+<script src="../itp-data.js"></script>
 <script src="tolerances-data.js?v=9"></script>
 <script src="tolerances-tier1.js?v=9"></script>
 <script src="tolerances-tier2.js?v=9"></script>
@@ -504,6 +506,7 @@ function viewCheck(){
         <div style="font-size:13.5px;${on?'color:var(--muted);text-decoration:line-through':''}">${esc(tx(it.t))}<span style="display:block;font-size:11px;color:var(--brand2);font-weight:700;margin-top:3px">📎 ${esc(tx(it.ref))}</span></div></div>`; });
     h+=`</div>`;
   });
+  h+=`<div class="sectitle" style="margin-top:18px">🗂 ${LANG==='vi'?'Quy trình kiểm soát chất lượng (ITP)':'Inspection & Test Plan'}</div><div id="itpMount"></div>`;
   return h;
 }
 function setLang(l){ LANG=l; document.getElementById("lvi").classList.toggle("on",l==="vi"); document.getElementById("len").classList.toggle("on",l==="en"); document.documentElement.lang=l; render(); }
@@ -525,7 +528,7 @@ function render(){
   if(VIEW==="lookup") app.innerHTML=viewLookup();
   else if(VIEW==="compare") app.innerHTML=viewCompare();
   else if(VIEW==="standards") app.innerHTML=viewStandards();
-  else if(VIEW==="check") app.innerHTML=viewCheck();
+  else if(VIEW==="check"){ app.innerHTML=viewCheck(); if(window.QCITP&&window.ITP_DATA) QCITP.mount(document.getElementById("itpMount"), ITP_DATA.dungsai, {color:"#0c447c"}); }
   else if(VIEW==="admin") app.innerHTML=viewAdmin();
   renderModal();
 }

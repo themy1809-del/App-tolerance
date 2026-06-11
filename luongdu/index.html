@@ -129,6 +129,7 @@ h1{font-size:17px;margin:0;font-weight:800;line-height:1.15}
     <button class="tab" id="tabC" onclick="setTab('C')">📚 Thư viện 5M+1E</button>
     <button class="tab" id="tabD" onclick="setTab('D')">📸 Ảnh thật (39)</button>
     <button class="tab" id="tabE" onclick="setTab('E')">📷 Đo ảnh</button>
+    <button class="tab" id="tabF" onclick="setTab('F')">🗂 ITP</button>
   </div>
   <div id="galFilter" style="display:none;gap:6px;flex-wrap:wrap;margin-bottom:12px">
     <button class="chip on" data-gal="all" onclick="setGal('all')">Tất cả · 39</button>
@@ -173,11 +174,15 @@ h1{font-size:17px;margin:0;font-weight:800;line-height:1.15}
   </div>
   <div id="content"></div>
   <div id="photoWrap" style="display:none;background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px"></div>
+  <div id="itpWrap" style="display:none"></div>
 </main>
 
 <div id="modal"></div>
 
 <script src="../photo-tool.js"></script>
+<script src="../report.js"></script>
+<script src="../itp.js"></script>
+<script src="../itp-data.js"></script>
 <script src="data.js?v=6"></script>
 <script src="sketches.js?v=6"></script>
 <script src="library-5m1e.js?v=6"></script>
@@ -193,16 +198,21 @@ function setSev(s){
 }
 function setTab(t){
   TAB = t;
-  ['A','B','C','D','E'].forEach(x => { var el=document.getElementById('tab'+x); if(el) el.classList.toggle('on', t===x); });
+  ['A','B','C','D','E','F'].forEach(x => { var el=document.getElementById('tab'+x); if(el) el.classList.toggle('on', t===x); });
   document.getElementById('catFilter').style.display = t==='B' ? 'flex' : 'none';
   document.getElementById('galFilter').style.display = t==='D' ? 'flex' : 'none';
-  var pw = document.getElementById('photoWrap'), ct = document.getElementById('content');
+  var pw = document.getElementById('photoWrap'), ct = document.getElementById('content'), iw = document.getElementById('itpWrap');
+  pw.style.display='none'; iw.style.display='none'; ct.style.display='';
   if (t==='E') {
     ct.style.display='none'; pw.style.display='block';
     if (window.PhotoTool) PhotoTool.mount(pw, { key: 'ld_photos_v1' });
     return;
   }
-  ct.style.display=''; pw.style.display='none';
+  if (t==='F') {
+    ct.style.display='none'; iw.style.display='block';
+    if (window.QCITP && window.ITP_DATA) QCITP.mount(iw, ITP_DATA.luongdu, { color: '#5f4ab7' });
+    return;
+  }
   render();
 }
 var GAL = 'all';

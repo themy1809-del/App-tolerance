@@ -1,7 +1,7 @@
 /* Launcher service worker — v3
    FIX: chỉ xoá cache CỦA LAUNCHER (launcher-*). Trước đây xoá mọi cache
    → phá cache offline của các module con (dungsai/wps/vattu/luongdu/han/son). */
-const CACHE = "launcher-v5";
+const CACHE = "launcher-v6";
 
 self.addEventListener("install", e => {
   // Không pre-cache — load tươi mỗi lần để tránh kẹt phiên bản cũ

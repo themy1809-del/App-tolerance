@@ -55,6 +55,11 @@
       </a>
     </div>
 
+    <details style="margin:4px 0 14px;background:#fff;border:1px solid #e4e9f0;border-radius:12px;overflow:hidden">
+      <summary style="padding:12px 16px;font-weight:700;font-size:13.5px;color:#b4421f;cursor:pointer;list-style:none">🗂 Quy trình kiểm soát WPS / PQR / WQT (ITP) — bấm mở</summary>
+      <div style="padding:0 14px 14px"><div id="itpMount"></div></div>
+    </details>
+
     <div class="search">
       <span class="mag">🔍</span>
       <input id="q" type="search" placeholder="Tìm WPS… (số, vật liệu, PQR, code…)" autocomplete="off">
@@ -195,6 +200,12 @@
 <script src="standards.js?v=1"></script>
 <script src="app2.js?v=7"></script>
 <script src="app.js?v=7"></script>
+<script src="../report.js"></script>
+<script src="../itp.js"></script>
+<script src="../itp-data.js"></script>
+<script>
+if (window.QCITP && window.ITP_DATA) QCITP.mount(document.getElementById('itpMount'), ITP_DATA.wps, { color: '#b4421f' });
+</script>
 
 <style>
 .mat-group-fab{position:fixed;bottom:80px;right:14px;z-index:50;background:#7c3f00;color:#fff;border:0;border-radius:50px;padding:12px 18px;font-weight:800;font-size:13.5px;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.25);font-family:inherit}

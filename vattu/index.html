@@ -48,6 +48,11 @@
     <span style="color:#3b6d11;font-weight:700;cursor:pointer;padding:4px 8px;border-radius:8px" id="resetBtn">Đặt lại</span>
   </div>
 
+  <details class="more" style="margin-bottom:12px">
+    <summary>🗂 Quy trình kiểm soát chất lượng — ITP vật tư đầu vào (bấm mở)</summary>
+    <div class="body" style="display:block"><div id="itpMount"></div></div>
+  </details>
+
   <details class="more" id="ckWrap" style="margin-bottom:12px">
     <summary>☑️ Checklist nghiệm thu vật tư đầu vào (bấm mở)</summary>
     <div class="body" style="display:block">
@@ -100,9 +105,12 @@
 <script src="app.js?v=2"></script>
 <script src="../photo-tool.js"></script>
 <script src="../report.js"></script>
+<script src="../itp.js"></script>
+<script src="../itp-data.js"></script>
 <script src="smart-search.js?v=1" defer></script>
 <script>
 if (window.PhotoTool) PhotoTool.mount(document.getElementById('photoMount'), { key: 'vt_photos_v1' });
+if (window.QCITP && window.ITP_DATA) QCITP.mount(document.getElementById('itpMount'), ITP_DATA.vattu, { color: '#3b6d11' });
 /* ===== Checklist nghiệm thu vật tư đầu vào ===== */
 (function(){
   var ITEMS = [

@@ -130,6 +130,7 @@
   <button data-tab="def"><span class="ic">⚠️</span><span data-vi="Lỗi sơn" data-en="Defects">Lỗi sơn</span></button>
   <button data-tab="do"><span class="ic">📷</span><span data-vi="Đo ảnh" data-en="Photo">Đo ảnh</span></button>
   <button data-tab="ck"><span class="ic">☑️</span><span data-vi="Checklist" data-en="Checklist">Checklist</span></button>
+  <button data-tab="itp"><span class="ic">🗂</span><span data-vi="ITP" data-en="ITP">ITP</span></button>
 </nav>
 
 <main class="main">
@@ -143,11 +144,18 @@
     <div class="seccard" id="photoMount"></div>
   </section>
   <section class="tab" id="tab-ck"></section>
+  <section class="tab" id="tab-itp">
+    <div class="h2x">🗂 Quy trình kiểm soát chất lượng (ITP)</div>
+    <div id="itpMount"></div>
+  </section>
 </main>
 
 <script src="data.js"></script>
 <script src="../photo-tool.js"></script>
 <script src="../report.js"></script>
+<script src="../itp.js"></script>
+<script src="../itp-data.js"></script>
+<script src="../qclog.js"></script>
 <script>
 const D = window.SON_DATA;
 let LANG = localStorage.getItem('son_lang') || 'vi';
@@ -387,7 +395,8 @@ function renderDft() {
         b) Min = ${min}µm (80% NDFT = ${Math.round(0.8*N)}µm) ${ok80?'✓':'✗ — '+below80.length+(LANG==='vi'?' điểm dưới 80%':' readings < 80%')}<br>
         c) ${LANG==='vi'?'Số điểm 80–100% NDFT':'Readings at 80–100% NDFT'} = ${band.length}/${reads.length} (${LANG==='vi'?'phải':'must be'} &lt; 20% = ${Math.round(0.2*reads.length*10)/10}) ${okBand?'✓':'✗'}<br>
         d) Max = ${max}µm (${LANG==='vi'?'giới hạn':'limit'} ${Math.round(M)}µm) ${okMax?'✓':'✗'}</div></div>
-      <div class="verdict ${allOk?'pass':'fail'}">${allOk?(LANG==='vi'?'✓ ĐẠT theo ISO 19840:2012 mục 9 (a–d)':'✓ PASS per ISO 19840:2012 Cl.9'):(LANG==='vi'?'✗ KHÔNG ĐẠT':'✗ FAIL')}</div>`;
+      <div class="verdict ${allOk?'pass':'fail'}">${allOk?(LANG==='vi'?'✓ ĐẠT theo ISO 19840:2012 mục 9 (a–d)':'✓ PASS per ISO 19840:2012 Cl.9'):(LANG==='vi'?'✗ KHÔNG ĐẠT':'✗ FAIL')}</div>` +
+      (window.QCLog ? QCLog.saveButton('QC Sơn', 'DFT ISO 19840 (NDFT ' + N + 'µm)', allOk, 'n=' + reads.length + ' · TB=' + Math.round(mean) + 'µm · min=' + min + ' · max=' + max + ' · dải 80–100%: ' + band.length) : '');
   };
   ['dN','dM','dR'].forEach(id => document.getElementById(id).addEventListener('input', run));
   run();
@@ -522,6 +531,7 @@ function renderCK() {
 function renderAll() { renderSurf(); renderEnv(); renderDft(); renderTest(); renderDef(); renderCK(); }
 setLang(LANG);
 if (window.PhotoTool) PhotoTool.mount(document.getElementById('photoMount'), { key: 'son_photos_v1' });
+if (window.QCITP && window.ITP_DATA) QCITP.mount(document.getElementById('itpMount'), ITP_DATA.son, { color: '#14532d' });
 
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   navigator.serviceWorker.register('sw.js').catch(()=>{});

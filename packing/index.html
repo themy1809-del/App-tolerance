@@ -108,6 +108,7 @@
   <button data-tab="lash"><span class="ic">🔗</span><span data-vi="Lashing" data-en="Lashing">Lashing</span></button>
   <button data-tab="photo"><span class="ic">📷</span><span data-vi="Ảnh hàng" data-en="Photos">Ảnh hàng</span></button>
   <button data-tab="ck"><span class="ic">☑️</span><span data-vi="Checklist" data-en="Checklist">Checklist</span></button>
+  <button data-tab="itp"><span class="ic">🗂</span><span data-vi="ITP" data-en="ITP">ITP</span></button>
 </nav>
 
 <main class="main">
@@ -124,11 +125,17 @@
     <div class="seccard" id="photoMount"></div>
   </section>
   <section class="tab" id="tab-ck"></section>
+  <section class="tab" id="tab-itp">
+    <div class="h2x">🗂 Quy trình kiểm soát chất lượng (ITP)</div>
+    <div id="itpMount"></div>
+  </section>
 </main>
 
 <script src="data.js"></script>
 <script src="../photo-tool.js"></script>
 <script src="../report.js"></script>
+<script src="../itp.js"></script>
+<script src="../itp-data.js"></script>
 <script>
 const D = window.PK_DATA;
 let LANG = localStorage.getItem('pk_lang') || 'vi';
@@ -309,6 +316,7 @@ function renderCK() {
 function renderAll() { renderQT(); renderTem(); renderStow(); renderLash(); renderCK(); }
 setLang(LANG);
 if (window.PhotoTool) PhotoTool.mount(document.getElementById('photoMount'), { key: 'pk_photos_v1' });
+if (window.QCITP && window.ITP_DATA) QCITP.mount(document.getElementById('itpMount'), ITP_DATA.packing, { color: '#0e7490' });
 
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   navigator.serviceWorker.register('sw.js').catch(()=>{});

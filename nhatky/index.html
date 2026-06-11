@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#334155">
+<title>Nhật ký kiểm tra QC</title>
+<style>
+  :root{--bg:#f4f6f9;--ink:#16202c;--muted:#5d6b7c;--line:#e4e9f0;--brand:#334155;--brand2:#475569;
+    --pass:#0f6e56;--pass-soft:#e3f6ee;--fail:#aa4322;--fail-soft:#fbeae2;
+    --r:14px;--sh:0 1px 2px rgba(18,30,48,.05),0 6px 22px rgba(18,30,48,.07)}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:14.5px;line-height:1.55}
+  .appbar{position:sticky;top:0;z-index:40;background:linear-gradient(180deg,#334155,#1e293b);color:#fff;
+    padding:max(10px,env(safe-area-inset-top)) 14px 10px;display:flex;align-items:center;gap:10px}
+  .appbar a{color:#fff;font-size:15px;font-weight:700;padding:6px 8px 6px 0;text-decoration:none}
+  .appbar h1{font-size:16px;margin:0;font-weight:700}
+  .appbar .sub{font-size:11px;opacity:.8}
+  .main{max-width:1060px;margin:0 auto;padding:14px 14px 30px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:14px 16px;margin-bottom:12px}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:12px}
+  .stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px 14px;text-align:center}
+  .stat b{font-size:22px;display:block}
+  .stat span{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+  .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+  .filters input,.filters select{padding:9px 11px;border:1px solid var(--line);border-radius:10px;font-size:13.5px;font-family:inherit;background:#fff}
+  .filters input{flex:1;min-width:150px}
+  .btn{padding:9px 14px;border:0;border-radius:10px;background:var(--brand);color:#fff;font-weight:700;font-size:12.5px;cursor:pointer;font-family:inherit}
+  .btn.alt{background:#e7ebf0;color:#334155}
+  .btn.red{background:#fbeae2;color:#aa4322}
+  .entry{display:flex;gap:11px;padding:11px 0;border-top:1px solid #eef1f5;align-items:flex-start}
+  .entry:first-child{border-top:0}
+  .res{flex:none;font-size:10.5px;font-weight:800;padding:4px 9px;border-radius:7px;margin-top:2px}
+  .res.P{background:var(--pass-soft);color:var(--pass)}
+  .res.F{background:var(--fail-soft);color:var(--fail)}
+  .ebody{flex:1;min-width:0}
+  .et{font-size:13.5px;font-weight:700}
+  .es{font-size:12px;color:var(--muted);margin-top:1px}
+  .edetail{font-size:12px;color:#33404e;margin-top:3px;background:#f7f9fc;border-radius:8px;padding:6px 9px}
+  .edel{flex:none;color:#aa4322;font-weight:800;font-size:12px;cursor:pointer;background:none;border:0;font-family:inherit;padding:4px}
+  .empty{text-align:center;color:var(--muted);padding:34px 14px;font-size:13.5px}
+  .form{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px}
+  .form input,.form select{padding:9px 11px;border:1px solid var(--line);border-radius:10px;font-size:13.5px;font-family:inherit}
+  .form .full{grid-column:1/-1}
+  h3{margin:0 0 10px;font-size:14.5px;color:var(--brand)}
+</style>
+</head>
+<body>
+
+<header class="appbar">
+  <a href="../">←</a>
+  <div>
+    <h1>📒 Nhật ký kiểm tra QC</h1>
+    <div class="sub">Lịch sử Đạt/Không đạt theo dự án — lưu trên máy này</div>
+  </div>
+</header>
+
+<main class="main">
+  <div class="stats" id="stats"></div>
+
+  <div class="filters">
+    <input id="fq" type="search" placeholder="🔍 Lọc theo dự án / cấu kiện / hạng mục...">
+    <select id="fm"><option value="">Mọi module</option></select>
+    <select id="fr"><option value="">Đạt + Không đạt</option><option value="PASS">Chỉ ĐẠT</option><option value="FAIL">Chỉ KHÔNG ĐẠT</option></select>
+    <button class="btn" id="bCsv">⬇ CSV</button>
+    <button class="btn" id="bPrint">🖨 In</button>
+    <button class="btn red" id="bClear">🗑 Xóa hết</button>
+  </div>
+
+  <div class="card">
+    <h3>➕ Ghi tay một dòng (kết quả đo ngoài app)</h3>
+    <div class="form">
+      <input id="aProj" placeholder="Dự án / cấu kiện">
+      <select id="aMod">
+        <option>Dung sai</option><option>QC Hàn</option><option>QC Sơn</option><option>QC Bu lông</option>
+        <option>Vật tư</option><option>Packing</option><option>Khác</option>
+      </select>
+      <select id="aRes"><option value="PASS">ĐẠT</option><option value="FAIL">KHÔNG ĐẠT</option></select>
+      <input id="aItem" class="full" placeholder="Hạng mục kiểm tra (vd: độ võng dầm B-12, DFT mặt A...)">
+      <input id="aNote" class="full" placeholder="Giá trị đo / ghi chú">
+      <button class="btn full" id="aAdd">Lưu vào nhật ký</button>
+    </div>
+  </div>
+
+  <div class="card"><div id="list"><div class="empty">⏳ Đang tải...</div></div></div>
+</main>
+
+<script src="../qclog.js"></script>
+<script src="../report.js"></script>
+<script>
+let ALL = [];
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const norm = s => String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[đĐ]/g,'d').toLowerCase();
+
+function filtered() {
+  const q = norm(document.getElementById('fq').value.trim());
+  const m = document.getElementById('fm').value;
+  const r = document.getElementById('fr').value;
+  return ALL.filter(e =>
+    (!q || norm((e.project||'') + ' ' + (e.item||'') + ' ' + (e.detail||'') + ' ' + (e.note||'')).includes(q)) &&
+    (!m || e.module === m) && (!r || e.result === r)
+  ).sort((a,b) => b.ts - a.ts);
+}
+
+function render() {
+  const rows = filtered();
+  const nP = ALL.filter(e=>e.result==='PASS').length, nF = ALL.filter(e=>e.result==='FAIL').length;
+  const projects = new Set(ALL.map(e=>e.project).filter(Boolean));
+  document.getElementById('stats').innerHTML =
+    '<div class="stat"><b>' + ALL.length + '</b><span>Lượt kiểm</span></div>' +
+    '<div class="stat"><b style="color:var(--pass)">' + nP + '</b><span>Đạt</span></div>' +
+    '<div class="stat"><b style="color:var(--fail)">' + nF + '</b><span>Không đạt</span></div>' +
+    '<div class="stat"><b>' + projects.size + '</b><span>Dự án/cấu kiện</span></div>';
+
+  const mods = [...new Set(ALL.map(e=>e.module).filter(Boolean))];
+  const fm = document.getElementById('fm');
+  const cur = fm.value;
+  fm.innerHTML = '<option value="">Mọi module</option>' + mods.map(m=>'<option '+(m===cur?'selected':'')+'>'+esc(m)+'</option>').join('');
+
+  document.getElementById('list').innerHTML = rows.length ? rows.map(e => `
+    <div class="entry">
+      <span class="res ${e.result==='PASS'?'P':'F'}">${e.result==='PASS'?'✓ ĐẠT':'✗ KHÔNG ĐẠT'}</span>
+      <div class="ebody">
+        <div class="et">${esc(e.item||'(không tên)')}</div>
+        <div class="es">${esc(e.module||'')} · <b>${esc(e.project||'(chưa ghi dự án)')}</b> · ${new Date(e.ts).toLocaleString('vi-VN')}</div>
+        ${e.detail||e.note ? '<div class="edetail">'+esc(e.detail||'')+(e.note?(' '+esc(e.note)):'')+'</div>' : ''}
+      </div>
+      <button class="edel" data-id="${e.id}">✕</button>
+    </div>`).join('') :
+    '<div class="empty">Chưa có bản ghi' + (ALL.length? ' khớp bộ lọc':'') + '.<br><br>💡 Bấm "💾 Lưu kết quả vào Nhật ký QC" dưới mỗi kết quả Đạt/Không đạt trong QC Hàn, QC Sơn... hoặc ghi tay ở khung trên.</div>';
+
+  document.querySelectorAll('.edel').forEach(b => b.onclick = () => QCLog.del(+b.dataset.id).then(load));
+}
+
+function load(){ QCLog.all().then(r => { ALL = r; render(); }).catch(e => { document.getElementById('list').innerHTML = '<div class="empty">Lỗi: '+esc(e)+'</div>'; }); }
+
+['fq','fm','fr'].forEach(id => document.getElementById(id).addEventListener('input', render));
+
+document.getElementById('aAdd').onclick = () => {
+  const item = document.getElementById('aItem').value.trim();
+  if (!item) return alert('Nhập hạng mục kiểm tra.');
+  QCLog.add({
+    project: document.getElementById('aProj').value.trim(),
+    module: document.getElementById('aMod').value,
+    result: document.getElementById('aRes').value,
+    item, note: document.getElementById('aNote').value.trim()
+  }).then(() => { document.getElementById('aItem').value=''; document.getElementById('aNote').value=''; load(); });
+};
+
+document.getElementById('bCsv').onclick = () => {
+  const rows = filtered();
+  const csv = '﻿Thời gian,Dự án/Cấu kiện,Module,Hạng mục,Kết quả,Chi tiết\n' + rows.map(e =>
+    [new Date(e.ts).toLocaleString('vi-VN'), e.project||'', e.module||'', e.item||'', e.result, (e.detail||'')+' '+(e.note||'')]
+      .map(v => '"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv;charset=utf-8'}));
+  a.download = 'nhat-ky-qc-' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+};
+
+document.getElementById('bPrint').onclick = () => {
+  const rows = filtered();
+  if (!window.QCReport) return;
+  QCReport.print({
+    module: 'Nhật ký QC', color: '#334155',
+    title: 'NHẬT KÝ KIỂM TRA QC' + (document.getElementById('fq').value ? ' — ' + document.getElementById('fq').value : ''),
+    groups: [{ name: 'CÁC LƯỢT KIỂM TRA (' + rows.length + ')', items: rows.map(e => ({
+      ok: e.result === 'PASS',
+      text: (e.project?('['+e.project+'] '):'') + (e.item||'') + ' — ' + e.result + (e.detail?(' · '+e.detail):'') + (e.note?(' · '+e.note):''),
+      ref: (e.module||'') + ' · ' + new Date(e.ts).toLocaleString('vi-VN')
+    })) }]
+  });
+};
+
+document.getElementById('bClear').onclick = () => {
+  if (confirm('Xóa TOÀN BỘ nhật ký trên máy này? (không khôi phục được)')) QCLog.clear().then(load);
+};
+
+load();
+</script>
+</body>
+</html>

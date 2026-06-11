@@ -108,6 +108,7 @@
   <button data-tab="insp"><span class="ic">🔍</span><span data-vi="Kiểm tra" data-en="Inspect">Kiểm tra</span></button>
   <button data-tab="mat"><span class="ic">🔩</span><span data-vi="Vật tư" data-en="Materials">Vật tư</span></button>
   <button data-tab="ck"><span class="ic">☑️</span><span data-vi="Checklist" data-en="Checklist">Checklist</span></button>
+  <button data-tab="itp"><span class="ic">🗂</span><span data-vi="ITP" data-en="ITP">ITP</span></button>
 </nav>
 
 <main class="main">
@@ -117,10 +118,16 @@
   <section class="tab" id="tab-insp"></section>
   <section class="tab" id="tab-mat"></section>
   <section class="tab" id="tab-ck"></section>
+  <section class="tab" id="tab-itp">
+    <div class="h2x">🗂 Quy trình kiểm soát chất lượng (ITP)</div>
+    <div id="itpMount"></div>
+  </section>
 </main>
 
 <script src="data.js"></script>
 <script src="../report.js"></script>
+<script src="../itp.js"></script>
+<script src="../itp-data.js"></script>
 <script>
 const D = window.BL_DATA;
 let LANG = localStorage.getItem('bl_lang') || 'vi';
@@ -376,6 +383,7 @@ function renderCK() {
 
 function renderAll() { renderCalc(); renderMet(); renderRule(); renderInsp(); renderMat(); renderCK(); }
 setLang(LANG);
+if (window.QCITP && window.ITP_DATA) QCITP.mount(document.getElementById('itpMount'), ITP_DATA.bulong, { color: '#37474f' });
 
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   navigator.serviceWorker.register('sw.js').catch(()=>{});

@@ -1,5 +1,5 @@
-const CACHE = 'packing-v1';
-const ASSETS = ['./', './index.html', './data.js', '../photo-tool.js', '../report.js', './manifest.webmanifest'];
+const CACHE = 'packing-v2';
+const ASSETS = ['./', './index.html', './data.js', '../photo-tool.js', '../report.js', '../itp.js', '../itp-data.js', './manifest.webmanifest'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
 });
