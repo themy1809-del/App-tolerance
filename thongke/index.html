@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#9f1239">
+<title>Thống kê chất lượng — Dashboard QC</title>
+<style>
+  :root{--bg:#f6f4f6;--ink:#16202c;--muted:#5d6b7c;--line:#e8e2e6;--brand:#9f1239;--brand2:#be185d;
+    --pass:#0f6e56;--fail:#aa4322;
+    --r:14px;--sh:0 1px 2px rgba(40,18,30,.05),0 6px 22px rgba(40,18,30,.07)}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:14.5px;line-height:1.55}
+  .appbar{position:sticky;top:0;z-index:40;background:linear-gradient(180deg,#9f1239,#7a0e2c);color:#fff;
+    padding:max(10px,env(safe-area-inset-top)) 14px 10px;display:flex;align-items:center;gap:10px}
+  .appbar a{color:#fff;font-size:15px;font-weight:700;padding:6px 8px 6px 0;text-decoration:none}
+  .appbar h1{font-size:16px;margin:0;font-weight:700}
+  .appbar .sub{font-size:11px;opacity:.8}
+  .appbar .sp{flex:1}
+  .main{max-width:1060px;margin:0 auto;padding:14px 14px 30px}
+  .bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
+  .bar select{padding:9px 11px;border:1px solid var(--line);border-radius:10px;font-size:13.5px;font-family:inherit;background:#fff}
+  .btn{padding:9px 14px;border:0;border-radius:10px;background:var(--brand);color:#fff;font-weight:700;font-size:12.5px;cursor:pointer;font-family:inherit}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:10px;margin-bottom:12px}
+  .stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;text-align:center;box-shadow:var(--sh)}
+  .stat b{font-size:23px;display:block}
+  .stat span{font-size:10.5px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:15px 16px;margin-bottom:12px}
+  .card h3{margin:0 0 10px;font-size:14.5px;color:var(--brand)}
+  .row{display:flex;align-items:center;gap:9px;margin-bottom:7px}
+  .row .lb{width:130px;font-size:12px;font-weight:700;flex:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .row .track{flex:1;height:20px;background:#f3eef1;border-radius:6px;overflow:hidden;display:flex}
+  .row .seg{height:100%;display:flex;align-items:center;justify-content:flex-end;padding-right:5px;font-size:10px;font-weight:800;color:#fff;min-width:0}
+  .row .n{width:64px;font-size:11.5px;color:var(--muted);text-align:right;flex:none}
+  .grid2{display:grid;grid-template-columns:1fr;gap:12px}
+  @media(min-width:860px){.grid2{grid-template-columns:1fr 1fr}}
+  .empty{text-align:center;color:var(--muted);padding:30px 14px;font-size:13.5px}
+  .note{font-size:11.5px;color:var(--muted);margin-top:8px}
+  .trend{display:flex;align-items:flex-end;gap:6px;height:130px;padding-top:6px}
+  .tcol{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:2px;height:100%}
+  .tbarP{width:100%;background:#16a07c;border-radius:4px 4px 0 0;min-height:2px}
+  .tbarF{width:100%;background:#e2502a;border-radius:4px 4px 0 0;min-height:0}
+  .tlb{font-size:9.5px;color:var(--muted);font-weight:700;white-space:nowrap}
+</style>
+</head>
+<body>
+
+<header class="appbar">
+  <a href="../">←</a>
+  <div>
+    <h1>📊 Thống kê chất lượng</h1>
+    <div class="sub">Dashboard từ Nhật ký QC + NCR — dữ liệu máy này</div>
+  </div>
+  <div class="sp"></div>
+</header>
+
+<main class="main">
+  <div class="bar">
+    <select id="fp"><option value="">Mọi dự án</option></select>
+    <select id="fd">
+      <option value="0">Toàn bộ thời gian</option>
+      <option value="7">7 ngày qua</option>
+      <option value="30" selected>30 ngày qua</option>
+      <option value="90">90 ngày qua</option>
+    </select>
+    <span style="flex:1"></span>
+    <button class="btn" id="bPrint">🖨 In báo cáo</button>
+    <a class="btn" style="text-decoration:none" href="../nhatky/">📒 Nhật ký</a>
+  </div>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="grid2">
+    <div class="card"><h3>Tỉ lệ KHÔNG ĐẠT theo module</h3><div id="byModule"></div></div>
+    <div class="card"><h3>Nguyên nhân gốc (Ishikawa 5M+1E) — từ NCR</h3><div id="byCause"></div>
+      <div class="note">Ghi nhận khi bấm "Tạo NCR nháp" trong Lượng dư & Sai hỏng (có gắn nguyên nhân gốc của lỗi).</div></div>
+  </div>
+
+  <div class="card"><h3>Xu hướng 8 tuần gần nhất (xanh = đạt · đỏ = không đạt)</h3><div class="trend" id="trend"></div></div>
+
+  <div class="grid2">
+    <div class="card"><h3>Top hạng mục KHÔNG ĐẠT nhiều nhất</h3><div id="topFail"></div></div>
+    <div class="card"><h3>Theo dự án / cấu kiện</h3><div id="byProj"></div></div>
+  </div>
+</main>
+
+<script src="../qclog.js"></script>
+<script src="../report.js"></script>
+<script>
+let ALL = [];
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const CAUSE_VI = { man:'👷 Con người', machine:'⚙️ Máy móc', material:'📦 Vật liệu', method:'📋 Phương pháp', measurement:'📏 Đo lường', env:'🌦️ Môi trường' };
+
+function filtered() {
+  const p = document.getElementById('fp').value;
+  const d = +document.getElementById('fd').value;
+  const since = d ? Date.now() - d * 864e5 : 0;
+  return ALL.filter(e => (!p || e.project === p) && e.ts >= since);
+}
+
+function barRows(el, pairs, color, totalMode) {
+  /* pairs: [label, failN, totalN] — vẽ thanh tỉ lệ */
+  const max = Math.max(...pairs.map(p => totalMode ? p[2] : p[1]), 1);
+  el.innerHTML = pairs.length ? pairs.map(p => {
+    const pct = p[2] ? Math.round(p[1] / p[2] * 100) : 0;
+    const w = Math.max(3, Math.round((totalMode ? p[2] : p[1]) / max * 100));
+    return '<div class="row"><div class="lb" title="' + esc(p[0]) + '">' + esc(p[0]) + '</div>' +
+      '<div class="track"><div class="seg" style="width:' + w + '%;background:' + color + '">' + (totalMode ? p[2] : p[1]) + '</div></div>' +
+      '<div class="n">' + p[1] + '/' + p[2] + ' · ' + pct + '%</div></div>';
+  }).join('') : '<div class="empty">Chưa có dữ liệu.</div>';
+}
+
+function render() {
+  const rows = filtered();
+  const nF = rows.filter(e => e.result === 'FAIL').length;
+  const nNcr = rows.filter(e => e.module === 'NCR' || e.isNcr).length;
+  const projects = [...new Set(ALL.map(e => e.project).filter(Boolean))].sort();
+
+  const fp = document.getElementById('fp'); const cur = fp.value;
+  fp.innerHTML = '<option value="">Mọi dự án</option>' + projects.map(p => '<option ' + (p === cur ? 'selected' : '') + '>' + esc(p) + '</option>').join('');
+
+  document.getElementById('stats').innerHTML =
+    '<div class="stat"><b>' + rows.length + '</b><span>Lượt kiểm</span></div>' +
+    '<div class="stat"><b style="color:var(--pass)">' + (rows.length - nF) + '</b><span>Đạt</span></div>' +
+    '<div class="stat"><b style="color:var(--fail)">' + nF + '</b><span>Không đạt</span></div>' +
+    '<div class="stat"><b>' + (rows.length ? Math.round(nF / rows.length * 100) : 0) + '%</b><span>Tỉ lệ lỗi</span></div>' +
+    '<div class="stat"><b style="color:var(--brand)">' + nNcr + '</b><span>NCR</span></div>';
+
+  /* theo module */
+  const mods = {};
+  rows.forEach(e => { const k = e.module || '?'; mods[k] = mods[k] || [0, 0]; mods[k][1]++; if (e.result === 'FAIL') mods[k][0]++; });
+  barRows(document.getElementById('byModule'),
+    Object.entries(mods).map(([k, v]) => [k, v[0], v[1]]).sort((a, b) => b[1] - a[1]), '#e2502a');
+
+  /* Ishikawa */
+  const causes = {};
+  rows.forEach(e => { if (e.cause) { causes[e.cause] = (causes[e.cause] || 0) + 1; } });
+  const cPairs = Object.entries(causes).map(([k, v]) => [CAUSE_VI[k] || k, v, v]).sort((a, b) => b[1] - a[1]);
+  barRows(document.getElementById('byCause'), cPairs, '#9f1239', true);
+
+  /* xu hướng 8 tuần */
+  const wk = 7 * 864e5, now = Date.now();
+  const cols = [];
+  for (let i = 7; i >= 0; i--) {
+    const from = now - (i + 1) * wk, to = now - i * wk;
+    const inWk = rows.filter(e => e.ts > from && e.ts <= to);
+    const f = inWk.filter(e => e.result === 'FAIL').length;
+    cols.push({ p: inWk.length - f, f, lb: new Date(to).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' }) });
+  }
+  const maxW = Math.max(...cols.map(c => c.p + c.f), 1);
+  document.getElementById('trend').innerHTML = cols.map(c =>
+    '<div class="tcol">' +
+    '<div class="tbarF" style="height:' + Math.round(c.f / maxW * 100) + '%" title="Không đạt: ' + c.f + '"></div>' +
+    '<div class="tbarP" style="height:' + Math.round(c.p / maxW * 100) + '%" title="Đạt: ' + c.p + '"></div>' +
+    '<div class="tlb">' + c.lb + '</div></div>').join('');
+
+  /* top hạng mục FAIL */
+  const items = {};
+  rows.filter(e => e.result === 'FAIL').forEach(e => { const k = (e.item || '?').slice(0, 60); items[k] = (items[k] || 0) + 1; });
+  const tPairs = Object.entries(items).sort((a, b) => b[1] - a[1]).slice(0, 7).map(([k, v]) => [k, v, v]);
+  barRows(document.getElementById('topFail'), tPairs, '#e2502a', true);
+
+  /* theo dự án */
+  const pj = {};
+  rows.forEach(e => { const k = e.project || '(chưa ghi)'; pj[k] = pj[k] || [0, 0]; pj[k][1]++; if (e.result === 'FAIL') pj[k][0]++; });
+  barRows(document.getElementById('byProj'),
+    Object.entries(pj).map(([k, v]) => [k, v[0], v[1]]).sort((a, b) => b[2] - a[2]).slice(0, 8), '#be185d');
+}
+
+['fp', 'fd'].forEach(id => document.getElementById(id).addEventListener('input', render));
+
+document.getElementById('bPrint').onclick = () => {
+  const rows = filtered();
+  const nF = rows.filter(e => e.result === 'FAIL').length;
+  const mods = {};
+  rows.forEach(e => { const k = e.module || '?'; mods[k] = mods[k] || [0, 0]; mods[k][1]++; if (e.result === 'FAIL') mods[k][0]++; });
+  if (window.QCReport) QCReport.print({
+    module: 'Thống kê chất lượng', color: '#9f1239',
+    title: 'BÁO CÁO THỐNG KÊ CHẤT LƯỢNG' + (document.getElementById('fp').value ? ' — ' + document.getElementById('fp').value : ''),
+    groups: [
+      { name: 'TỔNG QUAN', items: [
+        { ok: true, text: 'Tổng lượt kiểm tra: ' + rows.length + ' · Đạt: ' + (rows.length - nF) + ' · Không đạt: ' + nF + ' · Tỉ lệ lỗi: ' + (rows.length ? Math.round(nF / rows.length * 100) : 0) + '%', ref: 'Kỳ: ' + (document.getElementById('fd').selectedOptions[0].textContent) }
+      ]},
+      { name: 'KHÔNG ĐẠT THEO MODULE', items: Object.entries(mods).map(([k, v]) => ({ ok: v[0] === 0, text: k + ': ' + v[0] + '/' + v[1] + ' lượt không đạt (' + (v[1] ? Math.round(v[0] / v[1] * 100) : 0) + '%)', ref: '' })) }
+    ]
+  });
+};
+
+QCLog.all().then(r => { ALL = r; render(); }).catch(() => { document.getElementById('stats').innerHTML = '<div class="empty">Không đọc được dữ liệu.</div>'; });
+</script>
+</body>
+</html>

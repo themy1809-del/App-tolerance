@@ -1,4 +1,4 @@
-const CACHE = "luongdu-cache-v12";
+const CACHE = "luongdu-cache-v13";
 const ASSETS = ["./", "index.html", "data.js", "sketches.js", "../photo-tool.js", "../report.js", "../itp.js", "../itp-data.js", "manifest.webmanifest",
   "../icons/icon-192.png", "../icons/icon-512.png", "../icons/maskable-512.png"];
 self.addEventListener("install", e => {

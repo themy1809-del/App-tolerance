@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#92400e">
+<title>QC Fit-up — Gá lắp trước hàn</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/icon-180.png">
+<style>
+  :root{
+    --bg:#f6f4f0; --ink:#1b2430; --muted:#5f6b7a; --line:#e7e0d6;
+    --brand:#92400e; --brand2:#b45309; --soft:#fdf0e0;
+    --pass:#0f6e56; --pass-soft:#e3f6ee; --fail:#aa4322; --fail-soft:#fbeae2;
+    --warn:#8a5a00; --warn-soft:#fdf3e2;
+    --r:14px; --sh:0 1px 2px rgba(50,35,15,.07),0 6px 20px rgba(50,35,15,.06);
+    --navh:62px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.5}
+  button{font-family:inherit;cursor:pointer;border:0;background:none}
+  input,select{font-family:inherit}
+  .appbar{position:sticky;top:0;z-index:40;background:linear-gradient(180deg,#92400e,#713209);color:#fff;
+    padding:max(10px,env(safe-area-inset-top)) 14px 10px;display:flex;align-items:center;gap:10px}
+  .appbar .back{color:#fff;font-size:15px;font-weight:700;padding:6px 8px 6px 0}
+  .appbar h1{font-size:16px;margin:0;font-weight:700;line-height:1.15}
+  .appbar .sub{font-size:11px;opacity:.8}
+  .appbar .sp{flex:1}
+  .lang{display:flex;background:rgba(255,255,255,.16);border-radius:8px;overflow:hidden}
+  .lang button{color:#fff;padding:6px 11px;font-size:13px;font-weight:700;opacity:.65}
+  .lang button.on{background:#fff;color:var(--brand);opacity:1}
+  .nav{position:fixed;bottom:0;left:0;right:0;z-index:40;background:#fff;border-top:1px solid var(--line);
+    display:flex;justify-content:space-around;padding:6px 4px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(0,0,0,.05)}
+  .nav button{display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--muted);font-size:11px;font-weight:600;padding:4px 8px;border-radius:10px;flex:1}
+  .nav button .ic{font-size:20px;line-height:1}
+  .nav button.on{color:var(--brand)}
+  @media(min-width:980px){
+    .nav{position:sticky;top:58px;bottom:auto;z-index:39;max-width:1180px;margin:10px auto 0;border:1px solid var(--line);border-radius:12px;justify-content:flex-start;gap:4px;padding:6px;box-shadow:var(--sh)}
+    .nav button{flex:none;flex-direction:row;gap:7px;font-size:14px;padding:9px 16px}
+    .nav button .ic{font-size:17px}
+    .nav button.on{background:var(--soft)}
+  }
+  .main{max-width:1180px;margin:0 auto;padding:12px 14px calc(var(--navh) + 24px)}
+  @media(min-width:980px){.main{padding-bottom:28px}}
+  .seccard{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:14px;padding:16px;transition:box-shadow .15s ease}
+  .seccard:hover{box-shadow:0 2px 4px rgba(50,35,15,.08),0 10px 28px rgba(50,35,15,.1)}
+  .seccard h3{margin:0 0 8px;font-size:16px;color:var(--brand)}
+  .seccard .note{font-size:12.5px;color:var(--muted);margin:8px 0 0}
+  .evidence{background:#fffdf8;border:1px dashed var(--brand2);border-radius:12px;padding:12px 14px;margin-top:12px}
+  .evidence .h{font-size:11px;font-weight:800;letter-spacing:.5px;color:var(--brand);text-transform:uppercase}
+  .quote{font-style:italic;color:#33404e;border-left:3px solid var(--soft);padding-left:10px;margin-top:8px;font-size:12.5px}
+  .warn{background:var(--warn-soft);border:1px solid #f0d9a8;border-left:4px solid var(--warn);border-radius:10px;padding:10px 12px;font-size:12.5px;color:#6b4700;margin-top:10px}
+  .inrow{display:flex;gap:10px;align-items:center;margin:8px 0}
+  .inrow .lab{font-size:12px;color:var(--muted);flex:1}
+  .inrow input{width:120px;padding:9px 10px;border:1px solid var(--line);border-radius:10px;font-size:16px;text-align:right;background:#fff}
+  .res{background:#2b1c0a;color:#fff;border-radius:12px;padding:14px;margin-top:12px}
+  .res .lbl{font-size:11px;text-transform:uppercase;letter-spacing:.5px;opacity:.7}
+  .res .big{font-size:15px;font-weight:700;margin-top:4px;line-height:1.55}
+  .verdict{border-radius:12px;padding:14px;text-align:center;margin-top:10px;font-weight:800;font-size:19px}
+  .verdict.pass{background:var(--pass-soft);color:var(--pass);border:1px solid #b7e0d2}
+  .verdict.fail{background:var(--fail-soft);color:var(--fail);border:1px solid #f0c4b3}
+  .h2x{font-size:18px;font-weight:800;color:var(--brand);margin:14px 2px 10px;display:flex;align-items:center;gap:10px}
+  .h2x::after{content:"";flex:1;height:1px;background:var(--line)}
+  .skbox{background:#fffdf8;border:1px solid var(--line);border-radius:10px;padding:8px;max-width:430px;margin:10px auto}
+  .measure{font-size:13px;background:#f4f9ff;border:1px solid #cfe3f5;border-left:4px solid #185fa5;border-radius:10px;padding:9px 12px;margin-top:10px;color:#0c3a63}
+  .ckphase{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:14px;overflow:hidden}
+  .ckphase .ph{display:flex;align-items:center;gap:10px;padding:13px 16px;background:var(--soft);font-weight:800;color:var(--brand);font-size:15px}
+  .ckphase .ph .pct{margin-left:auto;font-size:12.5px;font-weight:700;color:var(--muted)}
+  .ckitem{display:flex;gap:11px;padding:12px 16px;border-top:1px solid var(--line);cursor:pointer;align-items:flex-start}
+  .ckitem:hover{background:#faf7f2}
+  .ckitem .box{width:22px;height:22px;border:2px solid #cfc2ae;border-radius:6px;flex:none;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;margin-top:1px}
+  .ckitem.done .box{background:var(--pass);border-color:var(--pass)}
+  .ckitem .tx{font-size:13.5px}
+  .ckitem.done .tx{color:var(--muted);text-decoration:line-through}
+  .ckitem .rf{display:block;font-size:11px;color:var(--brand2);font-weight:700;margin-top:3px}
+  .ckbar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+  .btn{padding:10px 16px;border-radius:10px;background:var(--brand);color:#fff;font-weight:700;font-size:13.5px}
+  .btn.alt{background:#efe7da;color:#6b4a1c}
+  .btn:active{transform:scale(.98)}
+  .tab{display:none}
+  .tab.on{display:block;animation:fadein .25s ease}
+  @keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<header class="appbar">
+  <a class="back" href="../">←</a>
+  <div>
+    <h1>QC Fit-up — Gá lắp trước hàn</h1>
+    <div class="sub">AWS D1.1:2020 7.21 + Fig 7.3 (đã xác minh) · ISO 5817 · ISO 9692</div>
+  </div>
+  <div class="sp"></div>
+  <div class="lang">
+    <button id="lvVi" class="on">VI</button>
+    <button id="lvEn">EN</button>
+  </div>
+</header>
+
+<nav class="nav">
+  <button data-tab="kt" class="on"><span class="ic">📐</span><span data-vi="Kiểm tra" data-en="Inspect">Kiểm tra</span></button>
+  <button data-tab="fix"><span class="ic">🔧</span><span data-vi="Xử lý lỗi" data-en="Fixes">Xử lý lỗi</span></button>
+  <button data-tab="photo"><span class="ic">📷</span><span data-vi="Đo ảnh" data-en="Photo">Đo ảnh</span></button>
+  <button data-tab="ck"><span class="ic">☑️</span><span data-vi="Checklist" data-en="Checklist">Checklist</span></button>
+</nav>
+
+<main class="main">
+  <section class="tab on" id="tab-kt"></section>
+  <section class="tab" id="tab-fix"></section>
+  <section class="tab" id="tab-photo">
+    <div class="h2x">📷 Đo fit-up trên ảnh</div>
+    <div class="seccard" style="padding:12px 16px;font-size:13px">Chụp vuông góc, đặt thước cùng mặt phẳng → hiệu chuẩn → đo khe hở/lệch mép → lưu hồ sơ kèm số mối hàn.</div>
+    <div class="seccard" id="photoMount"></div>
+  </section>
+  <section class="tab" id="tab-ck"></section>
+</main>
+
+<script src="data.js"></script>
+<script src="../report.js"></script>
+<script src="../qclog.js"></script>
+<script src="../photo-tool.js"></script>
+<script>
+const D = window.FU_DATA;
+let LANG = localStorage.getItem('fu_lang') || 'vi';
+const T = o => (o && typeof o === 'object') ? (o[LANG] || o.vi || '') : (o || '');
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+document.querySelectorAll('.nav button').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.nav button').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+    document.getElementById('tab-' + b.dataset.tab).classList.add('on');
+    window.scrollTo(0, 0);
+  });
+});
+function setLang(l) {
+  LANG = l; localStorage.setItem('fu_lang', l);
+  document.getElementById('lvVi').classList.toggle('on', l === 'vi');
+  document.getElementById('lvEn').classList.toggle('on', l === 'en');
+  document.querySelectorAll('[data-vi]').forEach(e => e.textContent = e.dataset[l]);
+  renderAll();
+}
+document.getElementById('lvVi').onclick = () => setLang('vi');
+document.getElementById('lvEn').onclick = () => setLang('en');
+
+/* ===== SVG cách đo ===== */
+const IK='#1b2430', DM='#aa4322', GN='#0f6e56', ST='#cdd6df';
+const fig = inner => `<svg viewBox="0 0 320 135" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block"><defs><marker id="fah" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="${DM}"/></marker></defs>${inner}</svg>`;
+const lb = (x,y,t,c,a) => `<text x="${x}" y="${y}" font-size="11" font-weight="700" fill="${c||DM}" text-anchor="${a||'middle'}" font-family="Segoe UI,Arial">${t}</text>`;
+const SK = {
+  fitgap: () => fig(`
+    <rect x="30" y="60" width="115" height="26" fill="${ST}" stroke="${IK}" stroke-width="1.5"/>
+    <rect x="175" y="60" width="115" height="26" fill="${ST}" stroke="${IK}" stroke-width="1.5"/>
+    <path d="M150,52 L168,52 L160,94 L154,94 Z" fill="#fff" stroke="${GN}" stroke-width="2"/>
+    ${lb(160,44,'taper gauge',GN)}
+    <line x1="145" y1="100" x2="175" y2="100" stroke="${DM}" stroke-width="1.3" marker-end="url(#fah)"/>
+    <line x1="175" y1="100" x2="145" y2="100" stroke="${DM}" stroke-width="1.3" marker-end="url(#fah)"/>
+    ${lb(160,118,'khe hở g — đo nhiều điểm dọc mối',DM)}`),
+  hilo: () => fig(`
+    <rect x="30" y="58" width="115" height="26" fill="${ST}" stroke="${IK}" stroke-width="1.5"/>
+    <rect x="175" y="68" width="115" height="26" fill="${ST}" stroke="${IK}" stroke-width="1.5"/>
+    <line x1="40" y1="58" x2="290" y2="58" stroke="${IK}" stroke-width="1.4"/>
+    ${lb(252,50,'thước thẳng','#5f6b7a')}
+    <line x1="200" y1="58" x2="200" y2="68" stroke="${DM}" stroke-width="1.6" marker-end="url(#fah)"/>
+    ${lb(216,66,'h (hi-lo)',DM,'start')}
+    ${lb(160,120,'đo bậc lệch bằng thước lá dưới thước thẳng',GN)}`),
+  bevel: () => fig(`
+    <path d="M30,55 L120,55 L145,95 L30,95 Z" fill="${ST}" stroke="${IK}" stroke-width="1.5"/>
+    <path d="M290,55 L200,55 L175,95 L290,95 Z" fill="${ST}" stroke="${IK}" stroke-width="1.5"/>
+    <path d="M120,55 a40,40 0 0 1 14,8" fill="none" stroke="${GN}" stroke-width="1.6"/>
+    ${lb(112,42,'α/2 — dưỡng góc',GN)}
+    <line x1="145" y1="95" x2="145" y2="83" stroke="${DM}" stroke-width="1.6"/>
+    ${lb(122,110,'root face f',DM)}
+    <line x1="148" y1="100" x2="172" y2="100" stroke="${DM}" stroke-width="1.3" marker-end="url(#fah)"/>
+    <line x1="172" y1="100" x2="148" y2="100" stroke="${DM}" stroke-width="1.3" marker-end="url(#fah)"/>
+    ${lb(160,120,'khe hở gốc',DM)}`)
+};
+
+/* ===== TAB KIỂM TRA ===== */
+function renderKT() {
+  const v = LANG === 'vi';
+  let h = `<div class="h2x">📐 ${v?'5 thông số fit-up + đánh giá Đạt/Không đạt':'Fit-up parameters + PASS/FAIL'}</div>
+    <div class="seccard" style="font-size:13.5px">${esc(T(D.intro))}</div>`;
+  h += D.RULES.map((r, i) => `
+    <div class="seccard">
+      <h3>${esc(T(r.title))}</h3>
+      <div style="font-size:13.5px">${esc(T(r.criteria))}</div>
+      <div class="skbox">${SK[r.sk] ? SK[r.sk]() : ''}</div>
+      <div class="measure">📏 <b>${v?'Cách đo':'How to measure'}:</b> ${esc(T(r.measure))}</div>
+      <div style="margin-top:10px" id="calc_${i}">
+        ${r.calc.inputs.map(inp => `<div class="inrow"><span class="lab">${esc(T(inp.label))}</span><input type="number" step="any" data-k="${inp.k}" value="${inp.def}"></div>`).join('')}
+        <div class="cout"></div>
+      </div>
+      <div class="evidence"><div class="h">${v?'Dẫn chứng (nguyên văn)':'Evidence'}</div><div class="quote">"${esc(r.quote)}"</div></div>
+    </div>`).join('');
+  document.getElementById('tab-kt').innerHTML = h;
+
+  D.RULES.forEach((r, i) => {
+    const box = document.getElementById('calc_' + i);
+    const run = () => {
+      const vals = {};
+      box.querySelectorAll('input').forEach(inp => vals[inp.dataset.k] = parseFloat(inp.value) || 0);
+      const out = r.calc.evaluate(vals);
+      box.querySelector('.cout').innerHTML =
+        `<div class="res"><div class="lbl">${LANG==='vi'?'Giới hạn':'Limit'}</div><div class="big">${esc(out.limitText)}<br><span style="font-size:12.5px;opacity:.8">${esc(out.detail||'')}</span></div></div>
+         <div class="verdict ${out.pass?'pass':'fail'}">${out.pass?(LANG==='vi'?'✓ ĐẠT':'✓ PASS'):(LANG==='vi'?'✗ KHÔNG ĐẠT':'✗ FAIL')}</div>` +
+        (window.QCLog ? QCLog.saveButton('QC Fit-up', T(r.title), out.pass, (out.detail||'') + ' | ' + out.limitText) : '');
+    };
+    box.querySelectorAll('input').forEach(inp => inp.addEventListener('input', run));
+    run();
+  });
+}
+
+/* ===== TAB XỬ LÝ LỖI ===== */
+function renderFix() {
+  const v = LANG === 'vi';
+  document.getElementById('tab-fix').innerHTML = `<div class="h2x">🔧 ${v?'Lỗi fit-up thường gặp & cách xử lý đúng':'Common fit-up faults & correct fixes'}</div>` +
+    D.FIXES.map(f => `<div class="seccard"><h3>${esc(T(f.p))}</h3>
+      <div style="font-size:13.5px">${esc(T(f.f))}</div>
+      <div class="note">📎 ${esc(f.ref)}</div></div>`).join('') +
+    `<div class="warn">⚠ ${v?'Mọi sửa chữa vượt dung sai Fig 7.3 (đắp khe hở lớn, sửa lệch mép nặng...) phải theo quy trình được duyệt và ghi nhận — không "sửa chui" rồi hàn đè.':'Repairs beyond Fig 7.3 require approved procedure and records.'}</div>`;
+}
+
+/* ===== CHECKLIST ===== */
+const CK_KEY = 'fu_ck_v1';
+function ckState() { try { return JSON.parse(localStorage.getItem(CK_KEY)) || {}; } catch (e) { return {}; } }
+function renderCK() {
+  const v = LANG === 'vi';
+  const st = ckState();
+  let h = `<div class="ckbar">
+    <button class="btn alt" id="ckReset">↺ ${v?'Làm mới':'Reset'}</button>
+    <button class="btn" id="ckCopy">📋 ${v?'Copy báo cáo':'Copy report'}</button>
+    <button class="btn" id="ckPrint">🖨 ${v?'In biên bản fit-up':'Print fit-up report'}</button></div>`;
+  D.CHECKLIST.forEach((ph, pi) => {
+    const done = ph.items.filter((_, ii) => st[pi + '_' + ii]).length;
+    h += `<div class="ckphase"><div class="ph">${ph.icon} ${esc(T(ph.phase))}<span class="pct">${done}/${ph.items.length}</span></div>
+      ${ph.items.map((it, ii) => `
+        <div class="ckitem ${st[pi+'_'+ii]?'done':''}" data-k="${pi}_${ii}">
+          <div class="box">${st[pi+'_'+ii]?'✓':''}</div>
+          <div class="tx">${esc(T(it.t))}<span class="rf">📎 ${esc(T(it.ref))}</span></div>
+        </div>`).join('')}</div>`;
+  });
+  const el = document.getElementById('tab-ck');
+  el.innerHTML = h;
+  el.querySelectorAll('.ckitem').forEach(c => c.onclick = () => {
+    const s = ckState(); s[c.dataset.k] = !s[c.dataset.k];
+    localStorage.setItem(CK_KEY, JSON.stringify(s)); renderCK();
+  });
+  el.querySelector('#ckReset').onclick = () => { localStorage.removeItem(CK_KEY); renderCK(); };
+  el.querySelector('#ckCopy').onclick = () => {
+    const s = ckState();
+    let txt = (v?'BIÊN BẢN KIỂM TRA FIT-UP':'FIT-UP INSPECTION REPORT') + ' — ' + new Date().toLocaleString() + '\n';
+    D.CHECKLIST.forEach((ph, pi) => {
+      txt += '\n## ' + T(ph.phase) + '\n';
+      ph.items.forEach((it, ii) => txt += (s[pi+'_'+ii] ? '[x] ' : '[ ] ') + T(it.t) + ' (' + T(it.ref) + ')\n');
+    });
+    (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(() => alert(v?'Đã copy!':'Copied!')).catch(()=>prompt('Copy:',txt));
+  };
+  el.querySelector('#ckPrint').onclick = () => {
+    const s = ckState();
+    if (window.QCReport) QCReport.print({
+      module: 'QC Fit-up', color: '#92400e',
+      title: v ? 'BIÊN BẢN KIỂM TRA FIT-UP (GÁ LẮP TRƯỚC HÀN)' : 'FIT-UP INSPECTION REPORT',
+      groups: D.CHECKLIST.map((ph, pi) => ({
+        name: T(ph.phase),
+        items: ph.items.map((it, ii) => ({ ok: !!s[pi+'_'+ii], text: T(it.t), ref: T(it.ref) }))
+      }))
+    });
+  };
+}
+
+function renderAll() { renderKT(); renderFix(); renderCK(); }
+setLang(LANG);
+if (window.PhotoTool) PhotoTool.mount(document.getElementById('photoMount'), { key: 'fu_photos_v1' });
+
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+</script>
+</body>
+</html>

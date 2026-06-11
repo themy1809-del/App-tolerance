@@ -562,5 +562,115 @@
         "ISO 2553 uses dashed identification line for other side. AWS: below line = arrow side, above = other side. Mixing conventions causes wrong-side welds!") }
   ];
 
-  window.HAN_DATA = { version: "1.0", STDS, EXC_MAP, WELD_VT, NDT, CHECKLIST, SYMBOLS };
+  /* (FIT-UP đã tách thành module riêng /fitup/ theo yêu cầu) */
+  const FITUP_MOVED = {
+    intro: B("Fit-up đạt thì mối hàn mới có cơ hội đạt. Kiểm TRƯỚC khi hàn — sau khi hàn xong không sửa được gốc nữa. Giá trị chuẩn lấy theo WPS/bản vẽ; dung sai cho phép dưới đây theo AWS D1.1:2020 (đã đối chiếu PDF gốc).",
+      "Good fit-up enables good welds. Inspect BEFORE welding. Design values per WPS/drawing; tolerances per AWS D1.1:2020 (verified)."),
+    rules: [
+      {
+        id: "fu_fillet", sk: "fitgap",
+        title: B("Khe hở chân — mối hàn GÓC (7.21.1)", "Fillet weld assembly root opening (7.21.1)"),
+        criteria: B("Các bản ghép áp sát hết mức. Khe hở ≤ 5mm. Riêng thép dày ≥ 75mm không ép khít được: cho phép tới 8mm NẾU có backing phù hợp (flux, băng thủy tinh, bột sắt hoặc lớp hàn lót hydro thấp). QUAN TRỌNG: khe hở > 2mm → cạnh fillet phải TĂNG THÊM đúng bằng khe hở (hoặc chứng minh đủ throat).",
+          "Parts in close contact. Gap ≤ 5mm; ≥75mm thick parts up to 8mm WITH suitable backing. Gap > 2mm → fillet leg increased by the gap amount."),
+        quote: "The root opening shall not exceed 3/16 in [5 mm]... a maximum root opening of 5/16 in [8 mm] may be used, provided suitable backing is used. If the separation is greater than 1/16 in [2 mm], the legs of the fillet weld shall be increased by the amount of the root opening. — AWS D1.1:2020, 7.21.1",
+        calc: {
+          inputs: [
+            { k: "g", label: B("Khe hở đo được (mm)", "Measured gap (mm)"), def: 1.5 },
+            { k: "z", label: B("Cạnh fillet thiết kế z (mm)", "Design leg z (mm)"), def: 6 },
+            { k: "thick", label: B("Thép dày ≥75mm + có backing? (1/0)", "≥75mm + backing? (1/0)"), def: 0 }
+          ],
+          evaluate(v) {
+            const lim = v.thick ? 8 : 5;
+            const legReq = v.g > 2 ? v.z + v.g : v.z;
+            return {
+              limitText: `Khe hở ≤ ${lim} mm` + (v.g > 2 ? ` · cạnh fillet yêu cầu = ${v.z} + ${num(v.g)} = ${num(legReq)} mm` : ""),
+              detail: `Đo ${v.g} mm` + (v.g > 2 ? ` (>2mm → phải tăng cạnh)` : ""),
+              pass: v.g <= lim
+            };
+          }
+        }
+      },
+      {
+        id: "fu_align", sk: "hilo",
+        title: B("Lệch mép mối GIÁP MỐI — hi-lo (7.21.3)", "Butt joint alignment / hi-lo (7.21.3)"),
+        criteria: B("Lệch tâm so với vị trí lý thuyết ≤ 10% chiều dày bản MỎNG hơn, tối đa 3mm — lấy giá trị NHỎ hơn. Khi nắn chỉnh: độ nghiêng kéo về không quá 12mm trên 300mm (1:25). Đo theo đường tâm bản trừ khi bản vẽ chỉ khác.",
+          "Offset ≤ 10% of thinner part or 3mm, whichever is smaller. Correction slope ≤ 12mm in 300mm."),
+        quote: "...the offset from the theoretical alignment shall not exceed 10% of the thickness of the thinner part joined, or 1/8 in [3 mm], whichever is smaller... the parts shall not be drawn in to a greater slope than 1/2 in [12 mm] in 12 in [300 mm]. — AWS D1.1:2020, 7.21.3",
+        calc: {
+          inputs: [
+            { k: "t", label: B("Chiều dày bản mỏng hơn (mm)", "Thinner part t (mm)"), def: 12 },
+            { k: "h", label: B("Lệch mép đo được (mm)", "Measured offset (mm)"), def: 1 }
+          ],
+          evaluate(v) {
+            const lim = Math.min(0.1 * v.t, 3);
+            return { limitText: `Giới hạn = min(10%×${v.t}; 3) = ${num(lim)} mm`, detail: `Đo ${v.h} mm`, pass: v.h <= lim };
+          }
+        }
+      },
+      {
+        id: "fu_groove", sk: "bevel",
+        title: B("Kích thước rãnh hàn so với bản vẽ (7.21.4.1, Fig 7.3)", "Groove dimensions vs detail (Fig 7.3)"),
+        criteria: B("Sai lệch cho phép so với bản vẽ (as fit-up): • Root face: ±2mm • Khe hở gốc KHÔNG backing: ±2mm • Khe hở gốc CÓ backing: +6mm/−2mm • Góc rãnh: +10°/−5°. Vượt các mức này phải trình Engineer duyệt hoặc sửa.",
+          "Permitted deviations: root face ±2mm; root opening ±2mm (no backing) / +6−2mm (with backing); groove angle +10°/−5°."),
+        quote: "(1) Root face of joint ±1/16 in [2 mm]; (2) Root opening without backing ±1/16 in [2 mm], with backing +1/4 in [6 mm] −1/16 in [2 mm]; (3) Groove angle of joint +10° −5°. — AWS D1.1:2020, Figure 7.3",
+        calc: {
+          inputs: [
+            { k: "gd", label: B("Khe hở thiết kế (mm)", "Design root opening (mm)"), def: 3 },
+            { k: "gm", label: B("Khe hở đo (mm)", "Measured opening (mm)"), def: 4 },
+            { k: "bk", label: B("Có backing? (1/0)", "Backing? (1/0)"), def: 0 },
+            { k: "ad", label: B("Góc rãnh thiết kế (°)", "Design angle (°)"), def: 60 },
+            { k: "am", label: B("Góc rãnh đo (°)", "Measured angle (°)"), def: 62 },
+            { k: "fd", label: B("Root face thiết kế (mm)", "Design root face (mm)"), def: 2 },
+            { k: "fm", label: B("Root face đo (mm)", "Measured root face (mm)"), def: 2.5 }
+          ],
+          evaluate(v) {
+            const dg = v.gm - v.gd, da = v.am - v.ad, df = v.fm - v.fd;
+            const gOk = v.bk ? (dg <= 6 && dg >= -2) : (Math.abs(dg) <= 2);
+            const aOk = da <= 10 && da >= -5;
+            const fOk = Math.abs(df) <= 2;
+            return {
+              limitText: `Khe hở: ${v.bk ? "+6/−2" : "±2"}mm · Góc: +10/−5° · Root face: ±2mm`,
+              detail: `Δkhe hở ${num(dg)}mm ${gOk ? "✓" : "✗"} · Δgóc ${num(da)}° ${aOk ? "✓" : "✗"} · Δroot face ${num(df)}mm ${fOk ? "✓" : "✗"}`,
+              pass: gOk && aOk && fOk
+            };
+          }
+        }
+      },
+      {
+        id: "fu_faying", sk: "fitgap",
+        title: B("Khe hở mặt áp (faying surface) — 7.21.1.1", "Faying surface separation (7.21.1.1)"),
+        criteria: B("Khe hở giữa các mặt áp của mối hàn nút/rãnh (plug/slot) và mối giáp mối đặt trên backing: ≤ 2mm. CẤM nhét tấm chêm (filler plates) trừ khi có trên bản vẽ hoặc Engineer duyệt.",
+          "Separation ≤ 2mm for plug/slot welds and butt joints on backing. Filler plates prohibited unless specified/approved."),
+        quote: "The separation between faying surfaces of plug and slot welds, and of butt joints landing on a backing, shall not exceed 1/16 in [2 mm]... The use of filler plates shall be prohibited except as specified on the drawings or as specially approved by the Engineer. — AWS D1.1:2020, 7.21.1.1",
+        calc: {
+          inputs: [{ k: "s", label: B("Khe hở đo (mm)", "Measured separation (mm)"), def: 1 }],
+          evaluate(v) { return { limitText: "≤ 2 mm", detail: `Đo ${v.s} mm`, pass: v.s <= 2 }; }
+        }
+      },
+      {
+        id: "fu_var", sk: "fitgap",
+        title: B("Biến thiên khe hở dọc mối — hàn máy (5.4.1.7)", "Root opening variation — mechanized welding"),
+        criteria: B("Với hàn tự động/cơ giới FCAW, GMAW, SAW: chênh lệch khe hở (max − min) dọc mối hàn ≤ 3mm. Lớn hơn phải sửa cục bộ trước khi hàn.",
+          "For automatic/mechanized FCAW, GMAW, SAW: root opening variation (max − min) ≤ 3mm; correct locally if exceeded."),
+        quote: "...for automatic or mechanized welding using FCAW, GMAW, and SAW processes, the maximum root opening variation (minimum to maximum opening as fit-up) may not exceed 1/8 in [3 mm]. — AWS D1.1:2020, 5.4.1.7",
+        calc: {
+          inputs: [
+            { k: "mx", label: B("Khe hở lớn nhất (mm)", "Max gap (mm)"), def: 4 },
+            { k: "mn", label: B("Khe hở nhỏ nhất (mm)", "Min gap (mm)"), def: 2.5 }
+          ],
+          evaluate(v) { const d = v.mx - v.mn; return { limitText: "Biến thiên ≤ 3 mm", detail: `${v.mx} − ${v.mn} = ${num(d)} mm`, pass: d <= 3 }; }
+        }
+      }
+    ],
+    fixes: [
+      { p: B("Khe hở rãnh quá lớn", "Excess root opening"), f: B("Được ĐẮP SỬA (buttering) về đúng kích thước trước khi hàn nối — chỉ khi khe hở ≤ 2× chiều dày bản mỏng hoặc ≤ 20mm (lấy nhỏ hơn). Lớn hơn nữa: phải có Engineer duyệt. TUYỆT ĐỐI không nhét que hàn/thanh thép vào khe.", "Buttering allowed up to min(2×t, 20mm); beyond → Engineer approval. NEVER insert rods/bars."), ref: "AWS 7.21.4.2/7.21.4.3" },
+      { p: B("Lệch mép quá giới hạn", "Excess misalignment"), f: B("Nắn chỉnh từ từ, độ nghiêng kéo về ≤ 12mm/300mm; không gò nguội quá tay làm biến cứng vùng mép.", "Draw in gradually, slope ≤ 12/300."), ref: "AWS 7.21.3" },
+      { p: B("Góc vát thiếu / root face quá dày", "Insufficient bevel / thick root face"), f: B("Mài/dũi mở thêm đúng góc WPS rồi kiểm lại bằng dưỡng; root face mài xuống giá trị bản vẽ ±2mm.", "Grind/gouge to WPS angle; dress root face to drawing ±2mm."), ref: "AWS Fig 7.3" },
+      { p: B("Tack hàn nứt / quá nhỏ", "Cracked/undersized tacks"), f: B("Mài bỏ tack lỗi, hàn lại bằng thợ có chứng chỉ theo WPS; tack nằm trong mối hàn chính phải đạt chất lượng như mối chính.", "Remove defective tacks; re-tack per WPS by qualified welder."), ref: "AWS 7.18" },
+      { p: B("Gá ép cứng gây ứng suất", "Over-restrained assembly"), f: B("Dùng đồ gá/nêm/bu lông giữ vị trí, chừa lượng dư co rút theo tính toán; trình tự hàn cân đối để tránh nứt do kẹp cứng.", "Use jigs with shrinkage allowance; balanced sequence."), ref: "AWS 7.21.6 + module Lượng dư" }
+    ]
+  };
+
+  void FITUP_MOVED;
+  window.HAN_DATA = { version: "1.1", STDS, EXC_MAP, WELD_VT, NDT, CHECKLIST, SYMBOLS };
 })();

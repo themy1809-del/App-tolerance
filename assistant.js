@@ -204,11 +204,12 @@
 
   function planFitup() {
     let s = [], n = 0;
-    s.push(step(++n, `<b>Lấy chuẩn từ WPS:</b> khe hở chân (root gap), góc vát, root face — fit-up phải nằm trong dải WPS, không phải "ướm vừa là hàn".`));
-    s.push(step(++n, `<b>Đo bằng gì:</b> dưỡng góc vát, thước lá đo khe hở, thước thẳng + thước lá đo lệch mép (misalignment).${sub('Giới hạn lệch mép theo ISO 5817 (5071): mức D ≤0.25t max 5mm · C ≤0.15t max 4 · B ≤0.1t max 3')}`));
-    s.push(step(++n, `<b>Hàn đính (tack):</b> thợ có chứng chỉ, chiều dài/size đủ, không nứt — tack nứt phải mài bỏ trước khi hàn chính.`));
-    s.push(step(++n, `<b>Làm sạch rãnh:</b> 25mm hai bên sạch dầu/gỉ/sơn; kiểm độ ẩm bề mặt.`));
-    s.push(step(++n, `<b>Ghi biên bản fit-up</b> (với mối quan trọng/EXC3-4) rồi mới thả hàn.${sub('☑️ Mục fit-up nằm trong checklist Trước khi hàn: ' + lk('han/', 'QC Hàn → Checklist'))}`));
+    s.push(step(++n, `<b>Lấy chuẩn từ WPS/bản vẽ:</b> khe hở chân, góc vát, root face — fit-up phải nằm trong dải WPS + dung sai AWS Fig 7.3 (khe hở ±2mm, góc +10/−5°, root face ±2mm).${sub('📐 Module riêng đầy đủ: ' + lk('fitup/', 'QC Fit-up'))}`));
+    s.push(step(++n, `<b>Đo 5 thông số bằng calculator:</b> khe hở fillet (≤5mm, >2mm phải tăng cạnh hàn), lệch mép hi-lo (≤ min 10%t; 3mm), kích thước rãnh, mặt áp ≤2mm, biến thiên khe hở hàn máy ≤3mm — mỗi mục có hình cách đo + Đạt/Không đạt.${sub('🧮 ' + lk('fitup/', 'QC Fit-up → tab Kiểm tra'))}`));
+    s.push(step(++n, `<b>Hàn đính (tack):</b> thợ có chứng chỉ, đủ size, không nứt — tack nứt mài bỏ trước khi hàn chính.`));
+    s.push(step(++n, `<b>Làm sạch rãnh:</b> 25mm hai bên sạch dầu/gỉ/sơn/ẩm.`));
+    s.push(step(++n, `<b>Khe hở quá lớn?</b> Đắp sửa (buttering) chỉ khi ≤ min(2×t, 20mm); KHÔNG nhét que/thanh thép — xem cách xử lý đúng từng lỗi.${sub('🔧 ' + lk('fitup/', 'QC Fit-up → Xử lý lỗi'))}`));
+    s.push(step(++n, `<b>Ghi biên bản fit-up</b> (mối quan trọng/EXC3-4) + lưu Nhật ký QC rồi mới thả hàn.${sub('🖨 In biên bản: ' + lk('fitup/', 'QC Fit-up → Checklist'))}`));
     return { title: 'Kiểm tra gá lắp (fit-up) trước khi hàn', body: s.join('') };
   }
 

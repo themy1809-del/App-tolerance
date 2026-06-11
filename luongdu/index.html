@@ -183,6 +183,7 @@ h1{font-size:17px;margin:0;font-weight:800;line-height:1.15}
 <script src="../report.js"></script>
 <script src="../itp.js"></script>
 <script src="../itp-data.js"></script>
+<script src="../qclog.js"></script>
 <script src="data.js?v=6"></script>
 <script src="sketches.js?v=6"></script>
 <script src="library-5m1e.js?v=6"></script>
@@ -392,6 +393,16 @@ function copyNCR(id){
   }).catch(function(){
     prompt('Copy thủ công:', txt);
   });
+  /* ghi NCR vào Nhật ký/Thống kê (kèm nguyên nhân gốc Ishikawa) */
+  if (window.QCLog && confirm('Ghi nhận NCR này vào Nhật ký & Thống kê chất lượng?')) {
+    var proj = prompt('Mã dự án / cấu kiện:', localStorage.getItem('qclog_last_proj') || '');
+    if (proj !== null) {
+      localStorage.setItem('qclog_last_proj', proj);
+      QCLog.add({ module: 'NCR', isNcr: true, project: proj, item: item.name,
+        result: 'FAIL', cause: item.rootCause || '', detail: 'Mức độ: ' + sevLabel(item.severity) })
+        .then(function(){ alert('✓ Đã ghi vào Thống kê chất lượng.'); });
+    }
+  }
 }
 function renderLib(){
   var c = document.getElementById('content');
