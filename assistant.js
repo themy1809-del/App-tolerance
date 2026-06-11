@@ -287,9 +287,8 @@
           step(2, `<b>Xem trong app:</b> ${lk(url, 'mở module liên quan')} — có tiêu chí, calculator và trích dẫn điều khoản.`) };
       }
     }
-    return { title: 'Thuật ngữ chưa có trong từ điển', body:
-      step(1, `Từ điển hiện có ${GLOSS.length} thuật ngữ QC (EXC, NDT, WPS, PQR, DFT, Sa 2½, ITP, NCR, MTC, lashing...). Thử gõ lại tên thuật ngữ chuẩn, hoặc dùng ô tìm kiếm — kết quả bên dưới.`) +
-      step(2, `Cần thêm thuật ngữ nào, nhắn quản trị bổ sung vào từ điển.`) };
+    /* Không có trong từ điển → trả null để các tuyến khác (playbook, tìm kiếm) xử lý tiếp */
+    return null;
   }
   function planToleranceLookup(q, len) {
     const L = len ? len.mm : null;
@@ -434,7 +433,7 @@
       return null;
     },
     async askClaude(q, ctxText, key) {
-      const SYS = 'Bạn là trợ lý QC kết cấu thép của DaiDung. Trả lời bằng tiếng Việt, TẬN TÌNH theo bước đánh số (làm gì, dụng cụ gì, ghi chép gì), nêu tiêu chuẩn áp dụng (EN 1090-2, ISO 5817:2023, AWS D1.1, ISO 19840, AISC/RCSC...) và nhắc đối chiếu module tương ứng trong app (Dung sai, QC Hàn, QC Sơn, QC Bu lông, Vật tư, Lượng dư, WPS). Không bịa số liệu tiêu chuẩn; nếu không chắc hãy nói rõ. Người hỏi có thể dùng từ ngữ đời thường, không chuyên — hãy hiểu ý và trả lời dễ hiểu. Câu hỏi ngoài lĩnh vực QC/kết cấu thép vẫn trả lời hữu ích, ngắn gọn.';
+      const SYS = 'Bạn là trợ lý QC kết cấu thép của DaiDung. Trả lời bằng tiếng Việt, TẬN TÌNH theo bước đánh số (làm gì, dụng cụ gì, ghi chép gì), nêu tiêu chuẩn áp dụng (EN 1090-2, ISO 5817:2023, AWS D1.1, ISO 19840, AISC/RCSC...) và nhắc đối chiếu module tương ứng trong app (Dung sai, QC Hàn, QC Sơn, QC Bu lông, Vật tư, Lượng dư, WPS). Không bịa số liệu tiêu chuẩn; nếu không chắc hãy nói rõ. Người hỏi có thể dùng từ ngữ đời thường, không chuyên — hãy hiểu ý và trả lời dễ hiểu. Câu hỏi ngoài lĩnh vực QC/kết cấu thép vẫn trả lời hữu ích. QUAN TRỌNG: trả lời NGẮN GỌN, đi thẳng vào việc, tối đa ~250 từ — người hỏi đang đứng ở xưởng cần đáp án nhanh.';
       const USER = 'Câu hỏi: ' + q + (ctxText ? '\n\nDữ liệu liên quan trong app:\n' + ctxText : '');
       const fail = (res, ten) => {
         let extra = '';
@@ -446,7 +445,10 @@
       /* ---- GEMINI (Google, key AIza...) ----
          Thử model mạnh trước (tài khoản AI Pro dùng được), hết hạn mức/không có quyền → tự rớt xuống Flash */
       if (/^AIza/.test(key)) {
-        const MODELS = ['gemini-3.5-flash', 'gemini-2.5-flash'];
+        const ALL = ['gemini-3.5-flash', 'gemini-2.5-flash'];
+        const saved = localStorage.getItem('qc_gem_model');
+        /* NHỚ model chạy được lần trước → gọi thẳng, không thử lại model hỏng (nhanh hơn hẳn) */
+        const MODELS = saved && ALL.includes(saved) ? [saved].concat(ALL.filter(m => m !== saved)) : ALL;
         let lastRes = null;
         for (const mdl of MODELS) {
           const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + mdl + ':generateContent', {
@@ -455,8 +457,62 @@
             body: JSON.stringify({
               systemInstruction: { parts: [{ text: SYS }] },
               contents: [{ role: 'user', parts: [{ text: USER }] }],
-              generationConfig: { maxOutputTokens: 1500 }
+              /* 2.5: tắt thinking → nhanh hơn nhiều; giới hạn 900 token cho gọn */
+              generationConfig: mdl.includes('2.5') ? { maxOutputTokens: 900, thinkingConfig: { thinkingBudget: 0 } } : { maxOutputTokens: 900 }
             })
           });
           if (res.ok) {
-            const j = await
+            const j = await res.json();
+            const txt = (((j.candidates || [])[0] || {}).content || { parts: [] }).parts.map(p => p.text || '').join('\n');
+            if (txt) {
+              localStorage.setItem('qc_gem_model', mdl);
+              return txt + '\n\n— Gemini ' + mdl.replace('gemini-', '').replace('-flash', ' Flash').replace('-pro', ' Pro');
+            }
+          }
+          lastRes = res;
+          if (saved === mdl) localStorage.removeItem('qc_gem_model');
+          /* 400 (tham số không hỗ trợ) / 429 / 404 / 403 / 5xx → thử model tiếp theo */
+          if (![400, 429, 404, 403, 500, 503, 504].includes(res.status) && !res.ok) break;
+        }
+        fail(lastRes || { status: 0 }, 'Gemini');
+      }
+      /* ---- CLAUDE (Anthropic, key sk-ant-...) ---- */
+      if (/^sk-ant-/.test(key)) {
+        const res = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'x-api-key': key,
+            'anthropic-version': '2023-06-01',
+            'content-type': 'application/json',
+            'anthropic-dangerous-direct-browser-access': 'true'
+          },
+          body: JSON.stringify({
+            model: 'claude-haiku-4-5-20251001',
+            max_tokens: 1200,
+            system: SYS,
+            messages: [{ role: 'user', content: USER }]
+          })
+        });
+        if (!res.ok) fail(res, 'Claude');
+        const j = await res.json();
+        return (j.content || []).map(c => c.text || '').join('\n');
+      }
+      /* ---- CHATGPT (OpenAI, key sk-...) ---- */
+      if (/^sk-/.test(key)) {
+        const res = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json', 'authorization': 'Bearer ' + key },
+          body: JSON.stringify({
+            model: 'gpt-4o-mini',
+            max_tokens: 1200,
+            messages: [{ role: 'system', content: SYS }, { role: 'user', content: USER }]
+          })
+        });
+        if (!res.ok) fail(res, 'ChatGPT');
+        const j = await res.json();
+        return (((j.choices || [])[0] || {}).message || {}).content || '(ChatGPT không trả về nội dung)';
+      }
+      throw new Error('Không nhận diện được key. Key hợp lệ: AIza... (Gemini — miễn phí) · sk-ant-... (Claude) · sk-... (ChatGPT)');
+    }
+  };
+})();

@@ -123,6 +123,7 @@
       <a href="#wps"><span class="em">🔥</span>Thư viện WPS</a>
       <a href="#vattu"><span class="em">📦</span>Kiểm tra Vật tư</a>
       <a href="#luongdu"><span class="em">⚙️</span>Lượng dư & Sai hỏng</a>
+      <a href="#hoacong"><span class="em">🔥</span>Nắn chỉnh Hỏa công</a>
       <a href="#do-anh"><span class="em">📷</span>Đo ảnh</a>
       <a href="#bao-cao"><span class="em">🖨</span>Checklist & In báo cáo</a>
       <a href="#cai-dat"><span class="em">📱</span>Cài đặt & Mẹo</a>
@@ -152,7 +153,9 @@
     <div class="steps">
       <div class="step"><div class="n">1</div><div class="tx">Gõ nguyên câu hỏi: <kbd>giàn 50m kiểm tra như thế nào?</kbd> · <kbd>dầm bị nứt mối hàn khắc phục thế nào</kbd> · <kbd>xiết bu lông M20 momen bao nhiêu</kbd></div></div>
       <div class="step"><div class="n">2</div><div class="tx"><b>Trợ lý QC trả lời ngay (offline):</b> kế hoạch từng bước, tự tính số liên quan (dung sai ISO 13920 đúng chiều dài bạn nêu, bù giãn nhiệt...), kèm link mở đúng công cụ.</div></div>
-      <div class="step"><div class="n">3</div><div class="tx"><b>Cần sâu hơn → ✨ Hỏi thêm AI:</b> bấm ⚙ dán API key một lần (key chỉ lưu trên máy đó). Hỗ trợ 3 hãng, tự nhận diện theo đầu key: <b>Gemini</b> (AIza... — MIỄN PHÍ tại aistudio.google.com/apikey), <b>Claude</b> (sk-ant-...), <b>ChatGPT</b> (sk-...). Câu trả lời AI luôn gắn nhãn "cần kiểm chứng".<small>Không có key vẫn dùng đầy đủ trợ lý offline. Khuyên dùng Gemini: miễn phí ~1.500 câu/ngày, không cần thẻ.</small></div></div>
+      <div class="step"><div class="n">3</div><div class="tx"><b>Cần sâu hơn → ✨ Hỏi thêm AI:</b> bấm nút <b>✨ Cài AI</b> ngay trong ô tìm kiếm, dán API key một lần (key chỉ lưu trên máy đó). Hỗ trợ 3 hãng, tự nhận diện theo đầu key: <b>Gemini</b> (AIza... — MIỄN PHÍ tại aistudio.google.com/apikey), <b>Claude</b> (sk-ant-...), <b>ChatGPT</b> (sk-...). Câu trả lời AI luôn gắn nhãn "cần kiểm chứng".<small>Không có key vẫn dùng đầy đủ trợ lý offline. Khuyên dùng Gemini: miễn phí, không cần thẻ.</small></div></div>
+      <div class="step"><div class="n">4</div><div class="tx"><b>Sau khi cài key, AI gắn thẳng vào ô tìm kiếm:</b> gõ câu hỏi xong ngừng tay ~2 giây là AI tự trả lời; nhấn <kbd>Enter</kbd> = hỏi ngay. Từ ngữ đời thường, ngoài chuyên môn vẫn hiểu.</div></div>
+      <div class="step"><div class="n">5</div><div class="tx"><b>Nút ✨ nổi trong từng module:</b> đang ở QC Hàn, QC Sơn... bấm nút tròn tím góc phải màn hình là hỏi tại chỗ, không phải quay về trang chủ.</div></div>
     </div>
   </div>
 
@@ -241,6 +244,18 @@
       <div class="step"><div class="n">2</div><div class="tx"><b>Tra sai hỏng:</b> 45 lỗi có ảnh thật, lọc theo loại / nguyên nhân gốc 5M+1E / mức độ nghiêm trọng (lỗi nặng tự lên đầu).</div></div>
       <div class="step"><div class="n">3</div><div class="tx"><b>Mỗi lỗi:</b> bảng chấp nhận B/C/D + nguyên nhân + biện pháp; lỗi hàn/sơn có nút nhảy thẳng sang QC Hàn / QC Sơn để tính Đạt/Không đạt.</div></div>
       <div class="step"><div class="n">4</div><div class="tx"><b>📋 Tạo NCR nháp:</b> một nút là có biên bản đầy đủ (mô tả, tiêu chuẩn tham chiếu, nguyên nhân, biện pháp, yêu cầu kiểm lại) — dán vào biểu mẫu công ty.</div></div>
+    </div>
+  </div>
+
+  <!-- ===== HỎA CÔNG ===== -->
+  <div class="card" id="hoacong">
+    <h2><span class="ic">🔥</span>Nắn chỉnh Hỏa công</h2>
+    <span class="pill">TL NỘI BỘ ĐÃ XÁC MINH</span><span class="pill">4 MẪU GIA NHIỆT</span><span class="pill">ITP + BIÊN BẢN</span>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><div class="tx"><b>Đo biến dạng trước:</b> chỉ nắn khi VƯỢT dung sai (tra Thư viện Dung sai). Tab Quy trình có đủ 8 bước từ đo đến nghiệm thu.</div></div>
+      <div class="step"><div class="n">2</div><div class="tx"><b>Chọn mẫu gia nhiệt</b> theo hình minh họa: điểm / đường (★ khuyến cáo) / chữ V / khối — mỗi mẫu ghi rõ dùng khi nào.</div></div>
+      <div class="step"><div class="n">3</div><div class="tx"><b>Giữ đúng giới hạn:</b> ~650°C (đỏ sẫm), ngấm ¾ chiều dày, đốt phía LỒI, cấm làm mát nước vùng mối hàn nối, dừng 300mm trước mép cố định — bảng đầy đủ ở tab Giới hạn & tiêu chí.</div></div>
+      <div class="step"><div class="n">4</div><div class="tx"><b>Chụp ảnh trước/sau</b> (tab 📷 Ảnh) + tick checklist + 🖨 in biên bản A4 — đủ hồ sơ nghiệm thu. ITP 7 điểm dừng H/W/R/S ở tab ITP.</div></div>
     </div>
   </div>
 

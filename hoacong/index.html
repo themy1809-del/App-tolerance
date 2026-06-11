@@ -61,6 +61,7 @@ th{background:#f8fafc;font-size:11px;text-transform:uppercase;letter-spacing:.4p
   <div class="tab" id="tb-pp"></div>
   <div class="tab" id="tb-gh"></div>
   <div class="tab" id="tb-itp"></div>
+  <div class="tab" id="tb-ph"></div>
   <div class="tab" id="tb-ck"></div>
 </div>
 
@@ -69,10 +70,11 @@ th{background:#f8fafc;font-size:11px;text-transform:uppercase;letter-spacing:.4p
 <script src="../report.js"></script>
 <script src="../itp-data.js"></script>
 <script src="../itp.js"></script>
+<script src="../photo-tool.js"></script>
 <script>
 'use strict';
 const D = window.HC_DATA;
-const TABS = [['qt','📋 Quy trình'],['kt','🔥 4 mẫu gia nhiệt'],['tt','🔢 Trình tự'],['pp','🛠 Phương pháp'],['gh','✅ Giới hạn & tiêu chí'],['itp','📑 ITP'],['ck','☑ Checklist']];
+const TABS = [['qt','📋 Quy trình'],['kt','🔥 4 mẫu gia nhiệt'],['tt','🔢 Trình tự'],['pp','🛠 Phương pháp'],['gh','✅ Giới hạn & tiêu chí'],['itp','📑 ITP'],['ph','📷 Ảnh'],['ck','☑ Checklist']];
 
 /* ===== SVG minh họa (label ngắn) ===== */
 const SK = {
@@ -212,6 +214,12 @@ function show(id){
 }
 rQT(); rKT(); rTT(); rPP(); rGH(); rCK();
 try { if (window.QCITP && window.ITP_DATA && ITP_DATA.hoacong) QCITP.mount(document.getElementById('tb-itp'), ITP_DATA.hoacong, { color: '#b3411f' }); } catch(e) {}
+try {
+  if (window.PhotoTool) {
+    document.getElementById('tb-ph').innerHTML = '<div class="card"><h3>📷 Ảnh hiện trường — chụp TRƯỚC và SAU nắn</h3><div class="note">Chụp kèm thước đo áp vào chỗ biến dạng. Ảnh lưu ngay trên máy này, đính kèm khi in biên bản.</div><div id="phMount"></div></div>';
+    PhotoTool.mount(document.getElementById('phMount'), { key: 'hoacong' });
+  }
+} catch(e) {}
 show(localStorage.getItem('hc_tab') || 'qt');
 </script>
 <script src="../assistant.js"></script>
