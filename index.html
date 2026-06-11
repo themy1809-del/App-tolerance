@@ -3,16 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#0c447c">
+<meta name="theme-color" content="#0d2547">
 <title>DaiDung QC Suite — Công cụ kết cấu thép</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
 <style>
   :root{
-    --bg:#f2f4f7; --ink:#16202c; --muted:#5d6b7c; --line:#e2e7ee;
-    --brand:#0c447c; --brand2:#185fa5;
-    --r:16px; --sh:0 1px 2px rgba(18,30,48,.06),0 8px 28px rgba(18,30,48,.08);
-    --sh-hover:0 2px 4px rgba(18,30,48,.08),0 16px 44px rgba(18,30,48,.14);
+    --bg:#f7f9fc; --ink:#101826; --muted:#64748b; --line:#e6ebf2;
+    --brand:#0c447c; --brand2:#2563eb; --cyan:#38bdf8; --violet:#7c3aed;
+    --r:14px; --sh:0 1px 2px rgba(16,24,38,.05),0 6px 22px rgba(16,24,38,.06);
+    --sh-hover:0 2px 6px rgba(16,24,38,.08),0 14px 38px rgba(16,24,38,.13);
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0;padding:0}
@@ -21,99 +21,94 @@
     display:flex;flex-direction:column}
   a{color:inherit;text-decoration:none}
 
-  /* ===== top bar ===== */
-  .topbar{background:linear-gradient(135deg,#0c447c 0%,#0a3a6b 55%,#093158 100%);color:#fff;
-    padding:max(14px,env(safe-area-inset-top)) 0 0}
-  .tb-in{max-width:1180px;margin:0 auto;padding:6px 22px 0;display:flex;align-items:center;gap:13px}
-  .logo{width:42px;height:42px;border-radius:11px;background:#fff;color:var(--brand);
-    display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;flex:none;
-    box-shadow:0 4px 14px rgba(0,0,0,.25)}
-  .tb-t{font-size:16.5px;font-weight:800;letter-spacing:-.2px;line-height:1.2}
-  .tb-s{font-size:11.5px;opacity:.75;font-weight:500}
-  .tb-sp{flex:1}
-  .tb-link{font-size:12.5px;font-weight:700;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);
-    padding:8px 14px;border-radius:9px;transition:.15s}
-  .tb-link:hover{background:rgba(255,255,255,.22)}
+  /* ===== header + hero gọn ===== */
+  .top{color:#fff;padding:max(10px,env(safe-area-inset-top)) 0 26px;
+    background:
+      radial-gradient(900px 360px at 85% -20%, rgba(56,189,248,.30), transparent 62%),
+      radial-gradient(700px 320px at -10% 130%, rgba(124,58,237,.25), transparent 60%),
+      linear-gradient(150deg,#0c1830 0%,#0d2547 55%,#0e2a52 100%)}
+  .bar{max-width:1060px;margin:0 auto;padding:8px 20px 0;display:flex;align-items:center;gap:11px}
+  .logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#38bdf8,#2563eb);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13.5px;flex:none;
+    box-shadow:0 4px 14px rgba(56,189,248,.35)}
+  .bar .t{font-size:14.5px;font-weight:800;letter-spacing:-.2px}
+  .bar .s{font-size:10.5px;opacity:.65;font-weight:500}
+  .bar .sp{flex:1}
+  .bar a{font-size:12px;font-weight:700;opacity:.85;padding:7px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.2)}
+  .bar a:hover{background:rgba(255,255,255,.12);opacity:1}
 
-  .hero{max-width:1180px;margin:0 auto;padding:30px 22px 38px;color:#fff;width:100%}
-  .hero h1{margin:0 0 8px;font-size:clamp(22px,3.4vw,32px);font-weight:850;letter-spacing:-.5px;line-height:1.18}
-  .hero p{margin:0;font-size:14px;opacity:.82;max-width:660px}
-  .hero .stats{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
-  .stat{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:10px;
-    padding:7px 13px;font-size:12px;font-weight:700;letter-spacing:.2px}
-  .stat b{font-size:13.5px}
+  .ask{max-width:1060px;margin:0 auto;padding:22px 20px 0;width:100%}
+  .ask h1{margin:0 0 12px;font-size:clamp(17px,2.4vw,22px);font-weight:800;letter-spacing:-.3px;
+    display:flex;align-items:center;gap:9px}
+  .ask h1 .em{font-size:24px}
+  .gsearch{position:relative;max-width:620px}
+  .gsearch .gs-ic{position:absolute;left:14px;top:50%;transform:translateY(-50%);opacity:.5;font-size:15px}
+  .gsearch input{width:100%;padding:13px 15px 13px 41px;border:1px solid rgba(255,255,255,.22);border-radius:12px;
+    font-size:14.5px;background:rgba(255,255,255,.1);color:#fff;outline:none;font-family:inherit;transition:.15s}
+  .gsearch input::placeholder{color:rgba(255,255,255,.5)}
+  .gsearch input:focus{background:#fff;color:var(--ink);border-color:var(--cyan);box-shadow:0 0 0 3px rgba(56,189,248,.3)}
+  .gsearch input:focus::placeholder{color:#9aa7b3}
+  .gs-ex{display:flex;gap:6px;margin-top:9px;overflow-x:auto;padding-bottom:3px;scrollbar-width:none}
+  .gs-ex::-webkit-scrollbar{display:none}
+  .gs-ex button{font-size:11px;font-weight:600;padding:5px 11px;border-radius:999px;cursor:pointer;white-space:nowrap;flex:none;
+    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);
+    font-family:inherit;transition:.15s}
+  .gs-ex button:hover{background:rgba(56,189,248,.25);border-color:rgba(56,189,248,.5);color:#fff}
 
   /* ===== content ===== */
-  .wrap{max-width:1180px;margin:-22px auto 0;padding:0 22px 30px;width:100%;flex:1}
-  .sec{margin-bottom:26px}
-  .sec-h{display:flex;align-items:center;gap:10px;margin:26px 2px 12px}
+  .wrap{max-width:1060px;margin:0 auto;padding:18px 20px 28px;width:100%;flex:1}
+  .sec-h{display:flex;align-items:center;gap:9px;margin:14px 2px 9px}
+  .sec-h:first-child{margin-top:0}
+  .sec-h .tt{font-size:10.5px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:#8b97a7}
   .sec-h .ln{flex:1;height:1px;background:var(--line)}
-  .sec-h .tt{font-size:12px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted)}
-  .grid{display:grid;grid-template-columns:1fr;gap:14px}
-  @media(min-width:640px){.grid{grid-template-columns:1fr 1fr}}
-  @media(min-width:1024px){.grid{grid-template-columns:1fr 1fr 1fr}}
+  .grid{display:grid;grid-template-columns:1fr;gap:9px}
+  @media(min-width:560px){.grid{grid-template-columns:1fr 1fr}}
+  @media(min-width:900px){.grid{grid-template-columns:1fr 1fr 1fr}}
 
-  @keyframes cardup{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  @keyframes up{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
   .mcard{position:relative;background:#fff;border:1px solid var(--line);border-radius:var(--r);
-    padding:20px 20px 16px;box-shadow:var(--sh);cursor:pointer;transition:.18s;
-    display:flex;flex-direction:column;gap:10px;text-align:left;font-family:inherit;width:100%;overflow:hidden;
-    animation:cardup .4s ease both}
-  .grid .mcard:nth-child(2){animation-delay:.06s}
-  .grid .mcard:nth-child(3){animation-delay:.12s}
-  .grid .mcard:nth-child(4){animation-delay:.18s}
-  .mcard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--ac)}
-  .mcard:hover{transform:translateY(-3px);box-shadow:var(--sh-hover);border-color:#d3dce8}
+    padding:13px 14px;box-shadow:var(--sh);cursor:pointer;transition:.16s;
+    display:flex;align-items:center;gap:12px;text-align:left;font-family:inherit;width:100%;
+    animation:up .35s ease both}
+  .grid .mcard:nth-child(2){animation-delay:.04s}
+  .grid .mcard:nth-child(3){animation-delay:.08s}
+  .grid .mcard:nth-child(4){animation-delay:.12s}
+  .grid .mcard:nth-child(5){animation-delay:.16s}
+  .mcard:hover{transform:translateY(-2px);box-shadow:var(--sh-hover);border-color:var(--ac)}
   .mcard:active{transform:scale(.99)}
-  .mtop{display:flex;align-items:center;gap:12px}
-  .mic{width:46px;height:46px;border-radius:12px;background:var(--ac-soft);color:var(--ac);
-    display:flex;align-items:center;justify-content:center;font-size:23px;flex:none}
-  .mtt{font-size:16.5px;font-weight:800;letter-spacing:-.2px;line-height:1.25}
-  .msub{font-size:11px;font-weight:700;color:var(--ac);text-transform:uppercase;letter-spacing:.6px}
-  .mds{font-size:13px;color:var(--muted);line-height:1.55;flex:1}
-  .mmeta{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:2px}
-  .pill{font-size:10.5px;font-weight:800;padding:4px 9px;border-radius:7px;background:#f1f4f8;color:#46566a;letter-spacing:.2px}
-  .pill.ac{background:var(--ac-soft);color:var(--ac)}
-  .pill.lock{background:#fdf3e2;color:#8a5a00}
-  .go{position:absolute;right:16px;top:20px;color:#c3cedb;font-size:17px;font-weight:800;transition:.18s}
-  .mcard:hover .go{color:var(--ac);transform:translateX(3px)}
+  .mic{width:42px;height:42px;border-radius:11px;background:var(--ac-soft);color:var(--ac);
+    display:flex;align-items:center;justify-content:center;font-size:21px;flex:none}
+  .mbody{flex:1;min-width:0}
+  .mtt{font-size:14.5px;font-weight:800;letter-spacing:-.2px;line-height:1.25;display:flex;align-items:center;gap:6px}
+  .mtt .lock{font-size:10px;font-weight:800;background:#fdf3e2;color:#8a5a00;padding:1px 6px;border-radius:5px}
+  .mds{font-size:12px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .go{color:#c3cedb;font-size:15px;font-weight:800;transition:.16s;flex:none}
+  .mcard:hover .go{color:var(--ac);transform:translateX(2px)}
 
-  /* accent palettes per module */
-  .m-dim {--ac:#0c447c;--ac-soft:#e6f0fb}
-  .m-han {--ac:#7c2d12;--ac-soft:#fbeee7}
-  .m-son {--ac:#14532d;--ac-soft:#e7f4ec}
-  .m-wps {--ac:#b4421f;--ac-soft:#fdeee8}
-  .m-vt  {--ac:#3b6d11;--ac-soft:#eef6e6}
-  .m-ld  {--ac:#5f4ab7;--ac-soft:#efecfa}
-  .m-bl  {--ac:#37474f;--ac-soft:#eceff1}
-  .m-pk  {--ac:#0e7490;--ac-soft:#e3f3f7}
+  .m-dim{--ac:#0c447c;--ac-soft:#e6f0fb}
+  .m-han{--ac:#7c2d12;--ac-soft:#fbeee7}
+  .m-son{--ac:#14532d;--ac-soft:#e7f4ec}
+  .m-wps{--ac:#b4421f;--ac-soft:#fdeee8}
+  .m-vt{--ac:#3b6d11;--ac-soft:#eef6e6}
+  .m-ld{--ac:#5f4ab7;--ac-soft:#efecfa}
+  .m-bl{--ac:#37474f;--ac-soft:#eceff1}
+  .m-pk{--ac:#0e7490;--ac-soft:#e3f3f7}
 
-  /* global search */
-  .gsearch{position:relative;margin-top:18px;max-width:660px}
-  .gsearch .gs-ic{position:absolute;left:15px;top:50%;transform:translateY(-50%);opacity:.55;font-size:16px}
-  .gsearch input{width:100%;padding:14px 16px 14px 44px;border:1px solid rgba(255,255,255,.25);border-radius:13px;
-    font-size:15.5px;background:rgba(255,255,255,.12);color:#fff;outline:none;font-family:inherit;backdrop-filter:blur(4px)}
-  .gsearch input::placeholder{color:rgba(255,255,255,.55)}
-  .gsearch input:focus{background:#fff;color:var(--ink);border-color:#fff}
-  .gsearch input:focus::placeholder{color:#9aa7b3}
-  .gs-box{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:8px 0;margin-bottom:22px;max-height:480px;overflow-y:auto}
-  .gs-grp{font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);padding:10px 18px 4px}
-  .gs-it{display:block;padding:9px 18px;border-left:3px solid transparent;cursor:pointer}
-  .gs-it:hover{background:#f5f8fb;border-left-color:var(--brand)}
-  .gs-it .t{font-size:14px;font-weight:700}
-  .gs-it .s{font-size:12px;color:var(--muted);margin-top:1px}
-  .gs-empty{padding:18px;text-align:center;color:var(--muted);font-size:13.5px}
-  .gs-ex{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px;max-width:760px}
-  .gs-ex button{font-size:11.5px;font-weight:700;padding:6px 12px;border-radius:999px;cursor:pointer;
-    background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);color:rgba(255,255,255,.85);
-    font-family:inherit;transition:.15s}
-  .gs-ex button:hover{background:rgba(255,255,255,.22);color:#fff}
-  .footer{border-top:1px solid var(--line);background:#fff}
-  .ft-in{max-width:1180px;margin:0 auto;padding:16px 22px calc(16px + env(safe-area-inset-bottom));
-    display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+  /* ===== kết quả tìm kiếm ===== */
+  .gs-box{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:6px 0;margin-bottom:16px;max-height:460px;overflow-y:auto}
+  .gs-grp{font-size:10.5px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;color:var(--muted);padding:9px 16px 3px}
+  .gs-it{display:block;padding:8px 16px;border-left:3px solid transparent;cursor:pointer}
+  .gs-it:hover{background:#f5f8fb;border-left-color:var(--brand2)}
+  .gs-it .t{font-size:13.5px;font-weight:700}
+  .gs-it .s{font-size:11.5px;color:var(--muted);margin-top:1px}
+  .gs-empty{padding:16px;text-align:center;color:var(--muted);font-size:13px}
+
+  .footer{border-top:1px solid var(--line)}
+  .ft-in{max-width:1060px;margin:0 auto;padding:12px 20px calc(12px + env(safe-area-inset-bottom));
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:11px;color:#8b97a7}
   .ft-in .sp{flex:1}
-  .ver{font-weight:700;background:#f1f4f8;padding:3px 9px;border-radius:7px}
 
-  /* ===== password modal (giữ nguyên logic) ===== */
+  /* ===== password modal ===== */
   .pw-ovl{position:fixed;inset:0;z-index:100;background:rgba(8,18,42,.55);backdrop-filter:blur(6px);
     display:none;align-items:center;justify-content:center;padding:20px}
   .pw-ovl.on{display:flex}
@@ -138,32 +133,21 @@
 </head>
 <body>
 
-<div class="topbar">
-  <div class="tb-in">
+<div class="top">
+  <div class="bar">
     <div class="logo">DD</div>
     <div>
-      <div class="tb-t">DaiDung QC Suite</div>
-      <div class="tb-s">Kết cấu thép · Quality Control</div>
+      <div class="t">DaiDung QC Suite</div>
+      <div class="s">Kết cấu thép · 8 module · offline</div>
     </div>
-    <div class="tb-sp"></div>
-    <a class="tb-link" href="huong-dan.html" target="_blank">📖 Hướng dẫn</a>
+    <div class="sp"></div>
+    <a href="huong-dan.html" target="_blank">📖 Hướng dẫn</a>
   </div>
-  <div class="hero">
-    <h1>Tra cứu tiêu chuẩn &amp; nghiệm thu —<br>tất cả trong một chỗ</h1>
-    <p>Dung sai, mối hàn, sơn phủ, vật tư đầu vào, WPS và xử lý sai hỏng — kèm dẫn chứng điều khoản, hình cách đo và tính Đạt/Không đạt tự động. Hoạt động offline.</p>
-    <div class="stats">
-      <span class="stat"><b>8</b> tiêu chuẩn quốc tế</span>
-      <span class="stat"><b>75</b> WPS</span>
-      <span class="stat"><b>45</b> lỗi + khắc phục</span>
-      <span class="stat"><b>25+</b> calculator</span>
-      <span class="stat">📱 Offline / PWA</span>
-    </div>
-    <div style="margin-top:20px;font-size:15.5px;font-weight:800;display:flex;align-items:center;gap:8px">
-      <span style="font-size:21px">🤖</span> Bạn cần kiểm tra gì? Tôi sẽ giải quyết giúp bạn.
-    </div>
+  <div class="ask">
+    <h1><span class="em">🤖</span>Bạn cần kiểm tra gì? Tôi sẽ giải quyết giúp bạn.</h1>
     <div class="gsearch">
       <span class="gs-ic">🔍</span>
-      <input id="gq" type="search" placeholder="Gõ câu hỏi hoặc từ khóa: giàn 50m kiểm tra như thế nào? · undercut · M20..." autocomplete="off">
+      <input id="gq" type="search" placeholder="Hỏi hoặc tìm: giàn 50m kiểm tra như thế nào? · undercut · M20..." autocomplete="off">
     </div>
     <div class="gs-ex" id="gsEx"></div>
   </div>
@@ -173,89 +157,67 @@
 
   <div id="gsRes" style="display:none"></div>
 
-  <div class="sec-h"><span class="tt">📐 Tiêu chuẩn &amp; nghiệm thu</span><span class="ln"></span></div>
+  <div class="sec-h"><span class="tt">Tiêu chuẩn & nghiệm thu</span><span class="ln"></span></div>
   <div class="grid">
     <a class="mcard m-dim" href="dungsai/">
-      <span class="go">→</span>
-      <div class="mtop"><div class="mic">📏</div><div>
-        <div class="msub">Kích thước · Hình học</div>
+      <div class="mic">📏</div>
+      <div class="mbody">
         <div class="mtt">Tra cứu Dung sai</div>
-      </div></div>
-      <div class="mds">Tra giới hạn dung sai theo cấu kiện, tính Đạt/Không đạt tự động, trích dẫn điều khoản làm dẫn chứng nghiệm thu.</div>
-      <div class="mmeta"><span class="pill ac">7 tiêu chuẩn</span><span class="pill">⭐ Bookmark</span><span class="pill">☑️ Checklist</span></div>
+        <div class="mds">8 tiêu chuẩn · Đạt/Không đạt · trích dẫn điều khoản</div>
+      </div><span class="go">→</span>
     </a>
-
     <a class="mcard m-han" href="han/">
-      <span class="go">→</span>
-      <div class="mtop"><div class="mic">👁</div><div>
-        <div class="msub">Mối hàn · VT / NDT</div>
+      <div class="mic">👁</div>
+      <div class="mbody">
         <div class="mtt">QC Hàn</div>
-      </div></div>
-      <div class="mds">Tiêu chí chấp nhận mối hàn theo AWS D1.1 / ISO 5817, phạm vi NDT theo EXC, hình cách đo từng khuyết tật.</div>
-      <div class="mmeta"><span class="pill ac">25 tiêu chí</span><span class="pill">📐 Hình cách đo</span><span class="pill">🧮 Đạt/Không đạt</span></div>
+        <div class="mds">AWS D1.1 · ISO 5817 · NDT theo EXC · hình cách đo</div>
+      </div><span class="go">→</span>
     </a>
-
     <a class="mcard m-son" href="son/">
-      <span class="go">→</span>
-      <div class="mtop"><div class="mic">🎨</div><div>
-        <div class="msub">Sơn phủ · Chống ăn mòn</div>
+      <div class="mic">🎨</div>
+      <div class="mbody">
         <div class="mtt">QC Sơn</div>
-      </div></div>
-      <div class="mds">Chuẩn bị bề mặt, điều kiện môi trường, đo DFT và bám dính theo ISO — kèm hình cách đo từng phép thử.</div>
-      <div class="mmeta"><span class="pill ac">DFT · Dew point</span><span class="pill">📐 Hình cách đo</span><span class="pill">⚠️ 16 lỗi sơn</span></div>
+        <div class="mds">Bề mặt · điểm sương · DFT ISO 19840 · 16 lỗi sơn</div>
+      </div><span class="go">→</span>
+    </a>
+    <a class="mcard m-bl" href="bulong/">
+      <div class="mic">🔩</div>
+      <div class="mbody">
+        <div class="mtt">QC Bu lông</div>
+        <div class="mds">Momen + góc xoay theo 2 hệ EN 1090-2 · AISC/RCSC</div>
+      </div><span class="go">→</span>
     </a>
   </div>
 
-  <div class="sec-h"><span class="tt">🏭 Sản xuất &amp; vật tư</span><span class="ln"></span></div>
+  <div class="sec-h"><span class="tt">Sản xuất & xuất hàng</span><span class="ln"></span></div>
   <div class="grid">
     <button class="mcard m-wps" id="wpsCard" type="button">
-      <span class="go">→</span>
-      <div class="mtop"><div class="mic">🔥</div><div>
-        <div class="msub">Quy trình hàn</div>
-        <div class="mtt">Thư viện WPS</div>
-      </div></div>
-      <div class="mds">Tra WPS theo công việc, vật liệu, tư thế — xem thông số máy hàn, PDF gốc, in QR dán bản vẽ.</div>
-      <div class="mmeta"><span class="pill lock">🔒 Mật khẩu nội bộ</span><span class="pill ac">75 WPS</span><span class="pill">🔳 QR</span></div>
+      <div class="mic">🔥</div>
+      <div class="mbody">
+        <div class="mtt">Thư viện WPS <span class="lock">🔒 nội bộ</span></div>
+        <div class="mds">75 WPS theo công việc · thông số máy hàn · QR</div>
+      </div><span class="go">→</span>
     </button>
-
     <a class="mcard m-vt" href="vattu/">
-      <span class="go">→</span>
-      <div class="mtop"><div class="mic">📦</div><div>
-        <div class="msub">Đầu vào · IMI</div>
+      <div class="mic">📦</div>
+      <div class="mbody">
         <div class="mtt">Kiểm tra Vật tư</div>
-      </div></div>
-      <div class="mds">Nghiệm thu vật tư nhập kho: spec + dung sai, MTC &amp; heat number, cấp gỉ — kèm sketch cách đo.</div>
-      <div class="mmeta"><span class="pill ac">44 vật tư</span><span class="pill">📐 Sketch cách đo</span><span class="pill">☑️ Checklist</span></div>
+        <div class="mds">Spec + dung sai · MTC · sketch cách đo · checklist</div>
+      </div><span class="go">→</span>
     </a>
-
-    <a class="mcard m-bl" href="bulong/">
-      <span class="go">→</span>
-      <div class="mtop"><div class="mic">🔩</div><div>
-        <div class="msub">Liên kết · Xiết lực</div>
-        <div class="mtt">QC Bu lông</div>
-      </div></div>
-      <div class="mds">Lực căng & momen xiết theo cả 2 hệ: EN 1090-2 (Fp,C, k-class — đã xác minh) và AISC/RCSC (Tb, turn-of-nut) — chọn hệ theo hợp đồng.</div>
-      <div class="mmeta"><span class="pill ac">🇪🇺 EN · 🇺🇸 AISC</span><span class="pill">🧮 Momen + góc xoay</span><span class="pill">☑️ Checklist</span></div>
-    </a>
-
-    <a class="mcard m-pk" href="packing/">
-      <span class="go">→</span>
-      <div class="mtop"><div class="mic">📦</div><div>
-        <div class="msub">Xuất hàng · Đóng gói</div>
-        <div class="mtt">Kiểm tra Packing</div>
-      </div></div>
-      <div class="mds">Quy trình đóng hàng 9 bước, tem nhãn ISO 780, sắp xếp, 4 kiểu lashing có hình minh họa, hồ sơ ảnh từng container, checklist in biểu mẫu.</div>
-      <div class="mmeta"><span class="pill ac">🔗 Lashing · hình vẽ</span><span class="pill">🏷️ Tem nhãn</span><span class="pill">📷 Ảnh hàng</span></div>
-    </a>
-
     <a class="mcard m-ld" href="luongdu/">
-      <span class="go">→</span>
-      <div class="mtop"><div class="mic">⚙️</div><div>
-        <div class="msub">Công nghệ · Sai hỏng</div>
-        <div class="mtt">Lượng dư &amp; Sai hỏng</div>
-      </div></div>
-      <div class="mds">Tính co rút hàn, giãn nhiệt, gập, kerf — tra 45 lỗi theo Ishikawa 5M+1E, tạo NCR một chạm.</div>
-      <div class="mmeta"><span class="pill ac">8 calculator</span><span class="pill">45 lỗi · ảnh thật</span><span class="pill">📋 NCR</span></div>
+      <div class="mic">⚙️</div>
+      <div class="mbody">
+        <div class="mtt">Lượng dư & Sai hỏng</div>
+        <div class="mds">8 calculator · 45 lỗi Ishikawa · NCR một chạm</div>
+      </div><span class="go">→</span>
+    </a>
+    <a class="mcard m-pk" href="packing/">
+      <div class="mic">🚛</div>
+      <div class="mbody">
+        <div class="mtt">Kiểm tra Packing</div>
+        <div class="mds">Quy trình · tem nhãn ISO 780 · lashing · ảnh hàng</div>
+      </div><span class="go">→</span>
     </a>
   </div>
 
@@ -265,8 +227,8 @@
   <div class="ft-in">
     <span>© DaiDung Metallic Manufacture Construction &amp; Trade Corporation</span>
     <span class="sp"></span>
-    <span class="ver">v2.0 · 06/2026</span>
-    <a href="reset.html" style="font-weight:700">↺ Xóa cache</a>
+    <span>v2.1 · 06/2026</span>
+    <a href="reset.html" style="font-weight:700;color:var(--brand2)">↺ Xóa cache</a>
   </div>
 </footer>
 
@@ -293,7 +255,6 @@ const KEY = 'wps_auth_v1';
 function alreadyAuth(){
   return sessionStorage.getItem(KEY) === 'ok' || localStorage.getItem(KEY) === 'ok';
 }
-
 function openPw(){
   if (alreadyAuth()){ goWps(); return; }
   document.getElementById('pwOvl').classList.add('on');
@@ -302,13 +263,10 @@ function openPw(){
   document.getElementById('pwErr').textContent = '';
   setTimeout(()=>inp.focus(), 60);
 }
-
 function closePw(){
   document.getElementById('pwOvl').classList.remove('on');
 }
-
 function goWps(){ location.href = 'wps/'; }
-
 function submitPw(){
   const inp = document.getElementById('pwInp');
   const err = document.getElementById('pwErr');
@@ -323,7 +281,6 @@ function submitPw(){
     setTimeout(()=>err.textContent='', 1800);
   }
 }
-
 document.getElementById('wpsCard').addEventListener('click', openPw);
 document.getElementById('pwOk').addEventListener('click', submitPw);
 document.getElementById('pwInp').addEventListener('keydown', e => {
@@ -335,7 +292,7 @@ if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   navigator.serviceWorker.register('sw.js').catch(()=>{});
 }
 
-/* ===== TÌM KIẾM TOÀN CỤC ===== */
+/* ===== TÌM KIẾM TOÀN CỤC + TRỢ LÝ ===== */
 let GS_IDX = null, GS_LOADING = false;
 const GS_SRC = [
   'dungsai/tolerances-data.js', 'dungsai/tolerances-tier1.js', 'dungsai/tolerances-tier2.js',
@@ -346,9 +303,9 @@ const norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').repla
 const gsTx = o => (o && typeof o === 'object') ? (o.vi || o.en || '') : (o || '');
 
 function gsLoadScript(src) {
-  return new Promise((res, rej) => {
+  return new Promise((res) => {
     const s = document.createElement('script');
-    s.src = src; s.onload = res; s.onerror = res; /* lỗi 1 file không chặn cả index */
+    s.src = src; s.onload = res; s.onerror = res;
     document.head.appendChild(s);
   });
 }
@@ -373,10 +330,10 @@ async function gsBuild() {
     (BL_DATA.DIA || []).forEach(d => add('🔩 Bu lông', 'bulong/', 'Bu lông M' + d + ' — lực căng & momen xiết',
       'Fp,C: 8.8 = ' + BL_DATA.FPC['8.8'][d] + ' kN · 10.9 = ' + BL_DATA.FPC['10.9'][d] + ' kN (EN 1090-2 Table 18)', 'M' + d + ' bolt preload torque')); } } catch(e){}
   try { if (window.PK_DATA) {
-    (PK_DATA.STEPS || []).forEach(s => add('📦 Packing', 'packing/', gsTx(s.t), 'Quy trình đóng hàng', gsTx(s.d)));
-    (PK_DATA.LASH.methods || []).forEach(m => add('📦 Packing', 'packing/', gsTx(m.name), 'Lashing — ' + gsTx(m.use).slice(0, 50), gsTx(m.d)));
-    (PK_DATA.STOW || []).forEach(s => add('📦 Packing', 'packing/', gsTx(s.t), 'Sắp xếp hàng', gsTx(s.d)));
-    (PK_DATA.LABEL.symbols || []).forEach(s => add('📦 Packing', 'packing/', gsTx(s.name), s.iso, 'tem nhan ky hieu'));
+    (PK_DATA.STEPS || []).forEach(s => add('🚛 Packing', 'packing/', gsTx(s.t), 'Quy trình đóng hàng', gsTx(s.d)));
+    (PK_DATA.LASH.methods || []).forEach(m => add('🚛 Packing', 'packing/', gsTx(m.name), 'Lashing — ' + gsTx(m.use).slice(0, 50), gsTx(m.d)));
+    (PK_DATA.STOW || []).forEach(s => add('🚛 Packing', 'packing/', gsTx(s.t), 'Sắp xếp hàng', gsTx(s.d)));
+    (PK_DATA.LABEL.symbols || []).forEach(s => add('🚛 Packing', 'packing/', gsTx(s.name), s.iso, 'tem nhan ky hieu'));
   } } catch(e){}
   try { (window.WPS_DB && WPS_DB.items || []).forEach(r =>
     add('🔥 WPS', 'wps/?id=' + encodeURIComponent(r.id), r.id, (r.process || '') + ' · ' + (r.base_metal || '').slice(0, 50), (r.position || '') + ' ' + (r.filler || ''))); } catch(e){}
@@ -392,11 +349,9 @@ function gsRun() {
   box.style.display = 'block';
   if (!GS_IDX) { box.innerHTML = '<div class="gs-box"><div class="gs-empty">⏳ Đang nạp dữ liệu các module...</div></div>'; return; }
 
-  /* tầng 1: trợ lý QC cục bộ — nhận diện câu hỏi */
   let aiHtml = '';
   try { if (window.QCAssistant) aiHtml = QCAssistant.answer(raw) || ''; } catch (e) {}
 
-  /* tìm kiếm theo từ khóa (bỏ stop-words của câu hỏi để vẫn ra kết quả liên quan) */
   const kw = q.replace(/\b(toi|cua|can|phai|lam|the|nao|nhu|sao|gi|cach|do|kiem|tra|nghiem|thu|quy|trinh|huong|dan|bao|nhieu|m|mm|cm|\d+)\b/g, ' ').trim();
   const terms = (kw || q).split(/\s+/).filter(t => t.length >= 2);
   const hits = GS_IDX.filter(r => terms.some(t => r.hay.includes(t))).slice(0, aiHtml ? 12 : 40);
@@ -405,7 +360,7 @@ function gsRun() {
   let claudeBar = '';
   if (aiHtml) {
     claudeBar = '<div style="display:flex;gap:8px;margin:-6px 0 14px;align-items:center">' +
-      '<button onclick="gsAskClaude()" style="padding:10px 16px;border:0;border-radius:10px;background:#5f4ab7;color:#fff;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit">✨ Hỏi thêm AI</button>' +
+      '<button onclick="gsAskClaude()" style="padding:10px 16px;border:0;border-radius:10px;background:linear-gradient(135deg,#7c3aed,#5f4ab7);color:#fff;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;box-shadow:0 4px 14px rgba(124,58,237,.3)">✨ Hỏi thêm AI</button>' +
       '<button onclick="gsAiKey()" title="Cấu hình API key" style="padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;cursor:pointer;font-size:13px">⚙</button>' +
       '<span style="font-size:11px;color:var(--muted)">' + (localStorage.getItem('qc_ai_key') ? 'API key đã lưu trên máy này' : 'cần API key (bấm ⚙)') + '</span></div>' +
       '<div id="aiOut"></div>';
@@ -417,12 +372,11 @@ function gsRun() {
     '<div class="gs-grp">' + g + ' · ' + groups[g].length + '</div>' +
     groups[g].map(h => '<a class="gs-it" href="' + h.url + '"><div class="t">' + h.t.replace(/</g, '&lt;') + '</div><div class="s">' + h.s.replace(/</g, '&lt;') + '</div></a>').join('')
   ).join('') + '</div>'
-    : (aiHtml ? '' : '<div class="gs-box"><div class="gs-empty">Không tìm thấy "' + raw.replace(/</g, '&lt;') + '" — thử từ khóa khác hoặc đặt câu hỏi (vd: "giàn 50m kiểm tra như thế nào?").</div></div>');
+    : (aiHtml ? '' : '<div class="gs-box"><div class="gs-empty">Không tìm thấy "' + raw.replace(/</g, '&lt;') + '" — thử từ khóa khác hoặc đặt câu hỏi.</div></div>');
 
   box.innerHTML = aiHtml + claudeBar + listHtml;
 }
 
-/* ===== Tầng 2: Claude API (tùy chọn) ===== */
 function gsAiKey() {
   const cur = localStorage.getItem('qc_ai_key') || '';
   const k = prompt('Dán API key AI (sk-ant-...) — key lưu CHỈ trên máy này.\nĐể trống và OK để xóa key.', cur);
@@ -450,11 +404,12 @@ async function gsAskClaude() {
     out.innerHTML = '<div style="background:#fbeae2;border:1px solid #f0c4b3;border-radius:12px;padding:14px;margin-bottom:14px;font-size:13px;color:#aa4322"><b>Lỗi gọi AI:</b> ' + String(e.message || e).replace(/</g, '&lt;') + '<br><span style="font-size:12px">Kiểm tra API key (⚙), kết nối mạng, hoặc dùng kế hoạch offline phía trên.</span></div>';
   }
 }
+
 const gqEl = document.getElementById('gq');
 gqEl.addEventListener('focus', gsBuild, { once: true });
 gqEl.addEventListener('input', () => { gsBuild(); gsRun(); });
 
-/* chip câu hỏi mẫu — gợi ý đa dạng vấn đề */
+/* chip câu hỏi mẫu */
 (function () {
   const ex = (window.QCAssistant && QCAssistant.EXAMPLES) || [];
   const box = document.getElementById('gsEx');
@@ -463,7 +418,7 @@ gqEl.addEventListener('input', () => { gsBuild(); gsRun(); });
   box.querySelectorAll('button').forEach(b => b.onclick = () => {
     gqEl.value = b.textContent;
     gsBuild(); gsRun();
-    gqEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    document.getElementById('gsRes').scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 })();
 </script>
