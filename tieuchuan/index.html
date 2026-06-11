@@ -52,7 +52,11 @@
 const STDS = [
   /* nhóm, mã, tên, verified, dùng ở đâu [text, href] */
   ['THI CÔNG KẾT CẤU THÉP', 'EN 1090-2:2018+A1:2024', 'Thi công kết cấu thép — yêu cầu kỹ thuật (hàn, bu lông, sơ chế, dung sai, sơn, kiểm tra)', true, [['QC Sơ chế','../soche/'],['QC Hàn','../han/'],['QC Bu lông','../bulong/'],['QC Dim','../dungsai/'],['QC Coating','../son/']]],
-  ['THI CÔNG KẾT CẤU THÉP', 'AISC 303-16', 'Code of Standard Practice — nhà & cầu thép (Mỹ)', true, [['QC Dim','../dungsai/']]],
+  ['THI CÔNG KẾT CẤU THÉP', 'AISC 303-16', 'Code of Standard Practice — dung sai chế tạo & lắp dựng hệ Mỹ (có PDF gốc trong dự án)', true, [['QC Dim','../dungsai/']]],
+  ['THI CÔNG KẾT CẤU THÉP', 'AISC 207-20', 'Certification Standard — yêu cầu chứng nhận nhà máy chế tạo & lắp dựng thép (audit AISC)', true, [['Thư viện Tiêu chuẩn','./']]],
+  ['SƠN', 'TL Bec phun sơn (Jotun School)', 'Chọn bec phun airless: số bec = góc phun + cỡ lỗ (vd "517": 5×5=25cm dải phun · 0.017in=0.43mm) · khoảng cách 30cm', true, [['QC Coating','../son/']]],
+  ['SƠN', 'Painting Spec — Steel Structures (2021)', 'Spec sơn mẫu cho mockup chứng nhận AISC: hệ sơn, chuẩn bề mặt, kiểm tra QC', true, [['QC Coating','../son/']]],
+  ['VẬT TƯ', 'TL Kiểm tra vật tư đầu vào (2022)', 'Training nội bộ: kiểm thép tấm/hình/ống + coil HGI (xà gồ) + GL/PPGL (bao che) theo ITP', true, [['QC Vật tư','../vattu/']]],
   ['THI CÔNG KẾT CẤU THÉP', 'MBMA 2012', 'Metal Building Systems Manual (PEB)', true, [['QC Dim','../dungsai/']]],
   ['THI CÔNG KẾT CẤU THÉP', 'JASS 6', 'Tiêu chuẩn kiến trúc Nhật — công tác thép (bản scan)', false, [['QC Dim','../dungsai/'],['QC Hàn','../han/']]],
   ['HÀN', 'AWS D1.1/D1.1M:2020', 'Structural Welding Code — Steel (Table 8.1 VT, 7.21 fit-up, Fig 7.3, Table 5.8 preheat)', true, [['QC Hàn','../han/'],['QC Fit-up','../fitup/']]],
@@ -76,7 +80,7 @@ const STDS = [
   ['SƠN / MẠ', 'ISO 1461 + EN ISO 14713-2', 'Mạ kẽm nhúng nóng: chiều dày tối thiểu + thiết kế lỗ thoát', false, [['QC Coating → Mạ kẽm','../son/']]],
   ['BU LÔNG', 'EN 14399 (1–10)', 'Bộ bu lông dự ứng lực HR/HV/HRC + DTI + k-class', false, [['QC Bu lông','../bulong/']]],
   ['BU LÔNG', 'EN 15048', 'Bộ bu lông không dự ứng lực (SB)', false, [['QC Bu lông','../bulong/']]],
-  ['BU LÔNG', 'AISC 360 (J3) + RCSC 2020 + ASTM F3125', 'Lực căng Tb + 4 phương pháp xiết hệ Mỹ', false, [['QC Bu lông','../bulong/']]],
+  ['BU LÔNG', 'AISC 360-16 (J3) + RCSC 2020 + ASTM F3125', 'Lực căng Tb (J3.1/J3.1M = RCSC Table 5.2) + turn-of-nut Table 8.1 (+60°/−0°) + 4 phương pháp xiết hệ Mỹ', true, [['QC Bu lông','../bulong/']]],
   ['PACKING', 'CTU Code 2014 (IMO/ILO/UNECE)', 'Quy tắc đóng hàng đơn vị vận tải (xếp, chèn, lashing)', false, [['QC Packing','../packing/']]],
   ['PACKING', 'EN 12195-1:2010', 'Tính lực chằng buộc đường bộ', false, [['QC Packing → Lashing','../packing/']]],
   ['PACKING', 'ISO 780:2015', 'Ký hiệu handling trên kiện hàng', false, [['QC Packing → Tem nhãn','../packing/']]],

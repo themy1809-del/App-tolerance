@@ -122,11 +122,12 @@
     ]}
   ];
 
-  /* ===== HỆ MỸ — AISC 360 Table J3.1/J3.1M + RCSC =====
-     Tb = lực căng tối thiểu (0.7 Fu·As làm tròn). THAM KHẢO — đối chiếu
-     AISC 360/RCSC bản gốc trước khi nghiệm thu chính thức (chưa có PDF trong dự án). */
+  /* ===== HỆ MỸ — AISC 360-16 Table J3.1/J3.1M + RCSC 2020 =====
+     Tb = lực căng tối thiểu (0.7 Fu·As làm tròn).
+     ĐÃ XÁC MINH nguyên văn từ PDF gốc: AISC 360-16 Table J3.1/J3.1M (16.1-127)
+     + RCSC 2020 Table 5.2 (pretension) & Table 8.1 (turn-of-nut). */
   const AISC = {
-    soft: true,
+    soft: false,
     metricDia: [16, 20, 22, 24, 27, 30, 36],
     Tb_M: { /* kN — AISC Table J3.1M */
       A325M: { 16: 91, 20: 142, 22: 176, 24: 205, 27: 267, 30: 326, 36: 475 },
@@ -137,20 +138,21 @@
       A325: [12, 19, 28, 39, 51, 64, 81, 97, 118],
       A490: [15, 24, 35, 49, 64, 80, 102, 121, 148]
     },
-    turnOfNut: [ /* RCSC Table 8.2 — cả 2 mặt vuông góc trục bu lông */
-      { cond: B("Chiều dài bu lông L ≤ 4d", "Bolt length L ≤ 4d"), turn: B("1/3 vòng (120°)", "1/3 turn (120°)") },
-      { cond: B("4d < L ≤ 8d", "4d < L ≤ 8d"), turn: B("1/2 vòng (180°)", "1/2 turn (180°)") },
-      { cond: B("8d < L ≤ 12d", "8d < L ≤ 12d"), turn: B("2/3 vòng (240°)", "2/3 turn (240°)") }
+    turnOfNut: [ /* RCSC 2020 Table 8.1 — đã xác minh. Góc xoay theo tình trạng 2 mặt ngoài */
+      { cond: B("Chiều dài bu lông L ≤ 4d", "Bolt length L ≤ 4d"), turn: B("1/3 vòng (2 mặt vuông góc) · 1/2 vòng (1 mặt nghiêng ≤1:20) · 2/3 vòng (2 mặt nghiêng)", "1/3 turn (both normal) · 1/2 (one sloped ≤1:20) · 2/3 (both sloped)") },
+      { cond: B("4d < L ≤ 8d", "4d < L ≤ 8d"), turn: B("1/2 vòng · 2/3 vòng · 5/6 vòng", "1/2 · 2/3 · 5/6 turn") },
+      { cond: B("8d < L ≤ 12d", "8d < L ≤ 12d"), turn: B("2/3 vòng · 5/6 vòng · 1 vòng", "2/3 · 5/6 · 1 turn") },
+      { cond: B("L > 12d", "L > 12d"), turn: B("KHÔNG có bảng — phải thử nghiệm trong thiết bị đo lực căng (Table 8.1 note c)", "No tabulated value — establish by testing in tension calibrator (note c)") }
     ],
     methods: [
-      { n: B("Turn-of-nut (xoay đai ốc)", "Turn-of-nut"), d: B("Xiết snug-tight → đánh dấu → xoay thêm theo RCSC Table 8.2 (theo CHIỀU DÀI bu lông L/d — KHÁC EN dùng tổng chiều dày kẹp Σt). Dung sai góc: ±30° khi ≤ 1/2 vòng; ±45° khi > 1/2 vòng. Mặt nghiêng không đệm vát → tăng góc theo bảng.", "Snug → mark → rotate per RCSC Table 8.2 (based on bolt LENGTH — unlike EN's grip Σt). Tolerance ±30°/±45°.") },
+      { n: B("Turn-of-nut (xoay đai ốc)", "Turn-of-nut"), d: B("Xiết snug-tight → đánh dấu → xoay thêm theo RCSC 2020 Table 8.1 (theo CHIỀU DÀI bu lông L/d — KHÁC EN dùng tổng chiều dày kẹp Σt). Dung sai góc BẢN 2020: +60° / −0° (đổi so với bản cũ ±30°/±45°). Mặt nghiêng không đệm vát → tăng góc theo bảng. Chỉ áp dụng khi toàn bộ vật liệu trong grip là thép.", "Snug → mark → rotate per RCSC 2020 Table 8.1 (based on bolt LENGTH — unlike EN's grip Σt). 2020 tolerance: +60°/−0°. Steel-only grip.") },
       { n: B("Calibrated wrench (cờ lê hiệu chuẩn)", "Calibrated wrench"), d: B("Hiệu chuẩn HẰNG NGÀY bằng thiết bị đo lực (Skidmore-Wilhelm) với ≥ 3 bu lông mỗi lô: momen đặt phải cho lực ≥ 1.05×Tb. KHÔNG dùng bảng momen in sẵn/công thức chung — RCSC cấm.", "DAILY calibration with tension calibrator, ≥3 bolts/lot, wrench set ≥1.05×Tb. Published torque tables prohibited by RCSC.") },
       { n: B("Twist-off (TC bolt — F1852/F2280)", "Twist-off tension-control"), d: B("Tương đương HRC của EN: xiết tới khi đứt chuôi spline. Kiểm tra trước lắp (pre-installation verification) 3 bộ/lô trong thiết bị đo lực.", "Equivalent to EN HRC: tighten until spline shears. Pre-installation verification 3/lot.") },
       { n: B("DTI (ASTM F959)", "Direct tension indicator (F959)"), d: B("Vòng đệm vấu — kiểm khe bằng thước lá; số khe từ chối theo số vấu của đệm.", "Protrusion washer — feeler gauge refusals per washer type.") }
     ],
     notes: B("Snug-tight theo RCSC = lực đủ ép khít các bản (vài nhát súng xung hoặc hết sức cờ lê thường). Mọi bu lông phải snug toàn liên kết trước khi căng. Pre-installation verification: 3 bộ/lô thử trong tension calibrator trước khi dùng.",
       "RCSC snug-tight = plies in firm contact. Snug whole joint before pretensioning. Pre-installation verification: 3 assemblies/lot in tension calibrator."),
-    ref: "AISC 360 Table J3.1/J3.1M · RCSC Specification (2020) Section 8 · ASTM F3125"
+    ref: "AISC 360-16 Table J3.1/J3.1M · RCSC 2020 Table 5.2 + Table 8.1 · ASTM F3125 — ĐÃ XÁC MINH từ PDF gốc"
   };
 
   window.BL_DATA = { DIA, FPC, M75, METHODS, RULES, INSPECT, MATERIALS, CHECKLIST, AISC,

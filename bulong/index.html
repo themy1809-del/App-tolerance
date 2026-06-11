@@ -237,7 +237,7 @@ function renderCalcUS() {
   const A = D.AISC;
   let h = `<div class="h2x">${v?'Lực căng tối thiểu Tb & turn-of-nut — AISC/RCSC':'Min pretension Tb & turn-of-nut — AISC/RCSC'}</div>` + sysBar();
 
-  h += `<div class="seccard"><h3>🧮 ${v?'Turn-of-nut: góc xoay theo chiều dài bu lông (RCSC Table 8.2)':'Turn-of-nut rotation (RCSC Table 8.2)'}</h3>
+  h += `<div class="seccard"><h3>🧮 ${v?'Turn-of-nut: góc xoay theo chiều dài bu lông (RCSC 2020 Table 8.1 — đã xác minh)':'Turn-of-nut rotation (RCSC 2020 Table 8.1 — verified)'}</h3>
     <div class="inrow"><span class="lab">${v?'Đường kính bu lông (hệ mét)':'Bolt diameter (metric)'}</span>
       <select id="uD">${A.metricDia.map(d=>`<option value="${d}" ${d===20?'selected':''}>M${d}</option>`).join('')}</select></div>
     <div class="inrow"><span class="lab">${v?'Cấp':'Grade'}</span>
@@ -245,7 +245,7 @@ function renderCalcUS() {
     <div class="inrow"><span class="lab">${v?'Chiều dài bu lông L (mm, từ mặt dưới đầu tới mút)':'Bolt length L (mm)'}</span>
       <input type="number" step="any" id="uL" value="80"></div>
     <div id="uOut"></div>
-    <div class="note">${v?'Trình tự: snug-tight toàn liên kết → đánh dấu đai ốc/ren → xoay thêm theo kết quả. Dung sai góc ±30° (≤1/2 vòng) / ±45° (>1/2 vòng). Mặt tựa nghiêng không đệm vát → tăng góc theo RCSC Table 8.2.':'Snug whole joint → mark → rotate. Tolerance ±30°/±45°.'}</div></div>`;
+    <div class="note">${v?'Trình tự: snug-tight toàn liên kết → đánh dấu đai ốc/ren → xoay thêm theo kết quả. Dung sai góc (RCSC 2020): +60° / −0°. Mặt tựa nghiêng không đệm vát → tăng góc theo RCSC 2020 Table 8.1. Chỉ áp dụng khi toàn bộ grip là thép.':'Snug whole joint → mark → rotate. RCSC 2020 tolerance: +60°/−0°. Steel-only grip.'}</div></div>`;
 
   h += `<div class="seccard"><h3>${v?'Bảng lực căng tối thiểu Tb — hệ mét (AISC Table J3.1M)':'Min pretension Tb — metric (J3.1M)'} [kN]</h3>
     <div class="tblwrap"><table><tr><th>${v?'Cấp':'Grade'}</th>${A.metricDia.map(d=>`<th>M${d}</th>`).join('')}</tr>
@@ -276,7 +276,7 @@ function renderCalcUS() {
     document.getElementById('uOut').innerHTML = `<div class="res"><div class="lbl">M${d} · ${c} · L = ${L} mm (${(L/d).toFixed(1)}d)</div><div class="big">
       Tb = <b>${Tb} kN</b><br>
       ${ok ? (LANG==='vi'?'Xoay thêm sau snug-tight':'Rotation after snug') + `: <b>${turn} ${LANG==='vi'?'vòng':'turn'} (${deg}°)</b>`
-           : `<span style="color:#ffb4a0">L > 12d — ${LANG==='vi'?'ngoài RCSC Table 8.2, xác định bằng thí nghiệm':'beyond Table 8.2, determine by test'}</span>`}</div></div>`;
+           : `<span style="color:#ffb4a0">L > 12d — ${LANG==='vi'?'ngoài bảng RCSC 2020 Table 8.1, phải thử trong thiết bị đo lực căng (note c)':'beyond RCSC 2020 Table 8.1 — test in tension calibrator (note c)'}</span>`}</div></div>`;
   };
   ['uD','uC','uL'].forEach(id => document.getElementById(id).addEventListener('input', urun)); urun();
 }
@@ -288,7 +288,7 @@ function renderMet() {
     const A = D.AISC;
     document.getElementById('tab-met').innerHTML = `<div class="h2x">${v?'4 phương pháp xiết theo RCSC':'4 RCSC pretensioning methods'}</div>` + sysBar() +
       A.methods.map(m => `<div class="seccard"><h3>${esc(T(m.n))}</h3><div style="font-size:13.5px">${esc(T(m.d))}</div></div>`).join('') +
-      `<div class="seccard"><h3>RCSC Table 8.2 — turn-of-nut</h3><div class="tblwrap"><table><tr><th>${v?'Chiều dài bu lông':'Bolt length'}</th><th>${v?'Góc xoay thêm':'Rotation'}</th></tr>
+      `<div class="seccard"><h3>RCSC 2020 Table 8.1 — turn-of-nut (đã xác minh)</h3><div class="tblwrap"><table><tr><th>${v?'Chiều dài bu lông':'Bolt length'}</th><th>${v?'Góc xoay thêm (2 mặt vuông góc · 1 mặt nghiêng · 2 mặt nghiêng)':'Rotation (both normal · one sloped · both sloped)'}</th></tr>
       ${A.turnOfNut.map(r=>`<tr><td>${esc(T(r.cond))}</td><td><b>${esc(T(r.turn))}</b></td></tr>`).join('')}</table></div>
       <div class="note">📎 ${esc(A.ref)}</div></div>`;
     return;
