@@ -128,6 +128,7 @@
   <button data-tab="dft"><span class="ic">📏</span><span data-vi="DFT" data-en="DFT">DFT</span></button>
   <button data-tab="test"><span class="ic">🔬</span><span data-vi="Kiểm tra" data-en="Tests">Kiểm tra</span></button>
   <button data-tab="def"><span class="ic">⚠️</span><span data-vi="Lỗi sơn" data-en="Defects">Lỗi sơn</span></button>
+  <button data-tab="zn"><span class="ic">🛡️</span><span data-vi="Mạ kẽm" data-en="Galv.">Mạ kẽm</span></button>
   <button data-tab="do"><span class="ic">📷</span><span data-vi="Đo ảnh" data-en="Photo">Đo ảnh</span></button>
   <button data-tab="ck"><span class="ic">☑️</span><span data-vi="Checklist" data-en="Checklist">Checklist</span></button>
   <button data-tab="itp"><span class="ic">🗂</span><span data-vi="ITP" data-en="ITP">ITP</span></button>
@@ -139,6 +140,7 @@
   <section class="tab" id="tab-dft"></section>
   <section class="tab" id="tab-test"></section>
   <section class="tab" id="tab-def"></section>
+  <section class="tab" id="tab-zn"></section>
   <section class="tab" id="tab-do">
     <div class="h2x">📷 Đo lỗi sơn trên ảnh</div>
     <div class="seccard" id="photoMount"></div>
@@ -480,6 +482,51 @@ function renderDef() {
   document.querySelectorAll('#tab-def .chip').forEach(c => c.onclick = () => { dg = c.dataset.g; renderDef(); });
 }
 
+/* ===== MẠ KẼM NHÚNG NÓNG — ISO 1461 (tham khảo) ===== */
+function renderZn() {
+  const v = LANG === 'vi';
+  const TBL = [
+    { t: v?'Thép > 6 mm':'> 6 mm', local: 70, mean: 85 },
+    { t: v?'Thép > 3 – 6 mm':'> 3 – 6 mm', local: 55, mean: 70 },
+    { t: v?'Thép > 1.5 – 3 mm':'> 1.5 – 3 mm', local: 45, mean: 55 },
+    { t: v?'Thép ≤ 1.5 mm':'≤ 1.5 mm', local: 35, mean: 45 }
+  ];
+  document.getElementById('tab-zn').innerHTML = `
+    <div class="h2x">🛡️ ${v?'Mạ kẽm nhúng nóng — QC theo ISO 1461':'Hot-dip galvanizing — ISO 1461'}</div>
+    <div class="seccard"><h3>${v?'Chiều dày lớp mạ tối thiểu (vật phẩm không ly tâm)':'Minimum coating thickness (non-centrifuged)'}</h3>
+      <div class="tblwrap"><table><tr><th>${v?'Chiều dày thép':'Steel thickness'}</th><th>${v?'Cục bộ (µm)':'Local (µm)'}</th><th>${v?'Trung bình (µm)':'Mean (µm)'}</th></tr>
+      ${TBL.map(r => `<tr><td>${r.t}</td><td><b>${r.local}</b></td><td><b>${r.mean}</b></td></tr>`).join('')}</table></div>
+      ${softWarn()}</div>
+    <div class="seccard"><h3>🧮 ${v?'Kiểm chiều dày mạ':'Coating thickness check'}</h3>
+      <div class="inrow"><span class="lab">${v?'Chiều dày thép (mm)':'Steel thickness (mm)'}</span><input type="number" step="any" id="znT" value="8"></div>
+      <div class="inrow"><span class="lab">${v?'Trung bình đo (µm) — máy đo từ tính, ≥5 điểm/khu vực':'Measured mean (µm)'}</span><input type="number" step="any" id="znM" value="92"></div>
+      <div class="inrow"><span class="lab">${v?'Giá trị cục bộ thấp nhất (µm)':'Lowest local (µm)'}</span><input type="number" step="any" id="znL" value="78"></div>
+      <div id="znOut"></div></div>
+    <div class="seccard"><h3>${v?'Ngoại quan & lưu ý QC mạ kẽm':'Visual & QC notes'}</h3>
+      <div style="font-size:13.5px;line-height:1.7">
+      • ${v?'Bề mặt liên tục, không vùng trống mạ, không cặn flux/tro kẽm bám; gai kẽm ở mặt tiếp xúc phải mài':'Continuous, no bare spots, no flux/ash; dross spikes dressed'}<br>
+      • ${v?'TRƯỚC KHI MẠ (việc của xưởng): khoan đủ LỖ THOÁT KHÍ/THOÁT KẼM cho hộp kín — thiếu lỗ là nguy cơ NỔ trong bể':'Vent/drain holes for hollow sections — mandatory (explosion risk)'} (EN ISO 14713-2)<br>
+      • ${v?'Vá vùng trống mạ: tổng diện tích ≤ 0.5% bề mặt, mỗi vùng ≤ 10cm²; sơn giàu kẽm dày hơn lớp mạ 30µm trở lên':'Repairs ≤0.5% total, ≤10cm² each; zinc-rich +30µm'}<br>
+      • ${v?'Gỉ trắng (white rust) khi lưu kho ướt: chà sạch, kiểm chiều dày còn lại — không phải lỗi mạ nếu còn đủ dày':'White rust: clean, re-check thickness'}<br>
+      • ${v?'Sơn phủ lên mạ kẽm (duplex): cần sweep blast nhẹ hoặc primer chuyên dụng — xem PDS':'Duplex systems: sweep blast or special primer'}</div>
+      ${softWarn()}</div>`;
+  const run = () => {
+    const t = +document.getElementById('znT').value || 0;
+    const m = +document.getElementById('znM').value || 0;
+    const l = +document.getElementById('znL').value || 0;
+    const row = t > 6 ? TBL[0] : t > 3 ? TBL[1] : t > 1.5 ? TBL[2] : TBL[3];
+    const okM = m >= row.mean, okL = l >= row.local;
+    document.getElementById('znOut').innerHTML = `
+      <div class="res"><div class="lbl">ISO 1461</div><div class="big">
+        ${v?'Yêu cầu':'Required'}: ${v?'trung bình':'mean'} ≥ ${row.mean}µm · ${v?'cục bộ':'local'} ≥ ${row.local}µm<br>
+        ${v?'Đo':'Measured'}: TB ${m}µm ${okM?'✓':'✗'} · ${v?'cục bộ':'local'} ${l}µm ${okL?'✓':'✗'}</div></div>
+      <div class="verdict ${okM&&okL?'pass':'fail'}">${okM&&okL?(v?'✓ ĐẠT':'✓ PASS'):(v?'✗ KHÔNG ĐẠT':'✗ FAIL')}</div>` +
+      (window.QCLog ? QCLog.saveButton('QC Coating', 'Mạ kẽm ISO 1461 (thép ' + t + 'mm)', okM && okL, 'TB ' + m + 'µm / cục bộ ' + l + 'µm — yêu cầu ' + row.mean + '/' + row.local) : '');
+  };
+  ['znT','znM','znL'].forEach(id => document.getElementById(id).addEventListener('input', run));
+  run();
+}
+
 /* ===== CHECKLIST ===== */
 const CK_KEY = 'son_ck_v1';
 function ckState() { try { return JSON.parse(localStorage.getItem(CK_KEY)) || {}; } catch (e) { return {}; } }
@@ -528,7 +575,7 @@ function renderCK() {
   };
 }
 
-function renderAll() { renderSurf(); renderEnv(); renderDft(); renderTest(); renderDef(); renderCK(); }
+function renderAll() { renderSurf(); renderEnv(); renderDft(); renderTest(); renderDef(); renderZn(); renderCK(); }
 setLang(LANG);
 if (window.PhotoTool) PhotoTool.mount(document.getElementById('photoMount'), { key: 'son_photos_v1' });
 if (window.QCITP && window.ITP_DATA) QCITP.mount(document.getElementById('itpMount'), ITP_DATA.son, { color: '#14532d' });

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f766e">
+<title>QC Ráp thử — Trial assembly</title>
+<style>
+  :root{--bg:#f2f6f5;--ink:#1b2430;--muted:#5f6b7a;--line:#dbe7e4;--brand:#0f766e;--brand2:#14b8a6;--soft:#e2f3f0;
+    --pass:#0f6e56;--pass-soft:#e3f6ee;--fail:#aa4322;--warn-soft:#fdf3e2;--warn:#8a5a00;
+    --r:14px;--sh:0 1px 2px rgba(15,60,55,.07),0 6px 20px rgba(15,60,55,.06)}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.5}
+  button{font-family:inherit;cursor:pointer;border:0;background:none}
+  .appbar{position:sticky;top:0;z-index:40;background:linear-gradient(180deg,#0f766e,#0b5852);color:#fff;
+    padding:max(10px,env(safe-area-inset-top)) 14px 10px;display:flex;align-items:center;gap:10px}
+  .appbar a{color:#fff;font-size:15px;font-weight:700;padding:6px 8px 6px 0;text-decoration:none}
+  .appbar h1{font-size:16px;margin:0;font-weight:700}
+  .appbar .sub{font-size:11px;opacity:.8}
+  .main{max-width:1060px;margin:0 auto;padding:14px 14px 30px}
+  .seccard{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:14px;padding:16px}
+  .seccard h3{margin:0 0 8px;font-size:16px;color:var(--brand)}
+  .warn{background:var(--warn-soft);border:1px solid #f0d9a8;border-left:4px solid var(--warn);border-radius:10px;padding:10px 12px;font-size:12.5px;color:#6b4700;margin-top:10px}
+  .h2x{font-size:18px;font-weight:800;color:var(--brand);margin:14px 2px 10px;display:flex;align-items:center;gap:10px}
+  .h2x::after{content:"";flex:1;height:1px;background:var(--line)}
+  .step{display:flex;gap:12px;padding:11px 0;border-top:1px dashed var(--line)}
+  .step:first-child{border-top:0}
+  .step .n{width:28px;height:28px;border-radius:50%;background:var(--brand);color:#fff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex:none;margin-top:1px}
+  .step .tx{font-size:13.5px;flex:1}
+  .step .tx b{display:block;font-size:14.5px;margin-bottom:2px;color:#16202c}
+  .step .tool{display:block;font-size:12px;color:var(--brand2);font-weight:700;margin-top:4px}
+  .ckphase{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:14px;overflow:hidden}
+  .ckphase .ph{display:flex;align-items:center;gap:10px;padding:13px 16px;background:var(--soft);font-weight:800;color:var(--brand);font-size:15px}
+  .ckphase .ph .pct{margin-left:auto;font-size:12.5px;font-weight:700;color:var(--muted)}
+  .ckitem{display:flex;gap:11px;padding:12px 16px;border-top:1px solid var(--line);cursor:pointer;align-items:flex-start}
+  .ckitem .box{width:22px;height:22px;border:2px solid #b3cdc8;border-radius:6px;flex:none;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;margin-top:1px}
+  .ckitem.done .box{background:var(--pass);border-color:var(--pass)}
+  .ckitem .tx{font-size:13.5px}
+  .ckitem.done .tx{color:var(--muted);text-decoration:line-through}
+  .ckitem .rf{display:block;font-size:11px;color:var(--brand2);font-weight:700;margin-top:3px}
+  .ckbar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+  .btn{padding:10px 16px;border-radius:10px;background:var(--brand);color:#fff;font-weight:700;font-size:13.5px}
+  .btn.alt{background:#dcebe8;color:#0b5852}
+  a.inl{color:var(--brand);font-weight:700;text-decoration:underline dotted}
+</style>
+</head>
+<body>
+
+<header class="appbar">
+  <a href="../">←</a>
+  <div>
+    <h1>QC Ráp thử (Trial assembly)</h1>
+    <div class="sub">Ráp thử tại xưởng trước khi xuất — theo hợp đồng / EN 1090-2 / AISC 303</div>
+  </div>
+</header>
+
+<main class="main">
+  <div class="h2x">🪜 Quy trình ráp thử — 8 bước</div>
+  <div class="seccard" id="steps"></div>
+  <div class="warn">⚠ Phạm vi ráp thử (toàn bộ / từng phân đoạn / chỉ mối nối điển hình) và tiêu chí nghiệm thu lấy theo <b>HỢP ĐỒNG</b> — ráp thử là hạng mục chi phí lớn, phải chốt phạm vi bằng văn bản trước khi thực hiện. Khách hàng/TVGS thường chứng kiến (điểm W, có thể nâng H).</div>
+
+  <div class="h2x">📏 Kiểm gì khi ráp thử</div>
+  <div class="seccard">
+    <div class="step"><div class="n">1</div><div class="tx"><b>Kích thước tổng thể cụm ráp</b> — chiều dài tổng, cao độ, khẩu độ, đường chéo so bản vẽ lắp.<span class="tool">🧮 Calculator: <a class="inl" href="../fitup/">QC Fit-up → Kích thước</a> · giới hạn: <a class="inl" href="../dungsai/">QC Dim</a></span></div></div>
+    <div class="step"><div class="n">2</div><div class="tx"><b>Độ đối tiếp lỗ bu lông giữa các phân đoạn</b> — lỗ thông suốt, bu lông xỏ tự do tỷ lệ theo spec; lỗ lệch xử lý theo quy trình (doa trong giới hạn, KHÔNG cắt nhiệt mở lỗ khi chưa duyệt).<span class="tool">🧰 Drift pin + bu lông thử · khe hở lỗ: <a class="inl" href="../soche/">QC Sơ chế → lỗ</a></span></div></div>
+    <div class="step"><div class="n">3</div><div class="tx"><b>Mặt tiếp xúc mối nối</b> — độ khít mặt bích/bản nối (thước lá), đặc biệt mối nối chịu ép mặt (bearing).<span class="tool">🧰 Thước lá; giới hạn theo bản vẽ/spec</span></div></div>
+    <div class="step"><div class="n">4</div><div class="tx"><b>Cao độ & độ võng đặt sẵn (camber)</b> — kê gối đúng sơ đồ, đo tại các điểm nút.<span class="tool">🧰 Máy thủy bình/total station · <a class="inl" href="../dungsai/">tra giới hạn camber</a></span></div></div>
+    <div class="step"><div class="n">5</div><div class="tx"><b>Đánh dấu ghép bộ (match-marking)</b> — đánh số từng mối nối sau khi ráp đạt để công trường lắp đúng vị trí, đúng chiều.<span class="tool">🧰 Sơn đánh dấu + sơ đồ match-mark đính kèm hồ sơ</span></div></div>
+  </div>
+
+  <div class="h2x">☑️ Checklist & biên bản</div>
+  <div id="ck"></div>
+</main>
+
+<script src="../report.js"></script>
+<script src="../qclog.js"></script>
+<script>
+const STEPS = [
+  ['Chốt phạm vi bằng văn bản', 'Hạng mục nào ráp thử, ráp đứng hay nằm, ai chứng kiến, tiêu chí nghiệm thu — theo hợp đồng.', 'Hợp đồng / spec + biên bản thống nhất'],
+  ['Chuẩn bị bãi ráp', 'Nền đủ cứng, gối kê đúng sơ đồ + cao độ được bắn máy trước; mặt bằng đủ cho cẩu thao tác.', 'Máy thủy bình + sơ đồ gối kê'],
+  ['Kiểm cấu kiện trước ráp', 'Từng cấu kiện đã nghiệm thu kích thước (QC Dim đạt), đủ mark; bu lông thử + drift pin sẵn.', 'Hồ sơ QC Dim + danh mục cấu kiện'],
+  ['Ráp theo trình tự', 'Theo trình tự lắp của bản vẽ; xỏ drift pin định vị trước, bu lông thử sau; KHÔNG ép cưỡng bức làm biến dạng.', 'Bản vẽ lắp + cẩu + drift pin'],
+  ['Đo kiểm tổng thể', 'Kích thước tổng + đường chéo + cao độ + đối tiếp lỗ + độ khít mặt nối (mục Kiểm gì ở trên).', 'Total station / thước + thước lá'],
+  ['Xử lý điểm không khớp', 'Lỗ lệch: doa trong giới hạn cho phép; sai kích thước: NCR + quyết định xử lý; ghi rõ đã sửa gì để công trường biết.', 'NCR (Lượng dư & Sai hỏng)'],
+  ['Match-marking + ảnh', 'Đánh dấu ghép bộ mọi mối nối; chụp ảnh tổng thể + từng mối nối đạt.', 'Sơn đánh dấu + máy ảnh'],
+  ['Biên bản nghiệm thu ráp thử', 'In biên bản (nút bên dưới), ký QC + khách/TVGS; tháo rời có kiểm soát, bảo vệ mark khi vận chuyển.', '🖨 In biên bản + Nhật ký QC']
+];
+const CK = [
+  ['CHUẨN BỊ', ['Phạm vi ráp thử chốt bằng văn bản, có xác nhận khách hàng', 'Bãi ráp + gối kê đạt cao độ (bắn máy có số liệu)', 'Toàn bộ cấu kiện tham gia đã đạt QC Dim, đủ mark']],
+  ['RÁP & ĐO', ['Ráp đúng trình tự bản vẽ, không ép cưỡng bức', 'Kích thước tổng + đường chéo + cao độ trong dung sai bản vẽ lắp', 'Lỗ đối tiếp: bu lông thử xỏ đạt tỷ lệ spec; lỗ lệch xử lý đúng quy trình', 'Mặt nối khít theo yêu cầu (đo thước lá có ghi số)']],
+  ['NGHIỆM THU', ['Match-marking đầy đủ mọi mối nối + sơ đồ kèm hồ sơ', 'Ảnh tổng thể + từng mối nối đã lưu', 'Biên bản ráp thử ký đủ các bên; điểm sửa chữa ghi rõ', 'Tháo rời có kiểm soát, mark được bảo vệ']]
+];
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+document.getElementById('steps').innerHTML = STEPS.map((s,i) =>
+  `<div class="step"><div class="n">${i+1}</div><div class="tx"><b>${esc(s[0])}</b>${esc(s[1])}<span class="tool">🧰 ${esc(s[2])}</span></div></div>`).join('');
+
+const KEY='rt_ck_v1';
+function st(){ try{ return JSON.parse(localStorage.getItem(KEY))||{}; }catch(e){ return {}; } }
+function renderCK(){
+  const s = st();
+  let h = `<div class="ckbar"><button class="btn alt" id="r0">↺ Làm mới</button><button class="btn" id="p0">🖨 In biên bản ráp thử</button></div>`;
+  CK.forEach((ph,pi)=>{
+    const done = ph[1].filter((_,ii)=>s[pi+'_'+ii]).length;
+    h += `<div class="ckphase"><div class="ph">${pi===0?'📋':pi===1?'📐':'✅'} ${ph[0]}<span class="pct">${done}/${ph[1].length}</span></div>` +
+      ph[1].map((it,ii)=>`<div class="ckitem ${s[pi+'_'+ii]?'done':''}" data-k="${pi}_${ii}"><div class="box">${s[pi+'_'+ii]?'✓':''}</div><div class="tx">${esc(it)}</div></div>`).join('') + `</div>`;
+  });
+  const el = document.getElementById('ck');
+  el.innerHTML = h;
+  el.querySelectorAll('.ckitem').forEach(c=>c.onclick=()=>{ const x=st(); x[c.dataset.k]=!x[c.dataset.k]; localStorage.setItem(KEY,JSON.stringify(x)); renderCK(); });
+  el.querySelector('#r0').onclick=()=>{ localStorage.removeItem(KEY); renderCK(); };
+  el.querySelector('#p0').onclick=()=>{
+    const x = st();
+    if (window.QCReport) QCReport.print({
+      module:'QC Ráp thử', color:'#0f766e',
+      title:'BIÊN BẢN NGHIỆM THU RÁP THỬ (TRIAL ASSEMBLY)',
+      groups: CK.map((ph,pi)=>({ name: ph[0], items: ph[1].map((it,ii)=>({ ok: !!x[pi+'_'+ii], text: it, ref: '' })) }))
+    });
+  };
+}
+renderCK();
+</script>
+</body>
+</html>

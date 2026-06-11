@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#9a3412">
+<title>Thư viện WPQR / PQR</title>
+<style>
+  :root{--bg:#f7f4f2;--ink:#1b2430;--muted:#5f6b7a;--line:#e8ddd5;--brand:#9a3412;--brand2:#c2541f;
+    --r:14px;--sh:0 1px 2px rgba(60,25,10,.05),0 6px 22px rgba(60,25,10,.07)}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:14.5px;line-height:1.55}
+  .appbar{position:sticky;top:0;z-index:40;background:linear-gradient(180deg,#9a3412,#7a290e);color:#fff;
+    padding:max(10px,env(safe-area-inset-top)) 14px 10px;display:flex;align-items:center;gap:10px}
+  .appbar a{color:#fff;font-size:15px;font-weight:700;padding:6px 8px 6px 0;text-decoration:none}
+  .appbar h1{font-size:16px;margin:0;font-weight:700}
+  .appbar .sub{font-size:11px;opacity:.8}
+  .main{max-width:1060px;margin:0 auto;padding:14px 14px 30px}
+  .search{position:relative;margin-bottom:12px}
+  .search input{width:100%;padding:12px 14px 12px 40px;border:1px solid var(--line);border-radius:12px;font-size:15px;background:#fff;box-shadow:var(--sh);font-family:inherit}
+  .search .mag{position:absolute;left:13px;top:50%;transform:translateY(-50%);opacity:.5}
+  .card{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:13px 15px;margin-bottom:9px}
+  .card b.code{font-size:15px;color:var(--brand)}
+  .meta{font-size:12px;color:var(--muted);margin-top:3px}
+  .wlist{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap}
+  .wlist a{font-size:11.5px;font-weight:700;background:#fdeee8;color:var(--brand);padding:4px 10px;border-radius:7px;text-decoration:none}
+  .note{background:#fff;border:1px dashed var(--brand2);border-radius:12px;padding:12px 14px;font-size:12.5px;color:#33404e;margin-bottom:14px}
+  .stats{display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+  .stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 16px;text-align:center;box-shadow:var(--sh)}
+  .stat b{font-size:20px;display:block;color:var(--brand)}
+  .stat span{font-size:10.5px;color:var(--muted);font-weight:700;text-transform:uppercase}
+</style>
+</head>
+<body>
+
+<header class="appbar">
+  <a href="../">←</a>
+  <div>
+    <h1>📁 Thư viện WPQR / PQR</h1>
+    <div class="sub">Hồ sơ chứng nhận quy trình hàn — gom từ dữ liệu WPS</div>
+  </div>
+</header>
+
+<main class="main">
+  <div class="note">Danh mục PQR được trích tự động từ 75 WPS trong thư viện: mỗi PQR liệt kê các WPS dựa trên nó. Bấm WPS để mở chi tiết (cần mật khẩu nội bộ như Thư viện WPS). <b>File PDF PQR gốc</b> lưu tại hồ sơ QC — muốn nhúng vào app, bỏ file vào <code>webapp/wpqr/files/</code> và đặt tên theo số PQR.</div>
+  <div class="stats" id="stats"></div>
+  <div class="search"><span class="mag">🔍</span><input id="q" placeholder="Tìm PQR / vật liệu / quy trình hàn..."></div>
+  <div id="list"></div>
+</main>
+
+<script src="../wps/wps-index.js"></script>
+<script>
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const norm = s => String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[đĐ]/g,'d').toLowerCase();
+const DB = window.WPS_DB || { items: [] };
+
+/* gom PQR ← WPS */
+const PQRS = {};
+DB.items.forEach(w => {
+  String(w.pqr || '').split(/[;,\/]+/).map(s => s.trim()).filter(Boolean).forEach(p => {
+    (PQRS[p] = PQRS[p] || { wps: [], procs: new Set(), mats: new Set(), projects: new Set() });
+    PQRS[p].wps.push(w);
+    if (w.process) PQRS[p].procs.add(w.process);
+    if (w.base_metal) PQRS[p].mats.add(String(w.base_metal).split(/[→(]/)[0].trim().slice(0, 30));
+    if (w.project) PQRS[p].projects.add(w.project);
+  });
+});
+
+function render() {
+  const q = norm(document.getElementById('q').value.trim());
+  const keys = Object.keys(PQRS).sort().filter(p => {
+    if (!q) return true;
+    const g = PQRS[p];
+    return norm(p + ' ' + [...g.procs].join(' ') + ' ' + [...g.mats].join(' ')).includes(q);
+  });
+  document.getElementById('stats').innerHTML =
+    '<div class="stat"><b>' + Object.keys(PQRS).length + '</b><span>PQR</span></div>' +
+    '<div class="stat"><b>' + DB.items.length + '</b><span>WPS liên kết</span></div>';
+  document.getElementById('list').innerHTML = keys.length ? keys.map(p => {
+    const g = PQRS[p];
+    return '<div class="card"><b class="code">📁 ' + esc(p) + '</b>' +
+      '<div class="meta">' + esc([...g.procs].join(' · ')) + (g.mats.size ? ' — ' + esc([...g.mats].slice(0, 3).join(', ')) : '') +
+      ' — ' + g.wps.length + ' WPS · ' + esc([...g.projects].join(', ')) + '</div>' +
+      '<div class="wlist">' + g.wps.map(w => '<a href="../wps/?id=' + encodeURIComponent(w.id) + '">' + esc(w.id) + '</a>').join('') + '</div></div>';
+  }).join('') : '<div style="text-align:center;color:#5f6b7a;padding:30px">Không tìm thấy PQR.</div>';
+}
+document.getElementById('q').addEventListener('input', render);
+render();
+</script>
+</body>
+</html>

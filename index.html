@@ -157,59 +157,112 @@
 
   <div id="gsRes" style="display:none"></div>
 
-  <div class="sec-h"><span class="tt">Tiêu chuẩn & nghiệm thu</span><span class="ln"></span></div>
+  <div class="sec-h"><span class="tt">QC theo công đoạn sản xuất — đúng thứ tự</span><span class="ln"></span></div>
   <div class="grid">
-    <a class="mcard m-dim" href="dungsai/">
-      <div class="mic">📏</div>
+    <a class="mcard m-vt" href="vattu/">
+      <div class="mic">📦</div>
       <div class="mbody">
-        <div class="mtt">Tra cứu Dung sai</div>
-        <div class="mds">8 tiêu chuẩn · Đạt/Không đạt · trích dẫn điều khoản</div>
+        <div class="mtt">1 · QC Vật tư</div>
+        <div class="mds">Đầu vào: MTC · spec + dung sai · sketch cách đo</div>
       </div><span class="go">→</span>
     </a>
-    <a class="mcard m-han" href="han/">
-      <div class="mic">👁</div>
+    <a class="mcard" style="--ac:#a16207;--ac-soft:#fdf6e3" href="soche/">
+      <div class="mic">✂️</div>
       <div class="mbody">
-        <div class="mtt">QC Hàn</div>
-        <div class="mds">AWS D1.1 · ISO 5817 · NDT theo EXC · hình cách đo</div>
-      </div><span class="go">→</span>
-    </a>
-    <a class="mcard m-son" href="son/">
-      <div class="mic">🎨</div>
-      <div class="mbody">
-        <div class="mtt">QC Sơn</div>
-        <div class="mds">Bề mặt · điểm sương · DFT ISO 19840 · 16 lỗi sơn</div>
+        <div class="mtt">2 · QC Sơ chế</div>
+        <div class="mds">Cắt (u, Rz5 theo EXC) · vát · nắn · lỗ Table 11</div>
       </div><span class="go">→</span>
     </a>
     <a class="mcard" style="--ac:#92400e;--ac-soft:#fdf0e0" href="fitup/">
       <div class="mic">📐</div>
       <div class="mbody">
-        <div class="mtt">QC Fit-up</div>
-        <div class="mds">Khe hở · lệch mép · góc vát theo AWS 7.21 · biên bản</div>
+        <div class="mtt">3 · QC Fit-up</div>
+        <div class="mds">Mối ghép AWS 7.21 + kích thước hình học cụm gá</div>
       </div><span class="go">→</span>
     </a>
+    <a class="mcard m-han" href="han/">
+      <div class="mic">👁</div>
+      <div class="mbody">
+        <div class="mtt">4 · QC Hàn</div>
+        <div class="mds">AWS D1.1 · ISO 5817 · NDT theo EXC · hình cách đo</div>
+      </div><span class="go">→</span>
+    </a>
+    <a class="mcard m-dim" href="dungsai/">
+      <div class="mic">📏</div>
+      <div class="mbody">
+        <div class="mtt">5 · QC Dim</div>
+        <div class="mds">Kích thước sau hàn: Đạt/Không đạt · trích dẫn điều khoản</div>
+      </div><span class="go">→</span>
+    </a>
+    <a class="mcard" style="--ac:#0f766e;--ac-soft:#e2f3f0" href="rapthu/">
+      <div class="mic">🏗️</div>
+      <div class="mbody">
+        <div class="mtt">6 · QC Ráp thử</div>
+        <div class="mds">Trial assembly: đối tiếp lỗ · match-mark · biên bản</div>
+      </div><span class="go">→</span>
+    </a>
+    <a class="mcard m-son" href="son/">
+      <div class="mic">🎨</div>
+      <div class="mbody">
+        <div class="mtt">7 · QC Coating (Sơn / Mạ kẽm)</div>
+        <div class="mds">Bề mặt · DFT ISO 19840 · mạ kẽm ISO 1461 · 16 lỗi</div>
+      </div><span class="go">→</span>
+    </a>
+    <a class="mcard m-pk" href="packing/">
+      <div class="mic">🚛</div>
+      <div class="mbody">
+        <div class="mtt">8 · QC Packing</div>
+        <div class="mds">Đóng gói · tem nhãn ISO 780 · lashing · ảnh hàng</div>
+      </div><span class="go">→</span>
+    </a>
+  </div>
+
+  <div class="sec-h"><span class="tt">Thư viện</span><span class="ln"></span></div>
+  <div class="grid">
+    <a class="mcard m-dim" href="dungsai/">
+      <div class="mic">📏</div>
+      <div class="mbody">
+        <div class="mtt">1 · Tra cứu Dung sai từng công đoạn</div>
+        <div class="mds">8 tiêu chuẩn · 85+ tiêu chí · so sánh · bookmark</div>
+      </div><span class="go">→</span>
+    </a>
+    <a class="mcard" style="--ac:#1d4ed8;--ac-soft:#e5edfd" href="tieuchuan/">
+      <div class="mic">📚</div>
+      <div class="mbody">
+        <div class="mtt">2 · Thư viện Tiêu chuẩn Chất lượng</div>
+        <div class="mds">29 bộ chuẩn · trạng thái xác minh · nơi áp dụng</div>
+      </div><span class="go">→</span>
+    </a>
+    <button class="mcard m-wps" id="wpsCard" type="button">
+      <div class="mic">🔥</div>
+      <div class="mbody">
+        <div class="mtt">3 · Thư viện WPS <span class="lock">🔒 nội bộ</span></div>
+        <div class="mds">75 WPS theo công việc · thông số máy hàn · QR</div>
+      </div><span class="go">→</span>
+    </button>
+    <a class="mcard" style="--ac:#9a3412;--ac-soft:#fdeee5" href="wpqr/">
+      <div class="mic">📁</div>
+      <div class="mbody">
+        <div class="mtt">4 · Thư viện WPQR</div>
+        <div class="mds">PQR ↔ WPS liên kết tự động · theo dự án</div>
+      </div><span class="go">→</span>
+    </a>
+    <a class="mcard" style="--ac:#9f1239;--ac-soft:#fbe8ef" href="thongke/">
+      <div class="mic">📊</div>
+      <div class="mbody">
+        <div class="mtt">5 · Thư viện Thống kê Chất lượng</div>
+        <div class="mds">Tỉ lệ lỗi · xu hướng · Ishikawa · NCR · nhật ký</div>
+      </div><span class="go">→</span>
+    </a>
+  </div>
+
+  <div class="sec-h"><span class="tt">Công cụ hỗ trợ</span><span class="ln"></span></div>
+  <div class="grid">
     <a class="mcard m-bl" href="bulong/">
       <div class="mic">🔩</div>
       <div class="mbody">
         <div class="mtt">QC Bu lông</div>
         <div class="mds">Momen + góc xoay theo 2 hệ EN 1090-2 · AISC/RCSC</div>
-      </div><span class="go">→</span>
-    </a>
-  </div>
-
-  <div class="sec-h"><span class="tt">Sản xuất & xuất hàng</span><span class="ln"></span></div>
-  <div class="grid">
-    <button class="mcard m-wps" id="wpsCard" type="button">
-      <div class="mic">🔥</div>
-      <div class="mbody">
-        <div class="mtt">Thư viện WPS <span class="lock">🔒 nội bộ</span></div>
-        <div class="mds">75 WPS theo công việc · thông số máy hàn · QR</div>
-      </div><span class="go">→</span>
-    </button>
-    <a class="mcard m-vt" href="vattu/">
-      <div class="mic">📦</div>
-      <div class="mbody">
-        <div class="mtt">Kiểm tra Vật tư</div>
-        <div class="mds">Spec + dung sai · MTC · sketch cách đo · checklist</div>
       </div><span class="go">→</span>
     </a>
     <a class="mcard m-ld" href="luongdu/">
@@ -219,25 +272,11 @@
         <div class="mds">8 calculator · 45 lỗi Ishikawa · NCR một chạm</div>
       </div><span class="go">→</span>
     </a>
-    <a class="mcard m-pk" href="packing/">
-      <div class="mic">🚛</div>
-      <div class="mbody">
-        <div class="mtt">Kiểm tra Packing</div>
-        <div class="mds">Quy trình · tem nhãn ISO 780 · lashing · ảnh hàng</div>
-      </div><span class="go">→</span>
-    </a>
     <a class="mcard" style="--ac:#334155;--ac-soft:#e8edf3" href="nhatky/">
       <div class="mic">📒</div>
       <div class="mbody">
         <div class="mtt">Nhật ký QC</div>
         <div class="mds">Lịch sử Đạt/Không đạt theo dự án · lọc · CSV · in</div>
-      </div><span class="go">→</span>
-    </a>
-    <a class="mcard" style="--ac:#9f1239;--ac-soft:#fbe8ef" href="thongke/">
-      <div class="mic">📊</div>
-      <div class="mbody">
-        <div class="mtt">Thống kê chất lượng</div>
-        <div class="mds">Tỉ lệ lỗi theo module · xu hướng · Ishikawa · NCR</div>
       </div><span class="go">→</span>
     </a>
   </div>
@@ -318,7 +357,7 @@ let GS_IDX = null, GS_LOADING = false;
 const GS_SRC = [
   'dungsai/tolerances-data.js', 'dungsai/tolerances-tier1.js', 'dungsai/tolerances-tier2.js',
   'dungsai/tolerances-tier3.js', 'dungsai/tolerances-tier4-mech.js',
-  'han/data.js', 'son/data.js', 'vattu/data.js', 'luongdu/data.js', 'bulong/data.js', 'packing/data.js', 'fitup/data.js', 'wps/wps-index.js'
+  'han/data.js', 'son/data.js', 'vattu/data.js', 'luongdu/data.js', 'bulong/data.js', 'packing/data.js', 'fitup/data.js', 'soche/data.js', 'wps/wps-index.js'
 ];
 const norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[đĐ]/g, 'd').toLowerCase();
 const gsTx = o => (o && typeof o === 'object') ? (o.vi || o.en || '') : (o || '');
@@ -359,6 +398,10 @@ async function gsBuild() {
   try { if (window.FU_DATA) {
     (FU_DATA.RULES || []).forEach(r => add('📐 Fit-up', 'fitup/', gsTx(r.title), 'Gá lắp trước hàn', gsTx(r.criteria)));
     (FU_DATA.FIXES || []).forEach(f => add('📐 Fit-up', 'fitup/', gsTx(f.p), 'Xử lý lỗi fit-up — ' + f.ref, gsTx(f.f)));
+  } } catch(e){}
+  try { if (window.SC_DATA) {
+    (SC_DATA.RULES || []).forEach(r => add('✂️ Sơ chế', 'soche/', gsTx(r.title), 'Cắt/vát/nắn/lỗ', gsTx(r.criteria)));
+    (SC_DATA.STEPS || []).forEach(s => add('✂️ Sơ chế', 'soche/', gsTx(s.t), 'Quy trình sơ chế', gsTx(s.d)));
   } } catch(e){}
   try { (window.WPS_DB && WPS_DB.items || []).forEach(r =>
     add('🔥 WPS', 'wps/?id=' + encodeURIComponent(r.id), r.id, (r.process || '') + ' · ' + (r.base_metal || '').slice(0, 50), (r.position || '') + ' ' + (r.filler || ''))); } catch(e){}

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1d4ed8">
+<title>Thư viện Tiêu chuẩn Chất lượng</title>
+<style>
+  :root{--bg:#f4f6fa;--ink:#16202c;--muted:#5d6b7c;--line:#e2e8f2;--brand:#1d4ed8;--brand2:#3b82f6;
+    --r:14px;--sh:0 1px 2px rgba(18,30,60,.05),0 6px 22px rgba(18,30,60,.07)}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:14.5px;line-height:1.55}
+  .appbar{position:sticky;top:0;z-index:40;background:linear-gradient(180deg,#1d4ed8,#1740ad);color:#fff;
+    padding:max(10px,env(safe-area-inset-top)) 14px 10px;display:flex;align-items:center;gap:10px}
+  .appbar a{color:#fff;font-size:15px;font-weight:700;padding:6px 8px 6px 0;text-decoration:none}
+  .appbar h1{font-size:16px;margin:0;font-weight:700}
+  .appbar .sub{font-size:11px;opacity:.8}
+  .main{max-width:1060px;margin:0 auto;padding:14px 14px 30px}
+  .search{position:relative;margin-bottom:12px}
+  .search input{width:100%;padding:12px 14px 12px 40px;border:1px solid var(--line);border-radius:12px;font-size:15px;background:#fff;box-shadow:var(--sh);font-family:inherit}
+  .search .mag{position:absolute;left:13px;top:50%;transform:translateY(-50%);opacity:.5}
+  .grp{font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin:16px 2px 8px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:13px 15px;margin-bottom:9px}
+  .card .top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .card b.code{font-size:14.5px}
+  .st{font-size:10px;font-weight:800;padding:3px 8px;border-radius:6px;letter-spacing:.3px}
+  .st.v{background:#e3f6ee;color:#0f6e56}
+  .st.r{background:#fdf3e2;color:#8a5a00}
+  .card .ti{font-size:12.5px;color:#33404e;margin-top:3px}
+  .card .us{font-size:11.5px;color:var(--muted);margin-top:5px}
+  .card .us a{color:var(--brand);font-weight:700;text-decoration:none}
+  .note{background:#fff;border:1px dashed var(--brand2);border-radius:12px;padding:12px 14px;font-size:12.5px;color:#33404e;margin-bottom:14px}
+</style>
+</head>
+<body>
+
+<header class="appbar">
+  <a href="../">←</a>
+  <div>
+    <h1>📚 Thư viện Tiêu chuẩn Chất lượng</h1>
+    <div class="sub">Toàn bộ chuẩn dùng trong app — trạng thái xác minh + nơi áp dụng</div>
+  </div>
+</header>
+
+<main class="main">
+  <div class="note"><b>✅ ĐÃ XÁC MINH</b> = số liệu trong app đã đối chiếu nguyên văn với PDF gốc đang lưu trong dự án. <b>📖 THAM KHẢO</b> = tổng hợp từ bản phát hành, chưa có PDF gốc — đối chiếu trước khi dùng nghiệm thu chính thức (đưa PDF vào là tôi xác minh được).</div>
+  <div class="search"><span class="mag">🔍</span><input id="q" placeholder="Tìm tiêu chuẩn: 5817, dung sai, sơn, bu lông..."></div>
+  <div id="list"></div>
+</main>
+
+<script>
+const STDS = [
+  /* nhóm, mã, tên, verified, dùng ở đâu [text, href] */
+  ['THI CÔNG KẾT CẤU THÉP', 'EN 1090-2:2018+A1:2024', 'Thi công kết cấu thép — yêu cầu kỹ thuật (hàn, bu lông, sơ chế, dung sai, sơn, kiểm tra)', true, [['QC Sơ chế','../soche/'],['QC Hàn','../han/'],['QC Bu lông','../bulong/'],['QC Dim','../dungsai/'],['QC Coating','../son/']]],
+  ['THI CÔNG KẾT CẤU THÉP', 'AISC 303-16', 'Code of Standard Practice — nhà & cầu thép (Mỹ)', true, [['QC Dim','../dungsai/']]],
+  ['THI CÔNG KẾT CẤU THÉP', 'MBMA 2012', 'Metal Building Systems Manual (PEB)', true, [['QC Dim','../dungsai/']]],
+  ['THI CÔNG KẾT CẤU THÉP', 'JASS 6', 'Tiêu chuẩn kiến trúc Nhật — công tác thép (bản scan)', false, [['QC Dim','../dungsai/'],['QC Hàn','../han/']]],
+  ['HÀN', 'AWS D1.1/D1.1M:2020', 'Structural Welding Code — Steel (Table 8.1 VT, 7.21 fit-up, Fig 7.3, Table 5.8 preheat)', true, [['QC Hàn','../han/'],['QC Fit-up','../fitup/']]],
+  ['HÀN', 'ISO 5817:2023', 'Mức chất lượng khuyết tật mối hàn B/C/D', true, [['QC Hàn','../han/'],['QC Fit-up','../fitup/'],['Sai hỏng','../luongdu/']]],
+  ['HÀN', 'ISO 13920:2023', 'Dung sai chung cho kết cấu hàn (dài + góc, class A–D)', true, [['QC Dim','../dungsai/'],['QC Fit-up','../fitup/']]],
+  ['HÀN', 'ISO 9692-1', 'Chuẩn bị mép hàn (kiểu rãnh)', false, [['QC Fit-up','../fitup/']]],
+  ['HÀN', 'EN ISO 15614-1 / 15609 / 9606-1', 'Chứng nhận quy trình hàn (PQR/WPS) + tay nghề thợ', false, [['Thư viện WPS','../wps/'],['WPQR','../wpqr/']]],
+  ['HÀN', 'EN ISO 17637 / 17640 / 23278 / 23277 / 10675-1 / 11666', 'NDT mối hàn: VT, UT, MT, PT, RT — quy trình + mức chấp nhận', false, [['QC Hàn → NDT','../han/']]],
+  ['SƠ CHẾ', 'ISO 9013:2017', 'Cắt nhiệt — phân loại chất lượng mặt cắt (u, Rz5)', false, [['QC Sơ chế','../soche/']]],
+  ['VẬT TƯ', 'EN 10204', 'Loại chứng chỉ vật liệu (3.1, 3.2)', false, [['QC Vật tư','../vattu/']]],
+  ['VẬT TƯ', 'EN 10025 / EN 10029 / EN 10034 / ASTM A6 / EN 10163 / EN 10160', 'Thép kết cấu: yêu cầu + dung sai giao hàng + khuyết tật bề mặt + UT tách lớp', false, [['QC Vật tư','../vattu/']]],
+  ['SƠN / MẠ', 'ISO 8501-1', 'Cấp gỉ + cấp làm sạch bề mặt (Sa, St)', false, [['QC Coating','../son/'],['QC Vật tư','../vattu/']]],
+  ['SƠN / MẠ', 'ISO 8501-3:2025', 'Cấp chuẩn bị mối hàn/cạnh P1–P3 trước sơn', true, [['QC Coating','../son/']]],
+  ['SƠN / MẠ', 'ISO 8502 (3/4/6/9)', 'Đánh giá bụi, điểm sương, muối hòa tan (Bresle)', false, [['QC Coating','../son/']]],
+  ['SƠN / MẠ', 'ISO 8503', 'Độ nhám bề mặt sau phun (comparator, replica tape)', false, [['QC Coating','../son/']]],
+  ['SƠN / MẠ', 'ISO 19840:2012', 'Đo DFT trên bề mặt nhám — 4 điều kiện nghiệm thu + hiệu chỉnh + số điểm đo', true, [['QC Coating → DFT','../son/']]],
+  ['SƠN / MẠ', 'ISO 12944 (1–8)', 'Hệ sơn bảo vệ: cấp ăn mòn C1–CX, độ bền, hệ sơn mẫu', false, [['QC Coating','../son/']]],
+  ['SƠN / MẠ', 'ISO 4624 / ISO 2409 / ISO 29601', 'Bám dính pull-off / cross-cut / dò lỗ kim holiday', false, [['QC Coating → Kiểm tra','../son/']]],
+  ['SƠN / MẠ', 'ISO 4628 (2–6)', 'Đánh giá xuống cấp màng sơn (phồng, gỉ, nứt, bong, phấn hóa)', false, [['Lỗi sơn','../son/'],['Sai hỏng','../luongdu/']]],
+  ['SƠN / MẠ', 'ISO 1461 + EN ISO 14713-2', 'Mạ kẽm nhúng nóng: chiều dày tối thiểu + thiết kế lỗ thoát', false, [['QC Coating → Mạ kẽm','../son/']]],
+  ['BU LÔNG', 'EN 14399 (1–10)', 'Bộ bu lông dự ứng lực HR/HV/HRC + DTI + k-class', false, [['QC Bu lông','../bulong/']]],
+  ['BU LÔNG', 'EN 15048', 'Bộ bu lông không dự ứng lực (SB)', false, [['QC Bu lông','../bulong/']]],
+  ['BU LÔNG', 'AISC 360 (J3) + RCSC 2020 + ASTM F3125', 'Lực căng Tb + 4 phương pháp xiết hệ Mỹ', false, [['QC Bu lông','../bulong/']]],
+  ['PACKING', 'CTU Code 2014 (IMO/ILO/UNECE)', 'Quy tắc đóng hàng đơn vị vận tải (xếp, chèn, lashing)', false, [['QC Packing','../packing/']]],
+  ['PACKING', 'EN 12195-1:2010', 'Tính lực chằng buộc đường bộ', false, [['QC Packing → Lashing','../packing/']]],
+  ['PACKING', 'ISO 780:2015', 'Ký hiệu handling trên kiện hàng', false, [['QC Packing → Tem nhãn','../packing/']]],
+  ['PACKING', 'ISPM 15', 'Gỗ đóng kiện xuất khẩu (dấu IPPC)', false, [['QC Packing','../packing/']]]
+];
+const norm = s => String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[đĐ]/g,'d').toLowerCase();
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function render(){
+  const q = norm(document.getElementById('q').value.trim());
+  const rows = STDS.filter(r => !q || norm(r[1]+' '+r[2]+' '+r[0]).includes(q));
+  const groups = {};
+  rows.forEach(r => { (groups[r[0]] = groups[r[0]] || []).push(r); });
+  document.getElementById('list').innerHTML = Object.keys(groups).map(g =>
+    `<div class="grp">${esc(g)} · ${groups[g].length}</div>` +
+    groups[g].map(r => `<div class="card">
+      <div class="top"><b class="code">${esc(r[1])}</b><span class="st ${r[3]?'v':'r'}">${r[3]?'✅ ĐÃ XÁC MINH PDF':'📖 THAM KHẢO'}</span></div>
+      <div class="ti">${esc(r[2])}</div>
+      <div class="us">Dùng trong: ${r[4].map(u=>`<a href="${u[1]}">${esc(u[0])}</a>`).join(' · ')}</div>
+    </div>`).join('')
+  ).join('') || '<div style="text-align:center;color:#5d6b7c;padding:30px">Không tìm thấy.</div>';
+}
+document.getElementById('q').addEventListener('input', render);
+render();
+</script>
+</body>
+</html>
