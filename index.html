@@ -53,9 +53,14 @@
   @media(min-width:640px){.grid{grid-template-columns:1fr 1fr}}
   @media(min-width:1024px){.grid{grid-template-columns:1fr 1fr 1fr}}
 
+  @keyframes cardup{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
   .mcard{position:relative;background:#fff;border:1px solid var(--line);border-radius:var(--r);
     padding:20px 20px 16px;box-shadow:var(--sh);cursor:pointer;transition:.18s;
-    display:flex;flex-direction:column;gap:10px;text-align:left;font-family:inherit;width:100%;overflow:hidden}
+    display:flex;flex-direction:column;gap:10px;text-align:left;font-family:inherit;width:100%;overflow:hidden;
+    animation:cardup .4s ease both}
+  .grid .mcard:nth-child(2){animation-delay:.06s}
+  .grid .mcard:nth-child(3){animation-delay:.12s}
+  .grid .mcard:nth-child(4){animation-delay:.18s}
   .mcard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--ac)}
   .mcard:hover{transform:translateY(-3px);box-shadow:var(--sh-hover);border-color:#d3dce8}
   .mcard:active{transform:scale(.99)}

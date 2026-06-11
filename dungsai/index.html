@@ -204,6 +204,7 @@
 <div id="report" class="main"></div>
 
 <script src="../photo-tool.js"></script>
+<script src="../report.js"></script>
 <script src="tolerances-data.js?v=9"></script>
 <script src="tolerances-tier1.js?v=9"></script>
 <script src="tolerances-tier2.js?v=9"></script>
@@ -475,13 +476,25 @@ function tolCkCopy(){ const s=tolCkSt();
     ph.items.forEach((it,ii)=>{ txt+=(s[pi+'_'+ii]?'[x] ':'[ ] ')+tx(it.t)+' ('+tx(it.ref)+')\n'; }); });
   (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(()=>alert(LANG==='vi'?'✓ Đã copy!':'✓ Copied!')).catch(()=>prompt('Copy:',txt));
 }
+function tolCkPrint(){
+  const s=tolCkSt();
+  if(window.QCReport) QCReport.print({
+    module: LANG==='vi'?'Dung sai kích thước':'Dimensional tolerance', color: '#0c447c',
+    title: LANG==='vi'?'BÁO CÁO CHECKLIST ĐO KIỂM KÍCH THƯỚC':'DIMENSIONAL INSPECTION CHECKLIST',
+    groups: TOLCK.map((ph,pi)=>({
+      name: tx(ph.ph),
+      items: ph.items.map((it,ii)=>({ ok: !!s[pi+'_'+ii], text: tx(it.t), ref: tx(it.ref) }))
+    }))
+  });
+}
 function viewCheck(){
   const s=tolCkSt();
   let h=`<div class="sectitle">☑️ ${LANG==='vi'?'Checklist đo kiểm kích thước':'Dimensional inspection checklist'}</div>
   <p class="lead">${LANG==='vi'?'Chuẩn bị – đo – hồ sơ. Tick lưu trên máy; copy báo cáo để dán vào hồ sơ.':'Prepare – measure – records. Ticks saved locally; copy report for records.'}</p>
   <div class="btnrow" style="margin-bottom:12px">
     <button class="btn alt" onclick="tolCkReset()">↺ ${LANG==='vi'?'Làm mới':'Reset'}</button>
-    <button class="btn" onclick="tolCkCopy()">📋 ${LANG==='vi'?'Copy báo cáo':'Copy report'}</button></div>`;
+    <button class="btn" onclick="tolCkCopy()">📋 ${LANG==='vi'?'Copy báo cáo':'Copy report'}</button>
+    <button class="btn" onclick="tolCkPrint()">🖨 ${LANG==='vi'?'In / PDF':'Print / PDF'}</button></div>`;
   TOLCK.forEach((ph,pi)=>{
     const done=ph.items.filter((_,ii)=>s[pi+'_'+ii]).length;
     h+=`<div class="card" style="overflow:hidden"><div style="display:flex;align-items:center;gap:10px;padding:13px 16px;background:var(--soft);font-weight:800;color:var(--brand)">${ph.ic} ${esc(tx(ph.ph))}<span style="margin-left:auto;font-size:12.5px;color:var(--muted)">${done}/${ph.items.length}</span></div>`;

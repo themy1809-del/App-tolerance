@@ -1,5 +1,5 @@
-const CACHE = 'han-v6';
-const ASSETS = ['./', './index.html', './data.js', './sketches.js', './manifest.webmanifest'];
+const CACHE = 'han-v7';
+const ASSETS = ['./', './index.html', './data.js', './sketches.js', '../report.js', './manifest.webmanifest'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
 });

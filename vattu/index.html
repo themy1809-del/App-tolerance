@@ -54,6 +54,7 @@
       <div style="display:flex;gap:8px;margin:10px 0">
         <button type="button" id="vtCkReset" style="padding:8px 14px;border:1px solid #cdd;border-radius:8px;background:#eef;font-weight:700;cursor:pointer;font-family:inherit">↺ Làm mới</button>
         <button type="button" id="vtCkCopy" style="padding:8px 14px;border:0;border-radius:8px;background:#3b6d11;color:#fff;font-weight:700;cursor:pointer;font-family:inherit">📋 Copy báo cáo</button>
+        <button type="button" id="vtCkPrint" style="padding:8px 14px;border:0;border-radius:8px;background:#3b6d11;color:#fff;font-weight:700;cursor:pointer;font-family:inherit">🖨 In / PDF</button>
         <span id="vtCkPct" style="margin-left:auto;font-weight:700;color:#3b6d11;align-self:center"></span>
       </div>
       <div id="vtCkList"></div>
@@ -98,6 +99,7 @@
 <script src="data.js?v=2"></script>
 <script src="app.js?v=2"></script>
 <script src="../photo-tool.js"></script>
+<script src="../report.js"></script>
 <script src="smart-search.js?v=1" defer></script>
 <script>
 if (window.PhotoTool) PhotoTool.mount(document.getElementById('photoMount'), { key: 'vt_photos_v1' });
@@ -160,6 +162,17 @@ if (window.PhotoTool) PhotoTool.mount(document.getElementById('photoMount'), { k
       g[1].forEach(function(it, ii){ txt += (s[gi+'_'+ii]?'[x] ':'[ ] ') + it[0] + ' (' + it[1] + ')\n'; });
     });
     (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(function(){ alert('✓ Đã copy!'); }).catch(function(){ prompt('Copy:', txt); });
+  };
+  document.getElementById('vtCkPrint').onclick = function(){
+    var s = st();
+    if (window.QCReport) QCReport.print({
+      module: 'Kiểm tra Vật tư', color: '#3b6d11',
+      title: 'BÁO CÁO CHECKLIST NGHIỆM THU VẬT TƯ ĐẦU VÀO',
+      groups: ITEMS.map(function(g, gi){ return {
+        name: g[0].replace(/^[^ ]+ /,''),
+        items: g[1].map(function(it, ii){ return { ok: !!s[gi+'_'+ii], text: it[0], ref: it[1] }; })
+      }; })
+    });
   };
   render();
 })();
