@@ -753,5 +753,9 @@ if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   navigator.serviceWorker.register('sw.js').catch(()=>{});
 }
 </script>
+
+<script src="../assistant.js"></script>
+<script src="../ai-fab.js"></script>
+<script>if(window.AIFab)AIFab.mount({module:'QC Hàn'});</script>
 </body>
 </html>

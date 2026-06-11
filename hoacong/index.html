@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#8a2c0f">
+<title>Thư viện Nắn chỉnh Hỏa công — Kết cấu thép</title>
+<style>
+:root{--ac:#b3411f;--ac-soft:#fbe9e2;--ink:#1c2733;--muted:#64748b;--line:#e5e9f0;--bg:#f4f6f9;--sh:0 2px 10px rgba(16,34,56,.07)}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.55}
+.appbar{background:linear-gradient(120deg,#8a2c0f,#b3411f 55%,#d4622e);color:#fff;padding:13px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:50}
+.appbar a{color:#fff;text-decoration:none;font-size:18px}
+.appbar h1{margin:0;font-size:15.5px;font-weight:800;letter-spacing:-.2px}
+.appbar .doc{margin-left:auto;font-size:10.5px;background:rgba(255,255,255,.16);padding:3px 9px;border-radius:7px;white-space:nowrap}
+.nav{display:flex;gap:4px;background:#fff;border-bottom:1px solid var(--line);padding:7px 10px;overflow-x:auto;position:sticky;top:50px;z-index:49;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav button{border:0;background:none;padding:8px 13px;border-radius:9px;font-size:12.5px;font-weight:700;color:var(--muted);cursor:pointer;white-space:nowrap;font-family:inherit}
+.nav button.on{background:var(--ac-soft);color:var(--ac)}
+.wrap{max-width:880px;margin:0 auto;padding:16px 14px 90px}
+.tab{display:none}.tab.on{display:block;animation:fadein .25s}
+@keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1}}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:15px 16px;margin-bottom:12px;box-shadow:var(--sh)}
+.card h3{margin:0 0 8px;font-size:14px;color:var(--ac)}
+.step{display:flex;gap:11px;margin-bottom:12px}
+.step .n{flex:none;width:26px;height:26px;border-radius:50%;background:var(--ac-soft);color:var(--ac);font-weight:800;font-size:12.5px;display:flex;align-items:center;justify-content:center}
+.step b{display:block;font-size:13.5px}
+.step .ref{font-size:11px;color:var(--muted);margin-top:3px}
+.ev{background:#fbf7f0;border-left:3px solid #d4a548;padding:8px 12px;border-radius:0 9px 9px 0;font-size:12px;color:#6b5732;margin-top:8px}
+.sk{max-width:430px;margin:10px auto;display:block}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{padding:8px 9px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:#f8fafc;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted)}
+.tag{display:inline-block;font-size:10px;font-weight:800;padding:2px 7px;border-radius:6px;background:#e7f6ee;color:#0e7a4d}
+.tag.tk{background:#fef3e2;color:#a16207}
+.calc{background:#f8fafc;border:1px solid var(--line);border-radius:11px;padding:12px;margin-top:10px}
+.calc label{font-size:11.5px;font-weight:700;color:var(--muted);display:block;margin:7px 0 3px}
+.calc input{width:100%;padding:9px 11px;border:1.5px solid #d6dee8;border-radius:9px;font-size:14px;font-family:inherit}
+.res{margin-top:10px;padding:10px 13px;border-radius:10px;font-weight:800;font-size:13.5px;display:none}
+.res.ok{display:block;background:#e7f6ee;color:#0e7a4d}
+.res.bad{display:block;background:#fdebe7;color:#b3411f}
+.ckph{font-size:12px;font-weight:800;color:var(--ac);text-transform:uppercase;letter-spacing:.5px;margin:14px 0 6px}
+.cki{display:flex;gap:9px;align-items:flex-start;padding:7px 0;border-bottom:1px dashed var(--line);font-size:13px}
+.cki input{margin-top:2px;width:17px;height:17px;accent-color:var(--ac)}
+.btn{display:inline-block;padding:10px 16px;border:0;border-radius:10px;background:var(--ac);color:#fff;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;margin-top:10px}
+.btn.alt{background:#fff;color:var(--ac);border:1.5px solid var(--ac)}
+.note{font-size:12px;color:var(--muted);margin-top:8px}
+</style>
+</head>
+<body>
+<div class="appbar">
+  <a href="../">←</a>
+  <h1>🔥 Thư viện Nắn chỉnh Hỏa công</h1>
+  <span class="doc">QHPS-QAC-F-001</span>
+</div>
+<div class="nav" id="nav"></div>
+<div class="wrap">
+  <div class="tab" id="tb-qt"></div>
+  <div class="tab" id="tb-kt"></div>
+  <div class="tab" id="tb-tt"></div>
+  <div class="tab" id="tb-pp"></div>
+  <div class="tab" id="tb-gh"></div>
+  <div class="tab" id="tb-ck"></div>
+</div>
+
+<script src="data.js"></script>
+<script src="../qclog.js"></script>
+<script src="../report.js"></script>
+<script>
+'use strict';
+const D = window.HC_DATA;
+const TABS = [['qt','📋 Quy trình'],['kt','🔥 4 mẫu gia nhiệt'],['tt','🔢 Trình tự'],['pp','🛠 Phương pháp'],['gh','✅ Giới hạn & tiêu chí'],['ck','☑ Checklist']];
+
+/* ===== SVG minh họa (label ngắn) ===== */
+const SK = {
+duong:`<svg class="sk" viewBox="0 0 320 135" xmlns="http://www.w3.org/2000/svg">
+<rect x="20" y="55" width="280" height="14" fill="#cfd8e3"/><path d="M20 62 Q160 30 300 62" fill="none" stroke="#b3411f" stroke-width="3"/>
+<line x1="70" y1="40" x2="70" y2="58" stroke="#e25822" stroke-width="6"/><line x1="130" y1="34" x2="130" y2="52" stroke="#e25822" stroke-width="6"/>
+<line x1="190" y1="34" x2="190" y2="52" stroke="#e25822" stroke-width="6"/><line x1="250" y1="40" x2="250" y2="58" stroke="#e25822" stroke-width="6"/>
+<text x="160" y="20" font-size="11" text-anchor="middle" fill="#1c2733">Dải đốt phía LỒI, theo tuyến</text>
+<text x="160" y="92" font-size="10" text-anchor="middle" fill="#64748b">Tấm cong lồi lên → đốt mặt trên</text>
+<text x="160" y="120" font-size="10" text-anchor="middle" fill="#b3411f">~650°C · ngấm ¾ chiều dày</text></svg>`,
+diem:`<svg class="sk" viewBox="0 0 320 135" xmlns="http://www.w3.org/2000/svg">
+<rect x="40" y="30" width="240" height="80" rx="6" fill="#eef2f7" stroke="#cfd8e3"/>
+<circle cx="160" cy="70" r="9" fill="#e25822"/><circle cx="120" cy="55" r="7" fill="#ef8a5e"/><circle cx="200" cy="55" r="7" fill="#ef8a5e"/>
+<circle cx="120" cy="86" r="7" fill="#ef8a5e"/><circle cx="200" cy="86" r="7" fill="#ef8a5e"/>
+<text x="160" y="20" font-size="11" text-anchor="middle" fill="#1c2733">Điểm Ø15–30, so le quanh tâm lồi</text>
+<text x="160" y="126" font-size="10" text-anchor="middle" fill="#64748b">Đốt từ ngoài vào tâm</text></svg>`,
+chuv:`<svg class="sk" viewBox="0 0 320 135" xmlns="http://www.w3.org/2000/svg">
+<rect x="30" y="60" width="260" height="16" fill="#cfd8e3"/>
+<path d="M140 60 L160 25 L180 60 Z" fill="#e25822" opacity=".85"/>
+<path d="M70 60 L85 35 L100 60 Z" fill="#ef8a5e" opacity=".7"/><path d="M220 60 L235 35 L250 60 Z" fill="#ef8a5e" opacity=".7"/>
+<text x="160" y="16" font-size="11" text-anchor="middle" fill="#1c2733">V mở về phía cần CO ngắn</text>
+<text x="160" y="100" font-size="10" text-anchor="middle" fill="#64748b">Nắn cong dầm / thép hình</text></svg>`,
+khoi:`<svg class="sk" viewBox="0 0 320 135" xmlns="http://www.w3.org/2000/svg">
+<rect x="30" y="90" width="260" height="12" fill="#cfd8e3"/><rect x="60" y="30" width="200" height="60" fill="#eef2f7" stroke="#cfd8e3"/>
+<path d="M100 90 L115 58 L130 90 Z" fill="#e25822"/><path d="M190 90 L205 58 L220 90 Z" fill="#e25822"/>
+<line x1="248" y1="30" x2="248" y2="90" stroke="#64748b" stroke-width="1" stroke-dasharray="3 2"/>
+<text x="262" y="62" font-size="9" fill="#64748b">h mép</text>
+<text x="160" y="20" font-size="11" text-anchor="middle" fill="#1c2733">Tam giác cao 1/3–1/2 mép</text>
+<text x="160" y="122" font-size="10" text-anchor="middle" fill="#64748b">Cạnh gia cường hàn với tôn</text></svg>`,
+order:`<svg class="sk" viewBox="0 0 320 150" xmlns="http://www.w3.org/2000/svg">
+<rect x="25" y="25" width="270" height="100" fill="#eef2f7" stroke="#cfd8e3"/>
+<line x1="115" y1="25" x2="115" y2="125" stroke="#94a3b8" stroke-width="4"/><line x1="205" y1="25" x2="205" y2="125" stroke="#94a3b8" stroke-width="4"/>
+<circle cx="115" cy="45" r="10" fill="#b3411f"/><text x="115" y="49" font-size="10" fill="#fff" text-anchor="middle">1</text>
+<circle cx="160" cy="70" r="10" fill="#c2552f"/><text x="160" y="74" font-size="10" fill="#fff" text-anchor="middle">2</text>
+<circle cx="70" cy="75" r="10" fill="#d4622e"/><text x="70" y="79" font-size="10" fill="#fff" text-anchor="middle">3</text>
+<circle cx="250" cy="75" r="10" fill="#e0764a"/><text x="250" y="79" font-size="10" fill="#fff" text-anchor="middle">4</text>
+<circle cx="40" cy="110" r="10" fill="#ef8a5e"/><text x="40" y="114" font-size="10" fill="#fff" text-anchor="middle">5</text>
+<text x="160" y="16" font-size="11" text-anchor="middle" fill="#1c2733">Thứ tự nắn phân đoạn 1→5</text>
+<text x="160" y="143" font-size="9.5" text-anchor="middle" fill="#64748b">1 gia cường · 2 hàn góc · 3 hàn nối · 4 giữa GC · 5 mép tự do</text></svg>`,
+edge:`<svg class="sk" viewBox="0 0 320 135" xmlns="http://www.w3.org/2000/svg">
+<rect x="25" y="40" width="270" height="60" fill="#eef2f7" stroke="#cfd8e3"/>
+<line x1="25" y1="40" x2="25" y2="100" stroke="#b3411f" stroke-width="5"/>
+<path d="M40 70 H140" stroke="#e25822" stroke-width="6" marker-end="url(#ar)"/>
+<defs><marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="#e25822"/></marker></defs>
+<line x1="240" y1="40" x2="240" y2="100" stroke="#64748b" stroke-dasharray="4 3"/>
+<text x="268" y="73" font-size="9" fill="#64748b">dừng 200</text>
+<text x="160" y="25" font-size="11" text-anchor="middle" fill="#1c2733">Mép tự do: đốt TỪ MÉP vào tâm</text>
+<text x="160" y="120" font-size="10" text-anchor="middle" fill="#64748b">Theo hướng gia cường → tâm tấm</text></svg>`
+};
+
+/* ===== render ===== */
+function rQT(){
+  let h = '<div class="card"><h3>Quy trình hỏa công nắn phẳng — 8 bước</h3>';
+  D.STEPS.forEach((s,i)=>{ h += `<div class="step"><div class="n">${i+1}</div><div><b>${s.t.replace(/^\d+\.\s*/,'')}</b>${s.d}<div class="ref">📖 ${s.ref}</div></div></div>`; });
+  h += `<div class="ev">"Hoả công nắn phẳng phải được thực hiện trước khi thử kín (nếu có), kiểm tra, nghiệm thu kết cấu hàn." — QHPS-QAC-F-001 mục 5.3 · đã xác minh</div></div>`;
+  document.getElementById('tb-qt').innerHTML = h;
+}
+function rKT(){
+  const m = { diem:SK.diem, duong:SK.duong, chuv:SK.chuv, khoi:SK.khoi };
+  let h = '';
+  D.PATTERNS.forEach(p=>{ h += `<div class="card"><h3>${p.name}</h3><div>${p.use}</div>${m[p.id]||''}<div class="note">💡 ${p.note}</div></div>`; });
+  h += `<div class="ev">"Có bốn mẫu gia nhiệt... dùng riêng rẽ hay kết hợp. Gia nhiệt theo đường (khuyến cáo nên dùng). Chú ý: chỉ đốt ngấm ¾ chiều dày." — QHPS-QAC-F-001 mục 6 · đã xác minh</div>`;
+  document.getElementById('tb-kt').innerHTML = h;
+}
+function rTT(){
+  let h = `<div class="card"><h3>Thứ tự nắn phẳng phân đoạn</h3>${SK.order}<table><tbody>`;
+  D.ORDER.forEach(o=>{ h += `<tr><td>${o}</td></tr>`; });
+  h += `</tbody></table></div>
+<div class="card"><h3>Nguyên tắc bắt buộc</h3>
+<div class="step"><div class="n">A</div><div>Bắt đầu từ chi tiết có <b>độ cứng lớn nhất</b>.</div></div>
+<div class="step"><div class="n">B</div><div>Biến dạng sâu/rộng khác nhau → nắn từ <b>biến dạng trung bình</b> trước.</div></div>
+<div class="step"><div class="n">C</div><div>Khu vực nắn phải <b>hàn xong</b>, ngoài vùng nhiệt hàn lân cận.</div></div>
+<div class="step"><div class="n">D</div><div>Chọn sai khu vực nung / chế độ nung → biến dạng <b>phức tạp thêm</b> (mục 1).</div></div>
+<div class="ev">"Việc hoả công nắn phẳng phải bắt đầu từ các chi tiết kết cấu có độ cứng lớn nhất." — QHPS-QAC-F-001 mục 9 · đã xác minh</div></div>`;
+  document.getElementById('tb-tt').innerHTML = h;
+}
+function rPP(){
+  let h = '';
+  D.METHODS.forEach((x,i)=>{ h += `<div class="card"><h3>${i+1}. ${x.name}</h3><div>${x.how}</div><div class="ref" style="font-size:11px;color:var(--muted);margin-top:5px">📖 QHPS-QAC-F-001 ${x.ref} · đã xác minh</div></div>`; });
+  h += `<div class="card"><h3>Minh họa mép tự do</h3>${SK.edge}</div>`;
+  document.getElementById('tb-pp').innerHTML = h;
+}
+function rGH(){
+  let h = `<div class="card"><h3>Giới hạn cứng & tiêu chí chấp nhận</h3><table><thead><tr><th>Hạng mục</th><th>Giới hạn</th><th>Nguồn</th></tr></thead><tbody>`;
+  D.LIMITS.forEach(l=>{ const tk = l.ref.includes('tham khảo'); h += `<tr><td><b>${l.t}</b></td><td>${l.v}</td><td><span class="tag${tk?' tk':''}">${tk?'📖 tham khảo':'✅ xác minh'}</span><div style="font-size:10.5px;color:var(--muted);margin-top:3px">${l.ref}</div></td></tr>`; });
+  h += `</tbody></table>
+<div class="calc"><b style="font-size:13px">🧮 Đánh giá sau nắn</b>
+<label>Dung sai cho phép (mm) — tra <a href="../dungsai/" style="color:var(--ac)">Thư viện Dung sai</a></label><input id="ghT" type="number" step="0.1" placeholder="VD: 4">
+<label>Giá trị đo sau nắn (mm)</label><input id="ghM" type="number" step="0.1" placeholder="VD: 3.5">
+<button class="btn" onclick="ghCalc()">Đánh giá</button>
+<div class="res" id="ghR"></div></div></div>`;
+  document.getElementById('tb-gh').innerHTML = h;
+}
+function ghCalc(){
+  const t = parseFloat(document.getElementById('ghT').value), m = parseFloat(document.getElementById('ghM').value);
+  const r = document.getElementById('ghR');
+  if (isNaN(t) || isNaN(m)) { r.className='res bad'; r.textContent='Nhập đủ 2 giá trị.'; return; }
+  const ok = m <= t;
+  r.className = 'res ' + (ok?'ok':'bad');
+  r.innerHTML = (ok ? `✅ ĐẠT — đo ${m}mm ≤ dung sai ${t}mm` : `❌ KHÔNG ĐẠT — đo ${m}mm > dung sai ${t}mm → tiếp tục nắn (dải gián tiếp, chờ nguội giữa các lần)`) +
+    (window.QCLog ? `<div style="margin-top:8px">${QCLog.saveButton('Hỏa công','Đo sau nắn ('+m+'/'+t+'mm)',ok,'đo '+m+'mm / cho phép '+t+'mm')}</div>` : '');
+}
+function rCK(){
+  const saved = JSON.parse(localStorage.getItem('hc_ck')||'{}');
+  let h = '<div class="card"><h3>Checklist hỏa công nắn phẳng</h3>', idx=0;
+  D.CHECKLIST.forEach(g=>{
+    h += `<div class="ckph">${g.ph}</div>`;
+    g.items.forEach(it=>{ const id='c'+(idx++); h += `<label class="cki"><input type="checkbox" id="${id}" ${saved[id]?'checked':''} onchange="ckSave()"> <span>${it}</span></label>`; });
+  });
+  h += `<button class="btn" onclick="ckPrint()">🖨 In biên bản A4</button> <button class="btn alt" onclick="ckReset()">Làm lại</button></div>`;
+  document.getElementById('tb-ck').innerHTML = h;
+}
+function ckSave(){
+  const o={}; document.querySelectorAll('#tb-ck input[type=checkbox]').forEach(c=>o[c.id]=c.checked);
+  localStorage.setItem('hc_ck', JSON.stringify(o));
+}
+function ckReset(){ localStorage.removeItem('hc_ck'); rCK(); }
+function ckPrint(){
+  if (!window.QCReport) { alert('Không tải được report.js'); return; }
+  const groups = D.CHECKLIST.map(g=>({ name:g.ph, items:g.items.map((it,i)=>{
+    const boxes=document.querySelectorAll('#tb-ck input[type=checkbox]');
+    let flat=[]; D.CHECKLIST.forEach(x=>x.items.forEach(y=>flat.push(y)));
+    const gi = flat.indexOf(it);
+    return { ok: boxes[gi] ? boxes[gi].checked : false, text: it, ref: 'QHPS-QAC-F-001' };
+  })}));
+  QCReport.print({ module:'Hỏa công nắn phẳng', color:'#b3411f', title:'BIÊN BẢN HỎA CÔNG NẮN PHẲNG', groups });
+}
+
+/* ===== nav ===== */
+const nav = document.getElementById('nav');
+nav.innerHTML = TABS.map(([id,t])=>`<button data-t="${id}">${t}</button>`).join('');
+nav.addEventListener('click', e=>{ const b=e.target.closest('button'); if(b) show(b.dataset.t); });
+function show(id){
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('on', b.dataset.t===id));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on', t.id==='tb-'+id));
+  localStorage.setItem('hc_tab', id);
+}
+rQT(); rKT(); rTT(); rPP(); rGH(); rCK();
+show(localStorage.getItem('hc_tab') || 'qt');
+</script>
+<script src="../assistant.js"></script>
+<script src="../ai-fab.js"></script>
+<script>if(window.AIFab)AIFab.mount({module:'Hỏa công nắn phẳng'});</script>
+</body>
+</html>

@@ -63,7 +63,9 @@
   /* ---------- khối hiển thị ---------- */
   const step = (n, html) => `<div style="display:flex;gap:10px;padding:9px 0;border-top:1px solid #eef1f5"><div style="width:24px;height:24px;border-radius:50%;background:#0c447c;color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none">${n}</div><div style="font-size:13.5px;flex:1">${html}</div></div>`;
   const sub = t => `<div style="font-size:12px;color:#5d6b7c;margin-top:3px">${t}</div>`;
-  const lk = (url, label) => `<a href="${url}" style="color:#0c447c;font-weight:700;text-decoration:underline dotted">${label}</a>`;
+  /* BASE: từ trang chủ = '', từ module con = '../' (để link han/, son/... luôn đúng) */
+  const BASE = /\/(vattu|soche|fitup|han|qcdim|rapthu|bulong|son|packing|dungsai|luongdu|tieuchuan|wpqr|thongke|nhatky|wps|hoacong)\//.test(location.pathname) ? '../' : '';
+  const lk = (url, label) => `<a href="${BASE}${url}" style="color:#0c447c;font-weight:700;text-decoration:underline dotted">${label}</a>`;
   const hi = t => `<b style="background:#fdf3e2;padding:1px 6px;border-radius:5px;color:#6b4700">${t}</b>`;
   const good = t => `<b style="background:#e3f6ee;padding:1px 6px;border-radius:5px;color:#0f6e56">${t}</b>`;
   const bad = t => `<b style="background:#fbeae2;padding:1px 6px;border-radius:5px;color:#aa4322">${t}</b>`;
@@ -277,7 +279,7 @@
     ['drift pin', 'Drift pin', 'Chốt côn định vị lỗ khi ráp: xuyên qua nhóm lỗ để đưa các bản về thẳng hàng trước khi xỏ bu lông thử. Không được dùng để "ép" lỗ lệch quá mức.', 'rapthu/']
   ];
   function tryGloss(qn) {
-    if (!/(la gi|la cai gi|nghia la|giai thich|khai niem)/.test(qn)) return null;
+    if (!/(la gi|la cai gi|nghia la|giai thich|khai niem|khac gi|khac nhau|so sanh)/.test(qn)) return null;
     for (const [re, term, def, url] of GLOSS) {
       if (new RegExp('(^|[^a-z])(' + re + ')([^a-z]|$)').test(qn)) {
         return { title: term + ' — là gì?', body:
@@ -298,6 +300,26 @@
     s.push(step(++n, `<b>Giá trị chính thức + trích dẫn điều khoản:</b> mở ${lk('dungsai/', 'Thư viện Dung sai kích thước')} — gõ tên hạng mục (độ võng, vuông góc, vị trí lỗ...), nhập số đo là ra Đạt/Không đạt + nút copy trích dẫn.`));
     s.push(step(++n, `<b>Kết quả tìm kiếm liên quan</b> hiển thị ngay bên dưới câu trả lời này — bấm mục đúng để mở.`));
     return { title: 'Tra dung sai — làm thế nào', body: s.join('') };
+  }
+  function planHoaCong() {
+    let s = [], n = 0;
+    s.push(step(++n, `<b>Đo & ghi biến dạng:</b> thước thẳng 1m + thước nêm hoặc căng dây — chỉ nắn khi VƯỢT dung sai (tra ${lk('dungsai/', 'Thư viện Dung sai')}).`));
+    s.push(step(++n, `<b>Chọn mẫu gia nhiệt:</b> ĐIỂM (lồi nhỏ cục bộ) · ĐƯỜNG ★ khuyến cáo (đa số trường hợp) · CHỮ V (nắn cong dầm) · KHỐI/tam giác (mép gia cường, cao 1/3–1/2 mép).${sub('🔥 Hình minh họa: ' + lk('hoacong/', 'Thư viện Hỏa công → 4 mẫu gia nhiệt'))}`));
+    s.push(step(++n, `<b>Điều kiện trước nắn:</b> khu vực đã hàn xong · ngoài vùng nhiệt hàn lân cận · nắn TRƯỚC thử kín/nghiệm thu (QHPS-QAC-F-001 mục 5).`));
+    s.push(step(++n, `<b>Đốt đúng giới hạn:</b> ~650°C (đỏ sẫm) · ngấm ¾ chiều dày · phía LỒI · bắt đầu từ chi tiết CỨNG NHẤT · dừng cách mép cố định 300mm.`));
+    s.push(step(++n, `<b>Cấm tuyệt đối:</b> làm mát bằng nước/khí nén vùng mối hàn nối tấm (thép bị tôi → giòn, mất cơ tính).`));
+    s.push(step(++n, `<b>Sau nắn:</b> nguội tự nhiên → đo lại → VT không nứt (nghi ngờ → MT) → biên bản + ảnh.${sub('🧮 Calculator đánh giá + in biên bản: ' + lk('hoacong/', 'Thư viện Hỏa công'))}`));
+    return { title: 'Nắn chỉnh hỏa công — làm đúng cách', body: s.join('') };
+  }
+  function planWhyTrial() {
+    let s = [], n = 0;
+    s.push(step(++n, `<b>Mục đích chính:</b> phát hiện sai lệch chế tạo TRƯỚC khi hàng ra công trường — sửa ở xưởng rẻ hơn 10–20 lần sửa trên cao.`));
+    s.push(step(++n, `<b>Kiểm đối tiếp lỗ bu lông:</b> các lỗ mặt bích/bản mã phải thông xuyên ≥ 85–90% khi gá đúng vị trí (thử bằng drift pin) — lệch lỗ là lỗi nặng nhất khi lắp dựng.${sub('🧮 Calculator tỷ lệ lỗ thông: ' + lk('rapthu/', 'QC Ráp thử → Tiêu chí đánh giá'))}`));
+    s.push(step(++n, `<b>Kiểm khẩu độ, cao độ gối, đường chéo</b> của tổ hợp đúng dung sai ISO 13920 / EN 1090-2 — sai số cộng dồn của từng cấu kiện chỉ lộ ra khi ráp tổng.`));
+    s.push(step(++n, `<b>Match-mark (đánh số khớp):</b> đánh dấu từng vị trí ghép để công trường lắp đúng thứ tự, đúng chiều — không có match-mark là tháo ra không lắp lại được.`));
+    s.push(step(++n, `<b>Lưu ý bu lông khi ráp thử:</b> CHỈ xỏ kiểm + xiết tay, KHÔNG xiết lực — bu lông đã xiết đủ lực rồi tháo ra là phải LOẠI BỎ (EN 1090-2 8.5.1).${sub('🔩 ' + lk('bulong/', 'Cách kiểm tra siết bu lông'))}`));
+    s.push(step(++n, `<b>Hồ sơ:</b> biên bản ráp thử (khẩu độ/cao độ/đường chéo/tỷ lệ lỗ thông + ảnh) có chữ ký QC, khách hàng chứng kiến nếu là H-point trong ITP.${sub('📋 ' + lk('rapthu/', 'QC Ráp thử — in biên bản A4'))}`));
+    return { title: 'Tại sao phải ráp thử (trial assembly)?', body: s.join('') };
   }
   function planWeldRepair() {
     let s = [], n = 0;
@@ -333,7 +355,9 @@
   const SPECIALS = [
     { re: /(\but\b|\bndt\b|\brt\b|\bmt\b|sieu am|moi han|\bhan\b).*(khong dat|khong pass|\bfail\b|bi loai|truot)|((khong dat|\bfail\b).*(\but\b|\bndt\b|moi han))|sua moi han|han lai|dao (khuyet tat|moi han)|repair weld/, fn: () => planWeldRepair() },
     { re: /sai kich thuoc|lech kich thuoc|kich thuoc.*(sai|lech|sua)|sua kich thuoc|bi (cong|venh)|cong venh.*(sua|xu l(y|i)|lam sao)|nan (thang|nhiet|co)/, fn: (q, len) => planDimFix(len) },
-    { re: /packing|dong (hang|kien|goi|container)|lashing|chang buoc|xuat hang|tem nhan|shipping mark|len cont|dong cont/, fn: () => planPacking() },
+    { re: /packing|dong (hang|kien|goi|container)|\bcontainer\b|lashing|chang buoc|xuat hang|tem nhan|shipping mark|len cont|dong cont|di bien|hang xuat/, fn: () => planPacking() },
+    { re: /hoa cong|nan (nong|nhiet|phang)|gia nhiet.*(nan|diem|duong|chu v)|nan.*(ton|tam|gia cuong|hoa cong)|flame straight/, fn: () => planHoaCong() },
+    { re: /tai sao.*(rap thu|lap thu)|(rap thu|lap thu).*(tai sao|de lam gi|lam gi|can gi|muc dich)/, fn: () => planWhyTrial() },
     { re: /thao ra.*(dung lai|xai lai|su dung)|dung lai bu long|tai su dung bu long|bu long cu/, fn: () => planReuseBolt() },
     { re: /troi (mua|am|noi)|do am.*(son|cao)|(\d{2,3})\s*%.*son|son.*duoc khong|dew|diem suong/, fn: q => planEnvPaint(q) },
     { re: /gia nhiet|preheat|han.*(troi lanh|mua dong)|nhiet do.*(han|truoc khi han)/, fn: () => planPreheat() },
@@ -350,6 +374,7 @@
       'Tôi muốn kiểm tra khung dầm 24m',
       'Bị sai kích thước thì sửa sao?',
       'Hàn UT không đạt phải xử lý sao?',
+      'Tôn bị lồi lõm nắn hỏa công thế nào?',
       'EXC là gì?',
       'Giàn 50m kiểm tra như thế nào?',
       'Trời ẩm 90% có sơn được không?',
@@ -376,7 +401,7 @@
       const sp = !plan && SPECIALS.find(s => s.re.test(qn));
       if (sp) plan = sp.fn(q, len);
       /* 2) lỗi / sai hỏng */
-      if (!plan && /loi |bi (nut|ro|cong|venh|chay|phong|bong|thung)|defect|khac phuc|nguyen nhan|sai hong|xu l(y|i)|khong dat|\bfail\b/.test(qn)) plan = planDefect();
+      if (!plan && /loi |bi (nut|ro|cong|venh|chay|phong|bong|thung)|defect|khac phuc|nguyen nhan|sai hong|xu l(y|i)|khong dat|\bfail\b|mai lem|lem vao|chay chan|chay canh/.test(qn)) plan = planDefect();
       /* 3) theo đối tượng */
       if (!plan) {
         const { ent, entVi } = detect(qn);
@@ -415,12 +440,13 @@
         let extra = '';
         if (res.status === 401 || res.status === 403) extra = ' — API key sai/hết hạn (' + ten + ')';
         if (res.status === 429) extra = ' — vượt hạn mức, chờ 1 phút rồi thử lại';
+        if ([500, 503, 504].includes(res.status)) extra = ' — máy chủ AI đang quá tải, thử lại sau 1–2 phút (không phải lỗi key)';
         throw new Error('API ' + res.status + extra);
       };
       /* ---- GEMINI (Google, key AIza...) ----
          Thử model mạnh trước (tài khoản AI Pro dùng được), hết hạn mức/không có quyền → tự rớt xuống Flash */
       if (/^AIza/.test(key)) {
-        const MODELS = ['gemini-2.5-pro', 'gemini-2.5-flash'];
+        const MODELS = ['gemini-3.5-flash', 'gemini-2.5-flash'];
         let lastRes = null;
         for (const mdl of MODELS) {
           const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + mdl + ':generateContent', {
@@ -435,11 +461,11 @@
           if (res.ok) {
             const j = await res.json();
             const txt = (((j.candidates || [])[0] || {}).content || { parts: [] }).parts.map(p => p.text || '').join('\n');
-            if (txt) return txt + '\n\n— ' + (mdl.includes('pro') ? 'Gemini 2.5 Pro' : 'Gemini 2.5 Flash');
+            if (txt) return txt + '\n\n— Gemini ' + mdl.replace('gemini-', '').replace('-flash', ' Flash').replace('-pro', ' Pro');
           }
           lastRes = res;
-          /* 429 (hết hạn mức) / 404 / 403 → thử model tiếp theo */
-          if (![429, 404, 403].includes(res.status) && !res.ok) break;
+          /* 429 (hết hạn mức) / 404 / 403 / 5xx (máy chủ quá tải) → thử model tiếp theo */
+          if (![429, 404, 403, 500, 503, 504].includes(res.status) && !res.ok) break;
         }
         fail(lastRes || { status: 0 }, 'Gemini');
       }

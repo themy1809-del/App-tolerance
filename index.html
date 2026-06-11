@@ -270,6 +270,13 @@
         <div class="mds">Tỉ lệ lỗi · xu hướng · Ishikawa · NCR · nhật ký</div>
       </div><span class="go">→</span>
     </a>
+    <a class="mcard" style="--ac:#b3411f;--ac-soft:#fbe9e2" href="hoacong/">
+      <div class="mic">🔥</div>
+      <div class="mbody">
+        <div class="mtt"><span class="no">6</span>Thư viện Nắn chỉnh Hỏa công</div>
+        <div class="mds">4 mẫu gia nhiệt · trình tự · 650°C · QHPS-QAC-F-001</div>
+      </div><span class="go">→</span>
+    </a>
   </div>
 
   <div class="sec-h"><span class="tt">Công cụ hỗ trợ</span><span class="ln"></span></div>
@@ -366,7 +373,7 @@ let GS_IDX = null, GS_LOADING = false;
 const GS_SRC = [
   'dungsai/tolerances-data.js', 'dungsai/tolerances-tier1.js', 'dungsai/tolerances-tier2.js',
   'dungsai/tolerances-tier3.js', 'dungsai/tolerances-tier4-mech.js',
-  'han/data.js', 'son/data.js', 'vattu/data.js', 'luongdu/data.js', 'bulong/data.js', 'packing/data.js', 'fitup/data.js', 'soche/data.js', 'qcdim/data.js', 'wps/wps-index.js'
+  'han/data.js', 'son/data.js', 'vattu/data.js', 'luongdu/data.js', 'bulong/data.js', 'packing/data.js', 'fitup/data.js', 'soche/data.js', 'qcdim/data.js', 'hoacong/data.js', 'wps/wps-index.js'
 ];
 const norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[đĐ]/g, 'd').toLowerCase();
 const gsTx = o => (o && typeof o === 'object') ? (o.vi || o.en || '') : (o || '');
@@ -415,6 +422,11 @@ async function gsBuild() {
   try { if (window.QD_DATA) {
     (QD_DATA.RULES || []).forEach(r => add('📏 QC Dim', 'qcdim/', gsTx(r.title), 'Kích thước sau hàn', gsTx(r.criteria)));
     (QD_DATA.STEPS || []).forEach(s => add('📏 QC Dim', 'qcdim/', gsTx(s.t), 'Quy trình đo', gsTx(s.d)));
+  } } catch(e){}
+  try { if (window.HC_DATA) {
+    (HC_DATA.STEPS || []).forEach(s => add('🔥 Hỏa công', 'hoacong/', s.t.replace(/^\d+\.\s*/, ''), 'Nắn phẳng — ' + s.ref, s.d));
+    (HC_DATA.METHODS || []).forEach(m => add('🔥 Hỏa công', 'hoacong/', m.name, 'Phương pháp nắn — ' + m.ref, m.how));
+    (HC_DATA.LIMITS || []).forEach(l => add('🔥 Hỏa công', 'hoacong/', l.t, l.v, l.ref));
   } } catch(e){}
   try { (window.WPS_DB && WPS_DB.items || []).forEach(r =>
     add('🔥 WPS', 'wps/?id=' + encodeURIComponent(r.id), r.id, (r.process || '') + ' · ' + (r.base_metal || '').slice(0, 50), (r.position || '') + ' ' + (r.filler || ''))); } catch(e){}
