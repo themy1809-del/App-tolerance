@@ -532,6 +532,21 @@
         { t: B("Truy xuất: đóng dấu/ghi nhận thợ hàn theo mối hàn (EXC3/4 bắt buộc theo dõi)", "Traceability: welder ID per weld (mandatory EXC3/4)"), ref: "EN 1090-2 7.5.6" },
         { t: B("Hồ sơ: báo cáo VT/NDT, bản đồ mối hàn, WPS/WPQR, chứng chỉ thợ, MTC", "Records: VT/NDT reports, weld map, WPS/WPQR, welder certs, MTC"), ref: "EN 1090-2 Cl.12 / AWS D1.1 Cl.8" }
       ]
+    },
+    {
+      phase: B("DỰ ÁN MỸ — AISC 360 Ch.N (bổ sung)", "US PROJECTS — AISC 360 Ch.N (extra)"), icon: "🇺🇸",
+      items: [
+        { t: B("Hệ thống nhận diện thợ hàn (welder ID) gắn với từng mối hàn", "Welder identification system per weld"), ref: "AISC 360-16 N5.4 — checklist mockup AISC" },
+        { t: B("Hình dạng + độ nhẵn lỗ thao tác hàn (access hole) đạt yêu cầu", "Configuration and finish of weld access holes"), ref: "AISC 360-16 N5.4" },
+        { t: B("KHÔNG hàn đè lên hàn đính bị nứt — tack nứt phải mài bỏ trước", "No welding over cracked tack welds"), ref: "AISC 360-16 N5.4" },
+        { t: B("Môi trường: tốc độ GIÓ trong giới hạn (GMAW/FCAW-G nhạy gió), mưa, nhiệt độ", "Wind speed within limits; precipitation & temperature"), ref: "AISC 360-16 N5.4 / AWS D1.1 7.11" },
+        { t: B("Đinh hàn chống cắt (stud anchor): vị trí + lắp đặt đúng", "Steel headed stud anchors: placement & installation"), ref: "AISC 360-16 N5.4" },
+        { t: B("Vết mồi hồ quang (arc strike) ngoài mối hàn: mài sạch + kiểm nứt", "Arc strikes: remove & check"), ref: "AISC 360-16 N5.4" },
+        { t: B("Vùng k (k-area): hàn doubler/continuity/stiffener vào vùng k → VT nứt bụng trong ~75mm quanh mối hàn", "k-area: VT web for cracks within 3 in. of welds"), ref: "AISC 360-16 N5.4 note [a]" },
+        { t: B("Thép hình nặng/tổ hợp nặng: VT lỗ thao tác hàn sau khi hàn (kiểm nứt)", "Heavy shapes: VT weld access holes after welding"), ref: "AISC 360-16 N5.4 note [b] / A3.1c-d" },
+        { t: B("Tháo backing + weld tab nếu bản vẽ yêu cầu, hoàn thiện bề mặt", "Backing & weld tabs removed if required"), ref: "AISC 360-16 N5.4" },
+        { t: B("KHÔNG thêm mối hàn ngoài bản vẽ khi chưa được kỹ sư thiết kế (EOR) duyệt", "No prohibited welds added without EOR approval"), ref: "AISC 360-16 N5.4" }
+      ]
     }
   ];
 

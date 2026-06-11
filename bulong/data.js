@@ -119,6 +119,16 @@
       { t: B("Kiểm lực/momen xác suất theo phương án lấy mẫu tuần tự (Annex M) theo EXC", "Preload sampling per Annex M by EXC"), ref: "EN 1090-2 12.5.2" },
       { t: B("Bu lông đã căng bị tháo → loại bỏ cả bộ, thay mới", "Un-tightened after preload → discard assembly"), ref: "EN 1090-2 8.5.1" },
       { t: B("Hồ sơ: báo cáo xiết + kiểm tra, chứng chỉ thiết bị, CoC bu lông, NCR nếu có", "Records: tightening + inspection reports, certs, NCR"), ref: "EN 1090-2 Cl.12" }
+    ]},
+    { phase: B("DỰ ÁN MỸ — AISC 360 Ch.N (bổ sung)", "US PROJECTS — AISC 360 Ch.N (extra)"), icon: "🇺🇸", items: [
+      { t: B("Bu lông/đai ốc/đệm có dấu (marking) đúng ASTM trên đầu bu lông — đối chiếu chứng chỉ nhà sản xuất", "Fasteners marked per ASTM; manufacturer certifications available"), ref: "AISC 360-16 N5.6 — checklist mockup AISC" },
+      { t: B("Chọn đúng bu lông cho chi tiết: cấp, loại, CHIỀU DÀI khi cần loại ren khỏi mặt cắt trượt", "Correct grade/type/length where threads excluded from shear plane"), ref: "AISC 360-16 N5.6" },
+      { t: B("Pre-installation verification: QC CHỨNG KIẾN thợ thử bộ bu lông + phương pháp trong thiết bị đo lực, có hồ sơ", "Pre-installation verification testing observed & documented"), ref: "AISC 360-16 N5.6 / RCSC §7" },
+      { t: B("Bảo quản che chắn cho bu lông, đai ốc, đệm (kho khô, không đổi lô lẫn lộn)", "Protected storage for fastener components"), ref: "AISC 360-16 N5.6" },
+      { t: B("Đặt đủ bộ vào TẤT CẢ lỗ, đệm và đai ốc đúng vị trí; snug-tight TOÀN liên kết trước khi căng", "Assemblies in all holes, washers/nuts positioned; snug whole joint before pretension"), ref: "AISC 360-16 N5.6" },
+      { t: B("Phần tử không được xoay (đầu bu lông hoặc đai ốc) phải được giữ chống xoay khi xiết", "Element not turned by wrench prevented from rotating"), ref: "AISC 360-16 N5.6" },
+      { t: B("Xiết căng TUẦN TỰ từ điểm cứng nhất của liên kết ra mép tự do (theo RCSC)", "Pretension systematically from most rigid point toward free edges"), ref: "AISC 360-16 N5.6 / RCSC §8.1" },
+      { t: B("Lập hồ sơ chấp nhận / từ chối liên kết bu lông", "Document acceptance or rejection of bolted connections"), ref: "AISC 360-16 N5.6" }
     ]}
   ];
 
