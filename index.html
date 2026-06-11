@@ -101,6 +101,11 @@
   .gs-it .t{font-size:14px;font-weight:700}
   .gs-it .s{font-size:12px;color:var(--muted);margin-top:1px}
   .gs-empty{padding:18px;text-align:center;color:var(--muted);font-size:13.5px}
+  .gs-ex{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px;max-width:760px}
+  .gs-ex button{font-size:11.5px;font-weight:700;padding:6px 12px;border-radius:999px;cursor:pointer;
+    background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);color:rgba(255,255,255,.85);
+    font-family:inherit;transition:.15s}
+  .gs-ex button:hover{background:rgba(255,255,255,.22);color:#fff}
   .footer{border-top:1px solid var(--line);background:#fff}
   .ft-in{max-width:1180px;margin:0 auto;padding:16px 22px calc(16px + env(safe-area-inset-bottom));
     display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
@@ -152,10 +157,14 @@
       <span class="stat"><b>25+</b> calculator</span>
       <span class="stat">📱 Offline / PWA</span>
     </div>
+    <div style="margin-top:20px;font-size:15.5px;font-weight:800;display:flex;align-items:center;gap:8px">
+      <span style="font-size:21px">🤖</span> Bạn cần kiểm tra gì? Tôi sẽ giải quyết giúp bạn.
+    </div>
     <div class="gsearch">
       <span class="gs-ic">🔍</span>
-      <input id="gq" type="search" placeholder="Tìm hoặc HỎI: giàn 50m kiểm tra như thế nào? · undercut · M20 · DFT..." autocomplete="off">
+      <input id="gq" type="search" placeholder="Gõ câu hỏi hoặc từ khóa: giàn 50m kiểm tra như thế nào? · undercut · M20..." autocomplete="off">
     </div>
+    <div class="gs-ex" id="gsEx"></div>
   </div>
 </div>
 
@@ -379,7 +388,7 @@ function gsRun() {
   let claudeBar = '';
   if (aiHtml) {
     claudeBar = '<div style="display:flex;gap:8px;margin:-6px 0 14px;align-items:center">' +
-      '<button onclick="gsAskClaude()" style="padding:10px 16px;border:0;border-radius:10px;background:#5f4ab7;color:#fff;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit">✨ Hỏi thêm AI (Claude)</button>' +
+      '<button onclick="gsAskClaude()" style="padding:10px 16px;border:0;border-radius:10px;background:#5f4ab7;color:#fff;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit">✨ Hỏi thêm AI</button>' +
       '<button onclick="gsAiKey()" title="Cấu hình API key" style="padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;cursor:pointer;font-size:13px">⚙</button>' +
       '<span style="font-size:11px;color:var(--muted)">' + (localStorage.getItem('qc_ai_key') ? 'API key đã lưu trên máy này' : 'cần API key (bấm ⚙)') + '</span></div>' +
       '<div id="aiOut"></div>';
@@ -399,7 +408,7 @@ function gsRun() {
 /* ===== Tầng 2: Claude API (tùy chọn) ===== */
 function gsAiKey() {
   const cur = localStorage.getItem('qc_ai_key') || '';
-  const k = prompt('Dán API key Claude (sk-ant-...) — key lưu CHỈ trên máy này.\nĐể trống và OK để xóa key.', cur);
+  const k = prompt('Dán API key AI (sk-ant-...) — key lưu CHỈ trên máy này.\nĐể trống và OK để xóa key.', cur);
   if (k === null) return;
   if (k.trim()) { localStorage.setItem('qc_ai_key', k.trim()); alert('✓ Đã lưu API key.'); }
   else { localStorage.removeItem('qc_ai_key'); alert('Đã xóa API key.'); }
@@ -411,12 +420,12 @@ async function gsAskClaude() {
   const q = document.getElementById('gq').value.trim();
   const out = document.getElementById('aiOut');
   if (!out) return;
-  out.innerHTML = '<div style="background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px;font-size:13.5px;color:var(--muted)">⏳ Claude đang trả lời...</div>';
+  out.innerHTML = '<div style="background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px;font-size:13.5px;color:var(--muted)">⏳ AI đang trả lời...</div>';
   const ctx = GS_LAST_HITS.slice(0, 8).map(h => '- [' + h.m + '] ' + h.t + ' — ' + h.s).join('\n');
   try {
     const ans = await QCAssistant.askClaude(q, ctx, key);
     out.innerHTML = '<div style="background:#fff;border:1px solid #dfd6f5;border-left:4px solid #5f4ab7;border-radius:14px;padding:16px 18px;margin-bottom:14px;box-shadow:var(--sh)">' +
-      '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span style="font-size:18px">✨</span><b style="color:#5f4ab7">Claude trả lời</b>' +
+      '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span style="font-size:18px">✨</span><b style="color:#5f4ab7">AI trả lời</b>' +
       '<span style="margin-left:auto;font-size:10.5px;font-weight:800;background:#efecfa;color:#5f4ab7;padding:3px 8px;border-radius:6px">AI · CẦN KIỂM CHỨNG</span></div>' +
       '<div style="font-size:13.5px;white-space:pre-wrap;line-height:1.65">' + ans.replace(/</g, '&lt;') + '</div>' +
       '<div style="font-size:11px;color:#8b97a3;margin-top:10px;border-top:1px solid #eef1f5;padding-top:8px">⚠ Câu trả lời AI có thể sai — đối chiếu số liệu với module tương ứng (có trích dẫn điều khoản đã xác minh) trước khi dùng nghiệm thu.</div></div>';
@@ -427,6 +436,19 @@ async function gsAskClaude() {
 const gqEl = document.getElementById('gq');
 gqEl.addEventListener('focus', gsBuild, { once: true });
 gqEl.addEventListener('input', () => { gsBuild(); gsRun(); });
+
+/* chip câu hỏi mẫu — gợi ý đa dạng vấn đề */
+(function () {
+  const ex = (window.QCAssistant && QCAssistant.EXAMPLES) || [];
+  const box = document.getElementById('gsEx');
+  if (!box || !ex.length) return;
+  box.innerHTML = ex.map(q => '<button type="button">' + q + '</button>').join('');
+  box.querySelectorAll('button').forEach(b => b.onclick = () => {
+    gqEl.value = b.textContent;
+    gsBuild(); gsRun();
+    gqEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+})();
 </script>
 </body>
 </html>

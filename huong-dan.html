@@ -2,323 +2,301 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0c447c">
-<title>Hướng dẫn triển khai — DaiDung Tools</title>
+<title>Hướng dẫn sử dụng — DaiDung QC Suite</title>
 <style>
-:root {
-  --brand:#0c447c; --brand2:#185fa5; --brand3:#0a3a6b;
-  --accent:#e6a700; --accent2:#cea24a;
-  --pass:#0f6e56; --pass-soft:#e3f6ee;
-  --warn:#8a5a00; --warn-soft:#fdf3e2;
-  --fail:#aa4322; --fail-soft:#fbeae2;
-  --ink:#1b2430; --muted:#5f6b7a; --line:#dfe5ec;
-  --bg:#f4f7fa; --card:#fff;
-}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-  background:var(--bg);color:var(--ink);font-size:15.5px;line-height:1.65}
-a{color:var(--brand);text-decoration:none}
-a:hover{text-decoration:underline}
+  :root{
+    --bg:#f2f4f7; --ink:#16202c; --muted:#5d6b7c; --line:#e2e7ee;
+    --brand:#0c447c; --brand2:#185fa5;
+    --r:16px; --sh:0 1px 2px rgba(18,30,48,.06),0 8px 28px rgba(18,30,48,.08);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    background:var(--bg);color:var(--ink);font-size:15px;line-height:1.65}
+  a{color:var(--brand2);font-weight:600;text-decoration:none}
+  a:hover{text-decoration:underline}
 
-/* HERO BANNER */
-.hero{background:linear-gradient(135deg,#0c447c 0%,#185fa5 60%,#0a3a6b 100%);
-  color:#fff;padding:max(28px,env(safe-area-inset-top)) 24px 36px;text-align:center;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(255,255,255,.1) 0%,transparent 50%),radial-gradient(circle at 80% 70%,rgba(255,255,255,.07) 0%,transparent 50%);pointer-events:none}
-.hero .back{position:absolute;top:max(14px,env(safe-area-inset-top));left:14px;
-  background:rgba(255,255,255,.18);color:#fff;width:38px;height:38px;border-radius:10px;
-  display:flex;align-items:center;justify-content:center;font-size:20px;text-decoration:none;font-weight:700}
-.hero .logo-row{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:18px}
-.hero .logo{width:64px;height:64px;border-radius:14px;background:#fff;color:var(--brand);
-  display:inline-flex;align-items:center;justify-content:center;font-weight:900;font-size:22px;
-  box-shadow:0 8px 24px rgba(0,0,0,.25)}
-.hero h1{margin:0 0 8px;font-size:28px;font-weight:800;letter-spacing:-.4px;position:relative}
-.hero .sub{font-size:15px;opacity:.92;font-weight:500;max-width:600px;margin:0 auto;position:relative}
-.hero .tags{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px;position:relative}
-.hero .tag{background:rgba(255,255,255,.18);padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:.3px}
+  .topbar{background:linear-gradient(135deg,#0c447c 0%,#0a3a6b 55%,#093158 100%);color:#fff;
+    padding:max(14px,env(safe-area-inset-top)) 0 36px}
+  .tb-in{max-width:980px;margin:0 auto;padding:6px 22px 0;display:flex;align-items:center;gap:13px}
+  .back{font-size:13px;font-weight:700;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);
+    padding:8px 14px;border-radius:9px;color:#fff}
+  .logo{width:42px;height:42px;border-radius:11px;background:#fff;color:var(--brand);
+    display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;flex:none}
+  .hero{max-width:980px;margin:0 auto;padding:26px 22px 0;color:#fff}
+  .hero h1{margin:0 0 8px;font-size:clamp(22px,3.2vw,30px);font-weight:850;letter-spacing:-.4px}
+  .hero p{margin:0;font-size:14.5px;opacity:.85;max-width:680px}
 
-/* CONTAINER */
-.main{max-width:980px;margin:0 auto;padding:24px 16px 60px}
+  .wrap{max-width:980px;margin:-18px auto 0;padding:0 22px 40px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);
+    padding:22px 24px;margin-bottom:18px}
+  h2{font-size:19px;font-weight:800;letter-spacing:-.2px;margin:0 0 12px;display:flex;align-items:center;gap:10px;color:var(--ac,var(--brand))}
+  h2 .ic{width:38px;height:38px;border-radius:10px;background:var(--ac-soft,#e6f0fb);display:flex;align-items:center;justify-content:center;font-size:19px;flex:none}
+  h3{font-size:15px;font-weight:800;margin:18px 0 8px;color:#33404e}
+  p{margin:0 0 10px}
+  .lead{font-size:15.5px;color:#33404e}
 
-/* SECTION HEADER */
-.section-h{display:flex;align-items:center;gap:10px;margin:34px 0 14px;padding-bottom:8px;border-bottom:2px solid var(--line)}
-.section-h .num{background:var(--brand);color:#fff;width:34px;height:34px;border-radius:50%;
-  display:inline-flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;flex-shrink:0}
-.section-h h2{margin:0;font-size:21px;color:var(--brand);font-weight:800}
+  .toc{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;margin-top:6px}
+  .toc a{display:flex;align-items:center;gap:9px;padding:10px 13px;background:#f6f8fb;border:1px solid var(--line);
+    border-radius:10px;font-size:13px;color:var(--ink);transition:.15s}
+  .toc a:hover{border-color:#c5d3e2;background:#eef3f9;text-decoration:none;transform:translateY(-1px)}
+  .toc .em{font-size:16px}
 
-/* STEP CARDS */
-.steps{display:grid;gap:14px}
-.step{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;
-  box-shadow:0 1px 3px rgba(20,30,45,.04);position:relative}
-.step.recommended{border-color:var(--pass);background:linear-gradient(180deg,var(--pass-soft) 0%,#fff 100%)}
-.step.warning{border-color:var(--warn);background:linear-gradient(180deg,var(--warn-soft) 0%,#fff 100%)}
-.step .title{display:flex;align-items:center;gap:10px;font-weight:800;font-size:16px;color:var(--brand);margin-bottom:8px}
-.step.recommended .title{color:var(--pass)}
-.step.warning .title{color:var(--warn)}
-.step .badge{font-size:10px;padding:3px 9px;border-radius:6px;font-weight:800;letter-spacing:.5px;text-transform:uppercase}
-.badge-rec{background:var(--pass);color:#fff}
-.badge-warn{background:var(--warn);color:#fff}
-.badge-free{background:#5f4ab7;color:#fff}
-.step p{margin:0 0 8px;font-size:14.5px}
-.step .meta{font-size:12.5px;color:var(--muted);margin-top:6px}
+  .pill{display:inline-block;font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:7px;
+    background:var(--ac-soft,#e6f0fb);color:var(--ac,var(--brand));margin:0 4px 4px 0;letter-spacing:.2px}
 
-/* GRID 3 CARDS for apps */
-.app-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin:18px 0}
-.app-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;text-align:center;transition:.18s}
-.app-card:hover{transform:translateY(-3px);box-shadow:0 10px 25px rgba(0,0,0,.08)}
-.app-card .em{font-size:40px;margin-bottom:8px;line-height:1}
-.app-card h3{margin:0 0 6px;font-size:15px;color:var(--brand)}
-.app-card p{margin:0;font-size:12px;color:var(--muted);line-height:1.5}
+  .steps{margin:10px 0 4px}
+  .step{display:flex;gap:13px;padding:11px 0;border-top:1px dashed var(--line)}
+  .step:first-child{border-top:0}
+  .step .n{width:28px;height:28px;border-radius:50%;background:var(--ac,var(--brand));color:#fff;
+    font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex:none;margin-top:1px}
+  .step .tx{font-size:14px;flex:1}
+  .step .tx b{color:#16202c}
+  .step .tx small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
 
-/* CODE BLOCKS */
-code{font-family:Consolas,Monaco,monospace;background:#eef1f5;padding:2px 6px;border-radius:4px;font-size:13px;color:var(--brand)}
-pre{background:#1b2430;color:#cdd6df;padding:14px 16px;border-radius:8px;overflow-x:auto;font-size:13px;line-height:1.55;margin:10px 0}
-pre code{background:none;padding:0;color:inherit}
+  .tip{background:#f4faf7;border:1px solid #cfe8df;border-left:4px solid #0f6e56;border-radius:0;
+    padding:11px 14px;font-size:13px;margin:12px 0;color:#0a4f3e}
+  .warn{background:#fdf3e2;border:1px solid #f0d9a8;border-left:4px solid #8a5a00;border-radius:0;
+    padding:11px 14px;font-size:13px;margin:12px 0;color:#6b4700}
 
-/* INFO BOXES */
-.box{padding:14px 16px;border-radius:10px;margin:14px 0;border-left:5px solid;font-size:14.5px}
-.box-info{background:#e6f1fb;border-color:var(--brand);color:var(--brand3)}
-.box-warn{background:var(--warn-soft);border-color:var(--warn);color:var(--warn)}
-.box-success{background:var(--pass-soft);border-color:var(--pass);color:var(--pass)}
-.box-danger{background:var(--fail-soft);border-color:var(--fail);color:var(--fail)}
-.box strong{font-weight:800}
+  .m-dim{--ac:#0c447c;--ac-soft:#e6f0fb}
+  .m-han{--ac:#7c2d12;--ac-soft:#fbeee7}
+  .m-son{--ac:#14532d;--ac-soft:#e7f4ec}
+  .m-wps{--ac:#b4421f;--ac-soft:#fdeee8}
+  .m-vt{--ac:#3b6d11;--ac-soft:#eef6e6}
+  .m-ld{--ac:#5f4ab7;--ac-soft:#efecfa}
+  .m-bl{--ac:#37474f;--ac-soft:#eceff1}
+  .m-ai{--ac:#5f4ab7;--ac-soft:#efecfa}
 
-/* FILE TREE */
-.tree{background:#1b2430;color:#cdd6df;padding:18px;border-radius:10px;font-family:Consolas,monospace;font-size:13.5px;line-height:1.7;margin:14px 0;overflow-x:auto}
-.tree .folder{color:#fbe07d}
-.tree .file{color:#cdd6df}
-.tree .comment{color:#888;font-style:italic;margin-left:8px}
+  .vals{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin:12px 0}
+  .val{background:#f6f8fb;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+  .val b{display:block;font-size:13.5px;color:var(--ac,var(--brand))}
+  .val span{font-size:12.5px;color:var(--muted)}
 
-/* DIAGRAM */
-.diagram{margin:18px 0;padding:18px;background:#fff;border:1px solid var(--line);border-radius:12px;text-align:center}
-.diagram svg{max-width:100%;height:auto}
-.diagram .caption{font-size:12.5px;color:var(--muted);margin-top:8px}
-
-/* TIPS */
-.tips{margin:14px 0}
-.tip{display:flex;gap:12px;padding:10px 14px;margin-bottom:6px;background:#fff;border:1px solid var(--line);border-radius:8px}
-.tip-icon{font-size:18px;flex-shrink:0}
-
-/* RESPONSIVE */
-@media (max-width:680px){
-  .hero h1{font-size:22px}
-  .hero .sub{font-size:13px}
-  .main{padding:18px 12px 40px}
-  .section-h h2{font-size:17px}
-}
+  kbd{background:#eef1f5;border:1px solid #d4dce5;border-radius:6px;padding:1px 7px;font-size:12px;font-weight:700;font-family:inherit}
+  .footer{text-align:center;color:var(--muted);font-size:12px;padding:10px 0 30px}
+  @media print{.topbar .back{display:none}}
 </style>
-<link rel="stylesheet" href="desktop-scale.css?v=1">
 </head>
 <body>
 
-<div class="hero">
-  <a class="back" href="./" aria-label="Trang chủ">←</a>
-  <div class="logo-row">
+<div class="topbar">
+  <div class="tb-in">
+    <a class="back" href="index.html">← Trang chủ</a>
     <div class="logo">DD</div>
+    <div style="font-size:14px;font-weight:800">DaiDung QC Suite<div style="font-size:11px;font-weight:500;opacity:.75">Hướng dẫn sử dụng · v2.0</div></div>
   </div>
-  <h1>📖 Hướng dẫn triển khai</h1>
-  <p class="sub">Bộ công cụ Tra cứu Dung sai · WPS · Vật tư · Lượng dư cho ngành kết cấu thép</p>
-  <div class="tags">
-    <span class="tag">PWA</span>
-    <span class="tag">Offline</span>
-    <span class="tag">Multi-language</span>
-    <span class="tag">Mobile-first</span>
+  <div class="hero">
+    <h1>Một bộ công cụ — trọn chuỗi QC kết cấu thép</h1>
+    <p>Tra cứu tiêu chuẩn có dẫn chứng, tính Đạt/Không đạt tự động, hình cách đo từng phép thử, checklist in được biểu mẫu — hoạt động offline trên điện thoại lẫn máy tính.</p>
   </div>
 </div>
 
-<main class="main">
+<div class="wrap">
 
-  <!-- TỔNG QUAN 4 APP -->
-  <div class="section-h">
-    <div class="num">0</div>
-    <h2>Tổng quan — Bộ 4 app</h2>
-  </div>
-  <div class="app-grid">
-    <div class="app-card"><div class="em">📏</div><h3>Tra cứu Dung sai</h3><p>32 tiêu chuẩn · 213 rules · 40 sketches parametric</p></div>
-    <div class="app-card"><div class="em">🔥</div><h3>Thư viện WPS</h3><p>74 WPS · 161 sketches · password 1234</p></div>
-    <div class="app-card"><div class="em">📦</div><h3>Vật tư Đầu vào</h3><p>33 tiêu chuẩn · 37 items · sketch cách đo</p></div>
-    <div class="app-card"><div class="em">⚙️</div><h3>Lượng dư & Sai hỏng</h3><p>8 calculator · 45 defects · Thư viện 5M+1E</p></div>
-  </div>
-
-  <!-- BƯỚC 1 -->
-  <div class="section-h">
-    <div class="num">1</div>
-    <h2>Xem ngay trên máy (offline)</h2>
-  </div>
-  <p>Mở nhanh để xem trước — không cần internet:</p>
-  <div class="box box-info">
-    <strong>📂 Nhấn đúp</strong> vào file <code>webapp/index.html</code> → mở bằng Chrome/Edge/Safari/Firefox.
-    Mọi tính năng chạy được: tra cứu, tính toán, đánh giá, sketches.
-  </div>
-  <div class="box box-warn">
-    <strong>⚠ Lưu ý:</strong> Chạy file local chưa "cài lên điện thoại" được (PWA cần HTTPS). Để cài như app native, cần bước 2.
-  </div>
-
-  <!-- BƯỚC 2 -->
-  <div class="section-h">
-    <div class="num">2</div>
-    <h2>Đăng lên đường link (chọn 1 trong 3)</h2>
-  </div>
-
-  <div class="steps">
-    <div class="step recommended">
-      <div class="title">🚀 Cách A: Netlify Drop <span class="badge badge-rec">KHUYẾN NGHỊ · 1 PHÚT</span></div>
-      <p>Vào <a href="https://app.netlify.com/drop" target="_blank">app.netlify.com/drop</a> → kéo-thả nguyên thư mục <code>webapp</code> vào trang. Netlify tạo HTTPS link ngay (vd <code>https://daidung-tools.netlify.app</code>) → chia sẻ link cho cả đội.</p>
-      <p class="meta">✓ Miễn phí · ✓ HTTPS tự động · ✓ Custom domain · ✓ CDN toàn cầu</p>
+  <!-- ===== GIỚI THIỆU ===== -->
+  <div class="card" id="gioi-thieu">
+    <h2><span class="ic">🏗️</span>Giới thiệu</h2>
+    <p class="lead"><b>DaiDung QC Suite</b> là bộ công cụ kiểm soát chất lượng nội bộ cho kết cấu thép, bao phủ trọn chuỗi sản xuất: <b>vật tư đầu vào → dung sai chế tạo → mối hàn → bu lông → sơn phủ → xử lý sai hỏng</b>, cùng thư viện WPS cho xưởng hàn.</p>
+    <p>Ba nguyên tắc xây dựng app:</p>
+    <div class="vals">
+      <div class="val"><b>📑 Có dẫn chứng</b><span>Mỗi tiêu chí kèm số điều khoản + trích nguyên văn. Các giá trị cốt lõi đã đối chiếu trực tiếp PDF gốc: EN 1090-2:2018+A1:2024, ISO 5817:2023, AWS D1.1:2020, ISO 19840, ISO 8501-3, ISO 13920.</span></div>
+      <div class="val"><b>🧮 Tự phán định</b><span>25+ calculator: nhập số đo là ra ĐẠT / KHÔNG ĐẠT kèm giới hạn áp dụng — không cần nhớ công thức.</span></div>
+      <div class="val"><b>📱 Offline 100%</b><span>Là PWA: mở 1 lần có mạng, sau đó dùng được dưới xưởng không cần internet. Cài lên màn hình chính như app thật.</span></div>
     </div>
+    <p><b>Dành cho ai?</b> QC/QA, giám sát sản xuất, thợ hàn-thợ sơn cần tra nhanh, kỹ sư lập hồ sơ nghiệm thu, và cả khách hàng/TVGS muốn đối chiếu tiêu chuẩn tại chỗ.</p>
+    <div class="warn">⚠ <b>Nguyên tắc sử dụng:</b> app là công cụ tra cứu & tính toán hỗ trợ. Căn cứ nghiệm thu chính thức luôn là <b>spec hợp đồng của dự án</b> và bản gốc tiêu chuẩn — các mục chưa đối chiếu bản gốc đều được app gắn nhãn "tham khảo" rõ ràng.</div>
+  </div>
 
-    <div class="step">
-      <div class="title">📦 Cách B: GitHub Pages <span class="badge badge-free">MIỄN PHÍ</span></div>
-      <p>Đẩy thư mục <code>webapp</code> lên repo GitHub → bật <code>Settings → Pages</code> → link dạng <code>https://&lt;user&gt;.github.io/&lt;repo&gt;</code>. Có HTTPS sẵn.</p>
-      <p class="meta">Đã có sẵn script <code>Cap-nhat-GitHub.bat</code> để auto add + commit + push.</p>
-    </div>
-
-    <div class="step">
-      <div class="title">🏢 Cách C: Máy chủ nội bộ công ty (IIS / Apache / Nginx)</div>
-      <p>Copy <code>webapp/</code> vào thư mục web. Dùng trong mạng LAN. Có thể chạy không HTTPS nội bộ nhưng <strong>cài PWA cần HTTPS</strong>.</p>
+  <!-- ===== MỤC LỤC ===== -->
+  <div class="card">
+    <h2><span class="ic">📚</span>Mục lục</h2>
+    <div class="toc">
+      <a href="#bat-dau"><span class="em">⚡</span>Bắt đầu trong 30 giây</a>
+      <a href="#tim-kiem"><span class="em">🔍</span>Tìm kiếm & Trợ lý AI</a>
+      <a href="#dungsai"><span class="em">📏</span>Tra cứu Dung sai</a>
+      <a href="#han"><span class="em">👁</span>QC Hàn</a>
+      <a href="#son"><span class="em">🎨</span>QC Sơn</a>
+      <a href="#bulong"><span class="em">🔩</span>QC Bu lông</a>
+      <a href="#wps"><span class="em">🔥</span>Thư viện WPS</a>
+      <a href="#vattu"><span class="em">📦</span>Kiểm tra Vật tư</a>
+      <a href="#luongdu"><span class="em">⚙️</span>Lượng dư & Sai hỏng</a>
+      <a href="#do-anh"><span class="em">📷</span>Đo ảnh</a>
+      <a href="#bao-cao"><span class="em">🖨</span>Checklist & In báo cáo</a>
+      <a href="#cai-dat"><span class="em">📱</span>Cài đặt & Mẹo</a>
     </div>
   </div>
 
-  <!-- BƯỚC 3 -->
-  <div class="section-h">
-    <div class="num">3</div>
-    <h2>Cài lên điện thoại (sau khi có link HTTPS)</h2>
-  </div>
-
-  <div class="diagram">
-    <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
-      <!-- Android -->
-      <g transform="translate(50,20)">
-        <rect x="0" y="0" width="160" height="160" rx="14" fill="#0c447c"/>
-        <text x="80" y="32" text-anchor="middle" font-size="14" fill="#fff" font-weight="800" font-family="Arial">🤖 ANDROID</text>
-        <text x="80" y="60" text-anchor="middle" font-size="11" fill="#cbd9e8" font-family="Arial">Chrome:</text>
-        <text x="80" y="80" text-anchor="middle" font-size="11" fill="#fff" font-family="Arial">⋮ menu →</text>
-        <text x="80" y="100" text-anchor="middle" font-size="12" fill="#fbe07d" font-weight="700" font-family="Arial">"Cài ứng dụng"</text>
-        <text x="80" y="120" text-anchor="middle" font-size="10" fill="#cbd9e8" font-family="Arial">hoặc</text>
-        <text x="80" y="140" text-anchor="middle" font-size="11" fill="#fff" font-weight="700" font-family="Arial">"Add to Home Screen"</text>
-      </g>
-      <!-- iOS -->
-      <g transform="translate(220,20)">
-        <rect x="0" y="0" width="160" height="160" rx="14" fill="#aa4322"/>
-        <text x="80" y="32" text-anchor="middle" font-size="14" fill="#fff" font-weight="800" font-family="Arial">🍎 iOS (Safari)</text>
-        <text x="80" y="60" text-anchor="middle" font-size="11" fill="#fcd5b5" font-family="Arial">Safari only:</text>
-        <text x="80" y="80" text-anchor="middle" font-size="11" fill="#fff" font-family="Arial">Nút Chia sẻ ⎙</text>
-        <text x="80" y="100" text-anchor="middle" font-size="12" fill="#fbe07d" font-weight="700" font-family="Arial">"Thêm vào MH chính"</text>
-        <text x="80" y="120" text-anchor="middle" font-size="10" fill="#fcd5b5" font-family="Arial">Add to Home Screen</text>
-      </g>
-      <!-- Desktop -->
-      <g transform="translate(390,20)">
-        <rect x="0" y="0" width="160" height="160" rx="14" fill="#0f6e56"/>
-        <text x="80" y="32" text-anchor="middle" font-size="14" fill="#fff" font-weight="800" font-family="Arial">💻 DESKTOP</text>
-        <text x="80" y="60" text-anchor="middle" font-size="11" fill="#cdf0e4" font-family="Arial">Chrome/Edge:</text>
-        <text x="80" y="80" text-anchor="middle" font-size="11" fill="#fff" font-family="Arial">Icon ⊕ ở thanh URL</text>
-        <text x="80" y="100" text-anchor="middle" font-size="12" fill="#fbe07d" font-weight="700" font-family="Arial">"Cài đặt DaiDung"</text>
-        <text x="80" y="120" text-anchor="middle" font-size="10" fill="#cdf0e4" font-family="Arial">Có shortcut trên desktop</text>
-      </g>
-    </svg>
-    <div class="caption">3 cách cài PWA — sau khi cài chạy như app native, hoạt động offline</div>
-  </div>
-
-  <div class="box box-success">
-    <strong>✅ Sau khi cài:</strong> mở như app thật, <strong>chạy offline</strong>, có icon riêng. Cache tự cập nhật khi online.
-  </div>
-
-  <!-- BƯỚC 4 -->
-  <div class="section-h">
-    <div class="num">4</div>
-    <h2>Cập nhật / thêm tiêu chuẩn (chỉ người bảo trì)</h2>
-  </div>
-
-  <div class="tips">
-    <div class="tip"><div class="tip-icon">🔐</div><div>Trong app vào tab <strong>"⚙ Quản trị"</strong> — nhập PIN 4 số (lần đầu tạo PIN).</div></div>
-    <div class="tip"><div class="tip-icon">➕</div><div><strong>+ Thêm dòng</strong> hoặc <strong>✏ Sửa</strong> / <strong>🗑 Xoá</strong> dòng có sẵn.</div></div>
-    <div class="tip"><div class="tip-icon">💾</div><div>Bấm <strong>"Lưu vào máy"</strong> để lưu localStorage trên thiết bị này.</div></div>
-    <div class="tip"><div class="tip-icon">⬇</div><div>Bấm <strong>"Xuất dữ liệu (.js)"</strong> để tải file <code>tolerances-data.js</code> mới — thay vào folder webapp/ → đăng lại link → cả đội thấy bản cập nhật.</div></div>
-  </div>
-
-  <div class="box box-info">
-    <strong>📋 Loại dung sai khi thêm:</strong><br>
-    <strong>FORMULA</strong>: công thức (vd <code>h/300</code>) + khai báo biến<br>
-    <strong>FIXED</strong>: giá trị cố định (vd <code>6</code>)<br>
-    <strong>REF</strong>: tham chiếu định tính (không tính số)<br>
-    <strong>TABLE</strong>: bảng theo dải kích thước + Class (sửa qua ô JSON)
-  </div>
-
-  <div class="box box-warn">
-    <strong>⚠ Bắt buộc:</strong> mỗi dòng có <code>clause.number</code> (dẫn chứng) và <code>acceptance</code> (tiêu chí chấp nhận VI).
-  </div>
-
-  <!-- BƯỚC 5 -->
-  <div class="section-h">
-    <div class="num">5</div>
-    <h2>Độ tin cậy dữ liệu</h2>
-  </div>
-  <div class="tips">
-    <div class="tip"><div class="tip-icon">📋</div><div><strong>Đã đối chiếu PDF</strong>: ISO 13920:2023 (Bảng 1/2/3), EN 1090-2 Annex B, EN 1090-4 Table D.1, AISC 303 §7.13, AWS D1.1 (undercut/reinforcement/root concavity).</div></div>
-    <div class="tip"><div class="tip-icon">⚠️</div><div><strong>Cần đối chiếu bản gốc</strong>: MBMA 2012, JASS 6.</div></div>
-  </div>
-  <div class="box box-danger">
-    <strong>⚠ Kết quả chỉ mang tính tra cứu.</strong> Khi nghiệm thu thực tế phải ưu tiên <em>execution specification / hợp đồng</em> và <strong>bản tiêu chuẩn gốc có kiểm soát</strong> (AISC §1.9: không quy định ≠ bằng 0).
-  </div>
-
-  <!-- BƯỚC 6: Cấu trúc file -->
-  <div class="section-h">
-    <div class="num">6</div>
-    <h2>Cấu trúc thư mục webapp/</h2>
-  </div>
-  <pre class="tree">
-<span class="folder">webapp/</span>
-├── <span class="file">index.html</span>          <span class="comment"># Launcher chooser — 4 cards</span>
-├── <span class="folder">dungsai/</span>          <span class="comment"># App 1: Tra cứu Dung sai</span>
-│   ├── <span class="file">index.html</span>
-│   ├── <span class="file">tolerances-data.js</span>     <span class="comment">+ tier1/2/3/4-mech.js</span>
-│   ├── <span class="file">sketches.js</span>            <span class="comment">+ sketches-v2/v3-mech.js</span>
-│   └── <span class="file">sketch-overlay.js</span>      <span class="comment"># Parametric — overlay giá trị rule</span>
-├── <span class="folder">wps/</span>              <span class="comment"># App 2: WPS Library (PW=1234)</span>
-│   ├── <span class="file">files/</span>          <span class="comment"># 74 WPS PDFs</span>
-│   ├── <span class="file">sketches/</span>       <span class="comment"># 161 PNG sketches</span>
-│   └── <span class="file">welder-card.html</span>       <span class="comment"># Phiếu thợ hàn A5 in được</span>
-├── <span class="folder">vattu/</span>            <span class="comment"># App 3: Kiểm tra Vật tư đầu vào</span>
-├── <span class="folder">luongdu/</span>          <span class="comment"># App 4: Lượng dư + Sai hỏng + 5M+1E</span>
-│   ├── <span class="file">data.js</span>         <span class="comment"># 8 calc + 45 defects</span>
-│   ├── <span class="file">sketches.js</span>     <span class="comment"># 50+ sketches</span>
-│   └── <span class="file">library-5m1e.js</span> <span class="comment"># Ishikawa root cause library</span>
-├── <span class="folder">icons/</span>           <span class="comment"># PWA icons 192/512/maskable</span>
-├── <span class="file">reset.html</span>         <span class="comment"># Xoá cache + SW (nếu kẹt phiên bản cũ)</span>
-└── <span class="file">Cap-nhat-GitHub.bat</span>      <span class="comment"># Auto push GitHub + clean .git locks</span>
-  </pre>
-
-  <!-- TROUBLESHOOTING -->
-  <div class="section-h">
-    <div class="num">⚠</div>
-    <h2>Khi gặp vấn đề</h2>
-  </div>
-
-  <div class="steps">
-    <div class="step warning">
-      <div class="title">🔄 App không cập nhật mặc dù đã push</div>
-      <p>Service Worker đang cache version cũ. Mở <a href="reset.html"><code>reset.html</code></a> → trang tự xoá SW + cache → redirect về home → F5.</p>
-    </div>
-    <div class="step warning">
-      <div class="title">📥 Cap-nhat-GitHub.bat lỗi "index.lock"</div>
-      <p>Đã có patch auto xoá <code>.git/index.lock</code> + <code>.git/HEAD.lock</code> trước khi pull/push. Nếu vẫn lỗi, đóng GitHub Desktop / VS Code source control rồi chạy lại.</p>
-    </div>
-    <div class="step warning">
-      <div class="title">⬜ Trang trắng / scripts không chạy</div>
-      <p>Mở DevTools (F12) → Console — xem lỗi JS. Hard reload bằng Ctrl+Shift+R. Nếu vẫn lỗi, vào <a href="reset.html"><code>reset.html</code></a>.</p>
+  <!-- ===== QUICK START ===== -->
+  <div class="card" id="bat-dau">
+    <h2><span class="ic">⚡</span>Bắt đầu trong 30 giây</h2>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><div class="tx"><b>Mở trang chủ → chọn module</b> theo việc đang làm (mỗi thẻ một màu riêng), hoặc gõ thẳng vào ô tìm kiếm.<small>Ví dụ: cần kiểm tra độ võng dầm → thẻ xanh dương "Tra cứu Dung sai".</small></div></div>
+      <div class="step"><div class="n">2</div><div class="tx"><b>Tìm tiêu chí → nhập số đo → nhận kết quả</b> ĐẠT/KHÔNG ĐẠT cùng giới hạn và trích dẫn điều khoản làm bằng chứng.</div></div>
+      <div class="step"><div class="n">3</div><div class="tx"><b>Tick checklist khi làm việc → bấm 🖨 In/PDF</b> là có biểu mẫu chữ ký nộp hồ sơ.</div></div>
     </div>
   </div>
 
-  <!-- FOOTER -->
-  <div style="margin-top:40px;padding-top:24px;border-top:2px solid var(--line);text-align:center;color:var(--muted);font-size:13px">
-    <p><strong style="color:var(--brand)">DaiDung Metallic Manufacture Construction & Trade Corporation</strong></p>
-    <p style="margin:6px 0">Tác giả: <strong>Thế Mỹ</strong> · Bản 2026</p>
-    <p style="margin-top:16px">
-      <a href="./" style="display:inline-block;padding:10px 22px;background:var(--brand);color:#fff;border-radius:10px;font-weight:700;text-decoration:none">← Quay về Trang chủ</a>
-    </p>
+  <!-- ===== TÌM KIẾM + AI ===== -->
+  <div class="card m-ai" id="tim-kiem">
+    <h2><span class="ic">🔍</span>Tìm kiếm & Trợ lý — "Bạn cần kiểm tra gì?"</h2>
+    <span class="pill">TÌM XUYÊN 7 MODULE</span><span class="pill">HIỂU CÂU HỎI</span><span class="pill">KHÔNG DẤU VẪN RA</span>
+    <h3>Tìm từ khóa</h3>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><div class="tx">Gõ vào ô tìm kiếm trang chủ: <kbd>undercut</kbd>, <kbd>Sa 2.5</kbd>, <kbd>M20</kbd>, <kbd>co rut</kbd> (không dấu vẫn hiểu)...</div></div>
+      <div class="step"><div class="n">2</div><div class="tx">Kết quả nhóm theo module — bấm là nhảy thẳng tới nơi cần (WPS nhảy đúng mã WPS).</div></div>
+    </div>
+    <h3>Hỏi như nói chuyện — trợ lý giải quyết giúp bạn</h3>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><div class="tx">Gõ nguyên câu hỏi: <kbd>giàn 50m kiểm tra như thế nào?</kbd> · <kbd>dầm bị nứt mối hàn khắc phục thế nào</kbd> · <kbd>xiết bu lông M20 momen bao nhiêu</kbd></div></div>
+      <div class="step"><div class="n">2</div><div class="tx"><b>Trợ lý QC trả lời ngay (offline):</b> kế hoạch từng bước, tự tính số liên quan (dung sai ISO 13920 đúng chiều dài bạn nêu, bù giãn nhiệt...), kèm link mở đúng công cụ.</div></div>
+      <div class="step"><div class="n">3</div><div class="tx"><b>Cần sâu hơn → ✨ Hỏi thêm AI:</b> bấm ⚙ dán API key một lần (key chỉ lưu trên máy đó). Câu trả lời AI luôn gắn nhãn "cần kiểm chứng".<small>Không có key vẫn dùng đầy đủ trợ lý offline.</small></div></div>
+    </div>
   </div>
 
-</main>
+  <!-- ===== DUNG SAI ===== -->
+  <div class="card m-dim" id="dungsai">
+    <h2><span class="ic">📏</span>Tra cứu Dung sai</h2>
+    <span class="pill">8 TIÊU CHUẨN</span><span class="pill">85+ TIÊU CHÍ</span><span class="pill">EN 1090-2 · ISO 13920 · AISC · JASS 6</span>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><div class="tx"><b>Chọn tiêu chuẩn</b> theo dự án (EU/US/JP/PEB) hoặc "Xem tất cả". Không chắc dùng chuẩn nào? Tab <b>Tiêu chuẩn</b> gợi ý theo loại dự án.</div></div>
+      <div class="step"><div class="n">2</div><div class="tx"><b>Tìm tiêu chí</b> bằng ô tìm + chip lọc (chiều dài, độ võng, vuông góc...). Bấm vào thẻ để mở chi tiết.</div></div>
+      <div class="step"><div class="n">3</div><div class="tx"><b>Nhập kích thước danh nghĩa + số đo thực</b> → app tính giới hạn (kể cả công thức h/300, bảng class A–D) và phán ĐẠT/KHÔNG ĐẠT.<small>Phần "Dẫn chứng" có số điều khoản + trang + nguyên văn để đưa vào hồ sơ.</small></div></div>
+      <div class="step"><div class="n">4</div><div class="tx"><b>⭐ Lưu tiêu chí hay dùng</b> (chip "Đã lưu" lọc nhanh) · <b>📋 Copy trích dẫn</b> dán vào báo cáo · tab <b>So sánh</b> đối chiếu nhiều chuẩn cùng lúc, xuất CSV.</div></div>
+      <div class="step"><div class="n">5</div><div class="tx"><b>Tab ☑️ Checklist:</b> quy trình đo kiểm chuẩn (bù nhiệt, datum, hiệu chuẩn...) — tick rồi in biểu mẫu.</div></div>
+    </div>
+    <div class="tip">💡 Đo cấu kiện dài ngoài trời: luôn ghi nhiệt độ lúc đo — thép giãn ~12µm/m/°C, cấu kiện 30m chênh 15°C đã lệch hơn 5mm.</div>
+  </div>
+
+  <!-- ===== QC HÀN ===== -->
+  <div class="card m-han" id="han">
+    <h2><span class="ic">👁</span>QC Hàn</h2>
+    <span class="pill">AWS D1.1 TABLE 8.1</span><span class="pill">ISO 5817:2023 B/C/D</span><span class="pill">25 TIÊU CHÍ · HÌNH CÁCH ĐO</span>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><div class="tx"><b>Tab Ngoại quan:</b> chọn khuyết tật (undercut, rỗ, gia cường, lệch cạnh...) — lọc theo tiêu chuẩn và nhóm.</div></div>
+      <div class="step"><div class="n">2</div><div class="tx"><b>Xem "📐 Cách đo":</b> hình vẽ dụng cụ (thước V-WAC, fillet gauge, cam gauge) + các bước đo cụ thể. Khung "📸 Hình ảnh thật" hiện ảnh xưởng nếu đã lưu vào <kbd>han/images/</kbd>.</div></div>
+      <div class="step"><div class="n">3</div><div class="tx"><b>Nhập số đo → ĐẠT/KHÔNG ĐẠT</b> theo đúng mức yêu cầu (chọn B/C/D theo EXC — bảng quy đổi EXC nằm ở tab NDT).</div></div>
+      <div class="step"><div class="n">4</div><div class="tx"><b>Tab NDT:</b> phương pháp + phạm vi % theo EXC (Table 24), thời gian chờ 8–24h trước NDT (Table 23) — đều đã xác minh nguyên văn.</div></div>
+      <div class="step"><div class="n">5</div><div class="tx"><b>Tab Công cụ:</b> đổi cạnh ↔ throat, tính nhiệt lượng Q → tự ra hold time, bảng preheat. <b>Tab Ký hiệu:</b> đọc ký hiệu hàn AWS/ISO — chú ý khác biệt 2 hệ kẻo hàn nhầm phía!</div></div>
+    </div>
+    <div class="tip">💡 Thép A514/A517/HPS 690W: VT phải chờ ≥ 48h sau hàn (nứt trễ hydro) — app nhắc ngay trong tiêu chí "Thời điểm kiểm tra".</div>
+  </div>
+
+  <!-- ===== QC SƠN ===== -->
+  <div class="card m-son" id="son">
+    <h2><span class="ic">🎨</span>QC Sơn</h2>
+    <span class="pill">ISO 8501 · 19840 (XÁC MINH)</span><span class="pill">DEW POINT +3°C</span><span class="pill">16 LỖI SƠN</span>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><div class="tx"><b>Bề mặt:</b> cấp sạch Sa/St, cấp chuẩn bị P1–P3 (theo tuổi thọ + cấp ăn mòn), độ nhám replica tape, muối Bresle — kèm hình cách đo từng phép.</div></div>
+      <div class="step"><div class="n">2</div><div class="tx"><b>Môi trường:</b> nhập nhiệt độ khí + RH + nhiệt độ thép → app tính điểm sương và kết luận <b>ĐƯỢC / KHÔNG ĐƯỢC SƠN</b> (quy tắc Ts ≥ Td + 3°C, RH ≤ 85%).</div></div>
+      <div class="step"><div class="n">3</div><div class="tx"><b>DFT:</b> dán cả loạt số đo vào ô tính → app kiểm đủ <b>4 điều kiện ISO 19840</b> (trung bình ≥ NDFT · từng điểm ≥ 80% · số điểm 80–100% dưới 20% · ≤ max). Có cả ô tính WFT cần phun.</div></div>
+      <div class="step"><div class="n">4</div><div class="tx"><b>Kiểm tra:</b> cross-cut (app tự chọn khoảng cách rạch theo DFT), pull-off, holiday — hình minh họa từng bước.</div></div>
+      <div class="step"><div class="n">5</div><div class="tx"><b>Lỗi sơn:</b> 16 lỗi với hiện tượng – nguyên nhân – khắc phục – tiêu chí chấp nhận + nút tìm ảnh thật.</div></div>
+    </div>
+    <div class="tip">💡 Đo DFT trên bề mặt phun hạt: nhớ trừ hiệu chỉnh nhám (Fine 10 / Medium 25 / Coarse 40 µm) hoặc zero máy trên chính bề mặt phun chưa sơn.</div>
+  </div>
+
+  <!-- ===== BU LÔNG ===== -->
+  <div class="card m-bl" id="bulong">
+    <h2><span class="ic">🔩</span>QC Bu lông</h2>
+    <span class="pill">🇪🇺 EN 1090-2 (XÁC MINH)</span><span class="pill">🇺🇸 AISC / RCSC</span><span class="pill">MOMEN + GÓC XOAY</span>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><div class="tx"><b>Chọn hệ theo HỢP ĐỒNG</b> bằng nút gạt EN / AISC đầu tab — hai hệ khác nhau cả lực căng lẫn cách xiết, không dùng lẫn.</div></div>
+      <div class="step"><div class="n">2</div><div class="tx"><b>Hệ EN:</b> chọn M + cấp bền + nhập km từ CoC lô bu lông → ra Mr,2 và momen bước 1 (0.75) / bước 2 (1.10). Phương pháp kết hợp: nhập tổng chiều dày kẹp Σt → ra momen Table 20 + góc xoay 60/90/120°.</div></div>
+      <div class="step"><div class="n">3</div><div class="tx"><b>Hệ AISC:</b> bảng Tb (J3.1M hệ mét + J3.1 hệ inch) + turn-of-nut theo <b>chiều dài bu lông</b> (1/3 · 1/2 · 2/3 vòng).</div></div>
+      <div class="step"><div class="n">4</div><div class="tx"><b>Tab Quy tắc + Kiểm tra:</b> khe hở ≤2mm trước căng, xoay đai ốc, bu lông tháo sau căng phải loại bỏ... và cách nghiệm thu theo 12.5.</div></div>
+    </div>
+    <div class="warn">⚠ RCSC cấm dùng bảng momen in sẵn cho calibrated wrench — phải hiệu chuẩn hằng ngày bằng tension calibrator (≥1.05×Tb).</div>
+  </div>
+
+  <!-- ===== WPS ===== -->
+  <div class="card m-wps" id="wps">
+    <h2><span class="ic">🔥</span>Thư viện WPS <span class="pill" style="margin-left:6px">🔒 NỘI BỘ — CẦN MẬT KHẨU</span></h2>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><div class="tx"><b>Không nhớ số WPS?</b> Bấm "Tìm theo công việc" — trả lời 4 câu (vật liệu, chiều dày, tư thế, quy trình) là ra WPS phù hợp.</div></div>
+      <div class="step"><div class="n">2</div><div class="tx"><b>Mở chi tiết:</b> thông số máy hàn, sketch mối ghép, PDF gốc, phiếu thợ hàn. <b>📋 Copy thông số</b> để dán vào báo cáo/Zalo nhóm.</div></div>
+      <div class="step"><div class="n">3</div><div class="tx"><b>⭐ Yêu thích</b> WPS hay dùng — hiện ngay trang đầu cùng mục "xem gần đây". <b>🔳 In QR</b> dán lên bản vẽ: thợ quét là mở đúng WPS.</div></div>
+    </div>
+  </div>
+
+  <!-- ===== VẬT TƯ ===== -->
+  <div class="card m-vt" id="vattu">
+    <h2><span class="ic">📦</span>Kiểm tra Vật tư đầu vào</h2>
+    <span class="pill">44 VẬT TƯ</span><span class="pill">EN 10029 · A6 · JIS</span><span class="pill">SKETCH CÁCH ĐO</span>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><div class="tx"><b>Tìm vật tư</b> theo nhóm hoặc gõ (vd "tấm 20mm S355") → xem spec, dung sai giao hàng, vị trí đo đúng theo sketch.</div></div>
+      <div class="step"><div class="n">2</div><div class="tx"><b>Checklist nghiệm thu đầu vào</b> (khối gập đầu trang): MTC/heat number, cấp gỉ, kích thước, UT tách lớp, lưu kho — tick rồi 🖨 in biểu mẫu.</div></div>
+      <div class="step"><div class="n">3</div><div class="tx"><b>📷 Đo ảnh:</b> chụp khuyết tật bề mặt vật tư kèm thước để đo và lưu hồ sơ.</div></div>
+    </div>
+  </div>
+
+  <!-- ===== LƯỢNG DƯ ===== -->
+  <div class="card m-ld" id="luongdu">
+    <h2><span class="ic">⚙️</span>Lượng dư & Sai hỏng</h2>
+    <span class="pill">8 CALCULATOR</span><span class="pill">45 LỖI · ISHIKAWA 5M+1E</span><span class="pill">NCR 1 CHẠM</span>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><div class="tx"><b>Tính lượng dư:</b> co rút hàn ngang/dọc, giãn nhiệt, gập + spring-back, kerf cắt, vát mép — nhập thông số là ra giá trị cộng vào blank.</div></div>
+      <div class="step"><div class="n">2</div><div class="tx"><b>Tra sai hỏng:</b> 45 lỗi có ảnh thật, lọc theo loại / nguyên nhân gốc 5M+1E / mức độ nghiêm trọng (lỗi nặng tự lên đầu).</div></div>
+      <div class="step"><div class="n">3</div><div class="tx"><b>Mỗi lỗi:</b> bảng chấp nhận B/C/D + nguyên nhân + biện pháp; lỗi hàn/sơn có nút nhảy thẳng sang QC Hàn / QC Sơn để tính Đạt/Không đạt.</div></div>
+      <div class="step"><div class="n">4</div><div class="tx"><b>📋 Tạo NCR nháp:</b> một nút là có biên bản đầy đủ (mô tả, tiêu chuẩn tham chiếu, nguyên nhân, biện pháp, yêu cầu kiểm lại) — dán vào biểu mẫu công ty.</div></div>
+    </div>
+  </div>
+
+  <!-- ===== ĐO ẢNH ===== -->
+  <div class="card" id="do-anh">
+    <h2><span class="ic">📷</span>Đo ảnh — đo khuyết tật trên ảnh chụp</h2>
+    <span class="pill">CÓ TRONG CẢ 5 MODULE QC</span><span class="pill">LƯU HỒ SƠ TRÊN MÁY</span>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><div class="tx"><b>Chụp đúng cách:</b> vuông góc bề mặt, đặt thước/dưỡng <b>cùng mặt phẳng</b> với khuyết tật.</div></div>
+      <div class="step"><div class="n">2</div><div class="tx"><b>🎯 Hiệu chuẩn:</b> bấm 2 đầu vật chuẩn trên ảnh → nhập khoảng cách thật (vd 10mm).</div></div>
+      <div class="step"><div class="n">3</div><div class="tx"><b>📏 Đo:</b> bấm 2 điểm bất kỳ → ra mm ngay, ảnh tự vẽ chú thích (xanh = chuẩn, đỏ = số đo).</div></div>
+      <div class="step"><div class="n">4</div><div class="tx"><b>Riêng QC Hàn:</b> bấm "→ Đánh giá" để gửi số đo vào thẳng calculator tiêu chí tương ứng.</div></div>
+      <div class="step"><div class="n">5</div><div class="tx"><b>💾 Lưu hồ sơ</b> kèm mã dự án/ghi chú — thư viện ảnh nằm ngay bên dưới, tải về đính kèm NCR/báo cáo.</div></div>
+    </div>
+    <div class="warn">⚠ Đo trên ảnh là THAM KHẢO (sai số góc chụp) — nghiệm thu chính thức đo bằng dụng cụ. Hồ sơ ảnh lưu trên máy đang dùng (không tự đồng bộ giữa các máy).</div>
+  </div>
+
+  <!-- ===== CHECKLIST + BÁO CÁO ===== -->
+  <div class="card" id="bao-cao">
+    <h2><span class="ic">🖨</span>Checklist & In báo cáo</h2>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><div class="tx"><b>Tick trong lúc làm việc</b> — tiến độ lưu tự động trên máy (tắt app mở lại vẫn còn). Mỗi mục có tham chiếu tiêu chuẩn.</div></div>
+      <div class="step"><div class="n">2</div><div class="tx"><b>🖨 In / PDF:</b> ra biểu mẫu A4 chuẩn hồ sơ — logo công ty, ô Dự án/Cấu kiện/Bản vẽ, bảng ☑/☐ đúng trạng thái, tổng kết X/Y mục, 3 ô chữ ký (Người kiểm tra / QC trưởng / Khách hàng-TVGS).<small>Trong hộp thoại in chọn "Save as PDF" để lưu file, hoặc in giấy ký tươi.</small></div></div>
+      <div class="step"><div class="n">3</div><div class="tx"><b>📋 Copy báo cáo</b> nếu chỉ cần dán nhanh dạng text vào email/Zalo.</div></div>
+      <div class="step"><div class="n">4</div><div class="tx"><b>↺ Làm mới</b> khi bắt đầu cấu kiện mới.</div></div>
+    </div>
+    <div class="tip">💡 Trình duyệt chặn pop-up lần đầu bấm In? Cho phép pop-up cho trang này là được.</div>
+  </div>
+
+  <!-- ===== CÀI ĐẶT + MẸO ===== -->
+  <div class="card" id="cai-dat">
+    <h2><span class="ic">📱</span>Cài đặt, offline & xử lý sự cố</h2>
+    <h3>Cài lên điện thoại / máy tính (PWA)</h3>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><div class="tx"><b>Android (Chrome):</b> mở app → menu ⋮ → <b>"Thêm vào màn hình chính"</b>. <b>iPhone (Safari):</b> nút Chia sẻ → <b>"Thêm vào MH chính"</b>. <b>Máy tính (Chrome/Edge):</b> biểu tượng cài đặt ⊕ trên thanh địa chỉ.</div></div>
+      <div class="step"><div class="n">2</div><div class="tx"><b>Mở mỗi module 1 lần khi có mạng</b> để cache offline — sau đó dưới xưởng không mạng vẫn dùng đủ.</div></div>
+    </div>
+    <h3>Không thấy bản cập nhật mới?</h3>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><div class="tx">Bấm <b>"↺ Xóa cache"</b> ở chân trang chủ (hoặc mở <kbd>reset.html</kbd>), rồi tải lại trang 2 lần.</div></div>
+      <div class="step"><div class="n">2</div><div class="tx">Vẫn không được: <kbd>Ctrl</kbd>+<kbd>F5</kbd> (máy tính) hoặc xóa dữ liệu trang trong cài đặt trình duyệt (điện thoại).</div></div>
+    </div>
+    <h3>Thêm ảnh thật cho Hàn / Sơn</h3>
+    <p style="font-size:14px">Lưu ảnh chụp xưởng vào <kbd>webapp/han/images/</kbd> và <kbd>webapp/son/images/</kbd> với tên file theo README có sẵn trong từng thư mục (vd <kbd>iso_undercut.jpg</kbd>) → app tự hiển thị. Ảnh tự chụp vừa sát thực tế vừa không vướng bản quyền.</p>
+    <h3>Câu hỏi nhanh</h3>
+    <div class="steps">
+      <div class="step"><div class="n">?</div><div class="tx"><b>Dữ liệu tick checklist / hồ sơ ảnh / bookmark lưu ở đâu?</b><small>Trong bộ nhớ trình duyệt của từng máy — không gửi đi đâu, và cũng không tự đồng bộ giữa các máy.</small></div></div>
+      <div class="step"><div class="n">?</div><div class="tx"><b>Quên mật khẩu WPS?</b><small>Hỏi quản trị nội bộ (QC trưởng) — mật khẩu dùng chung toàn xưởng.</small></div></div>
+      <div class="step"><div class="n">?</div><div class="tx"><b>Muốn thêm tiêu chuẩn/WPS mới?</b><small>Tab "Quản trị" trong Dung sai cho phép thêm tiêu chí rồi xuất dữ liệu; WPS thêm theo <kbd>HUONG_DAN_THEM_WPS.md</kbd> trong thư mục wps.</small></div></div>
+      <div class="step"><div class="n">?</div><div class="tx"><b>AI trả lời có tin được không?</b><small>Trợ lý offline chỉ dùng số liệu đã xác minh trong app. Tầng "Hỏi thêm AI" là AI thật — luôn gắn nhãn "cần kiểm chứng", hãy đối chiếu module trước khi dùng nghiệm thu.</small></div></div>
+    </div>
+  </div>
+
+  <div class="footer">© DaiDung Metallic Manufacture Construction &amp; Trade Corporation · DaiDung QC Suite v2.0 · 06/2026<br>
+  <a href="index.html">← Về trang chủ</a></div>
+</div>
+
 </body>
 </html>
