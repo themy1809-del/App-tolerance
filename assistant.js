@@ -23,8 +23,8 @@
 
   /* ---------- nhận diện ---------- */
   const ENT = [
-    { k: 'truss', re: /truss|trust|vi keo|gian( |$)|gian thep|keo thep/, vi: 'giàn / vì kèo' },
-    { k: 'beam', re: /\bdam\b|girder|beam|xa go/, vi: 'dầm' },
+    { k: 'truss', re: /truss|trust|vi keo|gian( |$)|gian thep|keo thep|khung keo/, vi: 'giàn / vì kèo' },
+    { k: 'beam', re: /\bdam\b|girder|beam|xa go|khung dam|\bkhung\b|\bong\b|pipe|giang\b|bracing/, vi: 'dầm / khung' },
     { k: 'column', re: /\bcot\b|column/, vi: 'cột' },
     { k: 'weld', re: /moi han|\bhan\b|weld|undercut|ngau|que han|fillet/, vi: 'mối hàn' },
     { k: 'paint', re: /\bson\b|paint|dft|be mat|sa 2|phun bi|phun cat|mang son/, vi: 'sơn phủ' },
@@ -37,8 +37,10 @@
   }
   function isQuestion(q) {
     const qn = norm(q);
-    if (q.trim().length < 10) return false;
-    return /\?|nhu the nao|lam sao|the nao|cach nao|kiem tra gi|can (kiem tra|do|lam|gi)|quy trinh|huong dan|bao nhieu|cach (do|kiem|lam|chon|xu ly)|nen dung|chon (phuong phap|cach|wps)|duoc khong|co (duoc|nen|son|han)|xu ly (sao|the nao)|khac phuc|tai sao|vi sao|giay to|ho so/.test(qn);
+    if (q.trim().length < 8) return false;
+    if (/\?|nhu the nao|lam sao|the nao|cach nao|kiem tra gi|can (kiem tra|do|lam|gi)|quy trinh|huong dan|bao nhieu|cach (do|kiem|lam|chon|xu ly)|nen dung|chon (phuong phap|cach|wps)|duoc khong|co (duoc|nen|son|han)|xu ly (sao|the nao)|khac phuc|tai sao|vi sao|giay to|ho so|la gi|nghia la|muon (kiem tra|do|nghiem thu|biet|hoi|danh gia|kiem)|toi (muon|can)|giup toi|huong dan toi/.test(qn)) return true;
+    /* "kiểm tra/nghiệm thu/đo + đối tượng" cũng là câu hỏi */
+    return /(kiem tra|nghiem thu|danh gia|\bdo\b)/.test(qn) && ENT.some(e => e.re.test(qn));
   }
 
   /* ---------- tính số thật từ dataset ---------- */
@@ -237,6 +239,71 @@
     return { title: 'Hồ sơ nghiệm thu cần những gì', body: s.join('') };
   }
 
+  /* ----- TỪ ĐIỂN THUẬT NGỮ QC ("... là gì?") ----- */
+  const GLOSS = [
+    ['exc', 'EXC (Execution Class)', 'Cấp thi công theo EN 1090-2: EXC1 (thấp nhất) → EXC4 (cao nhất). Quyết định mức chất lượng hàn (D/C/B), phạm vi NDT, yêu cầu truy xuất. Nhà xưởng thông thường: EXC2.', 'han/'],
+    ['ndt', 'NDT (Non-Destructive Testing)', 'Kiểm tra không phá hủy: VT (mắt), UT (siêu âm — khuyết tật trong), MT (bột từ — nứt bề mặt thép từ tính), PT (thẩm thấu), RT (chụp phim). Phạm vi % theo EXC.', 'han/'],
+    ['wps', 'WPS (Welding Procedure Specification)', 'Bản quy trình hàn: vật liệu, chiều dày, tư thế, thông số dòng/áp/tốc độ. Thợ phải hàn ĐÚNG WPS được duyệt — không hàn theo thói quen.', 'wps/'],
+    ['pqr|wpqr', 'PQR / WPQR', 'Hồ sơ chứng nhận quy trình hàn: hàn mẫu + thử cơ tính tại lab để chứng minh WPS đạt. Một PQR có thể đẻ ra nhiều WPS trong phạm vi của nó.', 'wpqr/'],
+    ['wqt', 'WQT (Welder Qualification Test)', 'Thi tay nghề thợ hàn theo phạm vi (quy trình/tư thế/chiều dày). Hiệu lực có thời hạn (thường 2-3 năm) — QC phải theo dõi.', 'wps/'],
+    ['cjp', 'CJP (Complete Joint Penetration)', 'Mối hàn ngấu hoàn toàn suốt chiều dày — mọi thiếu ngấu đều KHÔNG ĐẠT. Thường yêu cầu UT.', 'han/'],
+    ['pjp', 'PJP (Partial Joint Penetration)', 'Mối hàn ngấu một phần theo thiết kế — kiểm độ sâu ngấu hiệu dụng theo bản vẽ.', 'han/'],
+    ['fillet|moi han goc', 'Fillet weld (mối hàn góc)', 'Mối hàn tam giác nối 2 mặt vuông góc. Đo bằng cạnh z hoặc chiều dày tính toán a = z/√2 (dưỡng fillet/cam gauge).', 'han/'],
+    ['throat', 'Throat (chiều dày tính toán a)', 'Khoảng cách ngắn nhất từ gốc tới mặt mối hàn góc: a = z/√2 với mối đều cạnh. Mặt lõm đo bằng cam gauge.', 'han/'],
+    ['hi.?lo|lech mep', 'Hi-lo (lệch mép)', 'Độ lệch bậc giữa 2 mép mối giáp mối. AWS: ≤ min(10%t; 3mm). Đo bằng thước thẳng + thước lá.', 'fitup/'],
+    ['snug', 'Snug-tight', 'Trạng thái xiết "ép khít các bản" — hết sức cờ lê thường hoặc vài nhát súng xung. Là bước TRƯỚC khi căng lực; nhiều liên kết chỉ cần snug.', 'bulong/'],
+    ['k.?class|km\\b', 'k-class / km', 'Phân cấp hệ số ma sát ren của bộ bu lông EN 14399 (K0/K1/K2). km lấy từ CoC của LÔ bu lông để tính momen: Mr = km·d·Fp,C — không dùng giá trị mặc định.', 'bulong/'],
+    ['fp.?c|luc cang', 'Fp,C (lực căng tối thiểu)', 'Lực căng thiết kế của bu lông dự ứng lực hệ EN = 0.7·fub·As (Table 18 đã xác minh). Hệ Mỹ gọi là Tb.', 'bulong/'],
+    ['dft', 'DFT (Dry Film Thickness)', 'Chiều dày màng sơn KHÔ, đo bằng máy từ tính. Nghiệm thu theo ISO 19840: 4 điều kiện (trung bình ≥ NDFT, từng điểm ≥80%, dải 80-100% <20% số điểm, ≤max).', 'son/'],
+    ['ndft', 'NDFT (Nominal DFT)', 'Chiều dày màng khô danh nghĩa theo spec hệ sơn — mốc để so khi đo DFT.', 'son/'],
+    ['wft', 'WFT (Wet Film Thickness)', 'Chiều dày màng ƯỚT đo bằng lược ngay khi phun: WFT = NDFT / %VS × 100. Kiểm WFT là cách điều chỉnh tại chỗ trước khi khô.', 'son/'],
+    ['diem suong|dew point', 'Điểm sương (Dew point)', 'Nhiệt độ mà hơi nước ngưng tụ. Quy tắc sơn: nhiệt độ thép ≥ điểm sương + 3°C và RH ≤ 85% — app tính tự động từ 3 số đo.', 'son/'],
+    ['sa 2|sa2', 'Sa 2½ (cấp làm sạch)', 'Cấp phun hạt "rất kỹ" theo ISO 8501-1 — chuẩn phổ biến nhất cho sơn kết cấu: chỉ còn vết bẩn nhẹ dạng đốm/sọc, ≥95% sạch.', 'son/'],
+    ['p1|p2|p3', 'P1 / P2 / P3 (cấp chuẩn bị)', 'Cấp xử lý mối hàn/cạnh trước sơn theo ISO 8501-3: P1 nhẹ → P3 rất kỹ (sạch toàn bộ spatter, mép tròn r≥2mm). Chọn theo tuổi thọ + cấp ăn mòn (Table 22).', 'son/'],
+    ['itp', 'ITP (Inspection & Test Plan)', 'Kế hoạch kiểm tra & thử nghiệm: ai làm, ai kiểm, điểm dừng nào. H=Hold (dừng chờ nghiệm thu), W=Witness (mời chứng kiến), R=Review (hồ sơ), S=Surveillance (giám sát).', 'han/'],
+    ['hold|witness', 'Hold point / Witness point', 'Hold: DỪNG công việc chờ nghiệm thu đạt mới làm tiếp (vd bề mặt sau phun hạt). Witness: báo trước để chứng kiến, vắng vẫn được làm. Khách có quyền nâng W→H.', 'han/'],
+    ['ncr', 'NCR (Non-Conformance Report)', 'Biên bản sự không phù hợp: mô tả lỗi + tiêu chuẩn vi phạm + quyết định xử lý (sửa/chấp nhận có điều kiện/loại). App tạo NCR nháp 1 chạm trong Lượng dư & Sai hỏng.', 'luongdu/'],
+    ['mtc', 'MTC (Mill Test Certificate)', 'Chứng chỉ thử nghiệm của nhà máy thép (thường EN 10204 type 3.1): cơ tính + hóa học theo SỐ MẺ (heat number). Heat trên thép phải khớp MTC.', 'vattu/'],
+    ['heat number', 'Heat number (số mẻ nấu)', 'Số định danh mẻ thép, dập/in trên sản phẩm — chìa khóa truy xuất. Mất heat number = mất truy xuất = lỗi hệ thống nặng.', 'vattu/'],
+    ['lashing', 'Lashing (chằng buộc)', 'Cố định hàng trên phương tiện: top-over (ma sát), loop (chặn ngang), direct (hàng nặng có tai chằng). Dây phải có nhãn LC/STF; tính theo EN 12195-1.', 'packing/'],
+    ['lc|stf', 'LC / STF (nhãn dây chằng)', 'LC = Lashing Capacity (sức chịu của dây, daN); STF = lực căng tạo bởi tăng đơ. Dây không nhãn/rách → loại.', 'packing/'],
+    ['ispm', 'ISPM 15 (dấu IPPC)', 'Quy định kiểm dịch gỗ đóng kiện xuất khẩu: gỗ phải xử lý nhiệt + đóng dấu IPPC nhìn thấy được. Thiếu dấu → hàng bị giữ ở cảng đến.', 'packing/'],
+    ['camber', 'Camber (độ vồng đặt sẵn)', 'Độ cong NGƯỢC chế tạo sẵn cho dầm để khi chịu tải võng về thẳng. Đo khi cấu kiện KHÔNG tải, kê tự do.', 'dungsai/'],
+    ['exc.*5817|muc b|quality level', 'Mức B / C / D (ISO 5817)', 'Mức chất lượng khuyết tật hàn: B nghiêm nhất → D dễ nhất. EN 1090-2 gán theo EXC: EXC1→D, EXC2→C, EXC3→B (đã xác minh).', 'han/'],
+    ['drift pin', 'Drift pin', 'Chốt côn định vị lỗ khi ráp: xuyên qua nhóm lỗ để đưa các bản về thẳng hàng trước khi xỏ bu lông thử. Không được dùng để "ép" lỗ lệch quá mức.', 'rapthu/']
+  ];
+  function tryGloss(qn) {
+    if (!/(la gi|la cai gi|nghia la|giai thich|khai niem)/.test(qn)) return null;
+    for (const [re, term, def, url] of GLOSS) {
+      if (new RegExp('(^|[^a-z])(' + re + ')([^a-z]|$)').test(qn)) {
+        return { title: term + ' — là gì?', body:
+          step(1, `<b>Định nghĩa:</b> ${esc(def)}`) +
+          step(2, `<b>Xem trong app:</b> ${lk(url, 'mở module liên quan')} — có tiêu chí, calculator và trích dẫn điều khoản.`) };
+      }
+    }
+    return { title: 'Thuật ngữ chưa có trong từ điển', body:
+      step(1, `Từ điển hiện có ${GLOSS.length} thuật ngữ QC (EXC, NDT, WPS, PQR, DFT, Sa 2½, ITP, NCR, MTC, lashing...). Thử gõ lại tên thuật ngữ chuẩn, hoặc dùng ô tìm kiếm — kết quả bên dưới.`) +
+      step(2, `Cần thêm thuật ngữ nào, nhắn quản trị bổ sung vào từ điển.`) };
+  }
+  function planToleranceLookup(q, len) {
+    const L = len ? len.mm : null;
+    const iso = L ? iso13920(L) : null;
+    let s = [], n = 0;
+    s.push(step(++n, `<b>Xác định class áp dụng</b> trong spec hợp đồng (EXC/Annex B, ISO 13920 A–D, hay AISC).`));
+    if (iso) s.push(step(++n, `<b>Tham chiếu nhanh ISO 13920 cho ${len.raw}</b> (dải ${iso.band}mm): class B ${hi('±' + iso.B + 'mm')} · C ${hi('±' + iso.C + 'mm')} · D ${hi('±' + iso.D + 'mm')}.`));
+    s.push(step(++n, `<b>Giá trị chính thức + trích dẫn điều khoản:</b> mở ${lk('dungsai/', 'Thư viện Dung sai kích thước')} — gõ tên hạng mục (độ võng, vuông góc, vị trí lỗ...), nhập số đo là ra Đạt/Không đạt + nút copy trích dẫn.`));
+    s.push(step(++n, `<b>Kết quả tìm kiếm liên quan</b> hiển thị ngay bên dưới câu trả lời này — bấm mục đúng để mở.`));
+    return { title: 'Tra dung sai — làm thế nào', body: s.join('') };
+  }
+  function planHelp() {
+    let s = [], n = 0;
+    s.push(step(++n, `<b>Hỏi theo công đoạn:</b> "khung dầm 24m kiểm tra như thế nào", "đóng hàng xuất cần kiểm gì", "fit-up cần đo gì"...`));
+    s.push(step(++n, `<b>Hỏi tình huống:</b> "trời ẩm 90% có sơn được không", "bu lông tháo ra dùng lại được không", "EXC2 phải UT bao nhiêu %"...`));
+    s.push(step(++n, `<b>Hỏi thuật ngữ:</b> "EXC là gì", "DFT là gì", "hold point là gì"... (từ điển ${GLOSS.length} thuật ngữ)`));
+    s.push(step(++n, `<b>Tra dung sai:</b> "dung sai dầm 12m bao nhiêu" — hoặc gõ từ khóa để tìm xuyên 9 module (kết quả bên dưới).`));
+    return { title: 'Tôi chưa chắc ý bạn — đây là cách hỏi hiệu quả', body: s.join('') };
+  }
+
   /* ============================ ROUTER ============================ */
   const SPECIALS = [
     { re: /packing|dong (hang|kien|goi|container)|lashing|chang buoc|xuat hang|tem nhan|shipping mark|len cont|dong cont/, fn: () => planPacking() },
@@ -253,6 +320,8 @@
   window.QCAssistant = {
     isQuestion,
     EXAMPLES: [
+      'Tôi muốn kiểm tra khung dầm 24m',
+      'EXC là gì?',
       'Giàn 50m kiểm tra như thế nào?',
       'Trời ẩm 90% có sơn được không?',
       'EXC2 phải UT bao nhiêu %?',
@@ -270,8 +339,12 @@
       const len = parseLen(q);
       const dia = parseM(q);
       let plan = null;
-      /* 1) vấn đề đặc thù trước */
-      const sp = SPECIALS.find(s => s.re.test(qn));
+      /* 0) thuật ngữ "... là gì?" */
+      plan = tryGloss(qn);
+      /* 0b) tra dung sai */
+      if (!plan && /dung sai|cho phep (bao nhieu|la bao nhieu)|gioi han (nao|bao nhieu)/.test(qn)) plan = planToleranceLookup(q, len);
+      /* 1) vấn đề đặc thù */
+      const sp = !plan && SPECIALS.find(s => s.re.test(qn));
       if (sp) plan = sp.fn(q, len);
       /* 2) lỗi / sai hỏng */
       if (!plan && /loi |bi (nut|ro|cong|venh|chay|phong|bong|thung)|defect|khac phuc|nguyen nhan|sai hong|xu ly/.test(qn)) plan = planDefect();
@@ -283,9 +356,10 @@
         else if (ent === 'paint') plan = planPaint();
         else if (ent === 'bolt') plan = planBolt(dia);
         else if (ent === 'material') plan = planMaterial();
-        else plan = planStructure('cấu kiện', len);
+        else if (/(kiem tra|nghiem thu|danh gia|quy trinh|\bdo\b|can lam)/.test(qn)) plan = planStructure('cấu kiện', len);
+        else plan = planHelp();
       }
-      if (!plan) return null;
+      if (!plan) plan = planHelp();
       return `<div style="background:#fff;border:1px solid #dfe5ec;border-left:4px solid #0c447c;border-radius:14px;padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 2px rgba(18,30,48,.06),0 8px 28px rgba(18,30,48,.08)">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap">
           <span style="font-size:20px">🤖</span>
