@@ -53,6 +53,10 @@ table.vi th,table.vi td{border:1px solid var(--line);padding:7px 9px;text-align:
 table.vi th{background:var(--ac-soft);color:var(--ac2)}
 .tag{display:inline-block;font-size:10px;font-weight:800;padding:2px 8px;border-radius:6px;background:var(--ac-soft);color:var(--ac2)}
 .note{font-size:12px;color:var(--muted);margin-top:8px}
+.viImgRow{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:12px 0}
+.viImgRow figure{margin:0;text-align:center;flex:1 1 240px;max-width:340px}
+.viImgRow img{max-width:100%;max-height:260px;object-fit:contain;border:1px solid var(--line);border-radius:10px;padding:3px;background:#fff;cursor:zoom-in;box-shadow:var(--sh)}
+.viImgRow figcaption{font-size:11.5px;color:var(--muted);margin-top:5px}
 
 /* ===== tài liệu gốc ===== */
 .doclay{display:flex;gap:0;max-width:1280px;margin:0 auto}
@@ -210,6 +214,9 @@ table.vi th{background:var(--ac-soft);color:var(--ac2)}
       <div class="step"><div class="n">2</div><div><b>Kiểm tra an toàn xung quanh:</b> nhìn trực tiếp + qua màn hình camera xác nhận KHÔNG còn người quanh cầu, dưới tunnel, quanh trụ dẫn động. Bật nguồn, xoay khóa sang "OPERATE" → xác nhận đèn xoay vàng sáng + còi cảnh báo kêu.</div></div>
       <div class="step"><div class="n">3</div><div><b>Bố trí người hướng dẫn</b> (guide) khi cần.</div></div>
       <div class="step"><div class="n">4</div><div><b>Mưa/tuyết:</b> tầm nhìn giảm — vận hành chậm, cẩn thận hơn.</div></div>
+      <div class="viImgRow">
+        <figure><img src="media/image28.png" loading="lazy" onclick="zoomImg(this)" alt=""><figcaption>Kiểm tra an toàn quanh cầu: nhìn trực tiếp + màn hình camera (khu dưới tunnel, quanh trụ dẫn động)</figcaption></figure>
+      </div>
       <h4>Trong khi vận hành</h4>
       <div class="step"><div class="n">1</div><div>Giữ tư thế đúng khi điều khiển.</div></div>
       <div class="step"><div class="n">2</div><div><b>Không làm 2 việc cùng lúc:</b> không nâng/hạ rèm đầu cầu (closure) hoặc đóng/mở cửa cuốn cabin TRONG KHI cầu đang di chuyển.</div></div>
@@ -229,6 +236,10 @@ table.vi th{background:var(--ac-soft);color:var(--ac2)}
         <tr><td><b>Còi cảnh báo</b></td><td>1 còi điện dưới sàn cabin — báo cầu đang di chuyển.</td></tr>
       </table>
       <div class="danger"><b>⛔ NÚT DỪNG KHẨN CẤP [EMERGENCY STOP]:</b> trên bàn điều khiển — phát hiện BẤT KỲ bất thường nào, bấm NGAY LẬP TỨC. Muốn phục hồi sau dừng khẩn: bấm lại chính nút đó.</div>
+      <div class="viImgRow">
+        <figure><img src="media/image51.png" loading="lazy" onclick="zoomImg(this)" alt=""><figcaption>Nút [EMERGENCY STOP] — màu đỏ, nhấn là cắt mọi chuyển động</figcaption></figure>
+        <figure><img src="media/image52.png" loading="lazy" onclick="zoomImg(this)" alt=""><figcaption>Vị trí nút dừng khẩn cấp trên bàn điều khiển</figcaption></figure>
+      </div>
     </div>
 
     <div class="card" id="vi-vanhanh"><h3>🕹 Quy trình vận hành cơ bản — 13 bước <span class="tag">dịch từ Basic Operating Procedures</span></h3>
@@ -245,7 +256,11 @@ table.vi th{background:var(--ac-soft);color:var(--ac2)}
       <div class="step"><div class="n">11</div><div>Dùng <b>cần joystick</b> ➃ tiến cầu về phía CỬA máy bay.</div></div>
       <div class="step"><div class="n">12</div><div>Đẩy joystick <b>tới/lui</b> = cầu tiến/lùi; tốc độ VÔ CẤP theo góc đẩy cần — đẩy càng nhiều chạy càng nhanh.</div></div>
       <div class="step"><div class="n">13</div><div>Đẩy joystick <b>trái/phải KÈM tới/lui</b> = cầu chạy chéo theo hướng đó; đẩy trái/phải KHÔNG kèm tới/lui = cầu XOAY tại chỗ.</div></div>
-      <div class="warn">⚠ Các bước có số khoanh tròn (①②⑤⑫…) ứng với vị trí nút trên hình bàn điều khiển — xem hình chi tiết ở tab <b>📄 Tài liệu gốc → Control Console</b>.</div>
+      <div class="viImgRow">
+        <figure><img src="media/image79.png" loading="lazy" onclick="zoomImg(this)" alt=""><figcaption>Bàn điều khiển — vị trí các nút theo số khoanh tròn ①②⑤⑪⑭⑮</figcaption></figure>
+        <figure><img src="media/image80.png" loading="lazy" onclick="zoomImg(this)" alt=""><figcaption>Màn hình đồ họa ⑫ — nút [PRESET] và cần joystick ➃</figcaption></figure>
+      </div>
+      <div class="warn">⚠ Các bước có số khoanh tròn (①②⑤⑫…) ứng với vị trí nút trên hình bàn điều khiển phía trên — bấm hình để phóng to; trọn bộ hình từng bước ở tab <b>📄 Tài liệu gốc → Basic Operating Procedures</b>.</div>
     </div>
 
     <div class="card" id="vi-baotri"><h3>🧰 Bảo trì — chăm sóc & kiểm tra hằng ngày <span class="tag">Daily Care + Daily Inspection</span></h3>
@@ -264,6 +279,9 @@ table.vi th{background:var(--ac-soft);color:var(--ac2)}
       <div class="step"><div class="n">🔧</div><div><b>Đo đồng hồ áp suất ≥1 lần/tuần:</b> lốp 46": <b>1.373–1.470 kPa</b> (14,0–15,0 kg/cm²) · lốp 39": <b>1.138–1.755 kPa</b>. Lốp đặc (solid) không áp dụng.</div></div>
       <div class="step"><div class="n">🖥</div><div>Kiểm <b>màn hình đồ họa</b> hoạt động bình thường + hình camera rõ.</div></div>
       <div class="step"><div class="n">🔋</div><div>Kiểm <b>mức pin UPS</b> + đèn báo trạng thái bình thường.</div></div>
+      <div class="viImgRow">
+        <figure><img src="media/image169.png" loading="lazy" onclick="zoomImg(this)" alt=""><figcaption>Kiểm lốp hằng ngày: đo khoảng cách đất → tâm lốp (46": 510mm · 39": 406mm)</figcaption></figure>
+      </div>
       <h4>Tần suất kiểm tra định kỳ (theo giáo trình + 5 biểu mẫu kèm)</h4>
       <table class="vi">
         <tr><th>Chu kỳ</th><th>Ai làm</th><th>Biểu mẫu</th></tr>
@@ -287,6 +305,9 @@ table.vi th{background:var(--ac-soft);color:var(--ac2)}
         <tr><td>LEFT/RIGHT STEERING LIMIT</td><td>Giới hạn góc lái bánh trái/phải</td></tr>
         <tr><td>TUNNEL VERTICAL UP/DOWN LIMIT</td><td>Giới hạn nâng/hạ chiều cao tunnel</td></tr>
       </table>
+      <div class="viImgRow">
+        <figure><img src="media/image160.png" loading="lazy" onclick="zoomImg(this)" alt=""><figcaption>Màn hình đồ họa hiển thị thông báo vận hành</figcaption></figure>
+      </div>
       <div class="note">Danh sách đầy đủ mọi mã (xanh/đỏ/vàng) + cách xử lý: tab 📄 Tài liệu gốc → mục "Message List" (có nút 🌐 dịch AI nguyên mục).</div>
     </div>
 
@@ -329,6 +350,11 @@ function tryPw(){
 document.getElementById('pw').addEventListener('keydown', e => { if (e.key === 'Enter') tryPw(); });
 if (authed()) openApp(); else setTimeout(() => document.getElementById('pw').focus(), 150);
 
+/* phóng to ảnh trong tab tiếng Việt */
+function zoomImg(img){
+  document.getElementById('lbImg').src = img.src;
+  document.getElementById('lb').classList.add('on');
+}
 /* mindmap: bấm nhánh → cuộn tới thẻ tương ứng */
 function goCard(id){
   const el = document.getElementById(id);
