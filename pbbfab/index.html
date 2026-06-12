@@ -84,9 +84,12 @@ table.vi th{background:var(--ac-soft);color:var(--ac2)}
     <span class="lock">🔒 nội bộ</span>
   </div>
   <div class="tabbar">
-    <button class="on" data-t="vi">🇻🇳 Quy trình tóm tắt</button>
-    <button data-t="assy">📕 PBB Assy Procedure (127 tr)</button>
-    <button data-t="tunnel">📗 Tunnel Procedures (51 tr)</button>
+    <button class="on" data-t="vi">🇻🇳 Tổng quan</button>
+    <button data-t="rotunda">🔨 Chế tạo Rotunda (24)</button>
+    <button data-t="cab">🔨 Chế tạo Cab (33)</button>
+    <button data-t="tunnel">🔨 Chế tạo Tunnel (51)</button>
+    <button data-t="phay">⚙️ Phay mặt bích</button>
+    <button data-t="assy">🧩 Lắp ráp hoàn thiện (127)</button>
     <button data-t="cs">📋 Jig Checksheet</button>
   </div>
 
@@ -112,14 +115,14 @@ table.vi th{background:var(--ac-soft);color:var(--ac2)}
           <text x="127" y="148" text-anchor="middle" fill="#7c2d12" font-size="13" font-weight="800">🧱 ROTUNDA COLUMN</text>
           <text x="127" y="166" text-anchor="middle" fill="#c2410c" font-size="10">cắt+vát → cuốn ống CJP 70° → nối 3 ống</text></g>
         <g class="mmn" onclick="goCard('vi-tunnel')"><rect x="40" y="298" width="175" height="56" rx="12" fill="#fdeee4" stroke="#c2410c" stroke-width="2"/>
-          <text x="127" y="322" text-anchor="middle" fill="#7c2d12" font-size="13" font-weight="800">🚇 TUNNEL</text>
+          <text x="127" y="322" text-anchor="middle" fill="#7c2d12" font-size="12.5" font-weight="800">🔨 CHẾ TẠO TUNNEL</text>
           <text x="127" y="340" text-anchor="middle" fill="#c2410c" font-size="10">panel jig → hàn → box-up 9 bước</text></g>
-        <g class="mmn" onclick="goCard('vi-rotunda')"><rect x="35" y="382" width="175" height="56" rx="12" fill="#fdeee4" stroke="#c2410c" stroke-width="2"/>
-          <text x="122" y="406" text-anchor="middle" fill="#7c2d12" font-size="13" font-weight="800">🌀 ROTUNDA — 8 BƯỚC</text>
-          <text x="122" y="424" text-anchor="middle" fill="#c2410c" font-size="10">jig → bearing → khung → mái → rèm</text></g>
+        <g class="mmn" onclick="goCard('vi-rotunda-fab')"><rect x="35" y="382" width="175" height="56" rx="12" fill="#fdeee4" stroke="#c2410c" stroke-width="2"/>
+          <text x="122" y="406" text-anchor="middle" fill="#7c2d12" font-size="11.5" font-weight="800">🌀 ROTUNDA: CHẾ TẠO→LẮP</text>
+          <text x="122" y="424" text-anchor="middle" fill="#c2410c" font-size="10">8 cụm chế tạo → 8 bước lắp tổng</text></g>
         <g class="mmn" onclick="goCard('vi-cab')"><rect x="710" y="40" width="175" height="56" rx="12" fill="#e0f2f7" stroke="#0e7490" stroke-width="2"/>
-          <text x="797" y="64" text-anchor="middle" fill="#0c4a6e" font-size="13" font-weight="800">🚪 CAB</text>
-          <text x="797" y="82" text-anchor="middle" fill="#0e7490" font-size="10">sàn+trục lái → bellow → nội thất</text></g>
+          <text x="797" y="64" text-anchor="middle" fill="#0c4a6e" font-size="11.5" font-weight="800">🚪 CAB: CHẾ TẠO→LẮP</text>
+          <text x="797" y="82" text-anchor="middle" fill="#0e7490" font-size="10">33tr chế tạo → sàn+trục → nội thất</text></g>
         <g class="mmn" onclick="goCard('vi-fastener')"><rect x="705" y="124" width="180" height="56" rx="12" fill="#e0f2f7" stroke="#0e7490" stroke-width="2"/>
           <text x="795" y="148" text-anchor="middle" fill="#0c4a6e" font-size="13" font-weight="800">🔩 FASTENER GUIDE</text>
           <text x="795" y="166" text-anchor="middle" fill="#0e7490" font-size="10">washer · loctite · double-nut · marking</text></g>
@@ -157,8 +160,8 @@ table.vi th{background:var(--ac-soft);color:var(--ac2)}
     </div>
 
     <div class="card" id="vi-tunnel"><h3>🚇 Chế tạo Tunnel — panel → hàn → box-up <span class="tag">Tunnel Detailed Procedures (51 tr) + SOP Box-up</span></h3>
-      <h4>Trình tự panel (theo tài liệu 51 trang — xem hình đầy đủ tab 📗)</h4>
-      <div class="step"><div class="n">A</div><div><b>FLOOR</b> (tr.2–8) → <b>SIDE R</b> (tr.9–14, gồm hàn) → <b>SIDE L</b> (tr.15–23) → <b>ROOF</b> (tr.24–30) → <b>BOX-UP</b> (tr.31–40+, gồm hàn box-up).</div></div>
+      <h4>🔨 Giai đoạn 1 — chế tạo panel (bấm mở hình từng phần)</h4>
+      <div class="step"><div class="n">A</div><div><button class="chip" onclick="goTab('tunnel',2)">FLOOR tr.2–8</button> <button class="chip" onclick="goTab('tunnel',9)">SIDE R tr.9–14</button> <button class="chip" onclick="goTab('tunnel',15)">SIDE L tr.15–23</button> <button class="chip" onclick="goTab('tunnel',24)">ROOF tr.24–30</button> → 🧩 giai đoạn 2: <button class="chip" onclick="goTab('tunnel',31)">BOX-UP tr.31–40+</button></div></div>
       <div class="step"><div class="n">B</div><div>Mỗi panel gá trên <b>jig chuyên dụng</b> — kiểm jig bằng checksheet TRƯỚC khi gá (tab 📋): đo 10 beam × 8 vị trí ①–⑧ theo dây căng chuẩn; trục máy đo ở trạng thái XIẾT CHẶT.</div></div>
       <h4>Box-up 3D — 9 bước (SOP nguyên văn)</h4>
       <div class="step"><div class="n">1</div><div><b>Cố định sàn</b> lên jig — chỉnh khoảng cách trụ đứng ↔ FB panel hông; hàn fix plate. <b>Không được hở</b> giữa sàn và jig.</div></div>
@@ -172,7 +175,21 @@ table.vi th{background:var(--ac-soft);color:var(--ac2)}
       <div class="step"><div class="n">9</div><div><b>Hàn</b> tổng thể theo trình tự hàn box-up (tr.36–40 tài liệu).</div></div>
     </div>
 
-    <div class="card" id="vi-rotunda"><h3>🌀 Lắp ráp Rotunda — 8 bước <span class="tag">Rotunda Procedure Assy (bảng trắng + sơ đồ đã duyệt)</span></h3>
+    <div class="card" id="vi-rotunda-fab"><h3>🔨 GIAI ĐOẠN 1 — CHẾ TẠO Rotunda từng cụm <span class="tag">04-ROTUNDA DETAILED (24 tr) — bấm bước nào mở hình bước đó</span></h3>
+      <div class="nb">Nguyên tắc: <b>CHẾ TẠO xong từng cụm → kiểm tra đạt → mới sang lắp ráp tổng</b>. Mỗi cụm gá trên jig, hàn theo trình tự trong tài liệu, kiểm kích thước trước khi rời jig.</div>
+      <div class="step"><div class="n">0</div><div><b>Xem hình tách cụm (exploded view)</b> để nhận diện đủ các cụm. <button class="chip" onclick="goTab('rotunda',3)">📖 tr.3</button></div></div>
+      <div class="step"><div class="n">1</div><div><b>Khung cứng (Rigid Frame)</b> — cụm xương chính, 5 trang chi tiết gá + hàn. <button class="chip" onclick="goTab('rotunda',4)">📖 tr.4–8</button></div></div>
+      <div class="step"><div class="n">2</div><div><b>Covers (tấm che).</b> <button class="chip" onclick="goTab('rotunda',9)">📖 tr.9</button></div></div>
+      <div class="step"><div class="n">3</div><div><b>Đỡ sealing (Sealing Support).</b> <button class="chip" onclick="goTab('rotunda',10)">📖 tr.10</button></div></div>
+      <div class="step"><div class="n">4</div><div><b>Hành lang (Corridor).</b> <button class="chip" onclick="goTab('rotunda',11)">📖 tr.11</button></div></div>
+      <div class="step"><div class="n">5</div><div><b>Sàn (Floor)</b> — 2 trang. <button class="chip" onclick="goTab('rotunda',12)">📖 tr.12–13</button></div></div>
+      <div class="step"><div class="n">6</div><div><b>Mái (Roof)</b> — 3 trang. <button class="chip" onclick="goTab('rotunda',14)">📖 tr.14–16</button></div></div>
+      <div class="step"><div class="n">7</div><div><b>Trần (Ceiling).</b> <button class="chip" onclick="goTab('rotunda',17)">📖 tr.17</button></div></div>
+      <div class="step"><div class="n">8</div><div><b>Đầu cột (Column Head)</b> — mặt lắp bạc đạn phải qua <b>PHAY</b> đạt chuẩn trước (xem tab ⚙️ Phay). <button class="chip" onclick="goTab('rotunda',18)">📖 tr.18</button></div></div>
+      <div class="nb">✅ QC sau chế tạo từng cụm: kích thước theo bản vẽ + jig checksheet · mối hàn VT 100% (NDT theo spec) · nắn phẳng nếu vênh (Thư viện Hỏa công) → đạt hết mới chuyển GIAI ĐOẠN 2.</div>
+    </div>
+
+    <div class="card" id="vi-rotunda"><h3>🧩 GIAI ĐOẠN 2 — LẮP RÁP Rotunda hoàn thiện — 8 bước <span class="tag">tr.19–23 tài liệu chế tạo + sơ đồ đã duyệt</span></h3>
       <div class="step"><div class="n">1</div><div><b>Chuẩn bị jig lắp ráp</b> (assy jig).</div></div>
       <div class="step"><div class="n">2</div><div><b>Lắp đầu cột (column head) + bạc đạn (bearing)</b> — <b>BẮT BUỘC: keo chặn ren (Loctite) trên bu lông + xiết bằng CỜ LÊ LỰC</b>.</div></div>
       <div class="step"><div class="n">3</div><div><b>Lắp khung cứng (rigid frame).</b></div></div>
@@ -184,14 +201,19 @@ table.vi th{background:var(--ac-soft);color:var(--ac2)}
       <div class="viImgRow">
         <figure><img src="cs/rotunda8-1.jpg" loading="lazy" onclick="zoomImg(this)" alt=""><figcaption>Sơ đồ 8 bước lắp Rotunda (bản chính thức)</figcaption></figure>
       </div>
-      <div class="nb">Tiếp theo (tài liệu 127tr, mục 4): 4.2 Nội thất Rotunda (tấm sàn → cách nhiệt → trần → thiên...) → 4.3 Điều chỉnh (tấm rèm, độ bằng phẳng sàn) → 4.4 Đóng gói. Xem hình từng bước: tab 📕 từ trang 23.</div>
+      <div class="nb">Hình lắp tổng từng bước: <button class="chip" onclick="goTab('rotunda',19)">📖 Chế tạo tr.19–23</button> <button class="chip" onclick="goTab('rotunda',24)">📖 Thanh rèm tr.24</button> — sau đó nội thất + điều chỉnh + đóng gói: <button class="chip" onclick="goTab('assy',23)">📖 Lắp ráp tr.23+</button></div>
     </div>
 
-    <div class="card" id="vi-cab"><h3>🚪 Lắp ráp CAB <span class="tag">PBB Assy mục 5 — tr.45+</span></h3>
-      <div class="step"><div class="n">1</div><div><b>5.1 Cab Assy:</b> lắp <b>sàn + trục Cab</b> → <b>trụ lái (drive column) Cab</b> → <b>bellow Cab</b> (ống xếp).</div></div>
+    <div class="card" id="vi-cab"><h3>🚪 CAB — chế tạo rồi mới lắp hoàn thiện</h3>
+      <h4>🔨 Giai đoạn 1 — CHẾ TẠO Cab <span class="tag">03-CAB DETAILED (33 tr)</span></h4>
+      <div class="step"><div class="n">1</div><div><b>Nhận diện cụm + hình chiếu</b> (orthographic view). <button class="chip" onclick="goTab('cab',2)">📖 tr.2–3</button></div></div>
+      <div class="step"><div class="n">2</div><div><b>Sàn Cab (Cab Floor)</b> — gá jig, hàn theo trình tự, kiểm phẳng + kích thước. <button class="chip" onclick="goTab('cab',4)">📖 tr.4+</button></div></div>
+      <div class="step"><div class="n">3</div><div><b>Các cụm tiếp theo</b> (khung, vách, mái cab...) theo đúng thứ tự 33 trang — mỗi cụm xong phải kiểm đạt trước khi sang cụm kế. <button class="chip" onclick="goTab('cab',12)">📖 tr.12+</button> <button class="chip" onclick="goTab('cab',22)">📖 tr.22+</button></div></div>
+      <h4>🧩 Giai đoạn 2 — LẮP RÁP hoàn thiện <span class="tag">PBB Assy mục 5 — tr.45+</span></h4>
+      <div class="step"><div class="n">1</div><div><b>5.1 Cab Assy:</b> lắp <b>sàn + trục Cab</b> → <b>trụ lái (drive column) Cab</b> → <b>bellow Cab</b> (ống xếp). <button class="chip" onclick="goTab('assy',45)">📖 tr.45+</button></div></div>
       <div class="step"><div class="n">2</div><div><b>5.2 Nội thất Cab:</b> CAB base → trần CAB → <b>tấm viền kính + tấm sàn CAB</b>.</div></div>
-      <div class="step"><div class="n">3</div><div><b>5.3 Điều chỉnh:</b> lắp & chỉnh <b>quay CAB</b> (cab rotation) — kiểm hành trình quay êm, không kẹt.</div></div>
-      <div class="nb">Kính Tunnel/Cab (mục 6.1): lắp kính + <b>keo silicon</b> 3 hướng (ngoại thất / nội thất ngang / nội thất dọc) — vệt keo liên tục, không đứt quãng. Xem hình tab 📕 tr.67+.</div>
+      <div class="step"><div class="n">3</div><div><b>5.3 Điều chỉnh:</b> lắp & chỉnh <b>quay CAB</b> — hành trình quay êm, không kẹt.</div></div>
+      <div class="nb">Kính Tunnel/Cab (mục 6.1): lắp kính + <b>keo silicon</b> 3 hướng (ngoại thất / nội thất ngang / nội thất dọc) — vệt keo liên tục. <button class="chip" onclick="goTab('assy',67)">📖 tr.67+</button></div>
     </div>
 
     <div class="card" id="vi-fastener"><h3>🔩 Quy tắc bu lông lắp ráp <span class="tag">Assembly–Fastener Work Guide Rev.00 — nguyên văn</span></h3>
@@ -232,6 +254,50 @@ table.vi th{background:var(--ac-soft);color:var(--ac2)}
       <div class="step"><div class="n">2</div><div>Che chắn bề mặt sơn/kính; quy cách lashing + tem nhãn theo <a href="../packing/" style="color:var(--ac);font-weight:700">🚛 QC Packing</a>.</div></div>
     </div>
 
+  </div></div>
+
+  <!-- ================= TAB CHẾ TẠO ROTUNDA (24 tr) ================= -->
+  <div class="tabpage" id="tp-rotunda"><div class="wrap">
+    <div class="pgbar">
+      <button class="chip" onclick="goPage('rotunda',3)">Hình tách cụm (tr.3)</button>
+      <button class="chip" onclick="goPage('rotunda',4)">Khung cứng (tr.4)</button>
+      <button class="chip" onclick="goPage('rotunda',9)">Covers (tr.9)</button>
+      <button class="chip" onclick="goPage('rotunda',10)">Đỡ sealing (tr.10)</button>
+      <button class="chip" onclick="goPage('rotunda',11)">Hành lang (tr.11)</button>
+      <button class="chip" onclick="goPage('rotunda',12)">Sàn (tr.12)</button>
+      <button class="chip" onclick="goPage('rotunda',14)">Mái (tr.14)</button>
+      <button class="chip" onclick="goPage('rotunda',17)">Trần (tr.17)</button>
+      <button class="chip" onclick="goPage('rotunda',18)">Đầu cột (tr.18)</button>
+      <button class="chip" onclick="goPage('rotunda',19)">LẮP TỔNG (tr.19)</button>
+      <button class="chip" onclick="goPage('rotunda',24)">Thanh rèm (tr.24)</button>
+      <input type="number" id="rotundaN" min="1" max="24" placeholder="trang...">
+      <button class="go" onclick="goPage('rotunda', parseInt(document.getElementById('rotundaN').value||1))">Tới</button>
+    </div>
+    <div class="pages" id="pg-rotunda"></div>
+  </div></div>
+
+  <!-- ================= TAB CHẾ TẠO CAB (33 tr) ================= -->
+  <div class="tabpage" id="tp-cab"><div class="wrap">
+    <div class="pgbar">
+      <button class="chip" onclick="goPage('cab',2)">Tổng quan Cab (tr.2)</button>
+      <button class="chip" onclick="goPage('cab',3)">Hình chiếu (tr.3)</button>
+      <button class="chip" onclick="goPage('cab',4)">Sàn Cab (tr.4)</button>
+      <button class="chip" onclick="goPage('cab',12)">Tiếp theo (tr.12)</button>
+      <button class="chip" onclick="goPage('cab',22)">Tiếp theo (tr.22)</button>
+      <input type="number" id="cabN" min="1" max="33" placeholder="trang...">
+      <button class="go" onclick="goPage('cab', parseInt(document.getElementById('cabN').value||1))">Tới</button>
+    </div>
+    <div class="pages" id="pg-cab"></div>
+  </div></div>
+
+  <!-- ================= TAB PHAY ================= -->
+  <div class="tabpage" id="tp-phay"><div class="wrap">
+    <div class="card"><h3>⚙️ Phay mặt lắp bạc đạn (mặt bích Rotunda) <span class="tag">05-PHAY — nguyên văn</span></h3>
+      <div class="step"><div class="n">1</div><div><b>Đường kính ~1000mm:</b> 1 mặt <b>phay toàn bộ</b>; mặt còn lại <b>phay mép</b> (hạ âm 10mm, bề rộng mặt phay 100mm).</div></div>
+      <div class="step"><div class="n">2</div><div><b>Tiêu chí bề mặt:</b> phay nhẵn — <b>tay sờ không có gợn</b>.</div></div>
+      <div class="warn">⚠ Mặt này lắp BẠC ĐẠN quay Rotunda — phẳng/nhẵn quyết định độ êm khi quay. Sau phay: bảo vệ bề mặt, không để va xước; kiểm phẳng bằng thước thẳng + thước lá trước khi lắp đầu cột (bước 2 lắp ráp).</div>
+    </div>
+    <div class="pages" id="pg-phay"></div>
   </div></div>
 
   <!-- ================= TAB VIEWER 127 TRANG ================= -->
@@ -304,7 +370,15 @@ document.querySelector('.tabbar').addEventListener('click', e => {
   document.querySelectorAll('.tabpage').forEach(p => p.classList.toggle('on', p.id === 'tp-' + b.dataset.t));
   if (b.dataset.t === 'assy') loadPages('assy', 127, 3);
   if (b.dataset.t === 'tunnel') loadPages('tunnel', 51, 2);
+  if (b.dataset.t === 'rotunda') loadPages('rotunda', 24, 2);
+  if (b.dataset.t === 'cab') loadPages('cab', 33, 2);
+  if (b.dataset.t === 'phay') loadPages('phay', 1, 1);
 });
+/* mở tab + nhảy trang từ thẻ tiếng Việt */
+function goTab(doc, page){
+  document.querySelector(`.tabbar button[data-t=${doc}]`).click();
+  setTimeout(() => goPage(doc, page), 250);
+}
 
 /* viewer trang — ảnh tải lười */
 const loaded = {};
