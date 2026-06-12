@@ -490,7 +490,51 @@
       quote: "Table 24 — Extent of routine supplementary NDT (shop and site welds, EXC1/EXC2/EXC3)."
     },
     personnel: B("Nhân sự NDT (MT/PT/UT/RT): chứng chỉ theo EN ISO 9712 tối thiểu Level 2 (EN 1090-2, 12.4.2.1). Giám sát hàn: IWE/IWT/IWS theo EXC (EN 1090-2 Table 14/15); AWS: CWI theo AWS QC1, NDT theo ASNT SNT-TC-1A.",
-      "NDT personnel: EN ISO 9712 Level 2 minimum (EN 1090-2, 12.4.2.1). Welding coordination: IWE/IWT/IWS per EXC; AWS: CWI per AWS QC1, NDT per ASNT SNT-TC-1A.")
+      "NDT personnel: EN ISO 9712 Level 2 minimum (EN 1090-2, 12.4.2.1). Welding coordination: IWE/IWT/IWS per EXC; AWS: CWI per AWS QC1, NDT per ASNT SNT-TC-1A."),
+
+    /* ===== MỨC CHẤP NHẬN NDT — đã xác minh nguyên văn từ 3 PDF gốc ===== */
+    accept: [
+      {
+        id: "mt23278",
+        title: B("MT — Mức chấp nhận chỉ thị · ISO 23278:2015 Table 1 (đã xác minh)", "MT acceptance levels — ISO 23278:2015 Table 1 (verified)"),
+        note: B("Bề rộng kiểm tra = kim loại hàn + 10mm kim loại nền MỖI BÊN. Hai chỉ thị cách nhau NHỎ HƠN kích thước lớn nhất của chỉ thị nhỏ hơn → tính là MỘT chỉ thị liên tục. Được phép mài cục bộ để nâng cấp phân loại bề mặt.",
+          "Test width = weld + 10mm parent metal each side. Adjacent indications separated by less than the major dimension of the smaller → assess as one continuous indication."),
+        head: [B("Loại chỉ thị", "Indication type"), "Level 1", "Level 2", "Level 3"],
+        rows: [
+          [B("Chỉ thị DÀI (l = chiều dài)", "Linear (l = length)"), "l ≤ 1,5 mm", "l ≤ 3 mm", "l ≤ 6 mm"],
+          [B("Chỉ thị TRÒN (d = trục lớn)", "Non-linear (d = major axis)"), "d ≤ 2 mm", "d ≤ 3 mm", "d ≤ 4 mm"]
+        ],
+        map: B("Ánh xạ thường dùng theo EXC (EN 1090-2 Table 22): EXC2 → mức 2X · EXC3/4 → mức chặt hơn theo spec. Level 1 chặt nhất.", "Common mapping per EN 1090-2: EXC2 → 2X."),
+        quote: "ISO 23278:2015, Table 1 — Acceptance levels for indications from imperfections: Linear l≤1,5/3/6; Non-linear d≤2/3/4 (Levels 1/2/3)."
+      },
+      {
+        id: "ut11666",
+        title: B("UT — Mức chấp nhận · ISO 11666:2018 (đã xác minh)", "UT acceptance levels — ISO 11666:2018 (verified)"),
+        note: B("Phạm vi: mối hàn ngấu hoàn toàn thép ferit, dày 8–100mm, đầu dò 2–5 MHz, kiểm theo ISO 17640. AL2 ↔ ISO 5817 mức B · AL3 ↔ mức C (mức D không dùng UT). Recording level = acceptance level − 4dB. 4 kỹ thuật đặt độ nhạy: SDH Ø3mm · DGS (FBH) · DAC rãnh 1×1mm · tandem FBH Ø6mm.",
+          "Full-pen ferritic welds 8–100mm, probes 2–5 MHz per ISO 17640. AL2 ↔ ISO 5817 B; AL3 ↔ C. Recording level = AL − 4dB."),
+        head: [B("Tiêu chí", "Criterion"), "AL 2 (↔ 5817-B)", "AL 3 (↔ 5817-C)"],
+        rows: [
+          [B("Tổng chiều dài tích lũy lc các chỉ thị trên recording level, trong đoạn lw = 6t", "Cumulative length lc above recording level within lw = 6t"), "lc ≤ 20% lw", "lc ≤ 30% lw"],
+          [B("Chiều dài từng chỉ thị", "Individual length"), B("Theo Annex A (mức biên độ + chiều dài theo chiều dày)", "Per Annex A curves"), B("Theo Annex A", "Per Annex A")]
+        ],
+        map: B("Đo chiều dài chỉ thị bằng kỹ thuật biên độ cố định (Annex B). Đặc trưng hóa khuyết tật: ISO 23279.", "Length by fixed-amplitude technique (Annex B); characterization per ISO 23279."),
+        quote: "ISO 11666:2018 — 'two ultrasonic acceptance levels AL 2 and AL 3 ... correspond to ISO 5817:2014 quality levels B and C'; 'lc shall not exceed 20% of lw for acceptance level 2, or 30% of lw for acceptance level 3' (lw = 6t)."
+      },
+      {
+        id: "rt10675",
+        title: B("RT — Mức chấp nhận · ISO 10675-1:2016 Table 1 (đã xác minh)", "RT acceptance levels — ISO 10675-1:2016 Table 1 (verified)"),
+        note: B("Chọn KỸ THUẬT chụp (ISO 17636-1/-2 class A/B) và MỨC chấp nhận theo quality level ISO 5817 của mối hàn. Giới hạn chi tiết từng loại khuyết tật (rỗ, xỉ, undercut...) tra Table 2 của chuẩn; cách tính % diện tích rỗ theo Annex B/C.",
+          "Technique class per ISO 17636 and acceptance level selected by ISO 5817 quality level. Per-imperfection limits in Table 2."),
+        head: [B("ISO 5817 mức", "ISO 5817 level"), B("Kỹ thuật chụp (ISO 17636)", "RT technique class"), B("Mức chấp nhận RT", "RT acceptance level")],
+        rows: [
+          ["B", B("Class B", "Class B"), "Level 1"],
+          ["C", B("Class B (số phim chụp chu vi có thể theo class A)", "Class B (exposures may follow class A)"), "Level 2"],
+          ["D", B("Class A", "Class A"), "Level 3"]
+        ],
+        map: B("Khi cần định lượng undercut/lồi quá mức bằng RT → phải có quy trình chụp thử riêng ghi trong spec.", "Quantifying undercut/excess penetration by RT requires specified procedure."),
+        quote: "ISO 10675-1:2016, Table 1 — Quality level B → technique B → acceptance level 1; C → B → 2; D → A → 3."
+      }
+    ]
   };
 
   /* ---------- 5. CHECKLIST QC HÀN ---------- */

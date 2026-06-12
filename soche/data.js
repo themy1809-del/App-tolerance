@@ -2,7 +2,9 @@
    MODULE QC SƠ CHẾ — cắt / vát mép / nắn / khoan lỗ (trước gá hàn)
    ĐÃ XÁC MINH từ PDF: EN 1090-2:2018+A1:2024 — 6.4.3 + Table 9 (chất lượng
    mặt cắt theo EXC), 6.4.4 (độ cứng mép ≤450 HV10), 6.6 + Table 11 (khe hở lỗ).
-   Công thức dải ISO 9013:2017 (u, Rz5 theo chiều dày): THAM KHẢO — chưa có PDF.
+   Công thức dải ISO 9013:2017 (u, Rz5): ĐÃ XÁC MINH nguyên văn từ PDF EN ISO 9013:2019
+   (Table 4: u R1 0,05+0,003a · R2 0,15+0,007a · R3 0,4+0,01a · R4 0,8+0,02a · R5 1,2+0,035a;
+    Table 5: Rz5 R1 10+0,6a · R2 40+0,8a · R3 70+1,2a · R4 110+1,8a [µm]).
    ============================================================================ */
 (function () {
   const B = (vi, en) => ({ vi, en });
@@ -31,7 +33,7 @@
     {
       id: "sc_u",
       title: B("Vuông góc mặt cắt u — Table 9 + ISO 9013", "Cut squareness u"),
-      criteria: B("Mép tự do (không hàn tiếp): EXC2 → u Range 5; EXC3/4 → u Range 4 (EN 1090-2 Table 9 — đã xác minh). Giới hạn theo chiều dày a: Range 4: u ≤ 0.8+0.02a · Range 5: u ≤ 1.2+0.035a (mm — công thức ISO 9013, tham khảo).",
+      criteria: B("Mép tự do (không hàn tiếp): EXC2 → u Range 5; EXC3/4 → u Range 4 (EN 1090-2 Table 9 — đã xác minh). Giới hạn theo chiều dày a: Range 4: u ≤ 0.8+0.02a · Range 5: u ≤ 1.2+0.035a (mm — ISO 9013 Table 4, ĐÃ XÁC MINH từ PDF).",
         "Free edges: EXC2 → Range 5; EXC3/4 → Range 4. Range 4: ≤0.8+0.02a; Range 5: ≤1.2+0.035a."),
       measure: B("Áp thước vuông vào mặt tấm, đo khe lớn nhất giữa thước và mặt cắt bằng thước lá, tại điểm đại diện (vùng xấu nhất).", "Square against face; feeler max gap at representative (worst) spot."),
       quote: "Table 9 — Quality of the cut surfaces: EXC2: u Range 5, Rz5 Range 4; EXC3 and EXC4: u Range 4, Rz5 Range 4. — EN 1090-2:2018+A1:2024 (đã xác minh)",
@@ -51,10 +53,10 @@
     {
       id: "sc_rz",
       title: B("Độ nhám mặt cắt Rz5 — Table 9 + ISO 9013", "Cut roughness Rz5"),
-      criteria: B("EXC2/3/4 → Rz5 Range 4: Rz5 ≤ 110 + 1.8a (µm) — công thức ISO 9013 (tham khảo); hiện trường thường so bằng mẫu chuẩn nhám.",
+      criteria: B("EXC2/3/4 → Rz5 Range 4: Rz5 ≤ 110 + 1.8a (µm) — ISO 9013 Table 5, ĐÃ XÁC MINH từ PDF; hiện trường thường so bằng mẫu chuẩn nhám.",
         "Range 4: Rz5 ≤ 110 + 1.8a µm; field check by comparator."),
       measure: B("So mẫu chuẩn (comparator) hoặc máy đo nhám cầm tay trên đoạn giữa chiều dày.", "Comparator or portable tester at mid-thickness."),
-      quote: "Table 9: Rz5 Range 4 cho EXC2/3/4 — EN 1090-2 (đã xác minh); công thức dải theo ISO 9013:2017 (tham khảo)",
+      quote: "EN 1090-2 Table 9: Rz5 Range 4 cho EXC2/3/4 (đã xác minh) · ISO 9013:2017 Table 5: Rz5 = 110 + (1,8a) µm Range 4 — đã xác minh nguyên văn từ PDF",
       calc: {
         inputs: [
           { k: "a", label: B("Chiều dày cắt a (mm)", "Thickness (mm)"), def: 20 },

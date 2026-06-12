@@ -395,6 +395,16 @@ function renderNDT() {
     <div class="note">${esc(T(N.extent.note))}</div>
     <div class="evidence"><div class="h">${LANG==='vi'?'Dẫn chứng':'Evidence'}</div><div class="quote">"${esc(N.extent.quote)}"</div></div></div>`;
 
+  /* mức chấp nhận NDT — đã xác minh từ ISO 23278 / 11666 / 10675-1 */
+  (N.accept || []).forEach(a => {
+    h += `<div class="seccard"><h3>🎯 ${esc(T(a.title))}</h3>
+      <div class="tblwrap"><table><tr>${a.head.map(c => `<th>${esc(typeof c === 'object' ? T(c) : c)}</th>`).join('')}</tr>
+      ${a.rows.map(r => `<tr>${r.map(c => `<td>${esc(typeof c === 'object' ? T(c) : c)}</td>`).join('')}</tr>`).join('')}</table></div>
+      <div class="note">${esc(T(a.note))}</div>
+      ${a.map ? `<div class="note">🔗 ${esc(T(a.map))}</div>` : ''}
+      <div class="evidence"><div class="h">${LANG==='vi'?'Dẫn chứng':'Evidence'}</div><div class="quote">"${esc(a.quote)}"</div></div></div>`;
+  });
+
   h += `<div class="seccard"><h3>👤 ${LANG==='vi'?'Yêu cầu nhân sự':'Personnel requirements'}</h3><div style="font-size:13.5px">${esc(T(N.personnel))}</div></div>`;
   document.getElementById('tab-ndt').innerHTML = h;
 }
