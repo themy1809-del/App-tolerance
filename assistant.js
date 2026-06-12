@@ -42,7 +42,7 @@
     /* "kiểm tra/nghiệm thu/đo + đối tượng" cũng là câu hỏi */
     if (/(kiem tra|nghiem thu|danh gia|\bdo\b)/.test(qn) && ENT.some(e => e.re.test(qn))) return true;
     /* TỔNG QUÁT: từ chuyên môn QC + từ hỏi/sự cố = câu hỏi (chống lọt lưới) */
-    const DOMAIN = /\bhan\b|moi han|\but\b|\bndt\b|\brt\b|\bmt\b|\bpt\b|\bvt\b|sieu am|\bson\b|dft|ma kem|bu long|bulong|xiet|kich thuoc|dung sai|fit.?up|ga lap|packing|lashing|vat tu|thep|wps|pqr|exc|camber|cong venh|khe ho|undercut|ro khi|nut\b|que han|preheat|\blo\b|cat\b|vat mep|ket cau|cau kien|khung|\bdam\b|\bcot\b|gian\b|lo dot|\bvong\b|thang dung|container|di bien|tem nhan|bien ban|hold time|\bdo vong\b|rap thu|lap thu|trial|lap dung|\bcoil\b|\bhgi\b|\bppgl\b|\bgl\b|ton bao|ma kem coil|z275|az150|azm|\bque (han|jam|ham|hang)\b|bi am\b/;
+    const DOMAIN = /\bhan\b|moi han|\but\b|\bndt\b|\brt\b|\bmt\b|\bpt\b|\bvt\b|sieu am|\bson\b|dft|ma kem|bu long|bulong|xiet|kich thuoc|dung sai|fit.?up|ga lap|packing|lashing|vat tu|thep|wps|pqr|exc|camber|cong venh|khe ho|undercut|ro khi|nut\b|que han|preheat|\blo\b|cat\b|vat mep|ket cau|cau kien|khung|\bdam\b|\bcot\b|gian\b|lo dot|\bvong\b|thang dung|container|di bien|tem nhan|bien ban|hold time|\bdo vong\b|rap thu|lap thu|trial|lap dung|\bcoil\b|\bhgi\b|\bppgl\b|\bgl\b|ton bao|ma kem coil|z275|az150|azm|\bque (han|jam|ham|hang)\b|bi am\b|fabstation|hololens|\bar\b|thuc te ao|thuc te tang cuong|hologram|qc.?assist/;
     const ASK = /\bsao\b|\bgi\b|the nao|lam (sao|gi)|\bcan\b|\bphai\b|\bsua\b|xu l(y|i)|khong (dat|pass)|\bfail\b|bi loai|\bloi\b|bao nhieu|kiem tra|nghiem thu|huong dan|khac phuc|tai sao|vi sao|chon\b|\bnen\b|duoc khong|dat khong|co sao|bao lau|ai ky|can ai|chong gi|khac (gi|nhau)|bi (vong|cong|tray|bong|chay)|ba via|dung sai/;
     return DOMAIN.test(qn) && ASK.test(qn);
   }
@@ -64,7 +64,7 @@
   const step = (n, html) => `<div style="display:flex;gap:10px;padding:9px 0;border-top:1px solid #eef1f5"><div style="width:24px;height:24px;border-radius:50%;background:#0c447c;color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none">${n}</div><div style="font-size:13.5px;flex:1">${html}</div></div>`;
   const sub = t => `<div style="font-size:12px;color:#5d6b7c;margin-top:3px">${t}</div>`;
   /* BASE: từ trang chủ = '', từ module con = '../' (để link han/, son/... luôn đúng) */
-  const BASE = /\/(vattu|soche|fitup|han|qcdim|rapthu|bulong|son|packing|dungsai|luongdu|tieuchuan|wpqr|thongke|nhatky|wps|hoacong|pbb)\//.test(location.pathname) ? '../' : '';
+  const BASE = /\/(vattu|soche|fitup|han|qcdim|rapthu|bulong|son|packing|dungsai|luongdu|tieuchuan|wpqr|thongke|nhatky|wps|hoacong|pbb|fabstation)\//.test(location.pathname) ? '../' : '';
   const lk = (url, label) => `<a href="${BASE}${url}" style="color:#0c447c;font-weight:700;text-decoration:underline dotted">${label}</a>`;
   const hi = t => `<b style="background:#fdf3e2;padding:1px 6px;border-radius:5px;color:#6b4700">${t}</b>`;
   const good = t => `<b style="background:#e3f6ee;padding:1px 6px;border-radius:5px;color:#0f6e56">${t}</b>`;

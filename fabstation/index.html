@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1e3a8a">
+<title>Thư viện FabStation — AR kiểm tra kích thước</title>
+<style>
+:root{--ac:#1d4ed8;--ac2:#1e3a8a;--am:#f59e0b;--ac-soft:#e4ecfd;--am-soft:#fdf2dd;--ink:#16232f;--muted:#64748b;--line:#e3e9f0;--bg:#f4f6fa;--sh:0 2px 12px rgba(20,40,80,.08)}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--ink);font-size:14.5px;line-height:1.6}
+.appbar{background:linear-gradient(120deg,#0f1f4b,#1e3a8a 55%,#1d4ed8);color:#fff;padding:12px 16px;display:flex;align-items:center;gap:11px;position:sticky;top:0;z-index:50}
+.appbar a{color:#fff;text-decoration:none;font-size:18px}
+.appbar .tt{font-size:15px;font-weight:800}
+.appbar .st{font-size:10.5px;opacity:.75;display:block;font-weight:500}
+.appbar .bdg{margin-left:auto;font-size:10.5px;background:var(--am);color:#3b2a05;font-weight:800;padding:4px 10px;border-radius:8px;white-space:nowrap}
+.wrap{max-width:960px;margin:0 auto;padding:16px 14px 90px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--sh);padding:16px 18px;margin-bottom:13px}
+.card h3{margin:0 0 10px;font-size:15.5px;color:var(--ac2)}
+.tag{display:inline-block;font-size:10px;font-weight:800;padding:2px 8px;border-radius:6px;background:var(--ac-soft);color:var(--ac2)}
+.note{font-size:12px;color:var(--muted)}
+/* tìm kiếm */
+.srch{position:sticky;top:50px;z-index:49;background:var(--bg);padding:10px 0 8px}
+.srch input{width:100%;padding:12px 15px;border:1.5px solid var(--line);border-radius:12px;font-size:14px;font-family:inherit;outline:none;box-shadow:var(--sh)}
+.srch input:focus{border-color:var(--ac)}
+/* section */
+.sec{margin:20px 0 10px}
+.sec .shead{display:flex;align-items:center;gap:10px;background:linear-gradient(120deg,#1e3a8a,#1d4ed8);color:#fff;border-radius:13px;padding:13px 16px;cursor:pointer}
+.sec .shead .no{flex:none;width:34px;height:34px;border-radius:10px;background:var(--am);color:#3b2a05;font-weight:900;font-size:16px;display:flex;align-items:center;justify-content:center}
+.sec .shead .t{font-size:15px;font-weight:800}
+.sec .shead .d{font-size:11px;opacity:.8;display:block;font-weight:500}
+.sec .shead .ar{margin-left:auto;font-size:13px;opacity:.85;transition:.2s}
+.sec.open .shead .ar{transform:rotate(90deg)}
+.sec .sbody{display:none;padding-top:10px}
+.sec.open .sbody{display:block}
+/* step card */
+.step{background:#fff;border:1px solid var(--line);border-radius:13px;box-shadow:var(--sh);padding:14px 16px;margin-bottom:11px}
+.step .top{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.step .code{flex:none;font-weight:900;font-size:13px;background:var(--am);color:#3b2a05;padding:3px 10px;border-radius:8px}
+.step .vt{font-size:14.5px;font-weight:800;color:var(--ac2)}
+.step .et{font-size:11.5px;color:var(--muted);font-style:italic}
+.step .sub{font-size:13px;font-weight:700;color:var(--ac);margin:7px 0 5px}
+.step ul{margin:4px 0 6px;padding-left:20px}
+.step li{margin:3px 0;font-size:13.5px}
+.chip{display:inline-block;font-size:11px;font-weight:700;background:var(--am-soft);color:#92560a;border:1px solid #f3d9a8;padding:3px 10px;border-radius:999px;margin:4px 0}
+.nb{background:#eef6ff;border-left:3px solid var(--ac);border-radius:0 9px 9px 0;padding:7px 11px;font-size:12.5px;color:#1e3a8a;margin:6px 0}
+.wb{background:var(--am-soft);border-left:3px solid var(--am);border-radius:0 9px 9px 0;padding:7px 11px;font-size:12.5px;color:#7c4a03;margin:6px 0}
+.kbimg{margin:10px 0 2px;text-align:center}
+.kbimg img{max-width:min(100%,440px);max-height:300px;object-fit:contain;border:1px solid var(--line);border-radius:10px;padding:3px;background:#fff;cursor:zoom-in;box-shadow:var(--sh)}
+.kbimg figcaption{font-size:11px;color:var(--muted);margin-top:4px}
+/* mindmap node hover */
+.mmn{cursor:pointer}.mmn:hover rect{filter:brightness(1.1)}.mmn text{pointer-events:none}
+/* lightbox */
+#lb{position:fixed;inset:0;z-index:99;background:rgba(8,16,28,.88);display:none;align-items:center;justify-content:center;cursor:zoom-out;padding:18px}
+#lb.on{display:flex}
+#lb img{max-width:96vw;max-height:92vh;border-radius:8px;background:#fff;padding:6px}
+table.vi{width:100%;border-collapse:collapse;font-size:12.5px;margin:8px 0}
+table.vi th,table.vi td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.vi th{background:var(--ac-soft);color:var(--ac2)}
+@media print{.appbar,.srch,#lb{display:none!important}.sec .sbody{display:block}}
+</style>
+</head>
+<body>
+<div id="lb" onclick="this.classList.remove('on')"><img id="lbImg" alt=""></div>
+<div class="appbar">
+  <a href="../">←</a>
+  <div><span class="tt">🥽 Thư viện FabStation — AR kiểm tra kích thước</span>
+    <span class="st">HoloLens 2 · iPad · 66 bước có mã tra cứu · hình KB thật</span></div>
+  <span class="bdg">FABSTATION</span>
+</div>
+<div class="wrap">
+
+  <div class="card"><h3>🥽 FabStation là gì?</h3>
+    <div>FabStation <b>phủ (overlay) mô hình 3D lên vật liệu thật</b> bằng công nghệ thực tế tăng cường (AR) — QC nhìn thấy ngay chỗ nào lệch so với thiết kế, không cần thước từng kích thước.</div>
+    <table class="vi">
+      <tr><th>Thiết bị</th><th>Độ chính xác</th><th>Dùng khi</th></tr>
+      <tr><td><b>HoloLens 2</b> (kính AR)</td><td><b>1/16" ≈ 1,5 mm</b></td><td>Kiểm tra nghiệm thu, cần chính xác cao</td></tr>
+      <tr><td><b>iPad / Tablet</b></td><td>1/2" ≈ 13 mm</td><td>Tham khảo nhanh, fit-up sơ bộ</td></tr>
+    </table>
+    <div class="note">Lợi ích: phát hiện lỗi sớm (error logging → Funds Saved) · truy vết qua các stage QC → Final → Shipping · giảm rework ngoài công trường · ▶ video giới thiệu: youtu.be/nFXXkBR8eQ8</div>
+  </div>
+
+  <div class="card"><h3>🗺 Bản đồ quy trình — bấm nhánh để mở phần đó</h3>
+    <svg viewBox="0 0 920 470" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto" font-family="system-ui,Segoe UI,Roboto,sans-serif">
+      <g stroke-width="2.5" fill="none" opacity=".5">
+        <path d="M460 235 C 340 235 300 90 215 78" stroke="#f59e0b"/>
+        <path d="M460 235 C 360 235 330 160 220 158" stroke="#1d4ed8"/>
+        <path d="M460 235 C 360 235 330 315 220 318" stroke="#1d4ed8"/>
+        <path d="M460 235 C 340 235 300 390 215 398" stroke="#1d4ed8"/>
+        <path d="M460 235 C 580 235 620 90 705 78" stroke="#1d4ed8"/>
+        <path d="M460 235 C 560 235 590 160 700 158" stroke="#1d4ed8"/>
+        <path d="M460 235 C 560 235 590 315 700 318" stroke="#1d4ed8"/>
+        <path d="M460 235 C 580 235 620 390 705 398" stroke="#16a34a"/>
+      </g>
+      <g class="mmn" onclick="goSec('sec-A')">
+        <rect x="40" y="50" width="175" height="56" rx="12" fill="#fdf2dd" stroke="#f59e0b" stroke-width="2"/>
+        <text x="127" y="74" text-anchor="middle" fill="#92560a" font-size="13.5" font-weight="800">⚙️ A. CÀI THIẾT BỊ</text>
+        <text x="127" y="92" text-anchor="middle" fill="#b07a1e" font-size="10">làm 1 lần · tablet + HoloLens</text>
+      </g>
+      <g class="mmn" onclick="goSec('sec-1')">
+        <rect x="45" y="130" width="175" height="56" rx="12" fill="#e4ecfd" stroke="#1d4ed8" stroke-width="2"/>
+        <text x="132" y="154" text-anchor="middle" fill="#1e3a8a" font-size="13.5" font-weight="800">1️⃣ IMPORT (WEB)</text>
+        <text x="132" y="172" text-anchor="middle" fill="#3b62c4" font-size="10">tạo project · upload ZIP</text>
+      </g>
+      <g class="mmn" onclick="goSec('sec-2')">
+        <rect x="45" y="290" width="175" height="56" rx="12" fill="#e4ecfd" stroke="#1d4ed8" stroke-width="2"/>
+        <text x="132" y="314" text-anchor="middle" fill="#1e3a8a" font-size="13.5" font-weight="800">2️⃣ MỞ APP · INSPECT</text>
+        <text x="132" y="332" text-anchor="middle" fill="#3b62c4" font-size="10">chọn project · sub-assembly</text>
+      </g>
+      <g class="mmn" onclick="goSec('sec-3')">
+        <rect x="40" y="370" width="175" height="56" rx="12" fill="#e4ecfd" stroke="#1d4ed8" stroke-width="2"/>
+        <text x="127" y="394" text-anchor="middle" fill="#1e3a8a" font-size="13.5" font-weight="800">3️⃣ 3D VIEWER</text>
+        <text x="127" y="412" text-anchor="middle" fill="#3b62c4" font-size="10">Main Part xanh · đo tham khảo</text>
+      </g>
+      <g class="mmn" onclick="goSec('sec-4')">
+        <rect x="705" y="50" width="175" height="56" rx="12" fill="#e4ecfd" stroke="#1d4ed8" stroke-width="2"/>
+        <text x="792" y="74" text-anchor="middle" fill="#1e3a8a" font-size="13.5" font-weight="800">4️⃣ AR QC-ASSIST</text>
+        <text x="792" y="92" text-anchor="middle" fill="#3b62c4" font-size="10">QR → nam châm → map → align</text>
+      </g>
+      <g class="mmn" onclick="goSec('sec-5')">
+        <rect x="700" y="130" width="180" height="56" rx="12" fill="#e4ecfd" stroke="#1d4ed8" stroke-width="2"/>
+        <text x="790" y="154" text-anchor="middle" fill="#1e3a8a" font-size="13.5" font-weight="800">5️⃣ GHI NHẬN</text>
+        <text x="790" y="172" text-anchor="middle" fill="#3b62c4" font-size="10">Checklist · Assets ảnh · NCR/CR</text>
+      </g>
+      <g class="mmn" onclick="goSec('sec-6')">
+        <rect x="700" y="290" width="180" height="56" rx="12" fill="#e4ecfd" stroke="#1d4ed8" stroke-width="2"/>
+        <text x="790" y="314" text-anchor="middle" fill="#1e3a8a" font-size="13.5" font-weight="800">6️⃣ ERROR LOGGING</text>
+        <text x="790" y="332" text-anchor="middle" fill="#3b62c4" font-size="10">số lỗi + giá trị → Funds Saved</text>
+      </g>
+      <g class="mmn" onclick="goSec('sec-7')">
+        <rect x="705" y="370" width="175" height="56" rx="12" fill="#e7f6ee" stroke="#16a34a" stroke-width="2"/>
+        <text x="792" y="394" text-anchor="middle" fill="#14532d" font-size="13.5" font-weight="800">7️⃣ FINAL & REPORT</text>
+        <text x="792" y="412" text-anchor="middle" fill="#16a34a" font-size="10">đóng NCR · Shipping · Analytics</text>
+      </g>
+      <g class="mmn" onclick="goSec('sec-tips')">
+        <rect x="355" y="200" width="210" height="70" rx="16" fill="#1e3a8a"/>
+        <text x="460" y="228" text-anchor="middle" fill="#fff" font-size="17" font-weight="800">🥽 FABSTATION QC</text>
+        <text x="460" y="248" text-anchor="middle" fill="#f59e0b" font-size="11" font-weight="700">⚡ bấm đây xem MẸO ỔN ĐỊNH</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="srch"><input id="q" type="search" placeholder="Tìm bước: gõ mã (4.5, A.10) hoặc từ khóa (QR, nam châm, upload, align...)"></div>
+
+  <div id="list"></div>
+
+  <div class="card" id="sec-tips"><h3>⚡ Mẹo ổn định hologram — từ buổi training tại DaiDung (06/2026)</h3>
+    <table class="vi">
+      <tr><th>#</th><th>Mẹo (Stability Tips — FabStation onsite)</th></tr>
+      <tr><td>1</td><td><b>Người mặc đồ sáng/áo phản quang trong tầm camera</b> làm hologram mất ổn định — tránh nhìn vào họ hoặc mời ra khỏi khung hình.</td></tr>
+      <tr><td>2</td><td><b>Tia lửa hàn/mài không che chắn</b> ở gần cũng làm mất ổn định.</td></tr>
+      <tr><td>3</td><td>Dán <b>Feature Magnet đen-trắng lên TẤT CẢ các mặt</b> sẽ kiểm tra — cả bụng (web) lẫn cánh (flange).</td></tr>
+      <tr><td>4</td><td>Luôn <b>map assembly trước khi align (3 mặt)</b>.</td></tr>
+      <tr><td>5</td><td><b>KHÔNG BAO GIỜ</b> dùng joystick phải (Front-Back, Left-Right, Up-Down) ở phía đối diện (mặt không có QR).</td></tr>
+      <tr><td>6</td><td><b>Tắt hẳn HoloLens</b> cho tới khi đến assembly cần kiểm — giữ nút nguồn đến khi cả 5 đèn tắt.</td></tr>
+      <tr><td>7</td><td><b>Chuyển trạm làm việc:</b> Settings › System › Holograms › <b>Remove all Holograms</b> khi đến nơi. Cùng trang đó, bật <b>"Automatically remove all holograms... when device shuts down" = ON</b>.</td></tr>
+    </table>
+    <div class="nb">🛠 <b>Cài đặt HoloLens liên quan:</b> Settings › Privacy › Environment › <b>Clear environment data</b> (xóa dữ liệu môi trường khi hologram hiển thị sai chỗ) · Settings › System › Holograms › Remove all holograms.</div>
+    <div class="wb">📏 <b>Assembly dài &gt;15m hoặc cần mặt thứ 4:</b> chọn 1 chi tiết tham chiếu cách ~30ft (9m) dọc assembly → STEP 1: Map + Align + Inspect từ QR tới chi tiết tham chiếu → STEP 2: Home › Change Device — cập nhật vị trí QR theo chỗ mới → STEP 3: dời QR tới điểm tham chiếu kế → align đoạn tiếp & inspect.</div>
+    <div class="note">🏆 Chứng chỉ FabStation: hoàn thành 6 phần KB Guides + nộp video align 3 mặt (3–5 phút) + nộp 1 report qua app → nhận Diploma + voucher.</div>
+  </div>
+
+  <div class="card"><h3>📋 Cheat-sheet 1 ngày của QC</h3><div id="cheat"></div>
+    <div class="note" id="support"></div></div>
+</div>
+
+<script src="data.js"></script>
+<script>
+'use strict';
+const D = window.FS_DATA;
+const esc = s => String(s == null ? '' : s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+function stepCard(st){
+  let h = `<div class="step" data-hay="${esc((st.code+' '+st.vi+' '+st.en+' '+st.sub+' '+(st.body||[]).join(' ')).toLowerCase())}">
+    <div class="top"><span class="code">${esc(st.code)}</span><span class="vt">${esc(st.vi)}</span><span class="et">${esc(st.en)}</span></div>
+    ${st.sub ? `<div class="sub">${esc(st.sub)}</div>` : ''}`;
+  if (st.body && st.body.length) h += '<ul>' + st.body.map(b => `<li>${esc(b)}</li>`).join('') + '</ul>';
+  if (st.path) h += `<span class="chip">📍 ${esc(st.path)}</span>`;
+  (st.notes || []).forEach(n => h += `<div class="nb">💡 ${esc(n)}</div>`);
+  (st.warns || []).forEach(w => h += `<div class="wb">⚠ ${esc(w)}</div>`);
+  if (st.kburl) h += `<figure class="kbimg"><img loading="lazy" src="${esc(st.kburl)}" onerror="this.parentElement.style.display='none'" onclick="zoomImg(this)" alt=""><figcaption>Hình KB #${st.kb}${st.kbcap ? ' — ' + esc(st.kbcap) : ''}</figcaption></figure>`;
+  return h + '</div>';
+}
+function render(){
+  const box = document.getElementById('list');
+  box.innerHTML = D.SECTIONS.map((s, i) => `
+    <div class="sec ${i === 0 ? 'open' : ''}" id="sec-${esc(s.id)}">
+      <div class="shead" onclick="this.parentElement.classList.toggle('open')">
+        <span class="no">${esc(s.id)}</span>
+        <span><span class="t">${esc(s.title)}</span><span class="d">${esc(s.en)} · ${s.steps.length} bước — ${esc(s.desc)}</span></span>
+        <span class="ar">▶</span>
+      </div>
+      <div class="sbody">${s.steps.map(stepCard).join('')}</div>
+    </div>`).join('');
+  document.getElementById('cheat').innerHTML = '<ul>' + D.CHEAT.map(c => `<li>${esc(c)}</li>`).join('') + '</ul>';
+  const su = D.SUPPORT;
+  document.getElementById('support').innerHTML = `🆘 Hỗ trợ: <b>${esc(su.email)}</b> · ${esc(su.phone)} · Web Portal: <b>${esc(su.portal)}</b> · Knowledge Base: ${esc(su.kb)}`;
+}
+function goSec(id){
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (el.classList.contains('sec')) el.classList.add('open');
+  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  el.style.transition = 'box-shadow .3s'; el.style.boxShadow = '0 0 0 3px #f59e0b';
+  setTimeout(() => el.style.boxShadow = '', 1600);
+}
+function zoomImg(img){
+  document.getElementById('lbImg').src = img.src;
+  document.getElementById('lb').classList.add('on');
+}
+document.getElementById('q').addEventListener('input', function(){
+  const q = this.value.trim().toLowerCase();
+  document.querySelectorAll('.sec').forEach(sec => {
+    let any = false;
+    sec.querySelectorAll('.step').forEach(st => {
+      const hit = !q || st.dataset.hay.includes(q);
+      st.style.display = hit ? '' : 'none';
+      if (hit) any = true;
+    });
+    sec.style.display = !q || any ? '' : 'none';
+    if (q && any) sec.classList.add('open');
+  });
+});
+render();
+</script>
+<script src="../assistant.js"></script>
+<script src="../ai-fab.js"></script>
+<script>if(window.AIFab)AIFab.mount({module:'FabStation AR'});</script>
+</body>
+</html>
