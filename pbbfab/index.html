@@ -49,6 +49,22 @@ table.vi th{background:var(--ac-soft);color:var(--ac2)}
 .viImgRow img{max-width:100%;max-height:300px;object-fit:contain;border:1px solid var(--line);border-radius:10px;padding:3px;background:#fff;cursor:zoom-in;box-shadow:var(--sh)}
 .viImgRow figcaption{font-size:11.5px;color:var(--muted);margin-top:5px}
 .mmn{cursor:pointer}.mmn:hover rect{filter:brightness(1.08)}.mmn text{pointer-events:none}
+/* mindmap chế tạo từng bước có hình */
+.flow{display:flex;flex-direction:column;gap:0;margin-top:6px}
+.fnode{display:flex;gap:13px;align-items:stretch;background:#fff;border:1.5px solid var(--line);border-radius:13px;padding:11px 13px;box-shadow:var(--sh);position:relative}
+.fnode.gate{border-color:#16a34a;background:#f4fbf7}
+.fnode .fno{flex:none;width:30px;height:30px;border-radius:50%;background:var(--ac);color:#fff;font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center;margin-top:3px}
+.fnode.gate .fno{background:#16a34a}
+.fnode .fbody{flex:1;min-width:0}
+.fnode .ft{font-size:14px;font-weight:800;color:var(--ac2)}
+.fnode.gate .ft{color:#14532d}
+.fnode .fd{font-size:12.5px;margin-top:3px}
+.fnode .fimg{flex:none;width:130px;display:flex;flex-direction:column;gap:4px;justify-content:center}
+.fnode .fimg img{width:130px;height:88px;object-fit:cover;border:1px solid var(--line);border-radius:8px;cursor:zoom-in;background:#fff}
+.fnode .fimg .cap{font-size:9.5px;color:var(--muted);text-align:center}
+.farrow{width:3px;height:22px;background:linear-gradient(#c2410c,#f59e0b);margin:0 auto;position:relative}
+.farrow::after{content:'';position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#f59e0b}
+@media(max-width:560px){.fnode .fimg{width:96px}.fnode .fimg img{width:96px;height:66px}}
 /* viewer trang */
 .pgbar{display:flex;gap:6px;flex-wrap:wrap;align-items:center;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:12px;box-shadow:var(--sh)}
 .pgbar .chip{font-size:11px;font-weight:700;padding:5px 11px;border-radius:999px;background:var(--ac-soft);color:var(--ac2);border:0;cursor:pointer;font-family:inherit}
@@ -132,11 +148,72 @@ table.vi th{background:var(--ac-soft);color:var(--ac2)}
         <g class="mmn" onclick="goCard('vi-pack')"><rect x="710" y="382" width="175" height="56" rx="12" fill="#efecfa" stroke="#7c3aed" stroke-width="2"/>
           <text x="797" y="406" text-anchor="middle" fill="#4c1d95" font-size="13" font-weight="800">📦 ĐÓNG GÓI</text>
           <text x="797" y="424" text-anchor="middle" fill="#7c3aed" font-size="10">giá vận chuyển · bộ phận rời</text></g>
-        <g class="mmn"><rect x="350" y="205" width="220" height="70" rx="16" fill="#7c2d12"/>
+        <g class="mmn" onclick="goCard('vi-flow')"><rect x="350" y="205" width="220" height="70" rx="16" fill="#7c2d12"/>
           <text x="460" y="233" text-anchor="middle" fill="#fff" font-size="16" font-weight="800">🏗️ PBB — 1 BỘ ĐẦY ĐỦ</text>
-          <text x="460" y="253" text-anchor="middle" fill="#fdba74" font-size="10.5">chế tạo → sơn → lắp ráp → FAT → đóng gói</text></g>
+          <text x="460" y="251" text-anchor="middle" fill="#fdba74" font-size="10.5">⚡ bấm đây: MINDMAP CHẾ TẠO</text>
+          <text x="460" y="266" text-anchor="middle" fill="#fdba74" font-size="9.5">từng bước · có hình · điểm dừng QC</text></g>
       </svg>
       <div class="note">Tài liệu gốc đầy đủ hình từng bước nằm ở 2 tab: 📕 PBB Assy (127 trang — toàn bộ rotunda/cab/tunnel/cable carrier/FAT) và 📗 Tunnel (51 trang chi tiết panel + hàn + box-up). Nguồn: PBB Assy Procedure 010722 · Tunnel Detailed Procedures · MOS Rotunda Column Rev.0 · SOP Box-up · Fastener Guide Rev.00 · báo cáo sơn dự án — đã trích nguyên văn.</div>
+    </div>
+
+    <div class="card" id="vi-flow"><h3>🗺 MINDMAP CHẾ TẠO TỪNG BƯỚC — làm đúng thứ tự này, mỗi bước có hình <span class="tag">tổng hợp từ SOP + checksheet + tài liệu chế tạo</span></h3>
+      <div class="flow">
+
+        <div class="fnode gate"><div class="fno">1</div><div class="fbody">
+          <div class="ft">✅ CHUẨN JIG — kiểm jig TRƯỚC khi đặt tấm nào lên</div>
+          <div class="fd">Lấy checksheet đúng jig (PANEL JIG / BOX-UP JIG). Căng dây chuẩn (datum) → đo <b>10 beam × 8 vị trí ①–⑧</b>, ghi từng số vào phiếu. Đo thêm <b>⑨ = A+(OD/2)−A′</b> và <b>⑩ = C−D</b> với trục máy Ø38 ở trạng thái <b>XIẾT CHẶT</b> (chuẩn mẫu: ⑨=9.0, ⑩=88.0). Lệch chuẩn → chỉnh jig xong đo lại, KHÔNG gá tấm lên jig lệch.</div>
+          <div class="fd">📋 <button class="chip" onclick="goTab('cs',1)">Mở phiếu jig + cách đo</button></div>
+        </div><div class="fimg"><img loading="lazy" src="cs/tpanel-1.jpg" onclick="zoomImg(this)" alt=""><span class="cap">Phiếu đo jig 10 beam ①–⑧</span></div></div>
+        <div class="farrow"></div>
+
+        <div class="fnode"><div class="fno">2</div><div class="fbody">
+          <div class="ft">🧾 VẬT TƯ — kiểm tấm WELTEN 590 trước khi cắt/nối</div>
+          <div class="fd">Đối chiếu <b>heat number trên tấm ↔ MTC</b> (thép cường độ cao 590MPa — nhầm với thép thường là hỏng cả cụm). Đo chiều dày 4 góc + giữa tấm; ngoại quan không rỗ gỉ sâu, không tách lớp mép cắt. SANG SỐ mark sang từng phôi TRƯỚC khi cắt.</div>
+          <div class="fd">🧰 Thước cặp/micrometer · <a href="../vattu/" style="color:var(--ac);font-weight:700">bảng dung sai tấm EN 10029 trong QC Vật tư</a></div>
+        </div><div class="fimg"><img loading="lazy" src="tunnel/p-02.jpg" onclick="zoomImg(this)" alt=""><span class="cap">Tấm sàn tunnel — bố trí phôi</span></div></div>
+        <div class="farrow"></div>
+
+        <div class="fnode"><div class="fno">3</div><div class="fbody">
+          <div class="ft">📏 CHUẨN BỊ NỐI TẤM WELTEN 590 (fit-up mối nối)</div>
+          <div class="fd">Vát mép đúng <b>WPS riêng cho WELTEN 590</b> (góc vát +10°/−5°, root face ±2mm so WPS); khe hở chân đều suốt chiều dài — đo bằng thước lá 3 điểm/mét. Mặt vát mài sạch gỉ/dầu 25mm hai bên. <b>Que/dây hydro thấp sấy đúng</b> + <b>gia nhiệt sơ bộ THEO WPS</b> (thép 590 bắt buộc preheat — không hàn nguội).</div>
+          <div class="fd">🔥 Hàn đính bởi thợ có chứng chỉ, dài & dày theo WPS, không đính ở góc mối nối</div>
+        </div><div class="fimg"><img loading="lazy" src="tunnel/p-09.jpg" onclick="zoomImg(this)" alt=""><span class="cap">Gá phôi side panel trên jig</span></div></div>
+        <div class="farrow"></div>
+
+        <div class="fnode"><div class="fno">4</div><div class="fbody">
+          <div class="ft">🔥 HÀN NỐI TẤM — đúng trình tự chống vênh</div>
+          <div class="fd">Hàn theo <b>sơ đồ trình tự trong tài liệu</b> (đối xứng, phân đoạn — xem đúng trang hàn của panel đang làm): Side R tr.12 · Side L tr.19 · Roof tr.27 · Box-up tr.36. Kiểm interpass theo WPS; KHÔNG hàn đè tack nứt; làm sạch xỉ từng lớp.</div>
+          <div class="fd">📖 <button class="chip" onclick="goTab('tunnel',12)">Hàn Side R tr.12</button> <button class="chip" onclick="goTab('tunnel',27)">Hàn Roof tr.27</button> <button class="chip" onclick="goTab('tunnel',36)">Hàn Box-up tr.36</button></div>
+        </div><div class="fimg"><img loading="lazy" src="tunnel/p-12.jpg" onclick="zoomImg(this)" alt=""><span class="cap">Sơ đồ trình tự hàn Side R</span></div></div>
+        <div class="farrow"></div>
+
+        <div class="fnode gate"><div class="fno">5</div><div class="fbody">
+          <div class="ft">📡 NDT MỐI NỐI TẤM — đạt mới đi tiếp</div>
+          <div class="fd"><b>VT 100%</b> sau nguội (không nứt, không undercut quá mức ISO 5817 theo EXC) → chờ đủ <b>hold time</b> → <b>UT mối nối giáp mối</b> theo <b>ISO 11666 AL2</b> (tương đương 5817-B): trong mỗi đoạn lw=6t, tổng chỉ thị trên recording level ≤ 20% lw. Không đạt → sửa theo quy trình 7 bước (hỏi trợ lý "hàn UT không đạt").</div>
+          <div class="fd">📡 <a href="../han/" style="color:var(--ac);font-weight:700">QC Hàn → tab NDT (mức chấp nhận đã xác minh)</a></div>
+        </div><div class="fimg"><img loading="lazy" src="assy/p-100.jpg" onclick="zoomImg(this)" alt=""><span class="cap">Mục 8.0 — kiểm tra (tài liệu lắp ráp)</span></div></div>
+        <div class="farrow"></div>
+
+        <div class="fnode gate"><div class="fno">6</div><div class="fbody">
+          <div class="ft">📐 NGHIỆM THU PANEL TRÊN JIG — trước khi rời jig</div>
+          <div class="fd">Đo trên jig: dài/rộng theo bản vẽ, <b>đường chéo 2 phía lệch nhau ≤ dung sai bản vẽ</b>, độ phẳng (dây căng + thước lá). Vênh cục bộ → nắn theo <a href="../hoacong/" style="color:var(--ac);font-weight:700">Thư viện Hỏa công</a> (650°C, ¾ chiều dày) rồi đo lại. Ghi phiếu + ảnh → mới được nhấc khỏi jig.</div>
+        </div><div class="fimg"><img loading="lazy" src="cs/tpanel-2.jpg" onclick="zoomImg(this)" alt=""><span class="cap">Cách đo ⑨⑩ + datum trên jig</span></div></div>
+        <div class="farrow"></div>
+
+        <div class="fnode"><div class="fno">7</div><div class="fbody">
+          <div class="ft">🧱 BOX-UP 3D — ráp các panel thành hộp (9 bước SOP)</div>
+          <div class="fd">Sàn cố định lên jig (KHÔNG hở) → dựng 2 hông (vuông 90° tại TỪNG trụ) → mái → <b>kẻ tim sàn + đặt laser</b> (khoảng cách tim→laser đầu cab = đầu rotunda) → cân tâm mái theo công thức <b>L + 2×(CL→laser) = R</b> (vd 653+238=891) → kiểm tâm mỗi 2,4m + cao độ → đường chéo từng trụ → giằng chéo căng bên NGẮN hơn → hàn. Fix plate bước 500mm.</div>
+          <div class="fd">📖 <button class="chip" onclick="goTab('tunnel',31)">Box-up tr.31</button> · thẻ 9 bước chi tiết bên dưới ⬇</div>
+        </div><div class="fimg"><img loading="lazy" src="tunnel/p-31.jpg" onclick="zoomImg(this)" alt=""><span class="cap">Box-up trên jig</span></div></div>
+        <div class="farrow"></div>
+
+        <div class="fnode gate"><div class="fno">8</div><div class="fbody">
+          <div class="ft">🎨 SƠN — chỉ sau khi kết cấu nghiệm thu xong</div>
+          <div class="fd">Lau MEK sạch dầu (QC ký) → bắn bi <b>Sa 2.5, nhám 30–75µm</b> (tấm 2mm: áp lực nhẹ, kiểm vênh ngay) → DFT từng mốc: lớp 1: 90–250 · 1+2: 180–500 · <b>3 lớp: 240–570µm</b> → ngoại quan màu/độ bóng so mẫu. Đạt → chuyển GIAI ĐOẠN 2 LẮP RÁP (thẻ Rotunda/Cab bên dưới).</div>
+        </div><div class="fimg"><img loading="lazy" src="assy/p-007.jpg" onclick="zoomImg(this)" alt=""><span class="cap">Yêu cầu dự án (tr.7 tài liệu)</span></div></div>
+
+      </div>
+      <div class="note">Nút xanh lá = ĐIỂM DỪNG QC (không đạt thì không đi tiếp). Bấm hình phóng to; nút 📖 mở đúng trang tài liệu gốc. Quy trình này áp dụng chung cho panel Tunnel/Rotunda/Cab — trang hình cụ thể của từng cụm xem tab 🔨 tương ứng.</div>
     </div>
 
     <div class="card" id="vi-son"><h3>🎨 Yêu cầu sơn dự án <span class="tag">từ Báo cáo kiểm soát sơn Cầu Ống Lồng — nguyên văn</span></h3>
