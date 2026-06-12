@@ -46,6 +46,36 @@
   <div class="stats" id="stats"></div>
   <div class="search"><span class="mag">🔍</span><input id="q" placeholder="Tìm PQR / vật liệu / quy trình hàn..."></div>
   <div id="list"></div>
+
+  <!-- ===== Phạm vi chứng nhận PQR — ISO 15614-1 (đã xác minh từ PDF) ===== -->
+  <div class="card" style="margin-top:18px">
+    <b class="code">📐 Phạm vi chứng nhận theo CHIỀU DÀY — EN ISO 15614-1:2017+A1 Table 7 (mối giáp mối) · đã xác minh</b>
+    <div style="overflow-x:auto;margin-top:8px"><table style="width:100%;border-collapse:collapse;font-size:12px">
+      <tr style="background:#f1f5f9"><th style="border:1px solid #e2e8f0;padding:6px">Dày mẫu thử t</th><th style="border:1px solid #e2e8f0;padding:6px">Level 1</th><th style="border:1px solid #e2e8f0;padding:6px">Level 2 — 1 lớp</th><th style="border:1px solid #e2e8f0;padding:6px">Level 2 — nhiều lớp</th><th style="border:1px solid #e2e8f0;padding:6px">Kim loại đắp s</th></tr>
+      <tr><td style="border:1px solid #e2e8f0;padding:6px">t ≤ 3</td><td style="border:1px solid #e2e8f0;padding:6px" colspan="3">0,5t → 2t</td><td style="border:1px solid #e2e8f0;padding:6px">max 2s</td></tr>
+      <tr><td style="border:1px solid #e2e8f0;padding:6px">3 &lt; t ≤ 12</td><td style="border:1px solid #e2e8f0;padding:6px">1,5 → 2t</td><td style="border:1px solid #e2e8f0;padding:6px">0,5t (min 3) → 1,3t</td><td style="border:1px solid #e2e8f0;padding:6px">3 → 2t*</td><td style="border:1px solid #e2e8f0;padding:6px">max 2s*</td></tr>
+      <tr><td style="border:1px solid #e2e8f0;padding:6px">12 &lt; t ≤ 20</td><td style="border:1px solid #e2e8f0;padding:6px">5 → 2t</td><td style="border:1px solid #e2e8f0;padding:6px">0,5t → 1,1t</td><td style="border:1px solid #e2e8f0;padding:6px">0,5t → 2t</td><td style="border:1px solid #e2e8f0;padding:6px">max 2s</td></tr>
+      <tr><td style="border:1px solid #e2e8f0;padding:6px">20 &lt; t ≤ 40</td><td style="border:1px solid #e2e8f0;padding:6px">5 → 2t</td><td style="border:1px solid #e2e8f0;padding:6px">0,5t → 1,1t</td><td style="border:1px solid #e2e8f0;padding:6px">0,5t → 2t</td><td style="border:1px solid #e2e8f0;padding:6px">2s (s&lt;20) · 2t (s≥20)</td></tr>
+      <tr><td style="border:1px solid #e2e8f0;padding:6px">40 &lt; t ≤ 100</td><td style="border:1px solid #e2e8f0;padding:6px">5 → 200</td><td style="border:1px solid #e2e8f0;padding:6px">—</td><td style="border:1px solid #e2e8f0;padding:6px">0,5t → 2t</td><td style="border:1px solid #e2e8f0;padding:6px">2s (s&lt;20) · 200 (s≥20)</td></tr>
+      <tr><td style="border:1px solid #e2e8f0;padding:6px">100 &lt; t ≤ 150</td><td style="border:1px solid #e2e8f0;padding:6px">5 → 200</td><td style="border:1px solid #e2e8f0;padding:6px">—</td><td style="border:1px solid #e2e8f0;padding:6px">50 → 2t</td><td style="border:1px solid #e2e8f0;padding:6px">2s (s&lt;20) · 300 (s≥20)</td></tr>
+      <tr><td style="border:1px solid #e2e8f0;padding:6px">t &gt; 150</td><td style="border:1px solid #e2e8f0;padding:6px">5 → 1,33t</td><td style="border:1px solid #e2e8f0;padding:6px">—</td><td style="border:1px solid #e2e8f0;padding:6px">50 → 2t</td><td style="border:1px solid #e2e8f0;padding:6px">2s (s&lt;20) · 1,33t (s≥20)</td></tr>
+    </table></div>
+    <div class="meta" style="margin-top:6px">* Level 2, dải 3–12mm: nếu spec yêu cầu va đập mà CHƯA thử va đập → chứng nhận tối đa 12mm. Hàn góc (Table 8): t≤3 → 0,7t–2t · 3&lt;t&lt;30 → 3–2t · t≥30 → ≥5; throat 1 lớp 0,75a–1,5a, nhiều lớp không giới hạn. Ống: chứng nhận tấm phủ ống khi D&gt;500mm (hoặc D&gt;150mm hàn PC/PF/PA xoay).</div>
+  </div>
+
+  <div class="card" style="margin-top:12px">
+    <b class="code">🧬 Nhóm vật liệu thép — ISO/TR 15608:2017 Table 1 (đã xác minh) + quy tắc phủ nhóm 15614-1 Table 5</b>
+    <div style="overflow-x:auto;margin-top:8px"><table style="width:100%;border-collapse:collapse;font-size:12px">
+      <tr style="background:#f1f5f9"><th style="border:1px solid #e2e8f0;padding:6px">Nhóm</th><th style="border:1px solid #e2e8f0;padding:6px">Loại thép</th><th style="border:1px solid #e2e8f0;padding:6px">Ví dụ hay gặp</th></tr>
+      <tr><td style="border:1px solid #e2e8f0;padding:6px"><b>1.1</b></td><td style="border:1px solid #e2e8f0;padding:6px">ReH ≤ 275 MPa (C≤0,25; Mn≤1,8)</td><td style="border:1px solid #e2e8f0;padding:6px">S235, SS400</td></tr>
+      <tr><td style="border:1px solid #e2e8f0;padding:6px"><b>1.2</b></td><td style="border:1px solid #e2e8f0;padding:6px">275 &lt; ReH ≤ 360 MPa</td><td style="border:1px solid #e2e8f0;padding:6px">S275, S355, A572 Gr.50</td></tr>
+      <tr><td style="border:1px solid #e2e8f0;padding:6px"><b>1.3</b></td><td style="border:1px solid #e2e8f0;padding:6px">Hạt mịn thường hóa ReH &gt; 360</td><td style="border:1px solid #e2e8f0;padding:6px">S420N, S460N</td></tr>
+      <tr><td style="border:1px solid #e2e8f0;padding:6px"><b>1.4</b></td><td style="border:1px solid #e2e8f0;padding:6px">Thép chịu thời tiết</td><td style="border:1px solid #e2e8f0;padding:6px">S355J2W (Corten)</td></tr>
+      <tr><td style="border:1px solid #e2e8f0;padding:6px"><b>2.1/2.2</b></td><td style="border:1px solid #e2e8f0;padding:6px">TMCP hạt mịn 360–460 / &gt;460</td><td style="border:1px solid #e2e8f0;padding:6px">S420M–S460M / S500M+</td></tr>
+      <tr><td style="border:1px solid #e2e8f0;padding:6px"><b>3.1/3.2</b></td><td style="border:1px solid #e2e8f0;padding:6px">Tôi & ram 360–690 / &gt;690</td><td style="border:1px solid #e2e8f0;padding:6px">S690Q (3.1≤690)</td></tr>
+    </table></div>
+    <div class="meta" style="margin-top:6px">Quy tắc phủ (15614-1 Table 5, ghi chú a): mẫu thử nhóm 1, 2, 3, 11 phủ thép có giới hạn chảy BẰNG HOẶC THẤP HƠN (không phụ thuộc chiều dày) — vd PQR trên S355 (1.2) phủ S235 (1.1); nhóm 3 phủ 1+2. Nhóm 4–6 (Cr-Mo) chỉ phủ cùng/dưới sub-group trong cùng nhóm.</div>
+  </div>
 </main>
 
 <script src="../wps/wps-index.js"></script>

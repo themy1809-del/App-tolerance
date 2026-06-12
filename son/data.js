@@ -71,7 +71,7 @@
     contamination: {
       title: B("Tạp chất bề mặt trước sơn — ISO 8502", "Surface contamination before painting — ISO 8502"),
       rows: [
-        { t: B("Muối hòa tan (Bresle test)", "Soluble salts (Bresle)"), lim: B("Thông dụng: ≤ 50 mg/m² NaCl tương đương cho hệ ngâm nước/zinc-rich; ≤ 100 mg/m² môi trường khí quyển (giới hạn cụ thể theo spec sơn/dự án)", "Typical: ≤ 50 mg/m² for immersion/zinc-rich; ≤ 100 mg/m² atmospheric (per project/PDS)"), m: "ISO 8502-6 + 8502-9" },
+        { t: B("Muối hòa tan (Bresle test)", "Soluble salts (Bresle)"), lim: B("Thông dụng: ≤ 50 mg/m² NaCl tương đương cho hệ ngâm nước/zinc-rich; ≤ 100 mg/m² môi trường khí quyển (giới hạn cụ thể theo spec sơn/dự án). Cách làm (ISO 8502-6 — đã xác minh từ PDF): dán patch có khoang giữa lên bề mặt → tiêm nước cất bằng xi-lanh → hút ra, lặp bơm-hút nhiều chu kỳ → đo độ dẫn dung dịch theo 8502-9. Thể tích dung môi ≈ 2,6 µl/mm² diện tích khoang; ghi hồ sơ: thể tích tiêm + tổng số chu kỳ.", "Typical: ≤ 50 mg/m² immersion/zinc-rich; ≤ 100 mg/m² atmospheric. Patch + syringe inject/withdraw cycles per ISO 8502-6 (verified), conductivity per 8502-9."), m: "ISO 8502-6:2006 (đã xác minh) + 8502-9" },
         { t: B("Bụi (dust tape test)", "Dust (tape test)"), lim: B("Thông dụng: cấp bụi ≤ 2 và cỡ hạt ≤ class 2 (so ảnh chuẩn)", "Typical: dust quantity rating ≤ 2, size class ≤ 2"), m: "ISO 8502-3" },
         { t: B("Dầu mỡ", "Oil & grease"), lim: B("Không nhìn thấy / không phát hiện (test nước phun, UV, dung môi)", "None visible/detectable"), m: B("Đánh giá trực quan / SSPC-SP1 làm sạch dung môi trước phun hạt", "Visual / SSPC-SP1 solvent clean before blasting") }
       ],

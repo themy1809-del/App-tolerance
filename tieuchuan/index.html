@@ -91,7 +91,17 @@ const STDS = [
   ['PACKING', 'CTU Code 2014 (IMO/ILO/UNECE)', 'Quy tắc đóng hàng đơn vị vận tải (xếp, chèn, lashing)', false, [['QC Packing','../packing/']]],
   ['PACKING', 'EN 12195-1:2010', 'Tính lực chằng buộc đường bộ', false, [['QC Packing → Lashing','../packing/']]],
   ['PACKING', 'ISO 780:2015', 'Ký hiệu handling trên kiện hàng', false, [['QC Packing → Tem nhãn','../packing/']]],
-  ['PACKING', 'ISPM 15', 'Gỗ đóng kiện xuất khẩu (dấu IPPC)', false, [['QC Packing','../packing/']]]
+  ['PACKING', 'ISPM 15', 'Gỗ đóng kiện xuất khẩu (dấu IPPC)', false, [['QC Packing','../packing/']]],
+  ['WPS/PQR', 'EN ISO 15614-1:2017+A1:2019', 'Phạm vi chứng nhận PQR: Table 7 (dày giáp mối), Table 8 (hàn góc), Table 5 (phủ nhóm vật liệu) — bảng đầy đủ trong WPQR', true, [['Thư viện WPQR','../wpqr/']]],
+  ['WPS/PQR', 'ISO/TR 15608:2017', 'Nhóm vật liệu hàn: 1.1 (≤275) · 1.2 (275–360) · 1.3 (FG>360) · 2 (TMCP) · 3 (Q&T) · 4–6 (Cr-Mo)...', true, [['Thư viện WPQR','../wpqr/']]],
+  ['WPS/PQR', 'AWS B2.1:2021', 'Chứng nhận quy trình + thợ hàn hệ Mỹ (ngoài AWS D1.1) — có PDF trong dự án', true, [['Thư viện WPS','../wps/']]],
+  ['NGOÀI KẾT CẤU NHÀ (có PDF)', 'NSSS Rev.06 (BCSA/SCI)', 'Spec kết cấu thép quốc gia Anh + CE marking — dự án chuẩn UK', true, [['QC Dim','../dungsai/']]],
+  ['NGOÀI KẾT CẤU NHÀ (có PDF)', 'ASME PCC-2:2022', 'Sửa chữa thiết bị áp lực & đường ống (repair methods) — tham chiếu khi sửa lớn', true, [['Lượng dư & Sai hỏng','../luongdu/']]],
+  ['NGOÀI KẾT CẤU NHÀ (có PDF)', 'API 1104 (21st) + API 5L (2018)', 'Hàn đường ống dầu khí + spec ống thép line pipe', true, [['Thư viện WPS','../wps/']]],
+  ['NGOÀI KẾT CẤU NHÀ (có PDF)', 'BS EN 13445 (bộ 1/3/4/5/6/8)', 'Bình áp lực không đốt lửa: thiết kế, chế tạo, kiểm tra', true, [['Thư viện Tiêu chuẩn','./']]],
+  ['NGOÀI KẾT CẤU NHÀ (có PDF)', 'DNV-OS-C401 (2014 & 2021)', 'Chế tạo & thử kết cấu offshore (hàn, NDT, dung sai) — dự án biển', true, [['QC Hàn','../han/']]],
+  ['NGOÀI KẾT CẤU NHÀ (có PDF)', 'ASME B31.3 + AWWA C207', 'Đường ống công nghệ + bích thép ngành nước', true, [['Thư viện Tiêu chuẩn','./']]],
+  ['SƠN', 'SSPC-AMPP (bộ)', 'Chuẩn bị bề mặt hệ Mỹ: SP1 (dung môi), SP5/SP10 (phun hạt trắng/cận trắng) — file zip trong dự án', true, [['QC Coating','../son/']]]
 ];
 const norm = s => String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[đĐ]/g,'d').toLowerCase();
 const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));

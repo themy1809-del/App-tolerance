@@ -133,16 +133,106 @@ window.VT_DATA = {
      title_en:'Plate thickness tolerance — Class A',
      element:'plate', region:'EU',
      spec:[
-       {label:'Dày 3 ≤ t < 5 mm', value:'−0.4 / +0.8 mm'},
-       {label:'Dày 5 ≤ t < 8 mm', value:'−0.4 / +1.1 mm'},
-       {label:'Dày 8 ≤ t < 15 mm',value:'−0.5 / +1.2 mm'},
-       {label:'Dày 15 ≤ t < 25 mm',value:'−0.6 / +1.4 mm'},
-       {label:'Dày 25 ≤ t < 40 mm',value:'−0.8 / +1.7 mm'},
-       {label:'Dày 40 ≤ t < 80 mm',value:'−1.0 / +2.4 mm'},
-       {label:'Dày 80 ≤ t < 150 mm',value:'−1.4 / +2.8 mm'}
+       {label:'Dày 3 ≤ t < 5 mm', value:'−0,4 / +0,8 mm'},
+       {label:'Dày 5 ≤ t < 8 mm', value:'−0,4 / +1,1 mm'},
+       {label:'Dày 8 ≤ t < 15 mm',value:'−0,5 / +1,2 mm'},
+       {label:'Dày 15 ≤ t < 25 mm',value:'−0,6 / +1,3 mm'},
+       {label:'Dày 25 ≤ t < 40 mm',value:'−0,8 / +1,4 mm'},
+       {label:'Dày 40 ≤ t < 80 mm',value:'−1,0 / +1,8 mm'},
+       {label:'Dày 80 ≤ t < 150 mm',value:'−1,0 / +2,2 mm'},
+       {label:'Dày 150 ≤ t < 250 mm',value:'−1,2 / +2,4 mm'}
      ],
-     note_vi:'Cấp A là mặc định khi không chỉ định. Có thể đặt Class B (sai lệch ±), C (chỉ + thấp), D (chỉ +).',
-     clause:'EN 10029:2010 §7 Table 1'},
+     note_vi:'ĐÃ HIỆU CHỈNH theo PDF gốc EN 10029:1991 (4 dải trên bị sai ở bản nhập trước). Class A là mặc định khi không chỉ định. Dung sai áp dụng ngoài vùng đã mài (ground areas).',
+     clause:'EN 10029:1991 Table 1 — đã xác minh nguyên văn từ PDF'},
+
+    {id:'EN10029-thk-BCD', cat:'plate_tol', std:'EN 10029',
+     title_vi:'Dung sai chiều dày tấm — Class B / C / D (đủ bảng)',
+     title_en:'Plate thickness tolerance — Class B / C / D',
+     element:'plate', region:'EU',
+     spec:[
+       {label:'Ý nghĩa class', value:'B: âm cố định −0,3 · C: không âm (−0) · D: đối xứng ±'},
+       {label:'3 ≤ t < 5', value:'B: −0,3/+0,9 · C: −0/+1,2 · D: ±0,6'},
+       {label:'5 ≤ t < 8', value:'B: −0,3/+1,2 · C: −0/+1,5 · D: ±0,75'},
+       {label:'8 ≤ t < 15', value:'B: −0,3/+1,4 · C: −0/+1,7 · D: ±0,85'},
+       {label:'15 ≤ t < 25', value:'B: −0,3/+1,6 · C: −0/+1,9 · D: ±0,95'},
+       {label:'25 ≤ t < 40', value:'B: −0,3/+1,9 · C: −0/+2,2 · D: ±1,1'},
+       {label:'40 ≤ t < 80', value:'B: −0,3/+2,5 · C: −0/+2,8 · D: ±1,4'},
+       {label:'80 ≤ t < 150', value:'B: −0,3/+2,9 · C: −0/+3,2 · D: ±1,6'},
+       {label:'150 ≤ t < 250', value:'B: −0,3/+3,3 · C: −0/+3,6 · D: ±1,8'}
+     ],
+     note_vi:'Chọn class theo đơn hàng: C hay dùng cho tấm cần phay/CNC (không hụt dày); B cho liên kết chịu mỏi. Phạm vi chuẩn: t 3–250mm, rộng ≥600mm, YS <700 MPa.',
+     clause:'EN 10029:1991 Table 1 — đã xác minh nguyên văn từ PDF'},
+
+    {id:'EN10029-thkdiff', cat:'plate_tol', std:'EN 10029',
+     title_vi:'Chênh lệch chiều dày TRONG 1 TẤM (max)',
+     title_en:'Max thickness difference within a plate',
+     element:'plate', region:'EU',
+     spec:[
+       {label:'t 3–5 · rộng <2500', value:'0,8–0,9 mm'},
+       {label:'t 8–15 · rộng 600→4000+', value:'0,9 → 1,2 mm'},
+       {label:'t 15–25 · rộng 600→4000+', value:'1,0 → 1,4 mm'},
+       {label:'t 25–40 · rộng 600→4000+', value:'1,1 → 1,4 mm'},
+       {label:'t 40–80 · rộng 600→4000+', value:'1,2 → 1,6 mm'},
+       {label:'t 80–150 · rộng 600→4000+', value:'1,3 → 1,7 mm'}
+     ],
+     note_vi:'Đo nhiều điểm trên cùng 1 tấm — chênh max giữa các điểm không vượt bảng (tăng theo khổ rộng). Hữu ích khi tấm dùng làm bích/bản mã CNC.',
+     clause:'EN 10029:1991 Table 1 (cột "Maximum thickness difference within a plate") — đã xác minh'},
+
+    /* ===== EN 10219-2:2019 — ống/hộp hàn cán nguội (đã xác minh từ PDF) ===== */
+    {id:'EN10219-dims', cat:'tube_tol', std:'EN 10219-2',
+     title_vi:'Hộp/ống cán nguội — dung sai kích thước ngoài & chiều dày',
+     title_en:'CFS hollow sections — outside dimensions & thickness',
+     element:'tube', region:'EU',
+     spec:[
+       {label:'Ống tròn — đường kính D', value:'±1% (min ±0,5mm · max ±10mm)'},
+       {label:'Hộp — cạnh H,B < 100mm', value:'±1% (min ±0,5mm)'},
+       {label:'Hộp — cạnh 100 ≤ H,B ≤ 200', value:'±0,8%'},
+       {label:'Hộp — cạnh H,B > 200mm', value:'±0,6%'},
+       {label:'Chiều dày T ≤ 5mm', value:'±10%'},
+       {label:'Chiều dày T > 5mm', value:'±0,5mm (ống D>406,4: ±10% max ±2mm)'},
+       {label:'Méo tròn (out-of-roundness)', value:'2% — áp dụng khi D/T ≤ 100'}
+     ],
+     note_vi:'Đo kích thước ngoài tại đầu ống. Khối lượng từng cây giao: ±6%.',
+     clause:'EN 10219-2:2019 Table 2 — đã xác minh nguyên văn từ PDF'},
+
+    {id:'EN10219-shape', cat:'tube_tol', std:'EN 10219-2',
+     title_vi:'Hộp/ống cán nguội — vuông cạnh, lồi lõm, xoắn, thẳng',
+     title_en:'CFS hollow — squareness, concavity, twist, straightness',
+     element:'tube', region:'EU',
+     spec:[
+       {label:'Vuông góc cạnh hộp θ', value:'90° ± 1°'},
+       {label:'Lồi/lõm mặt hộp (x1, x2)', value:'max 0,8% cạnh — độc lập với dung sai kích thước'},
+       {label:'Xoắn (twist V) hộp', value:'2 mm + 0,5 mm/m chiều dài'},
+       {label:'Độ thẳng e — hộp chữ nhật/vuông', value:'0,15% tổng chiều dài VÀ 3mm trên mỗi 1m'},
+       {label:'Độ thẳng e — ống tròn/elip', value:'0,20% tổng chiều dài VÀ 3mm trên mỗi 1m'}
+     ],
+     note_vi:'Xoắn: kê một đầu sát bàn máp, đo độ kênh V1 ở đầu kia. Lồi/lõm đo bằng thước thẳng + thước lá giữa mặt.',
+     clause:'EN 10219-2:2019 Table 2 — đã xác minh nguyên văn từ PDF'},
+
+    {id:'EN10219-corner', cat:'tube_tol', std:'EN 10219-2',
+     title_vi:'Hộp cán nguội — bán kính góc ngoài (C1, C2, R)',
+     title_en:'CFS hollow — external corner profile',
+     element:'tube', region:'EU',
+     spec:[
+       {label:'Dày T ≤ 6mm', value:'1,6T → 2,4T'},
+       {label:'6 < T ≤ 10mm', value:'2,0T → 3,0T'},
+       {label:'T > 10mm', value:'2,4T → 3,6T'}
+     ],
+     note_vi:'Góc trong PHẢI tròn nhưng không quy định giá trị. Cạnh không nhất thiết tiếp tuyến với cung góc. Quan trọng khi detail mối hàn góc hộp + khe hở bản mã ôm góc.',
+     clause:'EN 10219-2:2019 Table 3 — đã xác minh nguyên văn từ PDF'},
+
+    {id:'LEEB-HARDNESS', cat:'spec', std:'ISO 16859-1 / ASTM A956',
+     title_vi:'Đo độ cứng hiện trường — phương pháp Leeb (búa bật nảy)',
+     title_en:'Field hardness testing — Leeb rebound method',
+     element:'all', region:'INT',
+     spec:[
+       {label:'Nguyên lý', value:'HL = (vận tốc bật lại vR ÷ vận tốc va chạm vA) × 1000 — không thứ nguyên'},
+       {label:'Thiết bị phổ biến', value:'Impact device loại D (HLD) — kết quả PHẢI ghi kèm loại đầu đo (vd 520 HLD)'},
+       {label:'Chuẩn áp dụng', value:'ISO 16859-1:2015 (quốc tế) / ASTM A956 (dự án Mỹ) — cả 2 có PDF trong dự án'},
+       {label:'Khi nào dùng', value:'Kiểm độ cứng mép cắt nhiệt (≤450HV10), HAZ sau hỏa công/hàn sửa, xác minh nhầm mác thép — tại hiện trường không mang mẫu về lab được'}
+     ],
+     note_vi:'BẪY quy đổi: HL→HV/HB/HRC PHỤ THUỘC vật liệu (bảng quy đổi riêng cho thép C, thép công cụ, gang...). Bề mặt phải mài nhẵn sạch gỉ/sơn; chi tiết mỏng nhẹ phải kê đỡ chặt (coupling) — không thì kết quả thấp giả. Khi tranh chấp → đo lại bằng HV/HB chuẩn tĩnh.',
+     clause:'ISO 16859-1:2015 mục 3 Formula (1) — đã xác minh nguyên văn từ PDF'},
 
     {id:'EN10029-flat', sketch:'plate_flatness', cat:'plate_tol', std:'EN 10029',
      title_vi:'Dung sai độ phẳng tấm — Class N (normal)',
