@@ -42,7 +42,7 @@
     /* "kiểm tra/nghiệm thu/đo + đối tượng" cũng là câu hỏi */
     if (/(kiem tra|nghiem thu|danh gia|\bdo\b)/.test(qn) && ENT.some(e => e.re.test(qn))) return true;
     /* TỔNG QUÁT: từ chuyên môn QC + từ hỏi/sự cố = câu hỏi (chống lọt lưới) */
-    const DOMAIN = /\bhan\b|moi han|\but\b|\bndt\b|\brt\b|\bmt\b|\bpt\b|\bvt\b|sieu am|\bson\b|dft|ma kem|bu long|bulong|xiet|kich thuoc|dung sai|fit.?up|ga lap|packing|lashing|vat tu|thep|wps|pqr|exc|camber|cong venh|khe ho|undercut|ro khi|nut\b|que han|preheat|\blo\b|cat\b|vat mep|ket cau|cau kien|khung|\bdam\b|\bcot\b|gian\b|lo dot|\bvong\b|thang dung|container|di bien|tem nhan|bien ban|hold time|\bdo vong\b|rap thu|lap thu|trial|lap dung|\bcoil\b|\bhgi\b|\bppgl\b|\bgl\b|ton bao|ma kem coil|z275|az150|azm|\bque (han|jam|ham|hang)\b|bi am\b|fabstation|hololens|\bar\b|thuc te ao|thuc te tang cuong|hologram|qc.?assist/;
+    const DOMAIN = /\bhan\b|moi han|\but\b|\bndt\b|\brt\b|\bmt\b|\bpt\b|\bvt\b|sieu am|\bson\b|dft|ma kem|bu long|bulong|xiet|kich thuoc|dung sai|fit.?up|ga lap|packing|lashing|vat tu|thep|wps|pqr|exc|camber|cong venh|khe ho|undercut|ro khi|nut\b|que han|preheat|\blo\b|cat\b|vat mep|ket cau|cau kien|khung|\bdam\b|\bcot\b|gian\b|lo dot|\bvong\b|thang dung|container|di bien|tem nhan|bien ban|hold time|\bdo vong\b|rap thu|lap thu|trial|lap dung|\bcoil\b|\bhgi\b|\bppgl\b|\bgl\b|ton bao|ma kem coil|z275|az150|azm|\bque (han|jam|ham|hang)\b|bi am\b|fabstation|hololens|\bar\b|thuc te ao|thuc te tang cuong|hologram|qc.?assist|evapco|\bfbg\b|\bfdb\b|\bplg\b|\bbsg\b|\buusg\b|khung be may|bat xeo/;
     const ASK = /\bsao\b|\bgi\b|the nao|lam (sao|gi)|\bcan\b|\bphai\b|\bsua\b|xu l(y|i)|khong (dat|pass)|\bfail\b|bi loai|\bloi\b|bao nhieu|kiem tra|nghiem thu|huong dan|khac phuc|tai sao|vi sao|chon\b|\bnen\b|duoc khong|dat khong|co sao|bao lau|ai ky|can ai|chong gi|khac (gi|nhau)|bi (vong|cong|tray|bong|chay)|ba via|dung sai/;
     return DOMAIN.test(qn) && ASK.test(qn);
   }
@@ -64,7 +64,7 @@
   const step = (n, html) => `<div style="display:flex;gap:10px;padding:9px 0;border-top:1px solid #eef1f5"><div style="width:24px;height:24px;border-radius:50%;background:#0c447c;color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none">${n}</div><div style="font-size:13.5px;flex:1">${html}</div></div>`;
   const sub = t => `<div style="font-size:12px;color:#5d6b7c;margin-top:3px">${t}</div>`;
   /* BASE: từ trang chủ = '', từ module con = '../' (để link han/, son/... luôn đúng) */
-  const BASE = /\/(vattu|soche|fitup|han|qcdim|rapthu|bulong|son|packing|dungsai|luongdu|tieuchuan|wpqr|thongke|nhatky|wps|hoacong|pbb|fabstation|pbbfab)\//.test(location.pathname) ? '../' : '';
+  const BASE = /\/(vattu|soche|fitup|han|qcdim|rapthu|bulong|son|packing|dungsai|luongdu|tieuchuan|wpqr|thongke|nhatky|wps|hoacong|pbb|fabstation|pbbfab|evapco)\//.test(location.pathname) ? '../' : '';
   const lk = (url, label) => `<a href="${BASE}${url}" style="color:#0c447c;font-weight:700;text-decoration:underline dotted">${label}</a>`;
   const hi = t => `<b style="background:#fdf3e2;padding:1px 6px;border-radius:5px;color:#6b4700">${t}</b>`;
   const good = t => `<b style="background:#e3f6ee;padding:1px 6px;border-radius:5px;color:#0f6e56">${t}</b>`;
@@ -300,6 +300,14 @@
     s.push(step(++n, `<b>Kết quả tìm kiếm liên quan</b> hiển thị ngay bên dưới câu trả lời này — bấm mục đúng để mở.`));
     return { title: 'Tra dung sai — làm thế nào', body: s.join('') };
   }
+  function planEvapco() {
+    let s = [], n = 0;
+    s.push(step(++n, `<b>4 quy tắc vàng EVAPCO:</b> ① dưỡng đạt chuẩn TRƯỚC khi lắp + dưỡng khoan cho hệ lỗ · ② mũi khoan HỆ INCH · ③ lượng dư chiều dài: khung <9m để +1~3mm, >9m để +5mm · ④ gông gá chống biến dạng sau hàn.`));
+    s.push(step(++n, `<b>Theo mã sản phẩm:</b> FBG (bệ máy) — KHÔNG ráp rời khung dài/ngắn, gối hàn visual đạt mới gắn, bắn cao độ gối +1~2mm · FDB bát xéo 45° — KHÔNG lắp bản mã xéo trước, hàn nắn thẳng xong mới về dưỡng gắn · FDB gối xéo — tổ hợp 4 gối thành hình vuông rồi mới hàn · PLG/BSG — ráp 100% trên dưỡng · USC (cột) — gối hàn+visual trước khi gắn bản mã đậy nắp, mặt cắt đầu cột phải phẳng · USG/UUSG — dưỡng chuẩn + livo, soát hướng & đồng phẳng 2 bát.`));
+    s.push(step(++n, `<b>9 lỗi đã từng xảy ra:</b> khoan sai tim (thiếu dưỡng) · thiếu lỗ · còn mill scale · phôi I lệch ke · đính lệch mép · 2 bát USG lệch · đầu cột cắt nham nhở · khe hở mối đính không đạt · đính NGƯỢC bát/bản mã.${sub('⚠️ Tổ trưởng + giám sát phải tự kiểm trước khi báo QC nghiệm thu')}`));
+    s.push(step(++n, `<b>Tra chi tiết + hình:</b> ${lk('evapco/', 'Thư viện QC EVAPCO')} — bảng mã sản phẩm, 9 lỗi kèm trang hình, nhắc nhở trước ca.`));
+    return { title: 'Dự án EVAPCO — lưu ý gia công & kiểm soát', body: s.join('') };
+  }
   function planHoaCong() {
     let s = [], n = 0;
     s.push(step(++n, `<b>Đo & ghi biến dạng:</b> thước thẳng 1m + thước nêm hoặc căng dây — chỉ nắn khi VƯỢT dung sai (tra ${lk('dungsai/', 'Thư viện Dung sai')}).`));
@@ -355,6 +363,7 @@
     { re: /(\but\b|\bndt\b|\brt\b|\bmt\b|sieu am|moi han|\bhan\b).*(khong dat|khong pass|\bfail\b|bi loai|truot)|((khong dat|\bfail\b).*(\but\b|\bndt\b|moi han))|sua moi han|han lai|dao (khuyet tat|moi han)|repair weld/, fn: () => planWeldRepair() },
     { re: /sai kich thuoc|lech kich thuoc|kich thuoc.*(sai|lech|sua)|sua kich thuoc|bi (cong|venh)|cong venh.*(sua|xu l(y|i)|lam sao)|nan (thang|nhiet|co)/, fn: (q, len) => planDimFix(len) },
     { re: /packing|dong (hang|kien|goi|container)|\bcontainer\b|lashing|chang buoc|xuat hang|tem nhan|shipping mark|len cont|dong cont|di bien|hang xuat/, fn: () => planPacking() },
+    { re: /evapco|\bfbg\b|\bfdb\b|\bplg\b|\bbsg\b|\busc\b|\buusg\b|\busg\b|khung be may|bat xeo|goi xeo|plenum|bunder|giang ong|u chan/, fn: () => planEvapco() },
     { re: /hoa cong|nan (nong|nhiet|phang)|gia nhiet.*(nan|diem|duong|chu v)|nan.*(ton|tam|gia cuong|hoa cong)|flame straight/, fn: () => planHoaCong() },
     { re: /tai sao.*(rap thu|lap thu)|(rap thu|lap thu).*(tai sao|de lam gi|lam gi|can gi|muc dich)/, fn: () => planWhyTrial() },
     { re: /thao ra.*(dung lai|xai lai|su dung)|dung lai bu long|tai su dung bu long|bu long cu/, fn: () => planReuseBolt() },
@@ -374,6 +383,7 @@
       'Bị sai kích thước thì sửa sao?',
       'Hàn UT không đạt phải xử lý sao?',
       'Tôn bị lồi lõm nắn hỏa công thế nào?',
+      'EVAPCO gia công cần lưu ý gì?',
       'EXC là gì?',
       'Giàn 50m kiểm tra như thế nào?',
       'Trời ẩm 90% có sơn được không?',
