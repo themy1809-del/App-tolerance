@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0c4a6e">
+<title>Thư viện PBB — Cầu dẫn hành khách (nội bộ)</title>
+<style>
+:root{--ac:#0e7490;--ac2:#0c4a6e;--ac-soft:#e0f2f7;--ink:#16232f;--muted:#64748b;--line:#e3e9f0;--bg:#f4f7fa;--sh:0 2px 12px rgba(12,40,60,.08)}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.65}
+
+/* ===== cổng mật khẩu ===== */
+#gate{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(800px 400px at 80% -10%,rgba(14,116,144,.35),transparent 60%),linear-gradient(150deg,#0a1828,#0c4a6e)}
+#gate .box{background:#fff;border-radius:18px;padding:30px 28px;max-width:380px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+#gate .em{font-size:40px}#gate h2{margin:8px 0 4px;font-size:18px}
+#gate p{font-size:13px;color:var(--muted);margin:0 0 16px}
+#gate input{width:100%;padding:13px;border:2px solid var(--line);border-radius:11px;font-size:18px;text-align:center;letter-spacing:6px;outline:none}
+#gate input:focus{border-color:var(--ac)}
+#gate button{width:100%;margin-top:12px;padding:13px;border:0;border-radius:11px;background:linear-gradient(135deg,#0e7490,#0c4a6e);color:#fff;font-weight:800;font-size:14.5px;cursor:pointer;font-family:inherit}
+#gate .err{color:#b3411f;font-size:12.5px;height:16px;margin-top:8px}
+#gate label{display:flex;align-items:center;justify-content:center;gap:7px;font-size:12.5px;color:var(--muted);margin-top:12px;cursor:pointer}
+
+/* ===== layout chính ===== */
+#app{display:none}
+.appbar{background:linear-gradient(120deg,#0a1828,#0c4a6e 60%,#0e7490);color:#fff;padding:12px 16px;display:flex;align-items:center;gap:11px;position:sticky;top:0;z-index:50}
+.appbar a{color:#fff;text-decoration:none;font-size:18px}
+.appbar .tt{font-size:15px;font-weight:800;letter-spacing:-.2px}
+.appbar .st{font-size:10.5px;opacity:.75;display:block;font-weight:500}
+.appbar .lock{margin-left:auto;font-size:10.5px;background:rgba(255,255,255,.15);padding:4px 10px;border-radius:8px;white-space:nowrap}
+.layout{display:flex;max-width:1280px;margin:0 auto;gap:0}
+/* TOC */
+#toc{width:320px;flex:none;position:sticky;top:54px;height:calc(100vh - 54px);overflow-y:auto;background:#fff;border-right:1px solid var(--line);padding:14px 10px 40px}
+#toc .tsr{width:100%;padding:9px 12px;border:1.5px solid var(--line);border-radius:10px;font-size:13px;font-family:inherit;outline:none;margin-bottom:10px}
+#toc .tsr:focus{border-color:var(--ac)}
+#toc a{display:block;padding:7px 11px;border-radius:9px;color:var(--ink);text-decoration:none;font-size:12.5px;border-left:3px solid transparent;margin-bottom:1px}
+#toc a:hover{background:var(--ac-soft)}
+#toc a.l1{font-weight:800;color:var(--ac2);margin-top:8px;font-size:12px;text-transform:uppercase;letter-spacing:.4px}
+#toc a.l3{padding-left:26px;font-size:12px;color:var(--muted)}
+#toc a .en{display:block;font-size:10.5px;color:#94a3b8;font-weight:400}
+#toc::-webkit-scrollbar{width:5px}#toc::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px}
+@media(max-width:900px){
+  .layout{flex-direction:column}
+  #toc{position:static;width:100%;height:auto;max-height:300px;border-right:0;border-bottom:1px solid var(--line)}
+}
+/* nội dung */
+#doc{flex:1;min-width:0;padding:22px 26px 80px;background:#fff}
+#doc img{max-width:100%;height:auto;display:block;margin:14px auto;border:1px solid var(--line);border-radius:10px;padding:4px;background:#fff;box-shadow:var(--sh)}
+#doc img[src*="image1."],#doc img[width="20"]{border:0;box-shadow:none;display:inline-block;margin:0 4px;vertical-align:middle}
+#doc h1{font-size:21px;color:#fff;background:linear-gradient(120deg,#0c4a6e,#0e7490);padding:14px 18px;border-radius:13px;margin:36px 0 16px;letter-spacing:-.2px}
+#doc h2{font-size:18px;color:var(--ac2);border-bottom:2.5px solid var(--ac-soft);padding-bottom:8px;margin:34px 0 12px;scroll-margin-top:70px}
+#doc h3{font-size:15.5px;color:var(--ac);margin:24px 0 8px;scroll-margin-top:70px}
+#doc h1,#doc h2{scroll-margin-top:70px}
+#doc table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0;display:block;overflow-x:auto}
+#doc th,#doc td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+#doc th{background:var(--ac-soft);color:var(--ac2)}
+#doc blockquote{margin:8px 0;padding:2px 0 2px 14px;border-left:3px solid var(--ac-soft);color:#334155}
+#doc li{margin:4px 0}
+#doc p{margin:8px 0}
+.viNote{background:linear-gradient(135deg,#f0fdfa,#e0f2f7);border:1px solid #bae6fd;border-left:4px solid var(--ac);border-radius:12px;padding:14px 16px;margin:14px 0;font-size:13.5px}
+.viNote b{color:var(--ac2)}
+.aiBtn{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border:0;border-radius:9px;cursor:pointer;font-family:inherit;font-size:12px;font-weight:800;
+  background:linear-gradient(135deg,#7c3aed,#5f4ab7);color:#fff;box-shadow:0 2px 8px rgba(124,58,237,.3);margin:6px 0}
+.aiBtn:disabled{opacity:.6;cursor:wait}
+.aiTrans{background:#faf8ff;border:1px solid #e4dcf7;border-left:4px solid #7c3aed;border-radius:12px;padding:13px 16px;margin:10px 0;font-size:13.5px;white-space:pre-wrap;line-height:1.7}
+.aiTrans .tag{display:inline-block;font-size:10px;font-weight:800;background:#efecfa;color:#5f4ab7;padding:2px 8px;border-radius:6px;margin-bottom:6px}
+.planCard{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--sh);padding:16px 18px;margin-bottom:14px}
+.planCard h3{margin:0 0 10px;font-size:15px;color:var(--ac2)}
+.day{display:flex;gap:11px;padding:9px 0;border-bottom:1px dashed var(--line)}
+.day .n{flex:none;width:54px;font-weight:800;color:var(--ac);font-size:12.5px}
+.day .tx{font-size:13.5px}
+.day .tx small{display:block;color:var(--muted)}
+.loading{text-align:center;color:var(--muted);padding:60px 0;font-size:14px}
+@media print{ #toc,.appbar,.aiBtn,#gate{display:none!important} #doc{padding:0} }
+</style>
+</head>
+<body>
+
+<div id="gate">
+  <div class="box">
+    <div class="em">🛬</div>
+    <h2>Thư viện PBB — Cầu dẫn hành khách</h2>
+    <p>Tài liệu đào tạo nội bộ (ShinMaywa · Long Thành)<br>Nhập mật khẩu để vào</p>
+    <input id="pw" type="password" inputmode="numeric" placeholder="••••" maxlength="20" autocomplete="off">
+    <button onclick="tryPw()">Mở khoá →</button>
+    <div class="err" id="pwErr"></div>
+    <label><input type="checkbox" id="pwRem"> Nhớ máy này (không hỏi lại)</label>
+  </div>
+</div>
+
+<div id="app">
+  <div class="appbar">
+    <a href="../">←</a>
+    <div><span class="tt">🛬 Thư viện PBB — Cầu dẫn hành khách</span>
+      <span class="st">Factory Training · ShinMaywa · Sân bay Long Thành · DaiDung</span></div>
+    <span class="lock">🔒 nội bộ</span>
+  </div>
+  <div class="layout">
+    <nav id="toc"><input class="tsr" id="tocQ" type="search" placeholder="Tìm mục lục..."></nav>
+    <main id="doc">
+      <div class="planCard">
+        <h3>📅 Kế hoạch đào tạo 5 ngày tại nhà máy (08–12/06/2026) — Giảng viên: Yue Boon Kee Kelvin</h3>
+        <div class="day"><div class="n">Ngày 1</div><div class="tx"><b>Đào tạo bộ phận CƠ KHÍ</b> (trong nhà)<small>Mechanical Component Training · giải lao · hỏi đáp</small></div></div>
+        <div class="day"><div class="n">Ngày 2</div><div class="tx"><b>Đào tạo hệ thống ĐIỆN</b> (trong nhà)<small>Electrical System Training · giải lao · hỏi đáp</small></div></div>
+        <div class="day"><div class="n">Ngày 3</div><div class="tx"><b>VẬN HÀNH an toàn PBB</b>: bàn điều khiển, thao tác vận hành, lỗi thường gặp (trong nhà)<small>Safety operation · control console · common faults · Q&amp;A</small></div></div>
+        <div class="day"><div class="n">Ngày 4</div><div class="tx"><b>Thực địa bãi tổ hợp</b>: giải thích từng bộ phận PBB + BẢO TRÌ (ngoài trời/trong nhà)<small>Parts at assembly yard · Maintenance · Q&amp;A</small></div></div>
+        <div class="day"><div class="n">Ngày 5</div><div class="tx"><b>Vận hành/Bảo trì tổng hợp + làm quen thiết bị</b> (trong nhà)<small>Operation/Maintenance and familiarization · Q&amp;A</small></div></div>
+        <div style="font-size:12.5px;color:var(--muted);margin-top:10px">📍 Địa điểm: DaiDung — Lô 38, KCN An Hạ, Bình Chánh, TP.HCM · 👥 Tối đa 5 người/khách · 🏆 Cấp chứng nhận hoàn thành khóa học</div>
+      </div>
+      <div class="viNote"><b>📌 Điều kiện tham gia (dịch từ tài liệu):</b> hiểu biết cơ bản về nguyên lý cơ/điện/điện tử (mạch, linh kiện, an toàn điện) · <b>thành thạo tiếng Anh</b> (khóa học giảng bằng tiếng Anh) · có kinh nghiệm bảo trì thiết bị điện/điện tử liên quan (chẩn đoán, sửa chữa thiết bị ShinMaywa hoặc tương đương) · ý thức an toàn khi làm việc với thiết bị điện · cam kết tham gia đầy đủ lý thuyết + thực hành. Hoàn thành khóa → nhận <b>Chứng nhận hoàn thành (Course Completion Certificate)</b>.</div>
+      <div class="viNote"><b>🌐 Cách dùng:</b> mục lục bên trái đã dịch tiếng Việt (chữ xám là tên gốc tiếng Anh). Phần thân là giáo trình gốc đầy đủ hình ảnh — bấm nút <b style="color:#5f4ab7">🌐 Dịch mục này (AI)</b> dưới tiêu đề bất kỳ để dịch nguyên mục sang tiếng Việt (cần API key AI — cài ở trang chủ; bản dịch được lưu lại trên máy, lần sau mở là có sẵn).</div>
+      <div class="loading" id="docLoad">⏳ Đang tải giáo trình (273KB + 219 hình)...</div>
+      <div id="docBody"></div>
+    </main>
+  </div>
+</div>
+
+<script src="../assistant.js"></script>
+<script>
+'use strict';
+/* ===== cổng mật khẩu (1234 — như Thư viện WPS) ===== */
+const PW = '1234', KEY = 'pbb_auth_v1';
+function authed(){ return sessionStorage.getItem(KEY) === 'ok' || localStorage.getItem(KEY) === 'ok'; }
+function openApp(){ document.getElementById('gate').style.display = 'none'; document.getElementById('app').style.display = 'block'; loadDoc(); }
+function tryPw(){
+  const inp = document.getElementById('pw');
+  if (inp.value === PW){
+    (document.getElementById('pwRem').checked ? localStorage : sessionStorage).setItem(KEY, 'ok');
+    openApp();
+  } else {
+    document.getElementById('pwErr').textContent = 'Sai mật khẩu, thử lại.';
+    inp.value = ''; inp.focus();
+    setTimeout(() => document.getElementById('pwErr').textContent = '', 1800);
+  }
+}
+document.getElementById('pw').addEventListener('keydown', e => { if (e.key === 'Enter') tryPw(); });
+if (authed()) openApp(); else setTimeout(() => document.getElementById('pw').focus(), 150);
+
+/* ===== bản dịch tiêu đề mục lục ===== */
+const VI = {
+  'safety':'An toàn','fundamental-safety-precautions':'Các biện pháp an toàn cơ bản','general-items':'Quy định chung',
+  'before-starting-operation':'Trước khi bắt đầu vận hành','cautions-on-operating-procedures':'Lưu ý TRONG khi vận hành',
+  'cautions-after-operating-procedures':'Lưu ý SAU khi vận hành','attention-items':'Hạng mục cần chú ý',
+  'warning-nameplates':'Biển cảnh báo','warning-beacons-obstruction-lights-and-floodlights':'Đèn cảnh báo / đèn chướng ngại / đèn pha',
+  'warning-horn':'Còi cảnh báo','safety-device':'Thiết bị an toàn','emergency-stop-pushbutton-switch':'Nút dừng khẩn cấp [EMERGENCY STOP]',
+  'name-and-function-of-major-structural-parts':'Tên & chức năng các bộ phận kết cấu chính',
+  'name-and-function-of-major-structural-parts-1':'Tên & chức năng các bộ phận (tiếp)',
+  'control-console-and-name-of-cab-components':'Bàn điều khiển & các bộ phận cabin',
+  'control-console-and-name-of-cab-components-1':'Bàn điều khiển & cabin (tiếp)',
+  'operating-procedures':'Quy trình vận hành','safety-precautions':'Biện pháp an toàn',
+  'startup-and-shutdown-procedures-1':'Quy trình khởi động & dừng máy (1)','startup-and-shutdown-procedures-2':'Quy trình khởi động & dừng máy (2)',
+  'preventive-maintenance-plan':'Kế hoạch bảo trì phòng ngừa','preventive-maintenance-frequency':'Tần suất bảo trì phòng ngừa',
+  'preventive-maintenance-standards':'Tiêu chuẩn bảo trì phòng ngừa','inspection-standards':'Tiêu chuẩn kiểm tra',
+  'periodical-inspection-and-maintenance':'Kiểm tra & bảo trì định kỳ','contents':'Mục lục giáo trình',
+  'daily-care-cleaning':'Chăm sóc hằng ngày (vệ sinh)','inspection-and-maintenance':'Kiểm tra & bảo trì',
+  'lubrication':'Bôi trơn','painting':'Sơn bảo vệ','periodical-inspectionmaintenance-check-list':'Checklist kiểm tra/bảo trì định kỳ',
+  'structure-of-each-part':'Cấu tạo từng bộ phận','electrical-system':'Hệ thống điện','message-list':'Danh sách thông báo / mã lỗi',
+  'solid-tire-replacement':'Thay lốp đặc (solid tire)','curtain-adjustment':'Chỉnh rèm đầu cầu (closure)','tunnel-roller-adjustment':'Chỉnh con lăn tunnel',
+  'special-maintenance-tools':'Dụng cụ bảo trì chuyên dụng',
+  'daily-inspection-maintenance-report':'BIÊN BẢN KIỂM TRA / BẢO TRÌ HẰNG NGÀY',
+  'one-month-after-start-of-operation-inspection-maintenance-report':'BIÊN BẢN KIỂM TRA SAU 1 THÁNG VẬN HÀNH',
+  'quarterly-inspection-maintenance-report':'BIÊN BẢN KIỂM TRA / BẢO TRÌ HẰNG QUÝ',
+  'biannual-inspection-maintenance-report':'BIÊN BẢN KIỂM TRA / BẢO TRÌ 6 THÁNG',
+  'annual-inspection-maintenance-report':'BIÊN BẢN KIỂM TRA / BẢO TRÌ HẰNG NĂM'
+};
+
+/* ===== tải giáo trình + dựng TOC + nút dịch AI ===== */
+async function loadDoc(){
+  const body = document.getElementById('docBody');
+  if (body.dataset.done) return;
+  try {
+    const html = await fetch('content.html').then(r => r.text());
+    body.innerHTML = html;
+    body.dataset.done = '1';
+    document.getElementById('docLoad').style.display = 'none';
+    buildToc();
+    addAiButtons();
+  } catch (e) {
+    document.getElementById('docLoad').textContent = 'Không tải được nội dung — kiểm tra mạng rồi tải lại trang.';
+  }
+}
+function buildToc(){
+  const toc = document.getElementById('toc');
+  const heads = document.querySelectorAll('#docBody h1, #docBody h2, #docBody h3');
+  let n = 0;
+  heads.forEach(h => {
+    if (!h.id) h.id = 'sec-' + (n++);
+    const en = h.textContent.trim().replace(/\s+/g, ' ');
+    if (en.length < 2) return;
+    const vi = VI[h.id];
+    const a = document.createElement('a');
+    a.href = '#' + h.id;
+    a.className = h.tagName === 'H1' ? 'l1' : (h.tagName === 'H3' ? 'l3' : 'l2');
+    a.innerHTML = (vi ? vi : en) + (vi ? '<span class="en">' + en.slice(0, 48) + '</span>' : '');
+    toc.appendChild(a);
+    /* gắn tên VI vào tiêu đề trong bài */
+    if (vi && h.tagName !== 'H3') {
+      const s = document.createElement('div');
+      s.style.cssText = 'font-size:12.5px;font-weight:600;opacity:.85;margin-top:2px';
+      s.textContent = '🇻🇳 ' + vi;
+      h.appendChild(s);
+    }
+  });
+  /* lọc mục lục */
+  document.getElementById('tocQ').addEventListener('input', function(){
+    const q = this.value.toLowerCase();
+    toc.querySelectorAll('a').forEach(a => { a.style.display = !q || a.textContent.toLowerCase().includes(q) ? '' : 'none'; });
+  });
+}
+/* ===== nút Dịch AI từng mục (h2) — bản dịch lưu localStorage ===== */
+function addAiButtons(){
+  document.querySelectorAll('#docBody h2').forEach(h => {
+    const btn = document.createElement('button');
+    btn.className = 'aiBtn'; btn.type = 'button';
+    btn.textContent = '🌐 Dịch mục này (AI)';
+    h.insertAdjacentElement('afterend', btn);
+    const cacheKey = 'pbb_vi_' + h.id;
+    const cached = localStorage.getItem(cacheKey);
+    if (cached) showTrans(btn, cached);
+    btn.addEventListener('click', async () => {
+      const key = localStorage.getItem('qc_ai_key');
+      if (!key) { alert('Chưa có API key AI — vào trang chủ bấm nút ✨ Cài AI (Gemini miễn phí) rồi quay lại.'); return; }
+      /* gom text của mục: từ sau nút đến h1/h2 kế */
+      let txt = '', el = btn.nextElementSibling;
+      while (el && !/^H[12]$/.test(el.tagName)) { txt += ' ' + (el.innerText || ''); el = el.nextElementSibling; if (txt.length > 7000) break; }
+      txt = txt.replace(/\s+/g, ' ').trim().slice(0, 7000);
+      if (txt.length < 30) { alert('Mục này chủ yếu là hình — không có chữ để dịch.'); return; }
+      btn.disabled = true; btn.textContent = '⏳ Đang dịch...';
+      try {
+        const ans = await QCAssistant.askClaude(
+          'Dịch đoạn tài liệu kỹ thuật cầu dẫn hành khách (PBB) sau sang tiếng Việt, giữ thuật ngữ kỹ thuật kèm tiếng Anh trong ngoặc khi cần, trình bày gọn theo gạch đầu dòng/đoạn ngắn đúng cấu trúc gốc:\n\n' + txt,
+          '', key);
+        const clean = ans.replace(/\n\n— Gemini.*$/, '');
+        localStorage.setItem(cacheKey, clean);
+        showTrans(btn, clean);
+        btn.textContent = '✅ Đã dịch (bấm để dịch lại)';
+      } catch (e) {
+        alert('Lỗi dịch: ' + (e.message || e));
+        btn.textContent = '🌐 Dịch mục này (AI)';
+      }
+      btn.disabled = false;
+    });
+  });
+}
+function showTrans(btn, text){
+  let box = btn.nextElementSibling;
+  if (!box || !box.classList || !box.classList.contains('aiTrans')) {
+    box = document.createElement('div');
+    box.className = 'aiTrans';
+    btn.insertAdjacentElement('afterend', box);
+  }
+  box.innerHTML = '<span class="tag">🇻🇳 BẢN DỊCH AI · CẦN KIỂM CHỨNG</span><br>' +
+    text.replace(/</g, '&lt;').replace(/\*\*([^*\n]+)\*\*/g, '<b>$1</b>').replace(/^[*-] /gm, '• ');
+  btn.textContent = '✅ Đã dịch (bấm để dịch lại)';
+}
+</script>
+<script src="../ai-fab.js"></script>
+<script>if(window.AIFab)AIFab.mount({module:'Thư viện PBB'});</script>
+</body>
+</html>
