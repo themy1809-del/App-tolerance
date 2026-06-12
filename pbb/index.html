@@ -8,7 +8,7 @@
 <style>
 :root{--ac:#0e7490;--ac2:#0c4a6e;--ac-soft:#e0f2f7;--ink:#16232f;--muted:#64748b;--line:#e3e9f0;--bg:#f4f7fa;--sh:0 2px 12px rgba(12,40,60,.08)}
 *{box-sizing:border-box}
-body{margin:0;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.65}
+body{margin:0;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--ink);font-size:14.5px;line-height:1.62}
 
 /* ===== cổng mật khẩu ===== */
 #gate{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;
@@ -22,57 +22,72 @@ body{margin:0;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;b
 #gate .err{color:#b3411f;font-size:12.5px;height:16px;margin-top:8px}
 #gate label{display:flex;align-items:center;justify-content:center;gap:7px;font-size:12.5px;color:var(--muted);margin-top:12px;cursor:pointer}
 
-/* ===== layout chính ===== */
+/* ===== khung ===== */
 #app{display:none}
 .appbar{background:linear-gradient(120deg,#0a1828,#0c4a6e 60%,#0e7490);color:#fff;padding:12px 16px;display:flex;align-items:center;gap:11px;position:sticky;top:0;z-index:50}
 .appbar a{color:#fff;text-decoration:none;font-size:18px}
-.appbar .tt{font-size:15px;font-weight:800;letter-spacing:-.2px}
+.appbar .tt{font-size:15px;font-weight:800}
 .appbar .st{font-size:10.5px;opacity:.75;display:block;font-weight:500}
 .appbar .lock{margin-left:auto;font-size:10.5px;background:rgba(255,255,255,.15);padding:4px 10px;border-radius:8px;white-space:nowrap}
-.layout{display:flex;max-width:1280px;margin:0 auto;gap:0}
-/* TOC */
-#toc{width:320px;flex:none;position:sticky;top:54px;height:calc(100vh - 54px);overflow-y:auto;background:#fff;border-right:1px solid var(--line);padding:14px 10px 40px}
-#toc .tsr{width:100%;padding:9px 12px;border:1.5px solid var(--line);border-radius:10px;font-size:13px;font-family:inherit;outline:none;margin-bottom:10px}
-#toc .tsr:focus{border-color:var(--ac)}
-#toc a{display:block;padding:7px 11px;border-radius:9px;color:var(--ink);text-decoration:none;font-size:12.5px;border-left:3px solid transparent;margin-bottom:1px}
-#toc a:hover{background:var(--ac-soft)}
-#toc a.l1{font-weight:800;color:var(--ac2);margin-top:8px;font-size:12px;text-transform:uppercase;letter-spacing:.4px}
-#toc a.l3{padding-left:26px;font-size:12px;color:var(--muted)}
-#toc a .en{display:block;font-size:10.5px;color:#94a3b8;font-weight:400}
-#toc::-webkit-scrollbar{width:5px}#toc::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px}
-@media(max-width:900px){
-  .layout{flex-direction:column}
-  #toc{position:static;width:100%;height:auto;max-height:300px;border-right:0;border-bottom:1px solid var(--line)}
-}
-/* nội dung */
-#doc{flex:1;min-width:0;padding:22px 26px 80px;background:#fff}
-#doc img{max-width:100%;height:auto;display:block;margin:14px auto;border:1px solid var(--line);border-radius:10px;padding:4px;background:#fff;box-shadow:var(--sh)}
-#doc img[src*="image1."],#doc img[width="20"]{border:0;box-shadow:none;display:inline-block;margin:0 4px;vertical-align:middle}
-#doc h1{font-size:21px;color:#fff;background:linear-gradient(120deg,#0c4a6e,#0e7490);padding:14px 18px;border-radius:13px;margin:36px 0 16px;letter-spacing:-.2px}
-#doc h2{font-size:18px;color:var(--ac2);border-bottom:2.5px solid var(--ac-soft);padding-bottom:8px;margin:34px 0 12px;scroll-margin-top:70px}
-#doc h3{font-size:15.5px;color:var(--ac);margin:24px 0 8px;scroll-margin-top:70px}
-#doc h1,#doc h2{scroll-margin-top:70px}
-#doc table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0;display:block;overflow-x:auto}
-#doc th,#doc td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
-#doc th{background:var(--ac-soft);color:var(--ac2)}
-#doc blockquote{margin:8px 0;padding:2px 0 2px 14px;border-left:3px solid var(--ac-soft);color:#334155}
-#doc li{margin:4px 0}
-#doc p{margin:8px 0}
-.viNote{background:linear-gradient(135deg,#f0fdfa,#e0f2f7);border:1px solid #bae6fd;border-left:4px solid var(--ac);border-radius:12px;padding:14px 16px;margin:14px 0;font-size:13.5px}
-.viNote b{color:var(--ac2)}
-.aiBtn{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border:0;border-radius:9px;cursor:pointer;font-family:inherit;font-size:12px;font-weight:800;
-  background:linear-gradient(135deg,#7c3aed,#5f4ab7);color:#fff;box-shadow:0 2px 8px rgba(124,58,237,.3);margin:6px 0}
-.aiBtn:disabled{opacity:.6;cursor:wait}
-.aiTrans{background:#faf8ff;border:1px solid #e4dcf7;border-left:4px solid #7c3aed;border-radius:12px;padding:13px 16px;margin:10px 0;font-size:13.5px;white-space:pre-wrap;line-height:1.7}
-.aiTrans .tag{display:inline-block;font-size:10px;font-weight:800;background:#efecfa;color:#5f4ab7;padding:2px 8px;border-radius:6px;margin-bottom:6px}
-.planCard{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--sh);padding:16px 18px;margin-bottom:14px}
-.planCard h3{margin:0 0 10px;font-size:15px;color:var(--ac2)}
-.day{display:flex;gap:11px;padding:9px 0;border-bottom:1px dashed var(--line)}
+.tabbar{display:flex;gap:6px;background:#fff;border-bottom:1px solid var(--line);padding:8px 14px;position:sticky;top:50px;z-index:49}
+.tabbar button{border:0;background:none;padding:9px 16px;border-radius:10px;font-size:13px;font-weight:800;color:var(--muted);cursor:pointer;font-family:inherit}
+.tabbar button.on{background:var(--ac-soft);color:var(--ac2)}
+.wrap{max-width:940px;margin:0 auto;padding:18px 16px 90px}
+.tabpage{display:none}.tabpage.on{display:block;animation:fade .25s}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1}}
+
+/* ===== bản tiếng Việt ===== */
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--sh);padding:16px 18px;margin-bottom:13px}
+.card h3{margin:0 0 10px;font-size:15.5px;color:var(--ac2);display:flex;align-items:center;gap:8px}
+.card h4{margin:16px 0 6px;font-size:13.5px;color:var(--ac)}
+.step{display:flex;gap:11px;margin-bottom:10px}
+.step .n{flex:none;width:25px;height:25px;border-radius:50%;background:var(--ac-soft);color:var(--ac2);font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center}
+.step b{color:var(--ac2)}
+.warn{background:#fef3e2;border-left:4px solid #d97706;border-radius:0 10px 10px 0;padding:9px 13px;font-size:13px;color:#7c4a03;margin:9px 0}
+.danger{background:#fdebe7;border-left:4px solid #c2410c;border-radius:0 10px 10px 0;padding:9px 13px;font-size:13px;color:#7c2d12;margin:9px 0}
+.day{display:flex;gap:11px;padding:8px 0;border-bottom:1px dashed var(--line)}
 .day .n{flex:none;width:54px;font-weight:800;color:var(--ac);font-size:12.5px}
-.day .tx{font-size:13.5px}
-.day .tx small{display:block;color:var(--muted)}
-.loading{text-align:center;color:var(--muted);padding:60px 0;font-size:14px}
-@media print{ #toc,.appbar,.aiBtn,#gate{display:none!important} #doc{padding:0} }
+.day .tx{font-size:13.5px}.day .tx small{display:block;color:var(--muted)}
+table.vi{width:100%;border-collapse:collapse;font-size:12.5px;margin:8px 0}
+table.vi th,table.vi td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.vi th{background:var(--ac-soft);color:var(--ac2)}
+.tag{display:inline-block;font-size:10px;font-weight:800;padding:2px 8px;border-radius:6px;background:var(--ac-soft);color:var(--ac2)}
+.note{font-size:12px;color:var(--muted);margin-top:8px}
+
+/* ===== tài liệu gốc ===== */
+.doclay{display:flex;gap:0;max-width:1280px;margin:0 auto}
+#toc{width:300px;flex:none;position:sticky;top:96px;height:calc(100vh - 96px);overflow-y:auto;background:#fff;border-right:1px solid var(--line);padding:12px 10px 40px}
+#toc .tsr{width:100%;padding:8px 11px;border:1.5px solid var(--line);border-radius:10px;font-size:12.5px;font-family:inherit;outline:none;margin-bottom:8px}
+#toc a{display:block;padding:6px 10px;border-radius:8px;color:var(--ink);text-decoration:none;font-size:12px;margin-bottom:1px}
+#toc a:hover{background:var(--ac-soft)}
+#toc a.l1{font-weight:800;color:var(--ac2);margin-top:7px;font-size:11.5px;text-transform:uppercase}
+#toc a.l3{padding-left:24px;color:var(--muted)}
+#toc a .en{display:block;font-size:10px;color:#94a3b8;font-weight:400}
+@media(max-width:900px){.doclay{flex-direction:column}#toc{position:static;width:100%;height:auto;max-height:260px;border-right:0;border-bottom:1px solid var(--line)}}
+#doc{flex:1;min-width:0;padding:20px 24px 80px;background:#fff}
+#doc img{max-width:min(100%,460px);max-height:380px;object-fit:contain;height:auto;display:block;margin:12px auto;border:1px solid var(--line);border-radius:9px;padding:3px;background:#fff;cursor:zoom-in}
+#doc img.junk{display:none}
+#doc h1{font-size:19px;color:#fff;background:linear-gradient(120deg,#0c4a6e,#0e7490);padding:12px 16px;border-radius:12px;margin:32px 0 14px}
+#doc h2{font-size:17px;color:var(--ac2);border-bottom:2.5px solid var(--ac-soft);padding-bottom:7px;margin:30px 0 10px}
+#doc h3{font-size:14.5px;color:var(--ac);margin:22px 0 7px}
+#doc h1,#doc h2,#doc h3{scroll-margin-top:110px}
+#doc table{width:100%;border-collapse:collapse;font-size:12.5px;margin:10px 0;display:block;overflow-x:auto}
+#doc th,#doc td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+#doc th{background:var(--ac-soft);color:var(--ac2)}
+#doc td img{max-width:130px;max-height:110px;margin:4px auto;cursor:zoom-in}
+#doc blockquote{margin:6px 0;padding:1px 0 1px 12px;border-left:3px solid var(--ac-soft);color:#334155}
+#doc li{margin:3px 0}#doc p{margin:7px 0}
+.aiBtn{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:0;border-radius:9px;cursor:pointer;font-family:inherit;font-size:11.5px;font-weight:800;
+  background:linear-gradient(135deg,#7c3aed,#5f4ab7);color:#fff;margin:4px 0}
+.aiBtn:disabled{opacity:.6;cursor:wait}
+.aiTrans{background:#faf8ff;border:1px solid #e4dcf7;border-left:4px solid #7c3aed;border-radius:12px;padding:12px 15px;margin:8px 0;font-size:13px;white-space:pre-wrap;line-height:1.65}
+.aiTrans .tag2{display:inline-block;font-size:10px;font-weight:800;background:#efecfa;color:#5f4ab7;padding:2px 8px;border-radius:6px;margin-bottom:5px}
+.loading{text-align:center;color:var(--muted);padding:50px 0}
+/* lightbox phóng to ảnh */
+#lb{position:fixed;inset:0;z-index:99;background:rgba(8,16,28,.88);display:none;align-items:center;justify-content:center;cursor:zoom-out;padding:18px}
+#lb.on{display:flex}
+#lb img{max-width:96vw;max-height:92vh;border-radius:8px;background:#fff;padding:6px}
+@media print{#toc,.appbar,.tabbar,.aiBtn,#gate,#lb{display:none!important}#doc{padding:0}}
 </style>
 </head>
 <body>
@@ -89,40 +104,217 @@ body{margin:0;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;b
   </div>
 </div>
 
+<div id="lb" onclick="this.classList.remove('on')"><img id="lbImg" alt=""></div>
+
 <div id="app">
   <div class="appbar">
     <a href="../">←</a>
     <div><span class="tt">🛬 Thư viện PBB — Cầu dẫn hành khách</span>
-      <span class="st">Factory Training · ShinMaywa · Sân bay Long Thành · DaiDung</span></div>
+      <span class="st">ShinMaywa · Sân bay Long Thành · đào tạo tại DaiDung</span></div>
     <span class="lock">🔒 nội bộ</span>
   </div>
-  <div class="layout">
-    <nav id="toc"><input class="tsr" id="tocQ" type="search" placeholder="Tìm mục lục..."></nav>
-    <main id="doc">
-      <div class="planCard">
-        <h3>📅 Kế hoạch đào tạo 5 ngày tại nhà máy (08–12/06/2026) — Giảng viên: Yue Boon Kee Kelvin</h3>
-        <div class="day"><div class="n">Ngày 1</div><div class="tx"><b>Đào tạo bộ phận CƠ KHÍ</b> (trong nhà)<small>Mechanical Component Training · giải lao · hỏi đáp</small></div></div>
-        <div class="day"><div class="n">Ngày 2</div><div class="tx"><b>Đào tạo hệ thống ĐIỆN</b> (trong nhà)<small>Electrical System Training · giải lao · hỏi đáp</small></div></div>
-        <div class="day"><div class="n">Ngày 3</div><div class="tx"><b>VẬN HÀNH an toàn PBB</b>: bàn điều khiển, thao tác vận hành, lỗi thường gặp (trong nhà)<small>Safety operation · control console · common faults · Q&amp;A</small></div></div>
-        <div class="day"><div class="n">Ngày 4</div><div class="tx"><b>Thực địa bãi tổ hợp</b>: giải thích từng bộ phận PBB + BẢO TRÌ (ngoài trời/trong nhà)<small>Parts at assembly yard · Maintenance · Q&amp;A</small></div></div>
-        <div class="day"><div class="n">Ngày 5</div><div class="tx"><b>Vận hành/Bảo trì tổng hợp + làm quen thiết bị</b> (trong nhà)<small>Operation/Maintenance and familiarization · Q&amp;A</small></div></div>
-        <div style="font-size:12.5px;color:var(--muted);margin-top:10px">📍 Địa điểm: DaiDung — Lô 38, KCN An Hạ, Bình Chánh, TP.HCM · 👥 Tối đa 5 người/khách · 🏆 Cấp chứng nhận hoàn thành khóa học</div>
-      </div>
-      <div class="viNote"><b>📌 Điều kiện tham gia (dịch từ tài liệu):</b> hiểu biết cơ bản về nguyên lý cơ/điện/điện tử (mạch, linh kiện, an toàn điện) · <b>thành thạo tiếng Anh</b> (khóa học giảng bằng tiếng Anh) · có kinh nghiệm bảo trì thiết bị điện/điện tử liên quan (chẩn đoán, sửa chữa thiết bị ShinMaywa hoặc tương đương) · ý thức an toàn khi làm việc với thiết bị điện · cam kết tham gia đầy đủ lý thuyết + thực hành. Hoàn thành khóa → nhận <b>Chứng nhận hoàn thành (Course Completion Certificate)</b>.</div>
-      <div class="viNote"><b>🌐 Cách dùng:</b> mục lục bên trái đã dịch tiếng Việt (chữ xám là tên gốc tiếng Anh). Phần thân là giáo trình gốc đầy đủ hình ảnh — bấm nút <b style="color:#5f4ab7">🌐 Dịch mục này (AI)</b> dưới tiêu đề bất kỳ để dịch nguyên mục sang tiếng Việt (cần API key AI — cài ở trang chủ; bản dịch được lưu lại trên máy, lần sau mở là có sẵn).</div>
-      <div class="loading" id="docLoad">⏳ Đang tải giáo trình (273KB + 219 hình)...</div>
-      <div id="docBody"></div>
-    </main>
+  <div class="tabbar">
+    <button class="on" data-t="vi">🇻🇳 Bản tiếng Việt</button>
+    <button data-t="goc">📄 Tài liệu gốc (EN, đủ 145 hình)</button>
+  </div>
+
+  <!-- ============ TAB TIẾNG VIỆT (biên soạn từ tài liệu gốc) ============ -->
+  <div class="tabpage on" id="tp-vi"><div class="wrap">
+
+    <div class="card"><h3>🗺 Sơ đồ tư duy — toàn cảnh PBB trong 1 hình <span class="tag">bấm nhánh để nhảy tới phần đó</span></h3>
+      <svg viewBox="0 0 920 540" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto" font-family="system-ui,Segoe UI,Roboto,sans-serif">
+        <defs>
+          <style>.mmn{cursor:pointer}.mmn:hover rect{filter:brightness(1.08)}.mmn text{pointer-events:none}</style>
+        </defs>
+        <!-- dây nối -->
+        <g stroke-width="2.5" fill="none" opacity=".55">
+          <path d="M460 270 C 350 270 300 120 218 96" stroke="#d97706"/>
+          <path d="M460 270 C 360 270 330 200 224 192" stroke="#0e7490"/>
+          <path d="M460 270 C 560 270 590 110 700 96" stroke="#16a34a"/>
+          <path d="M460 270 C 570 270 600 200 702 192" stroke="#7c3aed"/>
+          <path d="M460 270 C 360 270 330 350 224 356" stroke="#c2410c"/>
+          <path d="M460 270 C 570 270 600 350 702 356" stroke="#0c4a6e"/>
+          <path d="M460 270 C 460 380 460 420 460 448" stroke="#9f1239"/>
+        </g>
+        <!-- tâm -->
+        <g class="mmn" onclick="goCard('vi-plan')">
+          <rect x="350" y="232" width="220" height="76" rx="18" fill="#0c4a6e"/>
+          <text x="460" y="263" text-anchor="middle" fill="#fff" font-size="19" font-weight="800">🛬 PBB</text>
+          <text x="460" y="287" text-anchor="middle" fill="#bae6fd" font-size="12.5">Cầu dẫn hành khách — ShinMaywa</text>
+        </g>
+        <!-- nhánh: An toàn -->
+        <g class="mmn" onclick="goCard('vi-safety')">
+          <rect x="40" y="62" width="178" height="64" rx="13" fill="#fef3e2" stroke="#d97706" stroke-width="2"/>
+          <text x="129" y="88" text-anchor="middle" fill="#92400e" font-size="14.5" font-weight="800">🦺 AN TOÀN</text>
+          <text x="129" y="108" text-anchor="middle" fill="#a16207" font-size="10.5">6 quy định · tai nạn · thiên tai</text>
+        </g>
+        <!-- nhánh: Trước/Trong/Sau -->
+        <g class="mmn" onclick="goCard('vi-truoc')">
+          <rect x="40" y="160" width="184" height="64" rx="13" fill="#e0f2f7" stroke="#0e7490" stroke-width="2"/>
+          <text x="132" y="186" text-anchor="middle" fill="#0c4a6e" font-size="14" font-weight="800">▶️ TRƯỚC–TRONG–SAU</text>
+          <text x="132" y="206" text-anchor="middle" fill="#0e7490" font-size="10.5">kiểm tra quanh cầu · khóa OPERATE</text>
+        </g>
+        <!-- nhánh: Cảnh báo -->
+        <g class="mmn" onclick="goCard('vi-canhbao')">
+          <rect x="40" y="324" width="184" height="64" rx="13" fill="#fdebe7" stroke="#c2410c" stroke-width="2"/>
+          <text x="132" y="350" text-anchor="middle" fill="#7c2d12" font-size="14" font-weight="800">🚨 THIẾT BỊ AN TOÀN</text>
+          <text x="132" y="370" text-anchor="middle" fill="#c2410c" font-size="10.5">đèn xoay · còi · EMERGENCY STOP</text>
+        </g>
+        <!-- nhánh: Vận hành -->
+        <g class="mmn" onclick="goCard('vi-vanhanh')">
+          <rect x="700" y="62" width="180" height="64" rx="13" fill="#e7f6ee" stroke="#16a34a" stroke-width="2"/>
+          <text x="790" y="88" text-anchor="middle" fill="#14532d" font-size="14.5" font-weight="800">🕹 VẬN HÀNH 13 BƯỚC</text>
+          <text x="790" y="108" text-anchor="middle" fill="#16a34a" font-size="10.5">POWER ON → PRESET → AUTO DOCK</text>
+        </g>
+        <!-- nhánh: Bảo trì -->
+        <g class="mmn" onclick="goCard('vi-baotri')">
+          <rect x="700" y="160" width="180" height="64" rx="13" fill="#efecfa" stroke="#7c3aed" stroke-width="2"/>
+          <text x="790" y="186" text-anchor="middle" fill="#4c1d95" font-size="14.5" font-weight="800">🧰 BẢO TRÌ</text>
+          <text x="790" y="206" text-anchor="middle" fill="#7c3aed" font-size="10.5">hằng ngày · quý · 6T · năm · lốp 510mm</text>
+        </g>
+        <!-- nhánh: Mã lỗi -->
+        <g class="mmn" onclick="goCard('vi-msg')">
+          <rect x="700" y="324" width="180" height="64" rx="13" fill="#e0f2f7" stroke="#0c4a6e" stroke-width="2"/>
+          <text x="790" y="350" text-anchor="middle" fill="#0c4a6e" font-size="14.5" font-weight="800">💬 MÃ THÔNG BÁO</text>
+          <text x="790" y="370" text-anchor="middle" fill="#0e7490" font-size="10.5">xanh = giới hạn hành trình</text>
+        </g>
+        <!-- nhánh: Tài liệu gốc -->
+        <g class="mmn" onclick="document.querySelector('.tabbar button[data-t=goc]').click()">
+          <rect x="345" y="448" width="230" height="62" rx="13" fill="#fff" stroke="#9f1239" stroke-width="2"/>
+          <text x="460" y="473" text-anchor="middle" fill="#9f1239" font-size="14" font-weight="800">📄 TÀI LIỆU GỐC ĐẦY ĐỦ</text>
+          <text x="460" y="493" text-anchor="middle" fill="#be4a64" font-size="10.5">145 hình · cấu tạo · sơ đồ điện · 5 biểu mẫu · dịch AI</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="card" id="vi-plan"><h3>📅 Kế hoạch đào tạo 5 ngày (08–12/06/2026) — GV: Yue Boon Kee Kelvin</h3>
+      <div class="day"><div class="n">Ngày 1</div><div class="tx"><b>Đào tạo bộ phận CƠ KHÍ</b> (trong nhà)<small>Mechanical Component Training</small></div></div>
+      <div class="day"><div class="n">Ngày 2</div><div class="tx"><b>Đào tạo hệ thống ĐIỆN</b> (trong nhà)<small>Electrical System Training</small></div></div>
+      <div class="day"><div class="n">Ngày 3</div><div class="tx"><b>VẬN HÀNH an toàn</b>: bàn điều khiển · thao tác · lỗi thường gặp<small>Safety operation · control console · common faults</small></div></div>
+      <div class="day"><div class="n">Ngày 4</div><div class="tx"><b>Thực địa bãi tổ hợp</b>: từng bộ phận PBB + BẢO TRÌ (ngoài trời/trong nhà)<small>Parts at assembly yard · Maintenance</small></div></div>
+      <div class="day"><div class="n">Ngày 5</div><div class="tx"><b>Vận hành/Bảo trì tổng hợp + làm quen thiết bị</b><small>Operation/Maintenance and familiarization</small></div></div>
+      <div class="note">📍 DaiDung — Lô 38, KCN An Hạ, Bình Chánh, TP.HCM · 👥 tối đa 5 người/khách · 🏆 cấp Chứng nhận hoàn thành · Khóa học giảng bằng TIẾNG ANH, học viên cần nền tảng cơ/điện + kinh nghiệm bảo trì</div>
+    </div>
+
+    <div class="card" id="vi-safety"><h3>🦺 An toàn — 6 quy định chung <span class="tag">dịch từ mục General Items</span></h3>
+      <div class="step"><div class="n">1</div><div><b>Đọc kỹ tài liệu hướng dẫn trước khi vận hành.</b> Thao tác sai có thể gây tai nạn chết người. Cất tài liệu ở nơi quy định để mọi người vận hành đều đọc được.</div></div>
+      <div class="step"><div class="n">2</div><div><b>Mặc đồ bảo hộ phù hợp</b> — quần áo gọn gàng, đúng thao tác, đủ phương tiện bảo vệ cá nhân.</div></div>
+      <div class="step"><div class="n">3</div><div><b>Cấm vận hành khi:</b> sức khỏe kém, có rượu bia/thuốc ảnh hưởng thần kinh, đang dùng tai nghe hoặc điện thoại.</div></div>
+      <div class="step"><div class="n">4</div><div><b>Kiểm tra cầu trước khi dùng.</b> Phát hiện bất thường → báo đơn vị bảo trì ngay, đưa cầu về vị trí chờ không cản trở máy bay. Tự làm "chăm sóc hằng ngày" + "kiểm tra hằng ngày" và LƯU HỒ SƠ — đây là dữ liệu đầu vào cho kiểm tra định kỳ chuyên sâu (phải do đơn vị chuyên môn thực hiện).</div></div>
+      <div class="step"><div class="n">5</div><div><b>Khi có tai nạn / cháy:</b> dừng vận hành ngay; tai nạn người → sơ cứu trước; cháy → sơ tán hành khách khỏi cầu tới nơi an toàn. Quy định sẵn điểm sơ tán + vị trí bình chữa cháy, diễn tập định kỳ.</div></div>
+      <div class="step"><div class="n">6</div><div><b>Thiên tai:</b> động đất → dừng ngay, cường độ ≥4 (thang Nhật) phải kiểm tra bất thường; sét đánh → dừng + kiểm tra; bão → vận hành theo giới hạn TỐC ĐỘ GIÓ trong bảng thông số.</div></div>
+    </div>
+
+    <div class="card" id="vi-truoc"><h3>▶️ Trước khi vận hành <span class="tag">Before Starting Operation</span></h3>
+      <div class="step"><div class="n">1</div><div><b>Ra vào cầu</b> bằng cầu thang phục vụ (service stair) hoặc qua nhà ga — không leo trèo đường khác.</div></div>
+      <div class="step"><div class="n">2</div><div><b>Kiểm tra an toàn xung quanh:</b> nhìn trực tiếp + qua màn hình camera xác nhận KHÔNG còn người quanh cầu, dưới tunnel, quanh trụ dẫn động. Bật nguồn, xoay khóa sang "OPERATE" → xác nhận đèn xoay vàng sáng + còi cảnh báo kêu.</div></div>
+      <div class="step"><div class="n">3</div><div><b>Bố trí người hướng dẫn</b> (guide) khi cần.</div></div>
+      <div class="step"><div class="n">4</div><div><b>Mưa/tuyết:</b> tầm nhìn giảm — vận hành chậm, cẩn thận hơn.</div></div>
+      <h4>Trong khi vận hành</h4>
+      <div class="step"><div class="n">1</div><div>Giữ tư thế đúng khi điều khiển.</div></div>
+      <div class="step"><div class="n">2</div><div><b>Không làm 2 việc cùng lúc:</b> không nâng/hạ rèm đầu cầu (closure) hoặc đóng/mở cửa cuốn cabin TRONG KHI cầu đang di chuyển.</div></div>
+      <div class="step"><div class="n">3</div><div><b>Chống va chạm máy bay:</b> đặc biệt chú ý landing frame tiến gần ĐỘNG CƠ máy bay khi cầu thang phục vụ lắp bên phải cầu.</div></div>
+      <h4>Sau khi vận hành</h4>
+      <div class="step"><div class="n">1</div><div>Đưa cầu về đúng VỊ TRÍ CHỜ quy định.</div></div>
+      <div class="step"><div class="n">2</div><div>Xoay khóa về "OFF", RÚT CHÌA cất nơi quy định rồi mới rời bàn điều khiển.</div></div>
+    </div>
+
+    <div class="card" id="vi-canhbao"><h3>🚨 Cảnh báo & thiết bị an toàn</h3>
+      <table class="vi">
+        <tr><th>Thiết bị</th><th>Mô tả & yêu cầu</th></tr>
+        <tr><td><b>Biển cảnh báo (nameplates)</b></td><td>Dán cố định trên cầu, hướng dẫn hành khách + nhân viên. Mất/hỏng → liên hệ ShinMaywa thay NGAY.</td></tr>
+        <tr><td><b>Đèn xoay cảnh báo</b></td><td>2 đèn xoay CAM dưới gầm cầu — cảnh báo người gần cầu đang hoạt động.</td></tr>
+        <tr><td><b>Đèn chướng ngại</b></td><td>2 đèn trên nóc cabin — sáng liên tục, nhìn thấy từ xa.</td></tr>
+        <tr><td><b>Đèn pha</b></td><td>2 đèn dưới sàn cabin — chiếu sáng thân máy bay + khu vực bánh dẫn động.</td></tr>
+        <tr><td><b>Còi cảnh báo</b></td><td>1 còi điện dưới sàn cabin — báo cầu đang di chuyển.</td></tr>
+      </table>
+      <div class="danger"><b>⛔ NÚT DỪNG KHẨN CẤP [EMERGENCY STOP]:</b> trên bàn điều khiển — phát hiện BẤT KỲ bất thường nào, bấm NGAY LẬP TỨC. Muốn phục hồi sau dừng khẩn: bấm lại chính nút đó.</div>
+    </div>
+
+    <div class="card" id="vi-vanhanh"><h3>🕹 Quy trình vận hành cơ bản — 13 bước <span class="tag">dịch từ Basic Operating Procedures</span></h3>
+      <div class="step"><div class="n">1</div><div>Nếu nút <b>[EMERGENCY STOP]</b> ① đang bị nhấn → bấm lại để phục hồi trạng thái.</div></div>
+      <div class="step"><div class="n">2</div><div>Bật <b>[INTERIOR LIGHT]</b> ⑮ (đèn trong); ban đêm tầm nhìn kém bật thêm <b>[EXTERIOR LIGHT]</b> ⑭ (đèn pha ngoài).</div></div>
+      <div class="step"><div class="n">3</div><div>Cắm chìa vào <b>khóa điều khiển</b> ②.</div></div>
+      <div class="step"><div class="n">4</div><div>Bấm <b>[POWER ON]</b> ⑤ — đèn nút sáng, cấp nguồn các mạch, <b>màn hình đồ họa</b> ⑫ tự bật (màn hình không có công tắc riêng).</div></div>
+      <div class="step"><div class="n">5</div><div>Xoay khóa ② sang <b>"OPERATE"</b> → 2 đèn xoay vàng ở trụ dẫn động sáng + xoay, báo người dưới đất biết cầu sắp di chuyển.</div></div>
+      <div class="step"><div class="n">6</div><div>Kiểm tra <b>rèm đầu cầu (closure)</b> đã kéo lên hết — chưa thì giữ <b>[CLOSURE UP]</b> ⑪ đến khi chạm giới hạn trên.</div></div>
+      <div class="step"><div class="n">7</div><div>Chạm <b>[PRESET]</b> ⑭ trên màn hình đồ họa ⑫.</div></div>
+      <div class="step"><div class="n">8</div><div>Cửa sổ chọn loại máy bay hiện ra → <b>chọn đúng loại máy bay</b> chuyến đó.</div></div>
+      <div class="step"><div class="n">9</div><div>Cửa sổ xác nhận → chạm <b>[YES]</b> nếu đúng; chọn nhầm → <b>[NO]</b> chọn lại.</div></div>
+      <div class="step"><div class="n">10</div><div>Bấm <b>[AUTO DOCK]</b> — cầu TỰ ĐỘNG về góc xoay cabin + cao độ sàn đã lưu cho loại máy bay đó. Màn hình hiện <b>"COMPLETED"</b> khi xong.</div></div>
+      <div class="step"><div class="n">11</div><div>Dùng <b>cần joystick</b> ➃ tiến cầu về phía CỬA máy bay.</div></div>
+      <div class="step"><div class="n">12</div><div>Đẩy joystick <b>tới/lui</b> = cầu tiến/lùi; tốc độ VÔ CẤP theo góc đẩy cần — đẩy càng nhiều chạy càng nhanh.</div></div>
+      <div class="step"><div class="n">13</div><div>Đẩy joystick <b>trái/phải KÈM tới/lui</b> = cầu chạy chéo theo hướng đó; đẩy trái/phải KHÔNG kèm tới/lui = cầu XOAY tại chỗ.</div></div>
+      <div class="warn">⚠ Các bước có số khoanh tròn (①②⑤⑫…) ứng với vị trí nút trên hình bàn điều khiển — xem hình chi tiết ở tab <b>📄 Tài liệu gốc → Control Console</b>.</div>
+    </div>
+
+    <div class="card" id="vi-baotri"><h3>🧰 Bảo trì — chăm sóc & kiểm tra hằng ngày <span class="tag">Daily Care + Daily Inspection</span></h3>
+      <h4>Vệ sinh định kỳ (6 hạng mục)</h4>
+      <table class="vi">
+        <tr><th>Hạng mục</th><th>Cách làm</th></tr>
+        <tr><td>Hệ thoát nước</td><td>Không để rác/tuyết/đá nghẹt máng + ống thoát nước dưới tunnel</td></tr>
+        <tr><td>Bàn + tủ điều khiển</td><td>Lau bằng KHĂN KHÔ</td></tr>
+        <tr><td>Tường, trần</td><td>Lau bằng nước rửa trung tính pha loãng</td></tr>
+        <tr><td>Sàn</td><td>Hút bụi; ướt thì lau; quá bẩn gọi đơn vị bảo trì</td></tr>
+        <tr><td>Kính cabin/tunnel/cửa</td><td>Nước lau kính thông thường</td></tr>
+        <tr><td>Kính hộp 2 lớp</td><td>Lau trong + ngoài; vết bẩn cứng dùng nước rửa trung tính rồi RỬA NƯỚC NGAY</td></tr>
+      </table>
+      <h4>Kiểm tra hằng ngày — điểm đáng chú ý nhất: LỐP</h4>
+      <div class="step"><div class="n">📏</div><div><b>Nhìn nhanh mỗi ngày:</b> đo khoảng cách đất → TÂM lốp khi tunnel thu hết: lốp 46 inch chuẩn <b>510 mm</b> · lốp 39 inch chuẩn <b>406 mm</b> — thấp hơn là non hơi.</div></div>
+      <div class="step"><div class="n">🔧</div><div><b>Đo đồng hồ áp suất ≥1 lần/tuần:</b> lốp 46": <b>1.373–1.470 kPa</b> (14,0–15,0 kg/cm²) · lốp 39": <b>1.138–1.755 kPa</b>. Lốp đặc (solid) không áp dụng.</div></div>
+      <div class="step"><div class="n">🖥</div><div>Kiểm <b>màn hình đồ họa</b> hoạt động bình thường + hình camera rõ.</div></div>
+      <div class="step"><div class="n">🔋</div><div>Kiểm <b>mức pin UPS</b> + đèn báo trạng thái bình thường.</div></div>
+      <h4>Tần suất kiểm tra định kỳ (theo giáo trình + 5 biểu mẫu kèm)</h4>
+      <table class="vi">
+        <tr><th>Chu kỳ</th><th>Ai làm</th><th>Biểu mẫu</th></tr>
+        <tr><td><b>Hằng ngày</b> (trước khi dùng)</td><td>Người vận hành</td><td>Daily Inspection/Maintenance Report</td></tr>
+        <tr><td><b>Sau 1 tháng</b> vận hành đầu</td><td>Đơn vị chuyên môn</td><td>One Month Report</td></tr>
+        <tr><td><b>Hằng quý</b></td><td>Đơn vị chuyên môn</td><td>Quarterly Report</td></tr>
+        <tr><td><b>6 tháng</b></td><td>Đơn vị chuyên môn</td><td>Biannual Report</td></tr>
+        <tr><td><b>Hằng năm</b></td><td>Đơn vị chuyên môn</td><td>Annual Report</td></tr>
+      </table>
+      <div class="note">5 biểu mẫu gốc đầy đủ nằm cuối tab 📄 Tài liệu gốc — in trực tiếp được.</div>
+    </div>
+
+    <div class="card" id="vi-msg"><h3>💬 Hệ thông báo trên màn hình <span class="tag">Message List</span></h3>
+      <div>Màn hình đồ họa hiển thị thông báo theo nhóm — <b>thông báo XANH DƯƠNG = giới hạn vận hành</b> (cầu chạm ngưỡng hành trình, không phải hỏng hóc):</div>
+      <table class="vi">
+        <tr><th>Thông báo (EN)</th><th>Nghĩa</th></tr>
+        <tr><td>APPROACHING LEFT/RIGHT SWING LIMIT</td><td>Sắp chạm giới hạn xoay trái/phải</td></tr>
+        <tr><td>SLOPE UP/DOWN LIMIT</td><td>Chạm giới hạn nâng/hạ độ dốc</td></tr>
+        <tr><td>APPROACHING TUNNEL EXTEND/RETRACT LIMIT</td><td>Sắp chạm giới hạn vươn/thu tunnel</td></tr>
+        <tr><td>TUNNEL EXTEND/RETRACT LIMIT</td><td>ĐÃ chạm giới hạn vươn/thu — không đi tiếp được</td></tr>
+        <tr><td>LEFT/RIGHT STEERING LIMIT</td><td>Giới hạn góc lái bánh trái/phải</td></tr>
+        <tr><td>TUNNEL VERTICAL UP/DOWN LIMIT</td><td>Giới hạn nâng/hạ chiều cao tunnel</td></tr>
+      </table>
+      <div class="note">Danh sách đầy đủ mọi mã (xanh/đỏ/vàng) + cách xử lý: tab 📄 Tài liệu gốc → mục "Message List" (có nút 🌐 dịch AI nguyên mục).</div>
+    </div>
+
+    <div class="card"><h3>📄 Cần chi tiết hơn?</h3>
+      <div>Tab <b>"📄 Tài liệu gốc"</b> chứa NGUYÊN VẸN giáo trình: 145 hình bàn điều khiển/bôi trơn/cấu tạo từng bộ phận, sơ đồ điện, danh sách mã lỗi đầy đủ, 5 biểu mẫu kiểm tra. Mục lục bên trái đã dịch tiếng Việt; dưới mỗi tiêu đề có nút <b style="color:#5f4ab7">🌐 Dịch mục này (AI)</b> — dịch nguyên mục, lưu lại trên máy.</div>
+    </div>
+
+  </div></div>
+
+  <!-- ============ TAB TÀI LIỆU GỐC ============ -->
+  <div class="tabpage" id="tp-goc">
+    <div class="doclay">
+      <nav id="toc"><input class="tsr" id="tocQ" type="search" placeholder="Tìm mục lục..."></nav>
+      <main id="doc">
+        <div class="loading" id="docLoad">⏳ Đang tải giáo trình gốc (270KB + 145 hình)...</div>
+        <div id="docBody"></div>
+      </main>
+    </div>
   </div>
 </div>
 
 <script src="../assistant.js"></script>
 <script>
 'use strict';
-/* ===== cổng mật khẩu (1234 — như Thư viện WPS) ===== */
+/* ===== mật khẩu 1234 ===== */
 const PW = '1234', KEY = 'pbb_auth_v1';
 function authed(){ return sessionStorage.getItem(KEY) === 'ok' || localStorage.getItem(KEY) === 'ok'; }
-function openApp(){ document.getElementById('gate').style.display = 'none'; document.getElementById('app').style.display = 'block'; loadDoc(); }
+function openApp(){ document.getElementById('gate').style.display = 'none'; document.getElementById('app').style.display = 'block'; }
 function tryPw(){
   const inp = document.getElementById('pw');
   if (inp.value === PW){
@@ -137,35 +329,60 @@ function tryPw(){
 document.getElementById('pw').addEventListener('keydown', e => { if (e.key === 'Enter') tryPw(); });
 if (authed()) openApp(); else setTimeout(() => document.getElementById('pw').focus(), 150);
 
+/* mindmap: bấm nhánh → cuộn tới thẻ tương ứng */
+function goCard(id){
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  el.style.transition = 'box-shadow .3s';
+  el.style.boxShadow = '0 0 0 3px #0e7490';
+  setTimeout(() => el.style.boxShadow = '', 1600);
+}
+
+/* ===== chuyển tab — tài liệu gốc tải lười ===== */
+document.querySelector('.tabbar').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  document.querySelectorAll('.tabbar button').forEach(x => x.classList.toggle('on', x === b));
+  document.querySelectorAll('.tabpage').forEach(p => p.classList.toggle('on', p.id === 'tp-' + b.dataset.t));
+  if (b.dataset.t === 'goc') loadDoc();
+});
+
 /* ===== bản dịch tiêu đề mục lục ===== */
 const VI = {
   'safety':'An toàn','fundamental-safety-precautions':'Các biện pháp an toàn cơ bản','general-items':'Quy định chung',
   'before-starting-operation':'Trước khi bắt đầu vận hành','cautions-on-operating-procedures':'Lưu ý TRONG khi vận hành',
   'cautions-after-operating-procedures':'Lưu ý SAU khi vận hành','attention-items':'Hạng mục cần chú ý',
-  'warning-nameplates':'Biển cảnh báo','warning-beacons-obstruction-lights-and-floodlights':'Đèn cảnh báo / đèn chướng ngại / đèn pha',
+  'warning-nameplates':'Biển cảnh báo','warning-beacons-obstruction-lights-and-floodlights':'Đèn cảnh báo / chướng ngại / pha',
   'warning-horn':'Còi cảnh báo','safety-device':'Thiết bị an toàn','emergency-stop-pushbutton-switch':'Nút dừng khẩn cấp [EMERGENCY STOP]',
-  'name-and-function-of-major-structural-parts':'Tên & chức năng các bộ phận kết cấu chính',
-  'name-and-function-of-major-structural-parts-1':'Tên & chức năng các bộ phận (tiếp)',
-  'control-console-and-name-of-cab-components':'Bàn điều khiển & các bộ phận cabin',
+  'name-and-function-of-major-structural-parts':'Tên & chức năng bộ phận kết cấu chính',
+  'name-and-function-of-major-structural-parts-1':'Tên & chức năng bộ phận (tiếp)',
+  'control-console-and-name-of-cab-components':'Bàn điều khiển & bộ phận cabin',
   'control-console-and-name-of-cab-components-1':'Bàn điều khiển & cabin (tiếp)',
+  'control-console':'Bàn điều khiển','graphic-operation-panel':'Màn hình thao tác đồ họa',
   'operating-procedures':'Quy trình vận hành','safety-precautions':'Biện pháp an toàn',
-  'startup-and-shutdown-procedures-1':'Quy trình khởi động & dừng máy (1)','startup-and-shutdown-procedures-2':'Quy trình khởi động & dừng máy (2)',
+  'basic-operating-procedures':'Quy trình vận hành cơ bản',
+  'startup-and-shutdown-procedures-1':'Khởi động & dừng máy (1)','startup-and-shutdown-procedures-2':'Khởi động & dừng máy (2)',
   'preventive-maintenance-plan':'Kế hoạch bảo trì phòng ngừa','preventive-maintenance-frequency':'Tần suất bảo trì phòng ngừa',
   'preventive-maintenance-standards':'Tiêu chuẩn bảo trì phòng ngừa','inspection-standards':'Tiêu chuẩn kiểm tra',
   'periodical-inspection-and-maintenance':'Kiểm tra & bảo trì định kỳ','contents':'Mục lục giáo trình',
   'daily-care-cleaning':'Chăm sóc hằng ngày (vệ sinh)','inspection-and-maintenance':'Kiểm tra & bảo trì',
+  'daily-inspection-and-maintenance':'Kiểm tra & bảo trì hằng ngày',
+  'quarterly-inspection-and-maintenance':'Kiểm tra & bảo trì hằng quý',
+  'biannual-inspection-and-maintenance':'Kiểm tra & bảo trì 6 tháng',
+  'annual-inspection-and-maintenance':'Kiểm tra & bảo trì hằng năm',
   'lubrication':'Bôi trơn','painting':'Sơn bảo vệ','periodical-inspectionmaintenance-check-list':'Checklist kiểm tra/bảo trì định kỳ',
   'structure-of-each-part':'Cấu tạo từng bộ phận','electrical-system':'Hệ thống điện','message-list':'Danh sách thông báo / mã lỗi',
-  'solid-tire-replacement':'Thay lốp đặc (solid tire)','curtain-adjustment':'Chỉnh rèm đầu cầu (closure)','tunnel-roller-adjustment':'Chỉnh con lăn tunnel',
+  'list-of-operation-limit-messages-displayed-in-blue':'Thông báo giới hạn vận hành (màu xanh)',
+  'solid-tire-replacement':'Thay lốp đặc','curtain-adjustment':'Chỉnh rèm đầu cầu','tunnel-roller-adjustment':'Chỉnh con lăn tunnel',
   'special-maintenance-tools':'Dụng cụ bảo trì chuyên dụng',
-  'daily-inspection-maintenance-report':'BIÊN BẢN KIỂM TRA / BẢO TRÌ HẰNG NGÀY',
-  'one-month-after-start-of-operation-inspection-maintenance-report':'BIÊN BẢN KIỂM TRA SAU 1 THÁNG VẬN HÀNH',
-  'quarterly-inspection-maintenance-report':'BIÊN BẢN KIỂM TRA / BẢO TRÌ HẰNG QUÝ',
-  'biannual-inspection-maintenance-report':'BIÊN BẢN KIỂM TRA / BẢO TRÌ 6 THÁNG',
-  'annual-inspection-maintenance-report':'BIÊN BẢN KIỂM TRA / BẢO TRÌ HẰNG NĂM'
+  'daily-inspection-maintenance-report':'BIÊN BẢN KIỂM TRA HẰNG NGÀY',
+  'one-month-after-start-of-operation-inspection-maintenance-report':'BIÊN BẢN SAU 1 THÁNG VẬN HÀNH',
+  'quarterly-inspection-maintenance-report':'BIÊN BẢN HẰNG QUÝ',
+  'biannual-inspection-maintenance-report':'BIÊN BẢN 6 THÁNG',
+  'annual-inspection-maintenance-report':'BIÊN BẢN HẰNG NĂM'
 };
 
-/* ===== tải giáo trình + dựng TOC + nút dịch AI ===== */
+/* ===== tải tài liệu gốc ===== */
 async function loadDoc(){
   const body = document.getElementById('docBody');
   if (body.dataset.done) return;
@@ -174,17 +391,27 @@ async function loadDoc(){
     body.innerHTML = html;
     body.dataset.done = '1';
     document.getElementById('docLoad').style.display = 'none';
-    buildToc();
-    addAiButtons();
+    tidyImages(); buildToc(); addAiButtons();
   } catch (e) {
-    document.getElementById('docLoad').textContent = 'Không tải được nội dung — kiểm tra mạng rồi tải lại trang.';
+    document.getElementById('docLoad').textContent = 'Không tải được nội dung — kiểm tra mạng rồi tải lại.';
   }
+}
+/* Ẩn hình rác (mảnh chữ trang trí nhỏ) + bấm phóng to hình thật */
+function tidyImages(){
+  document.querySelectorAll('#docBody img').forEach(img => {
+    const mark = () => { if ((img.naturalWidth || 0) < 90 || (img.naturalHeight || 0) < 45) img.classList.add('junk'); };
+    if (img.complete) mark(); else img.addEventListener('load', mark);
+    img.addEventListener('click', () => {
+      if (img.classList.contains('junk')) return;
+      document.getElementById('lbImg').src = img.src;
+      document.getElementById('lb').classList.add('on');
+    });
+  });
 }
 function buildToc(){
   const toc = document.getElementById('toc');
-  const heads = document.querySelectorAll('#docBody h1, #docBody h2, #docBody h3');
   let n = 0;
-  heads.forEach(h => {
+  document.querySelectorAll('#docBody h1, #docBody h2, #docBody h3').forEach(h => {
     if (!h.id) h.id = 'sec-' + (n++);
     const en = h.textContent.trim().replace(/\s+/g, ' ');
     if (en.length < 2) return;
@@ -192,23 +419,21 @@ function buildToc(){
     const a = document.createElement('a');
     a.href = '#' + h.id;
     a.className = h.tagName === 'H1' ? 'l1' : (h.tagName === 'H3' ? 'l3' : 'l2');
-    a.innerHTML = (vi ? vi : en) + (vi ? '<span class="en">' + en.slice(0, 48) + '</span>' : '');
+    a.innerHTML = (vi || en) + (vi ? '<span class="en">' + en.slice(0, 46) + '</span>' : '');
     toc.appendChild(a);
-    /* gắn tên VI vào tiêu đề trong bài */
     if (vi && h.tagName !== 'H3') {
       const s = document.createElement('div');
-      s.style.cssText = 'font-size:12.5px;font-weight:600;opacity:.85;margin-top:2px';
+      s.style.cssText = 'font-size:12px;font-weight:700;opacity:.9;margin-top:2px';
       s.textContent = '🇻🇳 ' + vi;
       h.appendChild(s);
     }
   });
-  /* lọc mục lục */
   document.getElementById('tocQ').addEventListener('input', function(){
     const q = this.value.toLowerCase();
     toc.querySelectorAll('a').forEach(a => { a.style.display = !q || a.textContent.toLowerCase().includes(q) ? '' : 'none'; });
   });
 }
-/* ===== nút Dịch AI từng mục (h2) — bản dịch lưu localStorage ===== */
+/* ===== nút dịch AI từng mục ===== */
 function addAiButtons(){
   document.querySelectorAll('#docBody h2').forEach(h => {
     const btn = document.createElement('button');
@@ -220,26 +445,19 @@ function addAiButtons(){
     if (cached) showTrans(btn, cached);
     btn.addEventListener('click', async () => {
       const key = localStorage.getItem('qc_ai_key');
-      if (!key) { alert('Chưa có API key AI — vào trang chủ bấm nút ✨ Cài AI (Gemini miễn phí) rồi quay lại.'); return; }
-      /* gom text của mục: từ sau nút đến h1/h2 kế */
+      if (!key) { alert('Chưa có API key AI — vào trang chủ bấm ✨ Cài AI (Gemini miễn phí) rồi quay lại.'); return; }
       let txt = '', el = btn.nextElementSibling;
       while (el && !/^H[12]$/.test(el.tagName)) { txt += ' ' + (el.innerText || ''); el = el.nextElementSibling; if (txt.length > 7000) break; }
       txt = txt.replace(/\s+/g, ' ').trim().slice(0, 7000);
       if (txt.length < 30) { alert('Mục này chủ yếu là hình — không có chữ để dịch.'); return; }
       btn.disabled = true; btn.textContent = '⏳ Đang dịch...';
       try {
-        const ans = await QCAssistant.askClaude(
-          'Dịch đoạn tài liệu kỹ thuật cầu dẫn hành khách (PBB) sau sang tiếng Việt, giữ thuật ngữ kỹ thuật kèm tiếng Anh trong ngoặc khi cần, trình bày gọn theo gạch đầu dòng/đoạn ngắn đúng cấu trúc gốc:\n\n' + txt,
-          '', key);
+        const ans = await QCAssistant.askClaude('Dịch đoạn tài liệu kỹ thuật cầu dẫn hành khách (PBB) sau sang tiếng Việt, giữ thuật ngữ kỹ thuật kèm tiếng Anh trong ngoặc khi cần, trình bày theo gạch đầu dòng/đoạn ngắn đúng cấu trúc gốc:\n\n' + txt, '', key);
         const clean = ans.replace(/\n\n— Gemini.*$/, '');
-        localStorage.setItem(cacheKey, clean);
+        try { localStorage.setItem(cacheKey, clean); } catch (e) {}
         showTrans(btn, clean);
-        btn.textContent = '✅ Đã dịch (bấm để dịch lại)';
-      } catch (e) {
-        alert('Lỗi dịch: ' + (e.message || e));
-        btn.textContent = '🌐 Dịch mục này (AI)';
-      }
-      btn.disabled = false;
+      } catch (e) { alert('Lỗi dịch: ' + (e.message || e)); }
+      btn.disabled = false; btn.textContent = '✅ Đã dịch (bấm để dịch lại)';
     });
   });
 }
@@ -250,7 +468,7 @@ function showTrans(btn, text){
     box.className = 'aiTrans';
     btn.insertAdjacentElement('afterend', box);
   }
-  box.innerHTML = '<span class="tag">🇻🇳 BẢN DỊCH AI · CẦN KIỂM CHỨNG</span><br>' +
+  box.innerHTML = '<span class="tag2">🇻🇳 BẢN DỊCH AI · CẦN KIỂM CHỨNG</span><br>' +
     text.replace(/</g, '&lt;').replace(/\*\*([^*\n]+)\*\*/g, '<b>$1</b>').replace(/^[*-] /gm, '• ');
   btn.textContent = '✅ Đã dịch (bấm để dịch lại)';
 }
