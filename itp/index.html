@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#312e81">
+<title>Cách đọc ITP — Inspection & Test Plan</title>
+<style>
+:root{--ac:#4338ca;--ac2:#312e81;--ac-soft:#eaecfd;--gd:#92560a;--rd:#aa4322;--rd-soft:#fbeae2;--gn:#0e7a4d;--gn-soft:#e3f6ee;--ink:#16212f;--muted:#64748b;--line:#e4e8f0;--bg:#f5f6fb;--sh:0 2px 12px rgba(25,25,80,.07)}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--ink);font-size:14.5px;line-height:1.62}
+.appbar{background:linear-gradient(120deg,#1e1b4b,#312e81 58%,#4338ca);color:#fff;padding:12px 16px;display:flex;align-items:center;gap:11px;position:sticky;top:0;z-index:50}
+.appbar a{color:#fff;text-decoration:none;font-size:18px}
+.appbar .tt{font-size:15px;font-weight:800}
+.appbar .st{font-size:10.5px;opacity:.8;display:block;font-weight:500}
+.tabbar{display:flex;gap:5px;background:#fff;border-bottom:1px solid var(--line);padding:8px 12px;position:sticky;top:50px;z-index:49;overflow-x:auto;scrollbar-width:none}
+.tabbar::-webkit-scrollbar{display:none}
+.tabbar button{border:0;background:none;padding:9px 13px;border-radius:10px;font-size:12.5px;font-weight:800;color:var(--muted);cursor:pointer;font-family:inherit;white-space:nowrap}
+.tabbar button.on{background:var(--ac-soft);color:var(--ac2)}
+.wrap{max-width:920px;margin:0 auto;padding:16px 14px 96px}
+.tabpage{display:none}.tabpage.on{display:block;animation:fade .25s}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1}}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--sh);padding:16px 18px;margin-bottom:13px}
+.card h3{margin:0 0 10px;font-size:15.5px;color:var(--ac2)}
+.tag{display:inline-block;font-size:10px;font-weight:800;padding:2px 8px;border-radius:6px;background:var(--ac-soft);color:var(--ac2);vertical-align:middle}
+.tag.ok{background:var(--gn-soft);color:var(--gn)}
+.lead{font-size:14px;margin:0 0 9px}
+.lead b{color:var(--ac2)}
+.kv{display:flex;gap:9px;padding:9px 0;border-bottom:1px dashed var(--line)}
+.kv:last-child{border-bottom:0}
+.kv .q{flex:none;width:30px;height:30px;border-radius:9px;background:var(--ac-soft);color:var(--ac2);font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center}
+.kv .b b{color:var(--ink)}
+.kv .b .d{font-size:13px;color:#41506a;margin-top:1px}
+table.vi{width:100%;border-collapse:collapse;font-size:12.6px;margin:8px 0}
+table.vi th,table.vi td{border:1px solid var(--line);padding:8px 9px;text-align:left;vertical-align:top}
+table.vi th{background:var(--ac-soft);color:var(--ac2);font-size:11.5px}
+table.vi td .nm{font-weight:800;color:var(--ac2)}
+table.vi td .ex{color:var(--muted);font-size:11.5px;font-style:italic}
+.star{color:#d97706;font-weight:900}
+.pt{border-radius:13px;padding:13px 15px;margin-bottom:11px;border:1px solid var(--line)}
+.pt .h{display:flex;align-items:center;gap:9px;margin-bottom:7px}
+.pt .badge{font-size:13px;font-weight:900;padding:4px 11px;border-radius:8px}
+.pt .nm{font-size:14.5px;font-weight:800}
+.pt .li{font-size:13px;margin:4px 0;padding-left:20px;position:relative}
+.pt .li::before{position:absolute;left:0;top:0}
+.pt .ok::before{content:'✅'}.pt .no::before{content:'⛔'}.pt .bs::before{content:'📕'}
+.pt .ok{color:#0b5d3b}.pt .no{color:#9a3324}.pt .bs{color:#3a3a52}
+.mp{display:flex;gap:10px;font-size:13px;padding:7px 0;border-bottom:1px dashed var(--line)}
+.mp .c{flex:none;width:26px;height:26px;border-radius:7px;background:var(--ac2);color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center}
+.num{display:flex;gap:11px;padding:10px 0;border-bottom:1px dashed var(--line)}
+.num:last-child{border-bottom:0}
+.num .n{flex:none;width:26px;height:26px;border-radius:50%;background:var(--ac);color:#fff;font-weight:900;font-size:12.5px;display:flex;align-items:center;justify-content:center}
+.num b{color:var(--ac2)}
+.num .d{font-size:13px;color:#41506a;margin-top:1px}
+.err{display:flex;gap:10px;border-bottom:1px dashed var(--line);padding:9px 0;font-size:13.3px}
+.err:last-child{border-bottom:0}
+.err .x{flex:none;font-size:15px}
+.err .fx{color:var(--gn);font-weight:600}
+.code-row{border:1px solid var(--line);border-radius:12px;padding:11px 13px;margin-bottom:10px;background:#fff}
+.code-row .top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:5px}
+.code-row .cn{font-size:14px;font-weight:900;color:var(--ac2)}
+.code-row .ar{font-size:11px;font-weight:700;color:var(--muted);background:#f1f3fa;padding:2px 8px;border-radius:6px}
+.code-row .cl{font-size:12.5px;color:#33405a;margin:3px 0}
+.code-row .cl b{color:var(--ac)}
+.code-row .rl{font-size:12.8px;color:#41506a}
+.code-row .rl::before{content:'→ ';color:var(--ac);font-weight:900}
+.exrow{background:#fbfbff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:12.8px}
+.exrow .f{display:flex;gap:8px;padding:5px 0;border-bottom:1px dashed var(--line)}
+.exrow .f:last-child{border-bottom:0}
+.exrow .f .k{flex:none;width:96px;font-weight:800;color:var(--muted);font-size:11.5px;text-transform:uppercase;letter-spacing:.3px}
+.exrow .f .v{flex:1}
+.chip{display:inline-block;font-size:11px;font-weight:700;background:var(--ac-soft);color:var(--ac2);border:0;padding:5px 11px;border-radius:999px;margin:3px 4px 0 0;cursor:pointer;font-family:inherit;text-decoration:none}
+.note{font-size:12px;color:var(--muted);margin-top:8px}
+.warn{background:#fff7ed;border:1px solid #fcd9a8;border-left:4px solid var(--gd);border-radius:0 10px 10px 0;padding:10px 13px;font-size:12.5px;color:#7a4b07;margin-top:8px}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin:2px 0 14px}
+.btnrow button{padding:9px 14px;border:1px solid var(--line);background:#fff;border-radius:10px;font-size:12.5px;font-weight:800;color:var(--ac2);cursor:pointer;font-family:inherit}
+.btnrow button.pri{background:var(--ac);color:#fff;border-color:var(--ac)}
+@media print{.appbar,.tabbar,.btnrow,.ai-fab,#aiPanel{display:none!important}.tabpage{display:block!important}.card{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="appbar">
+  <a href="../">←</a>
+  <div><span class="tt">📋 Cách đọc ITP — Inspection &amp; Test Plan</span>
+    <span class="st">Đọc đúng các cột · điểm H·W·R·S · ITP dựa theo code nào</span></div>
+</div>
+<div class="tabbar">
+  <button class="on" data-t="tq">🏠 Tổng quan</button>
+  <button data-t="cot">🧩 Đọc các cột</button>
+  <button data-t="diem">🚦 Điểm H·W·R·S</button>
+  <button data-t="dung">✅ Đọc đúng &amp; lỗi</button>
+  <button data-t="code">📚 Code căn cứ</button>
+</div>
+
+<!-- ===== TỔNG QUAN ===== -->
+<div class="tabpage on" id="tp-tq"><div class="wrap">
+  <div class="btnrow">
+    <button class="pri" onclick="window.print()">🖨 In tài liệu</button>
+    <button onclick="go('cot')">🧩 Xem giải phẫu cột</button>
+    <button onclick="go('code')">📚 ITP dựa theo code nào</button>
+  </div>
+  <div class="card"><h3>📋 ITP là gì?</h3>
+    <p class="lead" id="iWhat"></p>
+    <p class="lead" id="iWhy"></p>
+    <p class="lead" id="iWhen"></p>
+  </div>
+  <div class="card"><h3>🧭 Đọc một ITP theo 3 câu hỏi</h3>
+    <div class="kv"><span class="q">1</span><div class="b"><b>Kiểm theo GÌ?</b><div class="d">Đọc cột <b>Reference / Procedure</b> — phải có số điều khoản code + spec + bản vẽ + WPS.</div></div></div>
+    <div class="kv"><span class="q">2</span><div class="b"><b>ĐẠT là bao nhiêu?</b><div class="d">Đọc cột <b>Acceptance Criteria</b> — ngưỡng bằng SỐ + điều khoản. Đây là cột quan trọng nhất.</div></div></div>
+    <div class="kv"><span class="q">3</span><div class="b"><b>Ai dừng / ai chứng kiến?</b><div class="d">Đọc cột <b>Điểm can thiệp H·W·R·S</b> theo từng bên (QC nhà máy · Khách · TVGS).</div></div></div>
+    <div class="note">💡 Hỏi nhanh trợ lý ở trang chủ hoặc nút ✨: "ITP đọc thế nào", "hold point là gì", "ITP dựa theo code nào", "witness point khác hold ra sao".</div>
+  </div>
+  <div class="card"><h3>🔗 ITP mẫu đã có trong app (theo từng công đoạn)</h3>
+    <div id="samples"></div>
+    <div class="note">Mỗi module trên có sẵn bảng ITP nhúng (H/W/R/S) cho công đoạn của nó — phần này dạy bạn ĐỌC các bảng đó cho đúng.</div>
+  </div>
+</div></div>
+
+<!-- ===== ĐỌC CÁC CỘT ===== -->
+<div class="tabpage" id="tp-cot"><div class="wrap">
+  <div class="card"><h3>🧩 Giải phẫu một ITP — đọc cột nào để biết gì <span class="tag">★ = cột phải đọc kỹ</span></h3>
+    <table class="vi"><thead><tr><th style="width:34px">#</th><th>Cột</th><th>Đọc để biết gì</th><th>Ví dụ</th></tr></thead>
+    <tbody id="cols"></tbody></table>
+  </div>
+  <div class="card"><h3>📝 Đọc thử 1 dòng ITP (mẫu có chú giải)</h3>
+    <div class="exrow" id="exRow"></div>
+    <h3 style="margin:14px 0 8px">→ Đọc dòng đó theo 5 bước:</h3>
+    <div id="exHow"></div>
+  </div>
+</div></div>
+
+<!-- ===== ĐIỂM H W R S ===== -->
+<div class="tabpage" id="tp-diem"><div class="wrap">
+  <div class="card"><h3>🚦 4 điểm can thiệp — đọc đúng & hệ quả nếu đọc sai</h3>
+    <div id="points"></div>
+  </div>
+  <div class="card"><h3>🇺🇸 Hệ ký hiệu Mỹ (AISC 360 Chương N): O / P</h3>
+    <p class="lead" id="opNote"></p>
+    <div id="opMap"></div>
+    <div class="warn">⚠ Spec Mỹ (AISC/AWS) dùng <b>O / P</b>; spec quốc tế & châu Âu dùng <b>H / W / R / S (hoặc M)</b>. Khi đọc ITP phải biết dự án dùng hệ nào — tra bảng chú thích (Legend) ở đầu ITP.</div>
+  </div>
+</div></div>
+
+<!-- ===== ĐỌC ĐÚNG & LỖI ===== -->
+<div class="tabpage" id="tp-dung"><div class="wrap">
+  <div class="card"><h3>✅ 8 nguyên tắc đọc ITP cho đúng</h3>
+    <div id="rules"></div>
+  </div>
+  <div class="card"><h3>⚠️ Lỗi thường gặp khi đọc / lập ITP</h3>
+    <div id="mistakes"></div>
+  </div>
+</div></div>
+
+<!-- ===== CODE CĂN CỨ ===== -->
+<div class="tabpage" id="tp-code"><div class="wrap">
+  <div class="card"><h3>📚 ITP dựa theo code nào? <span class="tag ok">✓ = đã xác minh từ PDF gốc</span></h3>
+    <p class="lead">Một ITP kết cấu thép không tự nghĩ ra — nó lắp ghép yêu cầu từ các code dưới đây. Mỗi dòng ITP truy được về một (vài) điều khoản:</p>
+    <div id="codes"></div>
+    <div class="warn">⚠ Điều khoản ✓ được trích &amp; xác minh nguyên văn từ PDF trong thư mục dự án (AISC 360-16 Chương N · EN 1090-2:2018 · AWS D1.1:2020). Các mục còn lại là kiến thức tiêu chuẩn — đối chiếu bản spec/hợp đồng dự án trước khi dùng nghiệm thu.</div>
+  </div>
+</div></div>
+
+<script src="data.js"></script>
+<script src="../assistant.js"></script>
+<script>
+'use strict';
+const D = window.IG_DATA;
+const esc = s => String(s == null ? '' : s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const star = s => esc(s).replace(/★+/g, m => '<span class="star">' + m + '</span>');
+
+/* Tổng quan */
+document.getElementById('iWhat').innerHTML = '<b>Là gì:</b> ' + esc(D.intro.what);
+document.getElementById('iWhy').innerHTML = '<b>Để làm gì:</b> ' + esc(D.intro.why);
+document.getElementById('iWhen').innerHTML = '<b>Khi nào:</b> ' + esc(D.intro.when);
+document.getElementById('samples').innerHTML = D.SAMPLES.map(s => '<a class="chip" href="' + s.url + '">📄 ' + esc(s.t) + '</a>').join('');
+
+/* Cột */
+document.getElementById('cols').innerHTML = D.COLUMNS.map(c =>
+  '<tr><td>' + esc(c.no) + '</td><td><span class="nm">' + star(c.name) + '</span><br><span style="font-size:11.5px">' + esc(c.vi) + '</span></td><td>' + star(c.read) + '</td><td class="ex">' + esc(c.ex) + '</td></tr>').join('');
+
+/* Ví dụ dòng */
+const R = D.EXAMPLE.row;
+document.getElementById('exRow').innerHTML =
+  [['Công đoạn', R.no + ' · ' + R.act], ['Căn cứ', R.ref], ['Tiêu chí', R.crit], ['Phương pháp', R.method],
+   ['Tần suất', R.extent], ['Hồ sơ', R.record], ['Thực hiện', R.resp], ['Điểm can thiệp', R.points]]
+  .map(f => '<div class="f"><span class="k">' + f[0] + '</span><span class="v">' + esc(f[1]) + '</span></div>').join('');
+document.getElementById('exHow').innerHTML = D.EXAMPLE.howto.map((h, i) =>
+  '<div class="num"><span class="n">' + (i + 1) + '</span><div class="d">' + esc(h) + '</div></div>').join('');
+
+/* Điểm H W R S */
+document.getElementById('points').innerHTML = D.POINTS.map(p =>
+  '<div class="pt" style="background:' + p.bg + '55;border-color:' + p.bg + '">' +
+  '<div class="h"><span class="badge" style="background:' + p.bg + ';color:' + p.color + '">' + p.k + '</span><span class="nm" style="color:' + p.color + '">' + esc(p.name) + '</span></div>' +
+  '<div style="font-size:13px;margin-bottom:6px">' + esc(p.def) + '</div>' +
+  '<div class="li ok">' + esc(p.right) + '</div>' +
+  '<div class="li no">' + esc(p.wrong) + '</div>' +
+  '<div class="li bs">' + esc(p.base) + '</div></div>').join('');
+document.getElementById('opNote').textContent = D.OP_MAP.note;
+document.getElementById('opMap').innerHTML = D.OP_MAP.rows.map(r =>
+  '<div class="mp"><span class="c">' + esc(r.c) + '</span><div><b>' + esc(r.n) + '</b> — ' + esc(r.d) + '</div></div>').join('');
+
+/* Đọc đúng + lỗi */
+document.getElementById('rules').innerHTML = D.READ_RIGHT.map((r, i) =>
+  '<div class="num"><span class="n">' + (i + 1) + '</span><div><b>' + esc(r.t) + '</b><div class="d">' + esc(r.d) + '</div></div></div>').join('');
+document.getElementById('mistakes').innerHTML = D.MISTAKES.map(m =>
+  '<div class="err"><span class="x">❌</span><div><b>' + esc(m.e) + '</b><br><span class="fx">✔ ' + esc(m.f) + '</span></div></div>').join('');
+
+/* Code */
+document.getElementById('codes').innerHTML = D.CODES.map(c =>
+  '<div class="code-row">' +
+  '<div class="top"><span class="cn">' + esc(c.code) + '</span>' + (c.verified ? '<span class="tag ok">✓ xác minh</span>' : '') + '<span class="ar">' + esc(c.area) + '</span></div>' +
+  '<div class="cl"><b>Điều khoản:</b> ' + esc(c.clause) + '</div>' +
+  '<div class="rl">' + esc(c.role) + '</div></div>').join('');
+
+/* Tabs */
+function go(t){
+  document.querySelectorAll('.tabbar button').forEach(x => x.classList.toggle('on', x.dataset.t === t));
+  document.querySelectorAll('.tabpage').forEach(p => p.classList.toggle('on', p.id === 'tp-' + t));
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+document.querySelector('.tabbar').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (b) go(b.dataset.t);
+});
+</script>
+<script src="../ai-fab.js"></script>
+<script>if(window.AIFab)AIFab.mount({module:'Cách đọc ITP'});</script>
+</body>
+</html>

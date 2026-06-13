@@ -305,6 +305,13 @@
         <div class="mds">Mã FBG/FDB/PLG/USC... · 9 lỗi thường gặp · 4 quy tắc vàng · 32 tr hình</div>
       </div><span class="go">→</span>
     </a>
+    <a class="mcard" style="--ac:#4338ca;--ac-soft:#eaecfd" href="itp/">
+      <div class="mic">📋</div>
+      <div class="mbody">
+        <div class="mtt"><span class="no">11</span>Cách đọc ITP — Inspection &amp; Test Plan</div>
+        <div class="mds">Đọc đúng 10 cột · điểm H·W·R·S · ITP dựa theo code nào (ISO/EN/AISC/AWS)</div>
+      </div><span class="go">→</span>
+    </a>
   </div>
 
   <div class="sec-h"><span class="tt">Công cụ hỗ trợ</span><span class="ln"></span></div>
@@ -401,7 +408,7 @@ let GS_IDX = null, GS_LOADING = false;
 const GS_SRC = [
   'dungsai/tolerances-data.js', 'dungsai/tolerances-tier1.js', 'dungsai/tolerances-tier2.js',
   'dungsai/tolerances-tier3.js', 'dungsai/tolerances-tier4-mech.js',
-  'han/data.js', 'son/data.js', 'vattu/data.js', 'luongdu/data.js', 'bulong/data.js', 'packing/data.js', 'fitup/data.js', 'soche/data.js', 'qcdim/data.js', 'hoacong/data.js', 'evapco/data.js', 'wps/wps-index.js'
+  'han/data.js', 'son/data.js', 'vattu/data.js', 'luongdu/data.js', 'bulong/data.js', 'packing/data.js', 'fitup/data.js', 'soche/data.js', 'qcdim/data.js', 'hoacong/data.js', 'evapco/data.js', 'itp/data.js', 'wps/wps-index.js'
 ];
 const norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[đĐ]/g, 'd').toLowerCase();
 const gsTx = o => (o && typeof o === 'object') ? (o.vi || o.en || '') : (o || '');
@@ -460,6 +467,13 @@ async function gsBuild() {
     (EV_DATA.PRODUCTS || []).forEach(p => add('🧊 EVAPCO', 'evapco/', p.code + ' — ' + p.name, 'Quy tắc gia công EVAPCO', p.rule + ' ' + p.qc));
     (EV_DATA.ERRORS || []).forEach(e => add('🧊 EVAPCO', 'evapco/', 'Lỗi: ' + e.e, 'EVAPCO — khắc phục', e.fix));
     (EV_DATA.GOLDEN || []).forEach(g => add('🧊 EVAPCO', 'evapco/', g.t, 'Quy tắc vàng EVAPCO', g.d));
+  } } catch(e){}
+  try { if (window.IG_DATA) {
+    add('📋 Đọc ITP', 'itp/', 'ITP là gì + cách đọc đúng', 'Inspection & Test Plan', IG_DATA.intro.what + ' ' + IG_DATA.intro.why);
+    (IG_DATA.POINTS || []).forEach(p => add('📋 Đọc ITP', 'itp/', p.name, 'Điểm can thiệp ITP (H/W/R/S)', p.def + ' ' + p.right));
+    (IG_DATA.COLUMNS || []).forEach(c => add('📋 Đọc ITP', 'itp/', 'Cột ITP: ' + c.name, c.vi, c.read));
+    (IG_DATA.CODES || []).forEach(c => add('📋 Đọc ITP', 'itp/', 'ITP dựa theo ' + c.code, c.area + ' · ' + c.clause, c.role));
+    (IG_DATA.MISTAKES || []).forEach(m => add('📋 Đọc ITP', 'itp/', 'Lỗi đọc ITP: ' + m.e, 'Cách đọc đúng', m.f));
   } } catch(e){}
   try { (window.WPS_DB && WPS_DB.items || []).forEach(r =>
     add('🔥 WPS', 'wps/?id=' + encodeURIComponent(r.id), r.id, (r.process || '') + ' · ' + (r.base_metal || '').slice(0, 50), (r.position || '') + ' ' + (r.filler || ''))); } catch(e){}

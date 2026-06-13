@@ -1,7 +1,7 @@
 /* Launcher service worker — v3
    FIX: chỉ xoá cache CỦA LAUNCHER (launcher-*). Trước đây xoá mọi cache
    → phá cache offline của các module con (dungsai/wps/vattu/luongdu/han/son). */
-const CACHE = "launcher-v11";
+const CACHE = "launcher-v12";
 
 self.addEventListener("install", e => {
   // Không pre-cache — load tươi mỗi lần để tránh kẹt phiên bản cũ
@@ -23,7 +23,7 @@ self.addEventListener("fetch", e => {
   if (e.request.method !== "GET") return;
   const u = new URL(e.request.url);
   // Để sub-apps tự xử (chúng có SW riêng)
-  if (['/dungsai/', '/wps/', '/vattu/', '/luongdu/', '/han/', '/son/', '/bulong/', '/packing/', '/fitup/', '/soche/', '/qcdim/', '/hoacong/', '/pbb/', '/fabstation/', '/pbbfab/', '/evapco/'].some(p => u.pathname.includes(p))) return;
+  if (['/dungsai/', '/wps/', '/vattu/', '/luongdu/', '/han/', '/son/', '/bulong/', '/packing/', '/fitup/', '/soche/', '/qcdim/', '/hoacong/', '/pbb/', '/fabstation/', '/pbbfab/', '/evapco/', '/itp/'].some(p => u.pathname.includes(p))) return;
   // Network-first cho launcher để luôn lấy bản mới
   e.respondWith(
     fetch(e.request).then(r => {
