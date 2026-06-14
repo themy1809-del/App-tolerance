@@ -1,5 +1,6 @@
 /* ============================================================================
    QC ASSISTANT v2 — "Bạn cần kiểm tra gì? Tôi sẽ giải quyết giúp bạn."
+   Tác giả / Author: Đậu Thế Mỹ · © 2026 Đậu Thế Mỹ. Giữ bản quyền.
    Tầng 1 (cục bộ, offline): hiểu câu hỏi đa dạng vấn đề → hướng dẫn TẬN TÌNH
    từng bước (làm gì, bằng dụng cụ gì, ghi chép gì), tự tính số liệu thật từ
    dataset đã nạp, link mở đúng công cụ.

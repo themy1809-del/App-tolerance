@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
+<meta name="author" content="Đậu Thế Mỹ">
+<meta name="copyright" content="© 2026 Đậu Thế Mỹ">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0d2547">
@@ -146,7 +148,7 @@
     <div class="logo">DD</div>
     <div>
       <div class="t">DaiDung QC Suite</div>
-      <div class="s">Kết cấu thép · 8 module · offline</div>
+      <div class="s">Kết cấu thép · Tra cứu &amp; nghiệm thu · chạy offline</div>
     </div>
     <div class="sp"></div>
     <a href="huong-dan.html" target="_blank">📖 Hướng dẫn</a>
@@ -165,6 +167,41 @@
 <div class="wrap">
 
   <div id="gsRes" style="display:none"></div>
+
+  <style>
+    .qs{position:relative;background:linear-gradient(135deg,#f0f6ff,#eef2fb);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:14px 16px;margin:2px 0 18px}
+    .qs-h{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+    .qs-t{font-size:13.5px;font-weight:800;color:var(--brand);letter-spacing:-.2px}
+    .qs-x{margin-left:auto;border:1px solid var(--line);background:#fff;color:var(--muted);font-size:11.5px;font-weight:700;padding:5px 10px;border-radius:8px;cursor:pointer;font-family:inherit}
+    .qs-x:hover{color:var(--ink);border-color:#cbd5e1}
+    .qs-grid{display:grid;grid-template-columns:1fr;gap:9px}
+    @media(min-width:560px){.qs-grid{grid-template-columns:1fr 1fr}}
+    @media(min-width:900px){.qs-grid{grid-template-columns:1fr 1fr 1fr}}
+    .qs-step{display:flex;flex-direction:column;gap:2px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px 11px}
+    .qs-step b{font-size:12.5px;color:var(--brand2);font-weight:800}
+    .qs-step span{font-size:12px;color:var(--muted);line-height:1.45}
+    .recent-row{display:none;flex-wrap:wrap;gap:7px;margin:0 0 16px}
+    .rchip{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 13px;font-size:12.5px;font-weight:700;color:var(--ink);box-shadow:var(--sh);transition:.15s}
+    .rchip:hover{border-color:var(--brand2);color:var(--brand2);transform:translateY(-1px)}
+  </style>
+
+  <div class="qs" id="qsGuide">
+    <div class="qs-h">
+      <span class="qs-t">📖 Hướng dẫn nhanh — 30 giây</span>
+      <button class="qs-x" type="button" onclick="qsHide()">Ẩn ✕</button>
+    </div>
+    <div class="qs-grid">
+      <div class="qs-step"><b>1 · Tìm nhanh</b><span>Gõ câu hỏi ở ô 🔍 trên cùng, hoặc chọn module theo công đoạn bên dưới.</span></div>
+      <div class="qs-step"><b>2 · Nhập số đo</b><span>Mở một tiêu chí, nhập kích thước đo được — app tự so với ngưỡng tiêu chuẩn.</span></div>
+      <div class="qs-step"><b>3 · Đạt / Không đạt</b><span>App kết luận ✅ / ❌ kèm sai lệch và % vượt dung sai.</span></div>
+      <div class="qs-step"><b>4 · Xem dẫn chứng</b><span>Mỗi kết quả ghi rõ tiêu chuẩn + điều khoản/bảng để đối chiếu khi nghiệm thu.</span></div>
+      <div class="qs-step"><b>5 · Hỏi thêm AI</b><span>Bấm ✨ — AI hướng dẫn từng bước, có trích tiêu chuẩn, không cần cài key.</span></div>
+      <div class="qs-step"><b>6 · Dùng offline</b><span>Mở một lần khi có mạng, sau đó dùng được ngay tại xưởng/công trường.</span></div>
+    </div>
+  </div>
+
+  <div class="sec-h" id="recentHead" style="display:none"><span class="tt">Gần đây</span><span class="ln"></span></div>
+  <div class="recent-row" id="recentRow"></div>
 
   <div class="sec-h"><span class="tt">QC theo công đoạn sản xuất — đúng thứ tự</span><span class="ln"></span></div>
   <div class="grid">
@@ -336,7 +373,7 @@
 
 <footer class="footer">
   <div class="ft-in">
-    <span>© DaiDung Metallic Manufacture Construction &amp; Trade Corporation</span>
+    <span>Tác giả: <strong>Đậu Thế Mỹ</strong> · © DaiDung Metallic Manufacture Construction &amp; Trade Corporation</span>
     <span class="sp"></span>
     <span>v2.1 · 06/2026</span>
     <a href="reset.html" style="font-weight:700;color:var(--brand2)">↺ Xóa cache</a>
@@ -377,6 +414,35 @@
   </div>
 </div>
 
+<script>
+/* Hướng dẫn nhanh + Gần đây — tác giả Đậu Thế Mỹ */
+function qsHide(){ try{localStorage.setItem('qc_qs_hidden','1');}catch(e){} var el=document.getElementById('qsGuide'); if(el) el.style.display='none'; }
+(function(){
+  try{ if(localStorage.getItem('qc_qs_hidden')==='1'){ var el=document.getElementById('qsGuide'); if(el) el.style.display='none'; } }catch(e){}
+  /* ghi nhớ module vừa mở */
+  document.addEventListener('click', function(e){
+    var a = e.target && e.target.closest ? e.target.closest('a.mcard') : null; if(!a) return;
+    var href = a.getAttribute('href'); if(!href) return;
+    var t = href, mtt = a.querySelector('.mtt');
+    if(mtt){ var c = mtt.cloneNode(true); var no=c.querySelector('.no'); if(no)no.remove(); var lk=c.querySelector('.lock'); if(lk)lk.remove(); t=c.textContent.trim(); }
+    try{ var r=JSON.parse(localStorage.getItem('qc_recent')||'[]'); r=r.filter(function(x){return x.href!==href;}); r.unshift({href:href,title:t}); r=r.slice(0,6); localStorage.setItem('qc_recent',JSON.stringify(r)); }catch(e){}
+  });
+  /* render hàng Gần đây */
+  try{
+    var r=JSON.parse(localStorage.getItem('qc_recent')||'[]');
+    if(r.length){
+      var row=document.getElementById('recentRow'), head=document.getElementById('recentHead');
+      if(row&&head){
+        row.innerHTML = r.map(function(x){
+          var safe=String(x.title||x.href).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+          return '<a class="rchip" href="'+String(x.href).replace(/"/g,'')+'">🕘 '+safe+'</a>';
+        }).join('');
+        head.style.display=''; row.style.display='flex';
+      }
+    }
+  }catch(e){}
+})();
+</script>
 <script src="assistant.js"></script>
 <script>
 const PW = '1234';
@@ -426,7 +492,7 @@ if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
 let GS_IDX = null, GS_LOADING = false;
 const GS_SRC = [
   'dungsai/tolerances-data.js', 'dungsai/tolerances-tier1.js', 'dungsai/tolerances-tier2.js',
-  'dungsai/tolerances-tier3.js', 'dungsai/tolerances-tier4-mech.js',
+  'dungsai/tolerances-tier3.js', 'dungsai/tolerances-tier4-mech.js', 'dungsai/tolerances-iso13920.js',
   'han/data.js', 'son/data.js', 'vattu/data.js', 'luongdu/data.js', 'bulong/data.js', 'packing/data.js', 'fitup/data.js', 'soche/data.js', 'qcdim/data.js', 'hoacong/data.js', 'evapco/data.js', 'itp/data.js', 'wps/wps-index.js'
 ];
 const norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[đĐ]/g, 'd').toLowerCase();
@@ -662,9 +728,4 @@ gqEl.addEventListener('keydown', e => {
     gq.focus();
     gsBuild();
     gsRun();
-    gsAiAuto();
-  });
-})();
-</script>
-</body>
-</html>
+    
