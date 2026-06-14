@@ -72,9 +72,9 @@
   .sec-h:first-child{margin-top:0}
   .sec-h .tt{font-size:12px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--brand)}
   .sec-h .ln{flex:1;height:2px;background:linear-gradient(90deg,var(--brand2),var(--line) 60%);border-radius:2px;opacity:.35}
-  .grid{display:grid;grid-template-columns:1fr;gap:9px}
-  @media(min-width:560px){.grid{grid-template-columns:1fr 1fr}}
-  @media(min-width:900px){.grid{grid-template-columns:1fr 1fr 1fr}}
+  .grid{display:grid;grid-template-columns:minmax(0,1fr);gap:9px;align-items:stretch}
+  @media(min-width:560px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media(min-width:900px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 
   @keyframes up{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
   .mcard{position:relative;background:#fff;border:1px solid var(--line);border-radius:var(--r);
@@ -242,7 +242,7 @@
       </div><span class="go">→</span>
     </a>
     <a class="mcard m-han" href="han/">
-      <div class="mic photo" style="background-image:url('quytrinh/images/buoc-4.jpg')"></div>
+      <div class="mic photo" style="background-image:url('quytrinh/images/buoc-7.jpg')"></div>
       <div class="mbody">
         <div class="mtt"><span class="no">4</span>QC Hàn</div>
         <div class="mds">AWS D1.1 · ISO 5817 · NDT theo EXC · hình cách đo</div>
