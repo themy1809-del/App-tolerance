@@ -395,6 +395,8 @@ function goStep(no){
 }
 build();
 buildAcc();
+/* Trên điện thoại: thu gọn sơ đồ tổng quan cho gọn, ưu tiên danh sách dễ đọc (máy tính vẫn mở) */
+try{ if (window.matchMedia && window.matchMedia('(max-width:700px)').matches){ var _dt=document.querySelector('details'); if(_dt) _dt.removeAttribute('open'); } }catch(e){}
 </script>
 <script src="../assistant.js"></script>
 <script src="../ai-fab.js"></script>

@@ -50,7 +50,7 @@
   .gsearch input::placeholder{color:rgba(255,255,255,.5)}
   .gsearch input:focus{background:#fff;color:var(--ink);border-color:var(--cyan);box-shadow:0 0 0 3px rgba(56,189,248,.3)}
   .gsearch input:focus::placeholder{color:#9aa7b3}
-  .gsearch input{padding-right:96px}
+  .gsearch input{padding-right:15px}
   #gsKeyBtn{position:absolute;right:6px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:4px;
     padding:7px 11px;border:0;border-radius:9px;cursor:pointer;font-family:inherit;font-size:11.5px;font-weight:800;
     background:linear-gradient(135deg,#7c3aed,#5f4ab7);color:#fff;box-shadow:0 2px 8px rgba(124,58,237,.35);transition:.15s}
@@ -158,7 +158,6 @@
     <div class="gsearch">
       <span class="gs-ic">🔍</span>
       <input id="gq" type="search" placeholder="Hỏi gì cũng được — gõ xong AI tự trả lời (Enter = hỏi ngay)" autocomplete="off">
-      <button type="button" id="gsKeyBtn" onclick="gsAiKey()" title="Cài API key AI (Gemini miễn phí / Claude / ChatGPT)">✨<span id="gsKeyTxt">Cài AI</span></button>
     </div>
     <div class="gs-ex" id="gsEx"></div>
   </div>
@@ -739,4 +738,13 @@ gqEl.addEventListener('keydown', e => {
     gq.focus();
     gsBuild();
     gsRun();
+    gsAiAuto();
+  });
+})();
+/* Nút "Cài AI" đã gỡ — AI dùng chung qua proxy cho mọi người, không cần cài key riêng.
+   Giữ hàm này (an toàn null) vì aiKeySave/aiKeyClear còn gọi tới. */
+function gsKeyBtnSync(){ try{ var t = document.getElementById('gsKeyTxt'); if (t) t.textContent = ''; }catch(e){} }
+</script>
+</body>
+</html>
     
