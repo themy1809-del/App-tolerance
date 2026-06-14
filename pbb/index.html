@@ -470,15 +470,14 @@ function addAiButtons(){
     const cached = localStorage.getItem(cacheKey);
     if (cached) showTrans(btn, cached);
     btn.addEventListener('click', async () => {
-      const key = localStorage.getItem('qc_ai_key');
-      if (!key) { alert('Chưa có API key AI — vào trang chủ bấm ✨ Cài AI (Gemini miễn phí) rồi quay lại.'); return; }
+      if (!(window.QCAssistant && QCAssistant.hasAI && QCAssistant.hasAI())) { alert('Chưa bật AI — app chưa gắn proxy chung và máy này chưa có key riêng.\nVào trang chủ bấm ✨ Cài AI (Gemini miễn phí) rồi quay lại, hoặc dựng proxy theo HUONG_DAN_PROXY_AI.md.'); return; }
       let txt = '', el = btn.nextElementSibling;
       while (el && !/^H[12]$/.test(el.tagName)) { txt += ' ' + (el.innerText || ''); el = el.nextElementSibling; if (txt.length > 7000) break; }
       txt = txt.replace(/\s+/g, ' ').trim().slice(0, 7000);
       if (txt.length < 30) { alert('Mục này chủ yếu là hình — không có chữ để dịch.'); return; }
       btn.disabled = true; btn.textContent = '⏳ Đang dịch...';
       try {
-        const ans = await QCAssistant.askClaude('Dịch đoạn tài liệu kỹ thuật cầu dẫn hành khách (PBB) sau sang tiếng Việt, giữ thuật ngữ kỹ thuật kèm tiếng Anh trong ngoặc khi cần, trình bày theo gạch đầu dòng/đoạn ngắn đúng cấu trúc gốc:\n\n' + txt, '', key);
+        const ans = await QCAssistant.askAI('Dịch đoạn tài liệu kỹ thuật cầu dẫn hành khách (PBB) sau sang tiếng Việt, giữ thuật ngữ kỹ thuật kèm tiếng Anh trong ngoặc khi cần, trình bày theo gạch đầu dòng/đoạn ngắn đúng cấu trúc gốc:\n\n' + txt, '');
         const clean = ans.replace(/\n\n— Gemini.*$/, '');
         try { localStorage.setItem(cacheKey, clean); } catch (e) {}
         showTrans(btn, clean);

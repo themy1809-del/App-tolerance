@@ -3,7 +3,7 @@
          <script src="../ai-fab.js"></script>
          <script>AIFab.mount({ module: 'QC Hàn', color: '#b54708' });</script>
    - Trả lời offline tức thì bằng QCAssistant (trích dẫn đã xác minh)
-   - Có key (localStorage qc_ai_key, dùng chung toàn app) → tự hỏi thêm AI
+   - Có AI (QCAssistant.hasAI: key riêng trên máy HOẶC proxy chung) → tự hỏi thêm AI
 */
 (function () {
   'use strict';
@@ -62,7 +62,7 @@
     <button id="aifabGo" type="button">Hỏi</button>
   </div>
   <div id="aifabChips"></div>
-  <div id="aifabOut"><div class="hint">💡 Gõ câu hỏi — trợ lý offline trả lời ngay (có trích dẫn tiêu chuẩn).${localStorage.getItem('qc_ai_key') ? ' AI sẽ tự trả lời thêm phía dưới.' : ' Cài API key ở trang chủ (nút ✨ Cài AI) để hỏi thêm AI.'}</div></div>
+  <div id="aifabOut"><div class="hint">💡 Gõ câu hỏi — trợ lý offline trả lời ngay (có trích dẫn tiêu chuẩn).${(window.QCAssistant && QCAssistant.hasAI && QCAssistant.hasAI()) ? ' AI sẽ tự trả lời thêm phía dưới.' : ' Cài API key ở trang chủ (nút ✨ Cài AI) để hỏi thêm AI.'}</div></div>
 </div>`;
     ovl.addEventListener('click', e => { if (e.target === ovl) close(); });
     document.body.appendChild(ovl);
@@ -97,13 +97,13 @@
     if (q.length < 2) { out.innerHTML = '<div class="hint">💡 Gõ câu hỏi để bắt đầu.</div>'; return ''; }
     let a = '';
     try { if (window.QCAssistant) a = QCAssistant.answer(q) || ''; } catch (e) {}
-    out.innerHTML = (a || '<div class="hint">Chưa có đáp án offline cho câu này' + (localStorage.getItem('qc_ai_key') ? ' — AI sẽ trả lời sau giây lát…' : ' — cài API key để hỏi AI.') + '</div>') + '<div id="aifabAiSlot"></div>';
+    out.innerHTML = (a || '<div class="hint">Chưa có đáp án offline cho câu này' + ((window.QCAssistant && QCAssistant.hasAI && QCAssistant.hasAI()) ? ' — AI sẽ trả lời sau giây lát…' : ' — cài API key để hỏi AI.') + '</div>') + '<div id="aifabAiSlot"></div>';
     return a;
   }
 
   function autoAI(q) {
     if (!q || q.length < 8 || q === lastAsked) return;
-    if (!localStorage.getItem('qc_ai_key')) return;
+    if (!(window.QCAssistant && QCAssistant.hasAI && QCAssistant.hasAI())) return;
     if (q.split(/\s+/).length < 3 && !(window.QCAssistant && QCAssistant.isQuestion(q))) return;
     ask(q, false);
   }
@@ -111,14 +111,13 @@
   async function ask(q, manual) {
     if (!q) return;
     if (manual) answerOffline(q);
-    const key = localStorage.getItem('qc_ai_key');
     const slot = document.getElementById('aifabAiSlot');
-    if (!key || !slot) return;
+    if (!slot || !(window.QCAssistant && QCAssistant.hasAI && QCAssistant.hasAI())) return;
     if (q === lastAsked && !manual) return;
     lastAsked = q;
     slot.innerHTML = '<div class="aians"><span class="tag">AI · CẦN KIỂM CHỨNG</span><br>⏳ AI đang trả lời…</div>';
     try {
-      const ans = await QCAssistant.askClaude(q, 'Người hỏi đang ở module: ' + CFG.module, key);
+      const ans = await QCAssistant.askAI(q, 'Người hỏi đang ở module: ' + CFG.module);
       slot.innerHTML = '<div class="aians"><span class="tag">AI · CẦN KIỂM CHỨNG</span><br>' + mdLite(ans) + '</div>';
     } catch (e) {
       slot.innerHTML = '<div class="aians"><span class="tag">LỖI</span><br>' + esc(e.message || e) + '</div>';

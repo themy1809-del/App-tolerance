@@ -388,6 +388,36 @@
   ];
 
   window.QCAssistant = {
+    /* ▼▼▼ DÁN URL CLOUDFLARE WORKER VÀO ĐÂY để AI chạy cho MỌI NGƯỜI (không cần key riêng) ▼▼▼
+       Ví dụ: 'https://qc-ai.tentaikhoan.workers.dev'  ·  để trống '' nếu chưa dùng proxy.
+       Hướng dẫn dựng: xem HUONG_DAN_PROXY_AI.md */
+    PROXY_URL: '',
+    /* Có AI dùng được không? (key riêng trên máy NÀY, hoặc proxy chung cho mọi người) */
+    hasAI() { try { return !!(localStorage.getItem('qc_ai_key') || (this.PROXY_URL && this.PROXY_URL.length > 8)); } catch (e) { return !!(this.PROXY_URL && this.PROXY_URL.length > 8); } },
+    /* Nhãn nguồn AI để hiển thị */
+    aiSourceLabel() {
+      let k = null; try { k = localStorage.getItem('qc_ai_key'); } catch (e) {}
+      if (k) return this.aiProvider(k) || 'AI (key riêng)';
+      if (this.PROXY_URL) return 'AI chung (proxy)';
+      return null;
+    },
+    /* Hỏi AI thông minh: có key riêng → gọi thẳng; không có → gọi proxy chung */
+    async askAI(q, ctxText) {
+      let key = null; try { key = localStorage.getItem('qc_ai_key'); } catch (e) {}
+      if (key) return this.askClaude(q, ctxText, key);
+      if (this.PROXY_URL) {
+        /* content-type text/plain → request "đơn giản", KHÔNG kích hoạt preflight CORS
+           (chạy được cả Cloudflare Worker lẫn Google Apps Script). Body vẫn là JSON. */
+        const res = await fetch(this.PROXY_URL, {
+          method: 'POST', headers: { 'content-type': 'text/plain;charset=UTF-8' },
+          body: JSON.stringify({ q: q, ctx: ctxText || '' })
+        });
+        let j = {}; try { j = await res.json(); } catch (e) {}
+        if (!res.ok || j.error) throw new Error(j.error || ('Proxy AI ' + res.status));
+        return j.text || '(proxy không trả nội dung)';
+      }
+      throw new Error('Chưa cấu hình AI: máy này chưa có key riêng và app chưa gắn proxy.');
+    },
     isQuestion,
     EXAMPLES: [
       'Tôi muốn kiểm tra khung dầm 24m',

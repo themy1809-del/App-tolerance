@@ -358,6 +358,25 @@
   </div>
 </div>
 
+<div class="pw-ovl" id="aiOvl" onclick="if(event.target===this)aiKeyClose()">
+  <div class="pw-card" style="max-width:430px">
+    <div class="pw-em">✨</div>
+    <h2 class="pw-h" style="margin-bottom:2px">Bật AI cho app</h2>
+    <p class="pw-s">Dán API key vào ô dưới — key chỉ lưu trên máy này.</p>
+    <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style="display:block;text-align:center;margin:0 0 12px;font-size:13px;font-weight:700;color:var(--brand2)">🔑 Lấy key Gemini MIỄN PHÍ (Google) →</a>
+    <input id="aiKeyInp" type="text" inputmode="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"
+      placeholder="Dán key: AIza… / sk-ant-… / sk-…"
+      style="width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:12px;font-size:13.5px;font-family:inherit;letter-spacing:0;-webkit-text-security:none;text-align:left;background:#fff;color:var(--ink)"
+      onkeydown="if(event.key==='Enter')aiKeySave();if(event.key==='Escape')aiKeyClose()">
+    <div id="aiKeyMsg" style="min-height:18px;font-size:12.5px;font-weight:600;margin:9px 2px 2px;line-height:1.45"></div>
+    <div class="pw-btnrow">
+      <button class="pw-btn alt" type="button" onclick="aiKeyClose()">Đóng</button>
+      <button class="pw-btn" type="button" onclick="aiKeySave()">Lưu &amp; bật AI</button>
+    </div>
+    <div id="aiKeyCur" style="text-align:center;margin-top:13px;font-size:12px;color:var(--muted)"></div>
+  </div>
+</div>
+
 <script src="assistant.js"></script>
 <script>
 const PW = '1234';
@@ -498,11 +517,11 @@ function gsRun() {
   GS_LAST_HITS = hits;
 
   let claudeBar = '';
-  if (aiHtml || localStorage.getItem('qc_ai_key')) {
+  if (aiHtml || (window.QCAssistant && QCAssistant.hasAI && QCAssistant.hasAI())) {
     claudeBar = '<div style="display:flex;gap:8px;margin:-6px 0 14px;align-items:center">' +
       '<button onclick="gsAskClaude()" style="padding:10px 16px;border:0;border-radius:10px;background:linear-gradient(135deg,#7c3aed,#5f4ab7);color:#fff;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;box-shadow:0 4px 14px rgba(124,58,237,.3)">✨ Hỏi thêm AI</button>' +
       '<button onclick="gsAiKey()" title="Cấu hình API key" style="padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;cursor:pointer;font-size:13px">⚙</button>' +
-      '<span style="font-size:11px;color:var(--muted)">' + (function(){ const k = localStorage.getItem('qc_ai_key'); if (!k) return 'cần API key (bấm ⚙) — Gemini MIỄN PHÍ'; const t = window.QCAssistant && QCAssistant.aiProvider(k); return t ? 'đang dùng ' + t : 'API key đã lưu'; })() + '</span></div>' +
+      '<span style="font-size:11px;color:var(--muted)">' + (function(){ const k = localStorage.getItem('qc_ai_key'); if (k){ const t = window.QCAssistant && QCAssistant.aiProvider(k); return t ? 'đang dùng ' + t : 'API key đã lưu'; } if (window.QCAssistant && QCAssistant.PROXY_URL) return 'đang dùng AI chung (proxy) — không cần key'; return 'cần API key (bấm ⚙) — Gemini MIỄN PHÍ'; })() + '</span></div>' +
       '<div id="aiOut"></div>';
   }
 
@@ -517,24 +536,52 @@ function gsRun() {
   box.innerHTML = aiHtml + claudeBar + listHtml;
 }
 
-function gsAiKey() {
-  const cur = localStorage.getItem('qc_ai_key') || '';
-  const k = prompt(
-    'Dán API key AI — app TỰ NHẬN DIỆN hãng theo đầu key:\n' +
-    '• AIza...  → Gemini (Google) — MIỄN PHÍ, lấy tại aistudio.google.com/apikey\n' +
-    '• sk-ant-... → Claude (Anthropic) — console.anthropic.com\n' +
-    '• sk-...   → ChatGPT (OpenAI) — platform.openai.com\n' +
-    'Key lưu CHỈ trên máy này. Để trống và OK để xóa key.', cur);
-  if (k === null) return;
-  if (k.trim()) {
-    const ten = (window.QCAssistant && QCAssistant.aiProvider(k.trim())) || null;
-    if (!ten) { alert('⚠ Key không đúng định dạng. Key hợp lệ bắt đầu bằng AIza / sk-ant- / sk-'); return; }
-    localStorage.setItem('qc_ai_key', k.trim());
-    alert('✓ Đã lưu key — dùng ' + ten + '.');
+/* Mở ô dán key dạng cửa sổ trong app (thay prompt — chạy được cả trên điện thoại) */
+function gsAiKey() { aiKeyOpen(); }
+function aiKeyOpen() {
+  const ovl = document.getElementById('aiOvl');
+  const inp = document.getElementById('aiKeyInp');
+  inp.value = localStorage.getItem('qc_ai_key') || '';
+  document.getElementById('aiKeyMsg').textContent = '';
+  aiKeySyncCur();
+  ovl.classList.add('on');
+  setTimeout(() => { inp.focus(); inp.select(); }, 60);
+}
+function aiKeyClose() { document.getElementById('aiOvl').classList.remove('on'); }
+function aiKeySyncCur() {
+  const cur = localStorage.getItem('qc_ai_key');
+  const el = document.getElementById('aiKeyCur');
+  if (cur) {
+    const t = (window.QCAssistant && QCAssistant.aiProvider(cur)) || 'AI';
+    el.innerHTML = '✅ Đang bật: <b>' + t + '</b> &nbsp;·&nbsp; <a href="#" onclick="aiKeyClear();return false" style="color:#aa4322;font-weight:700">Xóa key</a>';
+  } else {
+    el.textContent = 'Máy này chưa có key.';
   }
-  else { localStorage.removeItem('qc_ai_key'); alert('Đã xóa API key.'); }
-  gsKeyBtnSync();
-  gsRun();
+}
+function aiKeySave() {
+  const inp = document.getElementById('aiKeyInp');
+  const msg = document.getElementById('aiKeyMsg');
+  const k = (inp.value || '').trim().replace(/\s+/g, '');
+  if (!k) { msg.style.color = '#aa4322'; msg.textContent = '⚠ Bạn chưa dán key vào ô.'; return; }
+  if (/^https?:\/\//i.test(k)) { msg.style.color = '#aa4322'; msg.textContent = '⚠ Đây là ĐƯỜNG LINK, không phải key. Key bắt đầu bằng AIza… / sk-ant-… / sk-…'; return; }
+  const ten = window.QCAssistant && QCAssistant.aiProvider(k);
+  if (!ten) { msg.style.color = '#aa4322'; msg.textContent = '⚠ Key không đúng định dạng. Phải bắt đầu bằng AIza… (Gemini miễn phí), sk-ant-… (Claude) hoặc sk-… (ChatGPT).'; return; }
+  try {
+    localStorage.setItem('qc_ai_key', k);
+    if (localStorage.getItem('qc_ai_key') !== k) throw new Error('blocked');
+    msg.style.color = '#0e7a4d';
+    msg.textContent = '✓ Đã lưu! AI đã bật (dùng ' + ten + '). Đóng lại rồi gõ câu hỏi để dùng.';
+    aiKeySyncCur(); gsKeyBtnSync(); gsRun();
+  } catch (e) {
+    msg.style.color = '#aa4322';
+    msg.textContent = '⚠ Trình duyệt đang chặn lưu (chế độ ẩn danh?). Hãy mở app ở tab thường, không ẩn danh.';
+  }
+}
+function aiKeyClear() {
+  localStorage.removeItem('qc_ai_key');
+  document.getElementById('aiKeyInp').value = '';
+  const msg = document.getElementById('aiKeyMsg'); msg.style.color = '#64748b'; msg.textContent = 'Đã xóa key khỏi máy này.';
+  aiKeySyncCur(); gsKeyBtnSync(); gsRun();
 }
 function gsKeyBtnSync() {
   const btn = document.getElementById('gsKeyBtn');
@@ -547,17 +594,16 @@ function gsKeyBtnSync() {
 }
 gsKeyBtnSync();
 async function gsAskClaude() {
-  const key = localStorage.getItem('qc_ai_key');
-  if (!key) { gsAiKey(); return; }
+  if (!(window.QCAssistant && QCAssistant.hasAI && QCAssistant.hasAI())) { gsAiKey(); return; }
   const q = document.getElementById('gq').value.trim();
   const out = document.getElementById('aiOut');
   if (!out) return;
   out.innerHTML = '<div style="background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px;font-size:13.5px;color:var(--muted)">⏳ AI đang trả lời...</div>';
   const ctx = GS_LAST_HITS.slice(0, 8).map(h => '- [' + h.m + '] ' + h.t + ' — ' + h.s).join('\n');
   try {
-    const ans = await QCAssistant.askClaude(q, ctx, key);
+    const ans = await QCAssistant.askAI(q, ctx);
     out.innerHTML = '<div style="background:#fff;border:1px solid #dfd6f5;border-left:4px solid #5f4ab7;border-radius:14px;padding:16px 18px;margin-bottom:14px;box-shadow:var(--sh)">' +
-      '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span style="font-size:18px">✨</span><b style="color:#5f4ab7">' + ((window.QCAssistant && QCAssistant.aiProvider(key) || 'AI').split(' ')[0]) + ' trả lời</b>' +
+      '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span style="font-size:18px">✨</span><b style="color:#5f4ab7">' + ((window.QCAssistant && QCAssistant.aiSourceLabel() || 'AI').split(' ')[0]) + ' trả lời</b>' +
       '<span style="margin-left:auto;font-size:10.5px;font-weight:800;background:#efecfa;color:#5f4ab7;padding:3px 8px;border-radius:6px">AI · CẦN KIỂM CHỨNG</span></div>' +
       '<div style="font-size:13.5px;white-space:pre-wrap;line-height:1.65">' + ans.replace(/</g, '&lt;').replace(/\*\*([^*\n]+)\*\*/g, '<b>$1</b>').replace(/^[*-] /gm, '• ') + '</div>' +
       '<div style="font-size:11px;color:#8b97a3;margin-top:10px;border-top:1px solid #eef1f5;padding-top:8px">⚠ Câu trả lời AI có thể sai — đối chiếu số liệu với module tương ứng (có trích dẫn điều khoản đã xác minh) trước khi dùng nghiệm thu.</div></div>';
@@ -570,13 +616,13 @@ const gqEl = document.getElementById('gq');
 gqEl.addEventListener('focus', gsBuild, { once: true });
 
 /* === AI gắn thẳng vào thanh tìm kiếm ===
-   - Ngừng gõ 1.6s + là câu hỏi + có key → AI TỰ trả lời
+   - Ngừng gõ 1.6s + là câu hỏi + có AI (key hoặc proxy) → AI TỰ trả lời
    - Nhấn Enter → hỏi AI ngay lập tức */
 let GS_AI_T = null, GS_AI_LAST = '';
 function gsAiAuto() {
   clearTimeout(GS_AI_T);
   const q = gqEl.value.trim();
-  if (!localStorage.getItem('qc_ai_key') || q.length < 8) return;
+  if (!(window.QCAssistant && QCAssistant.hasAI && QCAssistant.hasAI()) || q.length < 8) return;
   /* Nhận cả câu hỏi từ ngữ đời thường: là câu hỏi QC HOẶC câu ≥3 từ */
   const laCauHoi = window.QCAssistant && QCAssistant.isQuestion && QCAssistant.isQuestion(q);
   const cauDai = q.split(/\s+/).length >= 3 && q.length >= 12;
@@ -594,7 +640,7 @@ gqEl.addEventListener('keydown', e => {
   e.preventDefault();
   clearTimeout(GS_AI_T);
   gsBuild(); gsRun();
-  if (localStorage.getItem('qc_ai_key') && gqEl.value.trim().length >= 4) {
+  if (window.QCAssistant && QCAssistant.hasAI && QCAssistant.hasAI() && gqEl.value.trim().length >= 4) {
     GS_AI_LAST = gqEl.value.trim();
     gsAskClaude();
   }
