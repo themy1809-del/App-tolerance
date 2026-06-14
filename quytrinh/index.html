@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="author" content="Đậu Thế Mỹ">
+<meta name="copyright" content="© 2026 Đậu Thế Mỹ">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0d2547">
+<title>Lưu đồ Sản xuất & QC — DaiDung An Hạ</title>
+<style>
+  :root{--bg:#f4f6fa;--ink:#0f1b2d;--muted:#5b6b80;--line:#dde4ee;--brand:#0c447c;--brand2:#2563eb;
+    --prod:#1f9d57;--prodbg:#e7f6ee;--qc:#e07b1a;--qcbg:#fdeede;--tpi:#64748b;--tpibg:#eef1f5;--rec:#b8860b;--recbg:#fbf3df;
+    --r:12px;--sh:0 1px 2px rgba(16,24,38,.05),0 6px 20px rgba(16,24,38,.07)}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5}
+  .top{color:#fff;padding:max(10px,env(safe-area-inset-top)) 16px 14px;background:linear-gradient(150deg,#0c1830,#0d2547 60%,#0e2a52)}
+  .top .bar{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:10px}
+  .logo{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#e23b2e,#b8231a);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;flex:none}
+  .ttl{font-weight:800;font-size:15px;letter-spacing:-.2px}
+  .sub{font-size:11px;opacity:.7}
+  .home{margin-left:auto;font-size:12px;font-weight:700;color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.25);padding:7px 12px;border-radius:8px}
+  .home:hover{background:rgba(255,255,255,.12)}
+  .wrap{max-width:1180px;margin:0 auto;padding:14px 16px 40px}
+  .legend{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 14px;font-size:11.5px}
+  .lg{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px 11px;font-weight:600}
+  .dot{width:11px;height:11px;border-radius:3px;flex:none}
+  .hint{font-size:12px;color:var(--muted);margin-bottom:10px}
+  .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:var(--r);background:#fff;box-shadow:var(--sh)}
+  .chart{min-width:1080px;padding:6px}
+  .lane{display:grid;grid-template-columns:104px repeat(12,1fr);gap:6px;align-items:stretch}
+  .lane + .lane{margin-top:6px}
+  .lanehdr{display:flex;flex-direction:column;justify-content:center;padding:8px;border-radius:10px;font-weight:800;font-size:11px;color:#fff;text-align:center;line-height:1.25}
+  .l-prod{background:var(--prod)} .l-qc{background:var(--qc)} .l-tpi{background:var(--tpi)} .l-rec{background:var(--rec)}
+  .lanehdr .s{font-size:9px;font-weight:600;opacity:.85;margin-top:2px}
+  .cell{position:relative;border-radius:10px;padding:7px 6px;font-size:10.5px;font-weight:700;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:62px;line-height:1.2}
+  .step{background:var(--prodbg);border:1.5px solid var(--prod);color:#0d5a31;cursor:pointer;text-decoration:none;transition:.15s}
+  .step:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(31,157,87,.22)}
+  .step .no{position:absolute;top:-9px;left:50%;transform:translateX(-50%);width:20px;height:20px;border-radius:50%;background:var(--prod);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 5px rgba(31,157,87,.4)}
+  .step .ic{font-size:16px;margin-bottom:2px} .step .go{font-size:9px;color:var(--prod);opacity:.8;margin-top:3px;font-weight:800}
+  .qc{background:var(--qcbg);border:1.5px solid var(--qc);color:#9a5410;clip-path:polygon(12% 0,88% 0,100% 50%,88% 100%,12% 100%,0 50%)}
+  .tpi{background:var(--tpibg);border:1.5px solid #94a3b8;color:#475569;clip-path:polygon(12% 0,88% 0,100% 50%,88% 100%,12% 100%,0 50%)}
+  .rec{background:var(--recbg);border:1.5px solid #d4a93c;color:#7a5a06}
+  .mk{position:absolute;top:-7px;right:4px;font-size:8px;font-weight:900;background:#d11;color:#fff;padding:1px 5px;border-radius:6px;letter-spacing:.3px}
+  .mk.itp{background:#1d4ed8} .empty{background:transparent;border:none;min-height:62px}
+  .flow{grid-column:span 4;background:linear-gradient(90deg,#eef5ff,#e8f0fb);border:1px dashed #b9cde8;color:#3a5f93;font-weight:700;font-size:11px;border-radius:10px;display:flex;align-items:center;justify-content:center}
+  .note{font-size:11.5px;color:var(--muted);margin-top:14px;border-top:1px solid var(--line);padding-top:10px}
+  .foot{font-size:11px;color:#90a0b3;text-align:center;margin-top:18px}
+</style>
+</head>
+<body>
+<div class="top"><div class="bar">
+  <div class="logo">DD</div>
+  <div><div class="ttl">Lưu đồ Sản xuất & Quản lý chất lượng</div><div class="sub">Nhà máy An Hạ · 2025 · bấm vào bước để mở module QC</div></div>
+  <a class="home" href="../">← Trang chủ</a>
+</div></div>
+
+<div class="wrap">
+  <div class="legend">
+    <span class="lg"><span class="dot" style="background:var(--prod)"></span>Sản xuất</span>
+    <span class="lg"><span class="dot" style="background:var(--qc)"></span>QC nội bộ</span>
+    <span class="lg"><span class="dot" style="background:#94a3b8"></span>Nghiệm thu khách hàng (TPI)</span>
+    <span class="lg"><span class="dot" style="background:#d4a93c"></span>Hồ sơ chất lượng</span>
+    <span class="lg"><span class="mk" style="position:static">SPM</span>điểm dừng 100%</span>
+    <span class="lg"><span class="mk itp" style="position:static">ITP</span>thư mời nghiệm thu</span>
+  </div>
+  <div class="hint">💡 Mỗi ô <b>Sản xuất</b> bấm được → mở thẳng công cụ QC của bước đó. Cuộn ngang để xem đủ 12 bước.</div>
+
+  <div class="scroll"><div class="chart" id="chart"></div></div>
+
+  <div class="note">⚠ Lưu đồ số hóa theo bản gốc của Phòng QC DaiDung (An Hạ 2025). Vị trí điểm dừng SPM / thư mời ITP có thể điều chỉnh theo ITP từng dự án.</div>
+  <div class="foot">Tác giả: Đậu Thế Mỹ · © 2026 · DaiDung QC Suite</div>
+</div>
+
+<script>
+/* Lưu đồ QC An Hạ — dữ liệu theo bản gốc Phòng QC. Tác giả: Đậu Thế Mỹ. */
+const STEPS = [
+  { no:1,  name:'Kiểm soát vật tư trước sơ chế', ic:'📦', mod:'../vattu/',  qc:true,  spm:false, tpi:true,  itp:true,  rec:'BC Vật tư' },
+  { no:2,  name:'Sơ chế (Cắt, Khoan, Chấn, Vát, Mép)', ic:'✂️', mod:'../soche/', qc:true, spm:true, tpi:true, itp:true, rec:'BC Truy xuất' },
+  { no:3,  name:'Ráp thô', ic:'🔧', mod:'../fitup/',  qc:'flow', spm:false, tpi:'flow', itp:false, rec:null },
+  { no:4,  name:'Hàn thô', ic:'🔥', mod:'../han/',    qc:'flow', spm:false, tpi:'flow', itp:false, rec:null },
+  { no:5,  name:'Nắn chỉnh và cưa', ic:'📐', mod:'../hoacong/', qc:'flow', spm:false, tpi:'flow', itp:false, rec:null },
+  { no:6,  name:'Ráp hoàn thiện', ic:'🏗️', mod:'../fitup/', qc:true, spm:true, tpi:'flow', itp:false, rec:'BC Lắp ráp' },
+  { no:7,  name:'Hàn hoàn thiện', ic:'👁', mod:'../han/',  qc:true, spm:false, tpi:'flow', itp:false, rec:'BC Hàn' },
+  { no:8,  name:'Sản phẩm hoàn thiện', ic:'📏', mod:'../qcdim/', qc:true, spm:true, tpi:true, itp:true, rec:'BC DIM · Visual hàn · NDT' },
+  { no:9,  name:'Ráp thử', ic:'🧩', mod:'../rapthu/', qc:true, spm:false, tpi:true, itp:true, rec:'BC Ráp thử' },
+  { no:10, name:'Bắn bi', ic:'⚪', mod:'../son/',     qc:true, spm:false, tpi:true, itp:true, rec:'BC Bắn bi' },
+  { no:11, name:'Sơn / Mạ kẽm', ic:'🎨', mod:'../son/', qc:true, spm:true, tpi:true, itp:true, rec:'BC Mạ kẽm' },
+  { no:12, name:'Đóng gói và xuất hàng', ic:'🚛', mod:'../packing/', qc:true, spm:false, tpi:true, itp:true, rec:'BC Đóng gói xuất hàng' }
+];
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function laneHdr(cls, t, s){ return `<div class="lanehdr ${cls}">${t}${s?`<span class="s">${s}</span>`:''}</div>`; }
+
+function build(){
+  let h = '';
+  // Lane 1 — Sản xuất
+  h += `<div class="lane">` + laneHdr('l-prod','SẢN XUẤT','12 bước') +
+    STEPS.map(s => `<a class="cell step" href="${s.mod}" title="Mở module: ${esc(s.name)}">
+      <span class="no">${s.no}</span><span class="ic">${s.ic}</span>${esc(s.name)}<span class="go">MỞ ▸</span></a>`).join('') + `</div>`;
+  // Lane 2 — QC nội bộ
+  h += `<div class="lane">` + laneHdr('l-qc','QC NỘI BỘ','kiểm tra / nghiệm thu') + cells('qc') + `</div>`;
+  // Lane 3 — Nghiệm thu khách hàng
+  h += `<div class="lane">` + laneHdr('l-tpi','NGHIỆM THU KH','TPI theo ITP') + cells('tpi') + `</div>`;
+  // Lane 4 — Hồ sơ
+  h += `<div class="lane">` + laneHdr('l-rec','HỒ SƠ','báo cáo chất lượng') +
+    STEPS.map(s => s.rec ? `<div class="cell rec">📄 ${esc(s.rec)}</div>` : `<div class="empty"></div>`).join('') + `</div>`;
+  document.getElementById('chart').innerHTML = h;
+}
+function cells(kind){
+  let out = '', i = 0;
+  while (i < STEPS.length){
+    const s = STEPS[i];
+    const v = kind === 'qc' ? s.qc : s.tpi;
+    if (v === 'flow'){
+      let j = i; while (j < STEPS.length && (kind==='qc'?STEPS[j].qc:STEPS[j].tpi) === 'flow') j++;
+      out += `<div class="flow" style="grid-column:span ${j-i}">${kind==='qc'?'Kiểm soát quá trình':'Kiểm tra quá trình'} →</div>`;
+      i = j; continue;
+    }
+    if (v === true){
+      const cls = kind === 'qc' ? 'qc' : 'tpi';
+      const label = kind === 'qc' ? 'QC KIỂM TRA' : 'TPI NGHIỆM THU';
+      const mk = kind === 'qc' ? (s.spm ? `<span class="mk">SPM 100%</span>` : '') : (s.itp ? `<span class="mk itp">ITP</span>` : '');
+      out += `<div class="cell ${cls}">${mk}${label}</div>`;
+    } else {
+      out += `<div class="empty"></div>`;
+    }
+    i++;
+  }
+  return out;
+}
+build();
+</script>
+<script src="../assistant.js"></script>
+<script src="../ai-fab.js"></script>
+</body>
+</html>
