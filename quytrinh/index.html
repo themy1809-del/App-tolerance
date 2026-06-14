@@ -28,6 +28,10 @@
   .intro p{margin:0 0 6px;font-size:13.5px;color:#1c3a63;line-height:1.6}
   .intro ol{margin:6px 0 0;padding-left:22px} .intro li{font-size:13.5px;color:#1c3a63;margin-bottom:4px;line-height:1.5}
   .cta{margin-top:9px;background:#dbeafe;border-radius:9px;padding:9px 11px;font-size:13.5px;color:#0c447c;font-weight:600}
+  .banner-wrap{margin:0 0 16px}
+  .banner-ttl{font-size:13.5px;font-weight:800;color:var(--brand);margin:0 0 7px}
+  .banner{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:12px;background:#fff;padding:8px;box-shadow:var(--sh)}
+  .banner svg{min-width:740px;width:100%;height:auto;display:block}
   .secttl{font-size:14px;font-weight:800;color:var(--brand);margin:20px 0 9px;display:flex;align-items:center;gap:7px}
   details{margin-bottom:6px}
   summary{cursor:pointer;list-style:none;font-size:13.5px;font-weight:700;color:var(--brand);background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 13px;box-shadow:var(--sh)}
@@ -86,6 +90,10 @@
   .tag.spm{background:#fde7e7;color:#b42318;border-color:#f6c9c4} .tag.itp{background:#e7eefb;color:#1d4ed8;border-color:#c9d8f6}
   .openmod{display:inline-flex;align-items:center;justify-content:center;gap:8px;margin-top:14px;background:linear-gradient(135deg,#1f9d57,#0d7a40);color:#fff;text-decoration:none;font-weight:800;font-size:13.5px;padding:11px 16px;border-radius:11px}
   .openmod:hover{filter:brightness(1.06)}
+  .viz{margin:2px 0 14px;text-align:center}
+  .viz .vizimg{max-width:100%;max-height:230px;border-radius:10px;border:1px solid var(--line)}
+  .viz .vizdg{border:1px solid var(--line);border-radius:10px;background:#fff;padding:8px;max-width:360px;margin:0 auto}
+  .viz .vizcap{font-size:11px;color:var(--muted);margin-top:5px;font-style:italic}
   .note{font-size:11.5px;color:var(--muted);margin-top:18px;border-top:1px solid var(--line);padding-top:10px}
   .foot{font-size:11px;color:#90a0b3;text-align:center;margin-top:16px}
 </style>
@@ -111,6 +119,8 @@
     <div class="cta">👉 <b>Muốn hiểu một bước:</b> bấm vào ô bước (hàng xanh) — trang sẽ nhảy xuống & mở bài phân tích; hoặc cuộn xuống mục “Chi tiết từng công đoạn” đọc lần lượt.</div>
   </div>
 
+  <div class="banner-wrap"><div class="banner-ttl">🏭 Dây chuyền sản xuất — Vật tư → Đóng gói (12 công đoạn)</div><div class="banner" id="qtBanner"></div></div>
+
   <div class="legend">
     <span class="lg"><span class="dot" style="background:var(--prod)"></span>Sản xuất</span>
     <span class="lg"><span class="dot" style="background:var(--qc)"></span>QC nội bộ</span>
@@ -132,6 +142,7 @@
   <div class="foot">Tác giả: Đậu Thế Mỹ · © 2026 · DaiDung QC Suite</div>
 </div>
 
+<script src="diagrams.js"></script>
 <script>
 /* Lưu đồ QC An Hạ + phân tích sâu từng công đoạn. Tác giả: Đậu Thế Mỹ. */
 const STEPS = [
@@ -355,6 +366,7 @@ function detailHTML(s){
     `<span class="tag">${s.tpi===true?'TPI nghiệm thu':'TPI giám sát'}</span></div>`;
   const sec = (t,html,cls) => `<div class="sec ${cls||''}"><h4>${t}</h4>${html}</div>`;
   return [
+    `<div class="viz"><img class="vizimg" src="images/buoc-${s.no}.jpg" alt="Ảnh thực tế bước ${s.no}" onerror="this.style.display='none';var d=this.parentNode.querySelector('.vizdg');if(d)d.style.display='block'"><div class="vizdg" style="display:none">${(window.QT_DIAGRAMS&&QT_DIAGRAMS[s.no])||''}</div><div class="vizcap">Sơ đồ minh hoạ cách kiểm — thay bằng ảnh thật: images/buoc-${s.no}.jpg</div></div>`,
     sec('🎯 Mục đích', `<p>${esc(s.muc_dich)}</p>`),
     sec('💡 Vì sao quan trọng', `<p>${esc(s.vi_sao)}</p>`, 'callout why'),
     sec('⚠️ Lưu ý / Rủi ro', liList(s.luu_y)),
@@ -395,6 +407,7 @@ function goStep(no){
 }
 build();
 buildAcc();
+try{ var _bn = document.getElementById('qtBanner'); if (_bn && window.QT_BANNER) _bn.innerHTML = QT_BANNER; }catch(e){}
 /* Trên điện thoại: thu gọn sơ đồ tổng quan cho gọn, ưu tiên danh sách dễ đọc (máy tính vẫn mở) */
 try{ if (window.matchMedia && window.matchMedia('(max-width:700px)').matches){ var _dt=document.querySelector('details'); if(_dt) _dt.removeAttribute('open'); } }catch(e){}
 </script>
