@@ -391,7 +391,7 @@
     /* ▼▼▼ DÁN URL CLOUDFLARE WORKER VÀO ĐÂY để AI chạy cho MỌI NGƯỜI (không cần key riêng) ▼▼▼
        Ví dụ: 'https://qc-ai.tentaikhoan.workers.dev'  ·  để trống '' nếu chưa dùng proxy.
        Hướng dẫn dựng: xem HUONG_DAN_PROXY_AI.md */
-    PROXY_URL: '',
+    PROXY_URL: 'https://qc-ai.themy1809.workers.dev',
     /* Có AI dùng được không? (key riêng trên máy NÀY, hoặc proxy chung cho mọi người) */
     hasAI() { try { return !!(localStorage.getItem('qc_ai_key') || (this.PROXY_URL && this.PROXY_URL.length > 8)); } catch (e) { return !!(this.PROXY_URL && this.PROXY_URL.length > 8); } },
     /* Nhãn nguồn AI để hiển thị */
