@@ -34,10 +34,11 @@
   .l-prod{background:var(--prod)} .l-qc{background:var(--qc)} .l-tpi{background:var(--tpi)} .l-rec{background:var(--rec)}
   .lanehdr .s{font-size:9px;font-weight:600;opacity:.85;margin-top:2px}
   .cell{position:relative;border-radius:10px;padding:7px 6px;font-size:10.5px;font-weight:700;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:62px;line-height:1.2}
-  .step{background:var(--prodbg);border:1.5px solid var(--prod);color:#0d5a31;cursor:pointer;text-decoration:none;transition:.15s}
+  .step{background:var(--prodbg);border:1.5px solid var(--prod);color:#0d5a31;cursor:pointer;transition:.15s}
   .step:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(31,157,87,.22)}
+  .step:focus-visible{outline:3px solid #34d07f;outline-offset:1px}
   .step .no{position:absolute;top:-9px;left:50%;transform:translateX(-50%);width:20px;height:20px;border-radius:50%;background:var(--prod);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 5px rgba(31,157,87,.4)}
-  .step .ic{font-size:16px;margin-bottom:2px} .step .go{font-size:9px;color:var(--prod);opacity:.8;margin-top:3px;font-weight:800}
+  .step .ic{font-size:16px;margin-bottom:2px} .step .go{font-size:9px;color:var(--prod);opacity:.85;margin-top:3px;font-weight:800}
   .qc{background:var(--qcbg);border:1.5px solid var(--qc);color:#9a5410;clip-path:polygon(12% 0,88% 0,100% 50%,88% 100%,12% 100%,0 50%)}
   .tpi{background:var(--tpibg);border:1.5px solid #94a3b8;color:#475569;clip-path:polygon(12% 0,88% 0,100% 50%,88% 100%,12% 100%,0 50%)}
   .rec{background:var(--recbg);border:1.5px solid #d4a93c;color:#7a5a06}
@@ -46,12 +47,33 @@
   .flow{grid-column:span 4;background:linear-gradient(90deg,#eef5ff,#e8f0fb);border:1px dashed #b9cde8;color:#3a5f93;font-weight:700;font-size:11px;border-radius:10px;display:flex;align-items:center;justify-content:center}
   .note{font-size:11.5px;color:var(--muted);margin-top:14px;border-top:1px solid var(--line);padding-top:10px}
   .foot{font-size:11px;color:#90a0b3;text-align:center;margin-top:18px}
+  /* ===== modal chi tiết công đoạn ===== */
+  .ovl{position:fixed;inset:0;z-index:50;background:rgba(8,18,42,.55);backdrop-filter:blur(4px);display:none;align-items:flex-end;justify-content:center}
+  .ovl.on{display:flex}
+  @media(min-width:680px){.ovl{align-items:center}}
+  .modal{background:#fff;width:100%;max-width:720px;max-height:90vh;overflow-y:auto;border-radius:18px 18px 0 0;box-shadow:0 -8px 40px rgba(8,18,42,.3)}
+  @media(min-width:680px){.modal{border-radius:18px}}
+  .mhd{position:sticky;top:0;background:linear-gradient(150deg,#0c1830,#0d2547);color:#fff;padding:16px 18px;display:flex;align-items:center;gap:10px;z-index:1}
+  .mhd .stepno{width:34px;height:34px;border-radius:50%;background:var(--prod);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;flex:none}
+  .mhd .mt{font-weight:800;font-size:15.5px;line-height:1.25} .mhd .ms{font-size:11px;opacity:.7;margin-top:1px}
+  .mhd .x{margin-left:auto;background:rgba(255,255,255,.15);border:0;color:#fff;width:32px;height:32px;border-radius:9px;font-size:18px;cursor:pointer;flex:none}
+  .mhd .x:hover{background:rgba(255,255,255,.28)}
+  .mbody{padding:14px 18px 20px}
+  .sec{margin-bottom:13px}
+  .sec h4{margin:0 0 5px;font-size:12px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;color:var(--brand);display:flex;align-items:center;gap:6px}
+  .sec p{margin:0;font-size:13.5px;color:#1f2d40;line-height:1.55}
+  .sec ul{margin:0;padding-left:20px} .sec li{font-size:13.5px;color:#1f2d40;line-height:1.5;margin-bottom:3px}
+  .tags{display:flex;flex-wrap:wrap;gap:6px}
+  .tag{font-size:11.5px;font-weight:700;background:#eef3fb;color:#27508a;border:1px solid #d7e3f3;border-radius:7px;padding:4px 9px}
+  .tag.spm{background:#fde7e7;color:#b42318;border-color:#f6c9c4} .tag.itp{background:#e7eefb;color:#1d4ed8;border-color:#c9d8f6}
+  .openmod{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:6px;background:linear-gradient(135deg,#1f9d57,#0d7a40);color:#fff;text-decoration:none;font-weight:800;font-size:14px;padding:12px;border-radius:11px}
+  .openmod:hover{filter:brightness(1.06)}
 </style>
 </head>
 <body>
 <div class="top"><div class="bar">
   <div class="logo">DD</div>
-  <div><div class="ttl">Lưu đồ Sản xuất & Quản lý chất lượng</div><div class="sub">Nhà máy An Hạ · 2025 · bấm vào bước để mở module QC</div></div>
+  <div><div class="ttl">Lưu đồ Sản xuất & Quản lý chất lượng</div><div class="sub">Nhà máy An Hạ · 2025 · bấm vào bước để xem biện pháp QC chi tiết</div></div>
   <a class="home" href="../">← Trang chủ</a>
 </div></div>
 
@@ -59,76 +81,178 @@
   <div class="legend">
     <span class="lg"><span class="dot" style="background:var(--prod)"></span>Sản xuất</span>
     <span class="lg"><span class="dot" style="background:var(--qc)"></span>QC nội bộ</span>
-    <span class="lg"><span class="dot" style="background:#94a3b8"></span>Nghiệm thu khách hàng (TPI)</span>
+    <span class="lg"><span class="dot" style="background:#94a3b8"></span>Nghiệm thu KH (TPI)</span>
     <span class="lg"><span class="dot" style="background:#d4a93c"></span>Hồ sơ chất lượng</span>
     <span class="lg"><span class="mk" style="position:static">SPM</span>điểm dừng 100%</span>
     <span class="lg"><span class="mk itp" style="position:static">ITP</span>thư mời nghiệm thu</span>
   </div>
-  <div class="hint">💡 Mỗi ô <b>Sản xuất</b> bấm được → mở thẳng công cụ QC của bước đó. Cuộn ngang để xem đủ 12 bước.</div>
+  <div class="hint">💡 Bấm vào ô <b>Sản xuất</b> để xem <b>biện pháp QC chi tiết</b> của công đoạn (mục đích, lưu ý, biện pháp, chuẩn bị, tiêu chuẩn, tiêu chí, điểm dừng, hồ sơ) — có nút mở module. Cuộn ngang để xem đủ 12 bước.</div>
 
   <div class="scroll"><div class="chart" id="chart"></div></div>
 
-  <div class="note">⚠ Lưu đồ số hóa theo bản gốc của Phòng QC DaiDung (An Hạ 2025). Vị trí điểm dừng SPM / thư mời ITP có thể điều chỉnh theo ITP từng dự án.</div>
+  <div class="note">⚠ Lưu đồ + biện pháp số hóa theo bản gốc Phòng QC DaiDung (An Hạ 2025). Giá trị dung sai/tiêu chí cụ thể: tra module trong app (có trích dẫn điều khoản) hoặc bản gốc tiêu chuẩn + spec dự án. Vị trí SPM/ITP điều chỉnh theo ITP từng dự án.</div>
   <div class="foot">Tác giả: Đậu Thế Mỹ · © 2026 · DaiDung QC Suite</div>
 </div>
 
-<script>
-/* Lưu đồ QC An Hạ — dữ liệu theo bản gốc Phòng QC. Tác giả: Đậu Thế Mỹ. */
-const STEPS = [
-  { no:1,  name:'Kiểm soát vật tư trước sơ chế', ic:'📦', mod:'../vattu/',  qc:true,  spm:false, tpi:true,  itp:true,  rec:'BC Vật tư' },
-  { no:2,  name:'Sơ chế (Cắt, Khoan, Chấn, Vát, Mép)', ic:'✂️', mod:'../soche/', qc:true, spm:true, tpi:true, itp:true, rec:'BC Truy xuất' },
-  { no:3,  name:'Ráp thô', ic:'🔧', mod:'../fitup/',  qc:'flow', spm:false, tpi:'flow', itp:false, rec:null },
-  { no:4,  name:'Hàn thô', ic:'🔥', mod:'../han/',    qc:'flow', spm:false, tpi:'flow', itp:false, rec:null },
-  { no:5,  name:'Nắn chỉnh và cưa', ic:'📐', mod:'../hoacong/', qc:'flow', spm:false, tpi:'flow', itp:false, rec:null },
-  { no:6,  name:'Ráp hoàn thiện', ic:'🏗️', mod:'../fitup/', qc:true, spm:true, tpi:'flow', itp:false, rec:'BC Lắp ráp' },
-  { no:7,  name:'Hàn hoàn thiện', ic:'👁', mod:'../han/',  qc:true, spm:false, tpi:'flow', itp:false, rec:'BC Hàn' },
-  { no:8,  name:'Sản phẩm hoàn thiện', ic:'📏', mod:'../qcdim/', qc:true, spm:true, tpi:true, itp:true, rec:'BC DIM · Visual hàn · NDT' },
-  { no:9,  name:'Ráp thử', ic:'🧩', mod:'../rapthu/', qc:true, spm:false, tpi:true, itp:true, rec:'BC Ráp thử' },
-  { no:10, name:'Bắn bi', ic:'⚪', mod:'../son/',     qc:true, spm:false, tpi:true, itp:true, rec:'BC Bắn bi' },
-  { no:11, name:'Sơn / Mạ kẽm', ic:'🎨', mod:'../son/', qc:true, spm:true, tpi:true, itp:true, rec:'BC Mạ kẽm' },
-  { no:12, name:'Đóng gói và xuất hàng', ic:'🚛', mod:'../packing/', qc:true, spm:false, tpi:true, itp:true, rec:'BC Đóng gói xuất hàng' }
-];
-const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+<div class="ovl" id="ovl" onclick="if(event.target===this)closeDetail()">
+  <div class="modal" id="modal" role="dialog" aria-modal="true"></div>
+</div>
 
-function laneHdr(cls, t, s){ return `<div class="lanehdr ${cls}">${t}${s?`<span class="s">${s}</span>`:''}</div>`; }
+<script>
+/* Lưu đồ QC An Hạ + phân tích từng công đoạn. Tác giả: Đậu Thế Mỹ. */
+const STEPS = [
+  { no:1, name:'Kiểm soát vật tư trước sơ chế', ic:'📦', mod:'../vattu/', modName:'QC Vật tư', qc:true, spm:false, tpi:true, itp:true, rec:'BC Vật tư',
+    muc_dich:'Bảo đảm đúng vật liệu (mác thép, kích thước, chứng chỉ) và truy xuất được trước khi đưa vào sản xuất.',
+    luu_y:['Nhầm mác thép; thiếu/sai chứng chỉ MTC (EN 10204 loại 3.1/3.2).','Chiều dày âm vượt dung sai (EN 10029); sai kích thước/độ phẳng tấm.','Khuyết tật bề mặt, gỉ sét (EN 10163).','Mất dấu truy xuất (heat number) khi cắt phôi.'],
+    bien_phap:['Đối chiếu MTC với mác thép & đơn hàng; lưu bản sao MTC.','Kiểm dấu nhận biết (số mẻ/heat no.) trên vật tư.','Đo chiều dày, kích thước, độ phẳng; kiểm bề mặt.','Chuyển (sang dấu) mã truy xuất lên phôi TRƯỚC khi cắt.'],
+    chuan_bi:'Thước, thước kẹp/máy đo dày siêu âm, bảng mác thép; khu lưu kho có nhận biết; biểu mẫu nhận vật tư.',
+    tieu_chuan:'EN 10025, EN 10204, EN 10029, EN 10163; ISO 13920.',
+    tieu_chi:'MTC hợp lệ & khớp mác thép; chiều dày & kích thước trong dung sai; không khuyết tật vượt mức.',
+    ho_so:'BC Vật tư; BC Truy xuất; bản sao MTC.' },
+  { no:2, name:'Sơ chế (Cắt, Khoan, Chấn, Vát, Mép)', ic:'✂️', mod:'../soche/', modName:'QC Sơ chế', qc:true, spm:true, tpi:true, itp:true, rec:'BC Truy xuất',
+    muc_dich:'Tạo phôi đúng kích thước, đúng mép vát & lỗ theo bản vẽ; giữ truy xuất sau cắt.',
+    luu_y:['Chất lượng mép cắt nhiệt (độ nhám Rz, độ vuông) chưa đạt cấp theo EXC.','Sai kích thước cắt; vát mép sai góc so với WPS.','Lỗ sai vị trí/đường kính/ovan (EN 1090-2 Bảng 11).','Biến dạng do nhiệt; mất mã truy xuất.'],
+    bien_phap:['Kiểm chất lượng mép cắt theo cấp (ISO 9013) phù hợp EXC.','Đo kích thước phôi bằng dưỡng/thước.','Kiểm vát mép theo WPS/ISO 9692; kiểm lỗ (vị trí, đường kính).','Chuyển mã truy xuất ngay sau khi cắt rời.'],
+    chuan_bi:'Dưỡng cắt/khoan, thước, dưỡng vát, calip lỗ, mẫu so độ nhám; chương trình NC; phiếu sơ chế.',
+    tieu_chuan:'EN 1090-2 §6.4 & Bảng 11; ISO 9013; ISO 9692; ISO 13920.',
+    tieu_chi:'Mép cắt đạt cấp theo EXC; kích thước & lỗ trong dung sai.',
+    ho_so:'BC Truy xuất; phiếu kiểm sơ chế.' },
+  { no:3, name:'Ráp thô', ic:'🔧', mod:'../fitup/', modName:'QC Fit-up', qc:'flow', spm:false, tpi:'flow', itp:false, rec:null,
+    muc_dich:'Gá định vị các cấu kiện đúng hình học trước khi hàn.',
+    luu_y:['Khe hở chân mối (root gap) & lệch mép (misalignment) vượt giới hạn.','Góc/độ vuông cụm gá sai; biến dạng do gá cứng.','Hàn đính (tack) không đúng WPS / thợ chưa chứng chỉ.'],
+    bien_phap:['Kiểm fit-up theo AWS D1.1 §5.21/§7.21 & EN 1090-2 (root gap, misalignment).','Đo kích thước tổng thể cụm gá.','Hàn đính bằng WPS & thợ hàn có chứng chỉ.'],
+    chuan_bi:'Dưỡng gá/jig, thước góc, thước lá đo khe hở, bản vẽ shop.',
+    tieu_chuan:'AWS D1.1; EN 1090-2; ISO 13920.',
+    tieu_chi:'Khe hở/lệch mép trong dung sai; hàn đính đạt.',
+    ho_so:'Phiếu fit-up (gộp vào BC Lắp ráp).' },
+  { no:4, name:'Hàn thô', ic:'🔥', mod:'../han/', modName:'QC Hàn', qc:'flow', spm:false, tpi:'flow', itp:false, rec:null,
+    muc_dich:'Hàn các liên kết chính đúng quy trình hàn (WPS).',
+    luu_y:['WPS/WPQR không phù hợp (EN ISO 15614); thợ hàn hết hạn/sai phạm vi (EN ISO 9606).','Gia nhiệt trước & nhiệt độ giữa lớp không kiểm soát.','Vật liệu hàn sai/ẩm (chưa sấy); môi trường xấu; biến dạng.'],
+    bien_phap:['Kiểm WPS đang dùng & chứng chỉ thợ trước khi hàn.','Kiểm preheat/interpass bằng nhiệt kế/phấn nhiệt.','Kiểm chủng loại & bảo quản vật liệu hàn (tủ sấy).','Ngoại quan sơ bộ ngay trong quá trình.'],
+    chuan_bi:'WPS/WPQR; máy hàn cài đúng thông số; nhiệt kế tiếp xúc/phấn chỉ nhiệt; tủ sấy que; danh sách thợ còn hạn.',
+    tieu_chuan:'EN ISO 15609/15614; EN ISO 9606; ISO 5817.',
+    tieu_chi:'Thông số theo WPS; ngoại quan đạt.',
+    ho_so:'Nhật ký hàn (BC Hàn).' },
+  { no:5, name:'Nắn chỉnh và cưa', ic:'📐', mod:'../hoacong/', modName:'QC Hỏa công', qc:'flow', spm:false, tpi:'flow', itp:false, rec:null,
+    muc_dich:'Nắn phẳng/thẳng biến dạng sau hàn & cắt kích thước cuối.',
+    luu_y:['Nhiệt độ nắn hỏa công vượt giới hạn → thay đổi cơ tính (đặc biệt thép tôi-ram, TMCP).','Làm nguội sai cách (tránh tôi nước với thép nhạy).','Sai kích thước cưa cuối; độ thẳng/phẳng chưa đạt (ISO 13920).'],
+    bien_phap:['Kiểm soát nhiệt độ nắn bằng nhiệt kế/phấn chỉ nhiệt theo giới hạn quy định.','Áp dụng quy trình nắn & làm nguội đúng.','Đo độ thẳng/phẳng & kích thước cưa sau nắn.'],
+    chuan_bi:'Thiết bị nắn (đốt/ép), đồng hồ/phấn chỉ nhiệt, thước/dây căng, quy trình nắn.',
+    tieu_chuan:'EN 1090-2 (nắn nhiệt); ISO 13920.',
+    tieu_chi:'Nhiệt độ trong giới hạn; độ thẳng/phẳng & kích thước đạt.',
+    ho_so:'Phiếu nắn/kiểm soát nhiệt.' },
+  { no:6, name:'Ráp hoàn thiện', ic:'🏗️', mod:'../fitup/', modName:'QC Fit-up', qc:true, spm:true, tpi:'flow', itp:false, rec:'BC Lắp ráp',
+    muc_dich:'Lắp đủ chi tiết (sườn, bản mã, gối, lỗ liên kết) đúng vị trí & kích thước tổng thể.',
+    luu_y:['Sai vị trí chi tiết phụ; sai kích thước tổng thể, độ vuông.','Sai vị trí/đường kính lỗ liên kết.','Vượt dung sai chế tạo (EN 1090-2 Annex B/D).'],
+    bien_phap:['Kiểm dimensional fit-up đầy đủ, đối chiếu bản vẽ.','Kiểm vị trí & nhóm lỗ liên kết.','Xác nhận trước khi sang hàn hoàn thiện.'],
+    chuan_bi:'Bản vẽ shop, thước/máy toàn đạc (cấu kiện lớn), dưỡng lỗ.',
+    tieu_chuan:'EN 1090-2 Annex B/D; ISO 13920.',
+    tieu_chi:'Trong dung sai chế tạo.',
+    ho_so:'BC Lắp ráp.' },
+  { no:7, name:'Hàn hoàn thiện', ic:'👁', mod:'../han/', modName:'QC Hàn', qc:true, spm:false, tpi:'flow', itp:false, rec:'BC Hàn',
+    muc_dich:'Hoàn tất toàn bộ mối hàn đạt cấp chất lượng theo EXC.',
+    luu_y:['Mối hàn chưa hoàn tất theo WPS.','Tỷ lệ & phương pháp NDT chưa đúng EXC (EN 1090-2 Bảng 24).','Cấp chấp nhận khuyết tật (ISO 5817 B/C/D) áp sai EXC.','Sửa lỗi hàn không theo quy trình.'],
+    bien_phap:['Ngoại quan (VT) 100% theo ISO 17637.','Lập kế hoạch NDT theo EXC; UT/RT/MT/PT bởi nhân sự chứng chỉ (ISO 9712).','Đánh giá theo ISO 5817 đúng cấp EXC.','Xử lý không phù hợp bằng NCR + quy trình sửa.'],
+    chuan_bi:'Dụng cụ VT (thước hàn, đèn, kính lúp); thiết bị NDT hiệu chuẩn & nhân sự cert; bảng tiêu chí theo EXC.',
+    tieu_chuan:'ISO 5817; ISO 17637; EN 1090-2 §12 & Bảng 24; ISO 17640/17638/3452; ISO 10675/23278.',
+    tieu_chi:'Cấp chất lượng mối hàn đạt theo EXC; NDT đạt.',
+    ho_so:'BC Hàn; BC Visual hàn; BC NDT.' },
+  { no:8, name:'Sản phẩm hoàn thiện', ic:'📏', mod:'../qcdim/', modName:'QC Dim', qc:true, spm:true, tpi:true, itp:true, rec:'BC DIM · Visual · NDT',
+    muc_dich:'Kiểm tra tổng thể cấu kiện sau hàn (kích thước, hình học, hoàn tất).',
+    luu_y:['Kích thước tổng thể: dài, cao, độ vồng (camber), độ thẳng, độ vuông.','Vượt dung sai chế tạo/lắp dựng (EN 1090-2 §11/Annex D; ISO 13920).','Chưa hoàn tất NDT/mài/làm sạch.'],
+    bien_phap:['Đo dimensional đầy đủ (dùng máy tính trong app), lập biên bản dimensional.','Xác nhận NDT & visual đã hoàn tất và đạt.','Đánh dấu trạng thái nghiệm thu.'],
+    chuan_bi:'Thước/dây căng/máy toàn đạc, biểu mẫu dimensional, bản vẽ.',
+    tieu_chuan:'EN 1090-2 §11 & Annex D; ISO 13920; ISO 5817.',
+    tieu_chi:'Kích thước trong dung sai; NDT/visual đạt.',
+    ho_so:'BC DIM; BC Visual hàn; BC NDT.' },
+  { no:9, name:'Ráp thử', ic:'🧩', mod:'../rapthu/', modName:'QC Ráp thử', qc:true, spm:false, tpi:true, itp:true, rec:'BC Ráp thử',
+    muc_dich:'Lắp thử (trial assembly) kiểm khớp nối, lỗ bu lông & kích thước cụm lắp.',
+    luu_y:['Lỗ không đối tiếp (không xỏ được bu lông); thiếu match-mark.','Khe hở mối nối lớn; kích thước cụm lắp sai.','Lưu ý: ráp thử chỉ xỏ kiểm — chưa siết đủ lực căng.'],
+    bien_phap:['Xỏ bu lông kiểm thông lỗ toàn mối nối.','Đánh dấu match-mark để lắp dựng đúng ngoài công trường.','Đo kích thước cụm lắp, lập biên bản.'],
+    chuan_bi:'Bu lông gá, dưỡng, sơn đánh dấu, thước, bản vẽ lắp.',
+    tieu_chuan:'EN 1090-2; AISC 303 / RCSC; ISO 13920.',
+    tieu_chi:'Lỗ thông & khớp; kích thước cụm lắp đạt.',
+    ho_so:'BC Ráp thử.' },
+  { no:10, name:'Bắn bi (làm sạch bề mặt)', ic:'⚪', mod:'../son/', modName:'QC Coating', qc:true, spm:false, tpi:true, itp:true, rec:'BC Bắn bi',
+    muc_dich:'Làm sạch bề mặt đạt độ sạch & độ nhám yêu cầu trước khi sơn/mạ.',
+    luu_y:['Độ sạch chưa đạt (vd Sa 2½ — ISO 8501-1); còn bụi (ISO 8502-3).','Độ nhám Rz ngoài khoảng yêu cầu (ISO 8503).','Độ ẩm/điểm sương/muối bề mặt không đạt (ISO 8502-4/6).','Để quá lâu sau làm sạch → tái gỉ trước khi sơn.'],
+    bien_phap:['So bề mặt với ảnh chuẩn ISO 8501-1.','Đo độ nhám (băng replica/máy); đo bụi bằng băng dính.','Kiểm nhiệt độ bề mặt, điểm sương trước & trong thi công.','Sơn trong cửa sổ thời gian cho phép.'],
+    chuan_bi:'Ảnh chuẩn ISO 8501-1, máy/băng đo nhám, băng đo bụi, ẩm kế & nhiệt kế bề mặt.',
+    tieu_chuan:'ISO 8501-1; ISO 8502-3; ISO 8503; ISO 8502-4/6.',
+    tieu_chi:'Đạt cấp độ sạch & độ nhám theo yêu cầu hệ sơn.',
+    ho_so:'BC Bắn bi / chuẩn bị bề mặt.' },
+  { no:11, name:'Sơn / Mạ kẽm', ic:'🎨', mod:'../son/', modName:'QC Coating', qc:true, spm:true, tpi:true, itp:true, rec:'BC Mạ kẽm',
+    muc_dich:'Tạo lớp bảo vệ đúng hệ & đúng chiều dày/khối lượng.',
+    luu_y:['SƠN: chiều dày màng khô (DFT) từng lớp & tổng; điều kiện thi công; thời gian khô/overcoat; bám dính; khuyết tật (chảy, bọt, lỗ kim/holiday).','MẠ KẼM: chiều dày/khối lượng lớp mạ; ngoại quan; bám dính; sót/giọt kẽm.'],
+    bien_phap:['Đo DFT theo ISO 19840 (số điểm theo diện tích); kiểm điều kiện môi trường.','Kiểm bám dính (ISO 2409/4624) & dò lỗ kim (holiday).','Mạ: đo chiều dày nhiều điểm theo ISO 1461; kiểm ngoại quan.'],
+    chuan_bi:'Máy đo DFT (đã hiệu chuẩn), máy dò holiday, dụng cụ đo bám dính, ẩm kế.',
+    tieu_chuan:'ISO 12944; ISO 19840 & ISO 2808 (DFT); ISO 2409/4624; ISO 1461 (mạ kẽm).',
+    tieu_chi:'DFT/khối lượng mạ đạt; bám dính đạt; không khuyết tật.',
+    ho_so:'BC Mạ kẽm / BC Sơn (DFT).' },
+  { no:12, name:'Đóng gói và xuất hàng', ic:'🚛', mod:'../packing/', modName:'QC Packing', qc:true, spm:false, tpi:true, itp:true, rec:'BC Đóng gói xuất hàng',
+    muc_dich:'Bảo vệ sản phẩm khi vận chuyển & xuất đúng số lượng, đúng nhận biết.',
+    luu_y:['Tem nhãn/nhận biết sai hoặc thiếu (ISO 780).','Lớp phủ bị trầy do đóng gói thiếu đệm.','Chằng buộc (lashing) không an toàn; khác packing list.','Sai kích thước/khối lượng kiện; thiếu ảnh hiện trạng.'],
+    bien_phap:['Kiểm tem nhãn & marking theo ISO 780.','Kiểm đệm/bảo vệ bề mặt sơn-mạ.','Kiểm chằng buộc & cố định hàng.','Đối chiếu packing list; đo kích thước/cân; chụp ảnh.'],
+    chuan_bi:'Vật tư đóng gói, cân, thước, máy ảnh, packing list, yêu cầu vận chuyển.',
+    tieu_chuan:'ISO 780; yêu cầu hợp đồng/vận chuyển.',
+    tieu_chi:'Đóng gói & chằng buộc đạt; số lượng & nhận biết khớp.',
+    ho_so:'BC Đóng gói xuất hàng; packing list; ảnh.' }
+];
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 function build(){
-  let h = '';
-  // Lane 1 — Sản xuất
-  h += `<div class="lane">` + laneHdr('l-prod','SẢN XUẤT','12 bước') +
-    STEPS.map(s => `<a class="cell step" href="${s.mod}" title="Mở module: ${esc(s.name)}">
-      <span class="no">${s.no}</span><span class="ic">${s.ic}</span>${esc(s.name)}<span class="go">MỞ ▸</span></a>`).join('') + `</div>`;
-  // Lane 2 — QC nội bộ
-  h += `<div class="lane">` + laneHdr('l-qc','QC NỘI BỘ','kiểm tra / nghiệm thu') + cells('qc') + `</div>`;
-  // Lane 3 — Nghiệm thu khách hàng
-  h += `<div class="lane">` + laneHdr('l-tpi','NGHIỆM THU KH','TPI theo ITP') + cells('tpi') + `</div>`;
-  // Lane 4 — Hồ sơ
-  h += `<div class="lane">` + laneHdr('l-rec','HỒ SƠ','báo cáo chất lượng') +
+  let h = `<div class="lane"><div class="lanehdr l-prod">SẢN XUẤT<span class="s">12 bước</span></div>` +
+    STEPS.map(s => `<div class="cell step" role="button" tabindex="0" onclick="openDetail(${s.no})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetail(${s.no})}" title="Xem biện pháp QC: ${esc(s.name)}">
+      <span class="no">${s.no}</span><span class="ic">${s.ic}</span>${esc(s.name)}<span class="go">CHI TIẾT ▸</span></div>`).join('') + `</div>`;
+  h += `<div class="lane"><div class="lanehdr l-qc">QC NỘI BỘ<span class="s">kiểm tra/nghiệm thu</span></div>` + cells('qc') + `</div>`;
+  h += `<div class="lane"><div class="lanehdr l-tpi">NGHIỆM THU KH<span class="s">TPI theo ITP</span></div>` + cells('tpi') + `</div>`;
+  h += `<div class="lane"><div class="lanehdr l-rec">HỒ SƠ<span class="s">báo cáo CL</span></div>` +
     STEPS.map(s => s.rec ? `<div class="cell rec">📄 ${esc(s.rec)}</div>` : `<div class="empty"></div>`).join('') + `</div>`;
   document.getElementById('chart').innerHTML = h;
 }
 function cells(kind){
   let out = '', i = 0;
   while (i < STEPS.length){
-    const s = STEPS[i];
-    const v = kind === 'qc' ? s.qc : s.tpi;
+    const v = kind==='qc' ? STEPS[i].qc : STEPS[i].tpi;
     if (v === 'flow'){
-      let j = i; while (j < STEPS.length && (kind==='qc'?STEPS[j].qc:STEPS[j].tpi) === 'flow') j++;
-      out += `<div class="flow" style="grid-column:span ${j-i}">${kind==='qc'?'Kiểm soát quá trình':'Kiểm tra quá trình'} →</div>`;
-      i = j; continue;
+      let j = i; while (j < STEPS.length && (kind==='qc'?STEPS[j].qc:STEPS[j].tpi)==='flow') j++;
+      out += `<div class="flow" style="grid-column:span ${j-i}">${kind==='qc'?'Kiểm soát quá trình':'Kiểm tra quá trình'} →</div>`; i = j; continue;
     }
     if (v === true){
-      const cls = kind === 'qc' ? 'qc' : 'tpi';
-      const label = kind === 'qc' ? 'QC KIỂM TRA' : 'TPI NGHIỆM THU';
-      const mk = kind === 'qc' ? (s.spm ? `<span class="mk">SPM 100%</span>` : '') : (s.itp ? `<span class="mk itp">ITP</span>` : '');
+      const cls = kind==='qc'?'qc':'tpi', label = kind==='qc'?'QC KIỂM TRA':'TPI NGHIỆM THU';
+      const mk = kind==='qc' ? (STEPS[i].spm?`<span class="mk">SPM 100%</span>`:'') : (STEPS[i].itp?`<span class="mk itp">ITP</span>`:'');
       out += `<div class="cell ${cls}">${mk}${label}</div>`;
-    } else {
-      out += `<div class="empty"></div>`;
-    }
+    } else out += `<div class="empty"></div>`;
     i++;
   }
   return out;
 }
+function liList(arr){ return '<ul>' + arr.map(x => `<li>${esc(x)}</li>`).join('') + '</ul>'; }
+function openDetail(no){
+  const s = STEPS.find(x => x.no === no); if (!s) return;
+  const diem = [ (s.qc===true ? (s.spm?'QC nội bộ 100% (điểm dừng SPM)':'QC nội bộ kiểm tra') : 'QC nội bộ — kiểm soát quá trình'),
+                 (s.tpi===true ? 'TPI/khách nghiệm thu theo ITP' : 'TPI — giám sát quá trình') ];
+  const tags = `<div class="tags"><span class="tag">QC: ${s.qc===true?(s.spm?'Hold 100%':'Kiểm tra'):'Quá trình'}</span>` +
+    (s.spm?`<span class="tag spm">SPM 100%</span>`:'') + (s.itp?`<span class="tag itp">Thư mời ITP</span>`:'') +
+    `<span class="tag">${s.tpi===true?'TPI nghiệm thu':'TPI giám sát'}</span></div>`;
+  document.getElementById('modal').innerHTML =
+    `<div class="mhd"><div class="stepno">${s.no}</div><div><div class="mt">${esc(s.ic)} ${esc(s.name)}</div><div class="ms">Công đoạn ${s.no}/12 · ${esc(s.modName)}</div></div><button class="x" onclick="closeDetail()" aria-label="Đóng">✕</button></div>
+    <div class="mbody">
+      <div class="sec"><h4>🎯 Mục đích</h4><p>${esc(s.muc_dich)}</p></div>
+      <div class="sec"><h4>⚠️ Lưu ý / Rủi ro</h4>${liList(s.luu_y)}</div>
+      <div class="sec"><h4>🛠️ Biện pháp kiểm soát</h4>${liList(s.bien_phap)}</div>
+      <div class="sec"><h4>🧰 Chuẩn bị</h4><p>${esc(s.chuan_bi)}</p></div>
+      <div class="sec"><h4>📚 Tiêu chuẩn áp dụng</h4><p>${esc(s.tieu_chuan)}</p></div>
+      <div class="sec"><h4>✔️ Tiêu chí chấp nhận</h4><p>${esc(s.tieu_chi)}</p></div>
+      <div class="sec"><h4>🛑 Điểm kiểm / dừng</h4>${liList(diem)}${tags}</div>
+      <div class="sec"><h4>🗂️ Hồ sơ</h4><p>${esc(s.ho_so)}</p></div>
+      <a class="openmod" href="${esc(s.mod)}">Mở module ${esc(s.modName)} →</a>
+    </div>`;
+  document.getElementById('ovl').classList.add('on');
+  document.body.style.overflow = 'hidden';
+}
+function closeDetail(){ document.getElementById('ovl').classList.remove('on'); document.body.style.overflow = ''; }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetail(); });
 build();
 </script>
 <script src="../assistant.js"></script>
