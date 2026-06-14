@@ -366,7 +366,7 @@ function detailHTML(s){
     `<span class="tag">${s.tpi===true?'TPI nghiệm thu':'TPI giám sát'}</span></div>`;
   const sec = (t,html,cls) => `<div class="sec ${cls||''}"><h4>${t}</h4>${html}</div>`;
   return [
-    `<div class="viz"><img class="vizimg" src="images/buoc-${s.no}.jpg" alt="Ảnh thực tế bước ${s.no}" onerror="this.style.display='none';var d=this.parentNode.querySelector('.vizdg');if(d)d.style.display='block'"><div class="vizdg" style="display:none">${(window.QT_DIAGRAMS&&QT_DIAGRAMS[s.no])||''}</div><div class="vizcap">Sơ đồ minh hoạ cách kiểm — thay bằng ảnh thật: images/buoc-${s.no}.jpg</div></div>`,
+    `<div class="viz"><img class="vizimg" src="images/buoc-${s.no}.jpg" alt="Ảnh thực tế bước ${s.no}" onerror="this.style.display='none';var d=this.parentNode.querySelector('.vizdg');if(d)d.style.display='block'"><div class="vizdg" style="display:none">${(window.QT_DIAGRAMS&&QT_DIAGRAMS[s.no])||''}</div><div class="vizcap">📷 Ảnh minh hoạ công đoạn ${s.no} — mô phỏng dây chuyền & đồng phục QC DaiDung</div></div>`,
     sec('🎯 Mục đích', `<p>${esc(s.muc_dich)}</p>`),
     sec('💡 Vì sao quan trọng', `<p>${esc(s.vi_sao)}</p>`, 'callout why'),
     sec('⚠️ Lưu ý / Rủi ro', liList(s.luu_y)),
