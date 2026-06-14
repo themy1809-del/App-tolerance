@@ -75,6 +75,11 @@
   .grid{display:grid;grid-template-columns:minmax(0,1fr);gap:9px;align-items:stretch}
   @media(min-width:560px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
   @media(min-width:900px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+  .tabs{display:flex;gap:7px;flex-wrap:wrap;margin:16px 2px 12px}
+  .tab{font-size:12.5px;font-weight:700;padding:8px 15px;border-radius:999px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--muted);font-family:inherit;transition:.15s}
+  .tab:hover{border-color:var(--brand2);color:var(--brand)}
+  .tab.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+  .grp[hidden]{display:none}
 
   @keyframes up{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
   .mcard{position:relative;background:#fff;border:1px solid var(--line);border-radius:var(--r);
@@ -218,6 +223,13 @@
     </a>
   </div>
 
+  <div class="tabs">
+    <button class="tab on" data-t="cd" onclick="var g=this.dataset.t;document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));this.classList.add('on');document.querySelectorAll('.grp').forEach(el=>el.hidden=(g!='all'&&el.getAttribute('data-g')!=g))">Công đoạn</button>
+    <button class="tab" data-t="tv" onclick="var g=this.dataset.t;document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));this.classList.add('on');document.querySelectorAll('.grp').forEach(el=>el.hidden=(g!='all'&&el.getAttribute('data-g')!=g))">Thư viện</button>
+    <button class="tab" data-t="cc" onclick="var g=this.dataset.t;document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));this.classList.add('on');document.querySelectorAll('.grp').forEach(el=>el.hidden=(g!='all'&&el.getAttribute('data-g')!=g))">Công cụ</button>
+    <button class="tab" data-t="all" onclick="var g=this.dataset.t;document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));this.classList.add('on');document.querySelectorAll('.grp').forEach(el=>el.hidden=(g!='all'&&el.getAttribute('data-g')!=g))">Tất cả</button>
+  </div>
+  <div class="grp" data-g="cd">
   <div class="sec-h"><span class="tt">QC theo công đoạn sản xuất — đúng thứ tự</span><span class="ln"></span></div>
   <div class="grid">
     <a class="mcard m-vt" href="vattu/">
@@ -285,6 +297,8 @@
     </a>
   </div>
 
+  </div>
+  <div class="grp" data-g="tv" hidden>
   <div class="sec-h"><span class="tt">Thư viện</span><span class="ln"></span></div>
   <div class="grid">
     <a class="mcard m-dim" href="dungsai/">
@@ -366,6 +380,8 @@
     </a>
   </div>
 
+  </div>
+  <div class="grp" data-g="cc" hidden>
   <div class="sec-h"><span class="tt">Công cụ hỗ trợ</span><span class="ln"></span></div>
   <div class="grid">
     <a class="mcard m-ld" href="luongdu/">
@@ -382,6 +398,7 @@
         <div class="mds">Lịch sử Đạt/Không đạt theo dự án · lọc · CSV · in</div>
       </div><span class="go">→</span>
     </a>
+  </div>
   </div>
 
 </div>
