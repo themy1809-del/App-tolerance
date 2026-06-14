@@ -22,18 +22,28 @@
   .home{margin-left:auto;font-size:12px;font-weight:700;color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.25);padding:7px 12px;border-radius:8px}
   .home:hover{background:rgba(255,255,255,.12)}
   .wrap{max-width:1180px;margin:0 auto;padding:14px 16px 40px}
-  .legend{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 14px;font-size:11.5px}
+  /* intro */
+  .intro{background:#eef5ff;border:1px solid #cfe0f5;border-radius:14px;padding:14px 16px;margin:4px 0 16px}
+  .intro h3{margin:0 0 7px;font-size:15px;color:var(--brand);font-weight:800}
+  .intro p{margin:0 0 6px;font-size:13.5px;color:#1c3a63;line-height:1.6}
+  .intro ol{margin:6px 0 0;padding-left:22px} .intro li{font-size:13.5px;color:#1c3a63;margin-bottom:4px;line-height:1.5}
+  .cta{margin-top:9px;background:#dbeafe;border-radius:9px;padding:9px 11px;font-size:13.5px;color:#0c447c;font-weight:600}
+  .secttl{font-size:14px;font-weight:800;color:var(--brand);margin:20px 0 9px;display:flex;align-items:center;gap:7px}
+  details{margin-bottom:6px}
+  summary{cursor:pointer;list-style:none;font-size:13.5px;font-weight:700;color:var(--brand);background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 13px;box-shadow:var(--sh)}
+  summary::-webkit-details-marker{display:none}
+  summary:hover{background:#f7fafd}
+  .legend{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;font-size:11.5px}
   .lg{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px 11px;font-weight:600}
   .dot{width:11px;height:11px;border-radius:3px;flex:none}
-  .hint{font-size:12px;color:var(--muted);margin-bottom:10px}
-  .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:var(--r);background:#fff;box-shadow:var(--sh)}
+  .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:var(--r);background:#fff;box-shadow:var(--sh);margin-top:8px}
   .chart{min-width:1080px;padding:6px}
   .lane{display:grid;grid-template-columns:104px repeat(12,1fr);gap:6px;align-items:stretch}
   .lane + .lane{margin-top:6px}
   .lanehdr{display:flex;flex-direction:column;justify-content:center;padding:8px;border-radius:10px;font-weight:800;font-size:11px;color:#fff;text-align:center;line-height:1.25}
   .l-prod{background:var(--prod)} .l-qc{background:var(--qc)} .l-tpi{background:var(--tpi)} .l-rec{background:var(--rec)}
   .lanehdr .s{font-size:9px;font-weight:600;opacity:.85;margin-top:2px}
-  .cell{position:relative;border-radius:10px;padding:7px 6px;font-size:10.5px;font-weight:700;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:62px;line-height:1.2}
+  .cell{position:relative;border-radius:10px;padding:7px 6px;font-size:10.5px;font-weight:700;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60px;line-height:1.2}
   .step{background:var(--prodbg);border:1.5px solid var(--prod);color:#0d5a31;cursor:pointer;transition:.15s}
   .step:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(31,157,87,.22)}
   .step:focus-visible{outline:3px solid #34d07f;outline-offset:1px}
@@ -43,212 +53,277 @@
   .tpi{background:var(--tpibg);border:1.5px solid #94a3b8;color:#475569;clip-path:polygon(12% 0,88% 0,100% 50%,88% 100%,12% 100%,0 50%)}
   .rec{background:var(--recbg);border:1.5px solid #d4a93c;color:#7a5a06}
   .mk{position:absolute;top:-7px;right:4px;font-size:8px;font-weight:900;background:#d11;color:#fff;padding:1px 5px;border-radius:6px;letter-spacing:.3px}
-  .mk.itp{background:#1d4ed8} .empty{background:transparent;border:none;min-height:62px}
+  .mk.itp{background:#1d4ed8} .empty{background:transparent;border:none;min-height:60px}
   .flow{grid-column:span 4;background:linear-gradient(90deg,#eef5ff,#e8f0fb);border:1px dashed #b9cde8;color:#3a5f93;font-weight:700;font-size:11px;border-radius:10px;display:flex;align-items:center;justify-content:center}
-  .note{font-size:11.5px;color:var(--muted);margin-top:14px;border-top:1px solid var(--line);padding-top:10px}
-  .foot{font-size:11px;color:#90a0b3;text-align:center;margin-top:18px}
-  /* ===== modal chi tiết công đoạn ===== */
-  .ovl{position:fixed;inset:0;z-index:50;background:rgba(8,18,42,.55);backdrop-filter:blur(4px);display:none;align-items:flex-end;justify-content:center}
-  .ovl.on{display:flex}
-  @media(min-width:680px){.ovl{align-items:center}}
-  .modal{background:#fff;width:100%;max-width:760px;max-height:92vh;overflow-y:auto;border-radius:18px 18px 0 0;box-shadow:0 -8px 40px rgba(8,18,42,.3)}
-  @media(min-width:680px){.modal{border-radius:18px}}
-  .mhd{position:sticky;top:0;background:linear-gradient(150deg,#0c1830,#0d2547);color:#fff;padding:16px 18px;display:flex;align-items:center;gap:10px;z-index:1}
-  .mhd .stepno{width:34px;height:34px;border-radius:50%;background:var(--prod);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;flex:none}
-  .mhd .mt{font-weight:800;font-size:15.5px;line-height:1.25} .mhd .ms{font-size:11px;opacity:.7;margin-top:1px}
-  .mhd .x{margin-left:auto;background:rgba(255,255,255,.15);border:0;color:#fff;width:32px;height:32px;border-radius:9px;font-size:18px;cursor:pointer;flex:none}
-  .mhd .x:hover{background:rgba(255,255,255,.28)}
-  .mbody{padding:14px 18px 22px}
-  .sec{margin-bottom:14px}
-  .sec h4{margin:0 0 5px;font-size:12px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;color:var(--brand);display:flex;align-items:center;gap:6px}
+  /* accordion chi tiết */
+  .acc{display:flex;flex-direction:column;gap:8px}
+  .acc-item{border:1px solid var(--line);border-radius:12px;background:#fff;box-shadow:var(--sh);overflow:hidden;scroll-margin-top:12px}
+  .acc-item.open{border-color:#9fc3e8;box-shadow:0 4px 18px rgba(12,68,124,.12)}
+  .acc-hd{width:100%;display:flex;align-items:center;gap:11px;padding:13px 14px;background:none;border:0;cursor:pointer;font-family:inherit;text-align:left}
+  .acc-hd:hover{background:#f7fafd}
+  .acc-no{width:27px;height:27px;border-radius:50%;background:var(--prod);color:#fff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex:none}
+  .acc-ic{font-size:18px;flex:none}
+  .acc-nm{font-weight:700;font-size:14.5px;color:var(--ink);flex:1;line-height:1.3}
+  .acc-nm small{display:block;font-weight:500;font-size:11.5px;color:var(--muted);margin-top:1px}
+  .acc-ar{font-size:13px;color:var(--muted);transition:.2s;flex:none}
+  .acc-item.open .acc-ar{transform:rotate(180deg);color:var(--brand)}
+  .acc-bd{padding:6px 16px 18px;border-top:1px solid var(--line)}
+  .sec{margin-bottom:13px} .sec:last-child{margin-bottom:0}
+  .sec h4{margin:12px 0 5px;font-size:12px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;color:var(--brand)}
   .sec p{margin:0;font-size:14px;color:#1f2d40;line-height:1.6}
   .sec ul{margin:0;padding-left:20px} .sec li{font-size:14px;color:#1f2d40;line-height:1.55;margin-bottom:5px}
-  .callout{border-radius:11px;padding:11px 13px;font-size:14px;line-height:1.6}
-  .why{background:#eef5ff;border-left:4px solid var(--brand2);color:#1c3a63}
-  .bad{background:#fdf0ee;border-left:4px solid #e0573f}
-  .bad h4{color:#b4341d} .bad li{color:#7a2a1a}
-  .tip{background:#eafaf1;border-left:4px solid #1f9d57}
-  .tip h4{color:#0d7a40} .tip li{color:#0d5a31}
-  .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
+  .callout{border-radius:11px;padding:10px 13px;margin-top:6px}
+  .callout h4{margin-top:0}
+  .why{background:#eef5ff;border-left:4px solid var(--brand2)} .why h4{color:#1c3a63}
+  .bad{background:#fdf0ee;border-left:4px solid #e0573f} .bad h4{color:#b4341d} .bad li{color:#7a2a1a}
+  .warn{background:#fff7ed;border-left:4px solid #e07b1a} .warn h4{color:#9a5410} .warn li{color:#7a4a10}
+  .tip{background:#eafaf1;border-left:4px solid #1f9d57} .tip h4{color:#0d7a40} .tip li{color:#0d5a31}
+  .chk{background:#eef2f7;border-left:4px solid #64748b} .chk h4{color:#3f4d5e} .chk li{color:#3f4d5e}
+  .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
   .tag{font-size:11.5px;font-weight:700;background:#eef3fb;color:#27508a;border:1px solid #d7e3f3;border-radius:7px;padding:4px 9px}
   .tag.spm{background:#fde7e7;color:#b42318;border-color:#f6c9c4} .tag.itp{background:#e7eefb;color:#1d4ed8;border-color:#c9d8f6}
-  .openmod{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:4px;background:linear-gradient(135deg,#1f9d57,#0d7a40);color:#fff;text-decoration:none;font-weight:800;font-size:14px;padding:13px;border-radius:11px}
+  .openmod{display:inline-flex;align-items:center;justify-content:center;gap:8px;margin-top:14px;background:linear-gradient(135deg,#1f9d57,#0d7a40);color:#fff;text-decoration:none;font-weight:800;font-size:13.5px;padding:11px 16px;border-radius:11px}
   .openmod:hover{filter:brightness(1.06)}
+  .note{font-size:11.5px;color:var(--muted);margin-top:18px;border-top:1px solid var(--line);padding-top:10px}
+  .foot{font-size:11px;color:#90a0b3;text-align:center;margin-top:16px}
 </style>
 </head>
 <body>
 <div class="top"><div class="bar">
   <div class="logo">DD</div>
-  <div><div class="ttl">Lưu đồ Sản xuất & Quản lý chất lượng</div><div class="sub">Nhà máy An Hạ · 2025 · bấm vào bước để xem phân tích QC chi tiết</div></div>
+  <div><div class="ttl">Lưu đồ Sản xuất & Quản lý chất lượng</div><div class="sub">Nhà máy An Hạ · 2025</div></div>
   <a class="home" href="../">← Trang chủ</a>
 </div></div>
 
 <div class="wrap">
+
+  <div class="intro">
+    <h3>🗺️ Lưu đồ này là gì & đọc thế nào?</h3>
+    <p>Đây là dòng chảy chất lượng của nhà máy: một cấu kiện đi qua <b>12 bước</b>, mỗi bước có nhiều lớp kiểm soát chồng lên nhau. Đọc theo <b>4 hàng từ trên xuống</b>:</p>
+    <ol>
+      <li><b>SẢN XUẤT</b> — 12 bước gia công, thứ tự từ trái sang phải.</li>
+      <li><b>QC NỘI BỘ</b> — nhà máy tự kiểm; ô có <b>SPM 100%</b> là điểm dừng bắt buộc (chưa đạt thì không cho qua bước sau).</li>
+      <li><b>NGHIỆM THU KH</b> — khách / bên thứ ba (TPI) kiểm; ô có <b>ITP</b> là điểm mời nghiệm thu.</li>
+      <li><b>HỒ SƠ</b> — báo cáo (BC) lưu cho mỗi bước để truy xuất.</li>
+    </ol>
+    <div class="cta">👉 <b>Muốn hiểu một bước:</b> bấm vào ô bước (hàng xanh) — trang sẽ nhảy xuống & mở bài phân tích; hoặc cuộn xuống mục “Chi tiết từng công đoạn” đọc lần lượt.</div>
+  </div>
+
   <div class="legend">
     <span class="lg"><span class="dot" style="background:var(--prod)"></span>Sản xuất</span>
     <span class="lg"><span class="dot" style="background:var(--qc)"></span>QC nội bộ</span>
     <span class="lg"><span class="dot" style="background:#94a3b8"></span>Nghiệm thu KH (TPI)</span>
-    <span class="lg"><span class="dot" style="background:#d4a93c"></span>Hồ sơ chất lượng</span>
+    <span class="lg"><span class="dot" style="background:#d4a93c"></span>Hồ sơ</span>
     <span class="lg"><span class="mk" style="position:static">SPM</span>điểm dừng 100%</span>
     <span class="lg"><span class="mk itp" style="position:static">ITP</span>thư mời nghiệm thu</span>
   </div>
-  <div class="hint">💡 Bấm vào ô <b>Sản xuất</b> để mở <b>bài phân tích QC chi tiết</b> của công đoạn: vì sao quan trọng, lưu ý, biện pháp, sai lầm thường gặp, mẹo hiện trường, tiêu chuẩn, tiêu chí, hồ sơ — kèm nút mở module. Cuộn ngang để xem đủ 12 bước.</div>
 
-  <div class="scroll"><div class="chart" id="chart"></div></div>
+  <details open>
+    <summary>📊 Sơ đồ tổng quan — 4 tầng × 12 bước (bấm để thu gọn · cuộn ngang để xem đủ)</summary>
+    <div class="scroll"><div class="chart" id="chart"></div></div>
+  </details>
+
+  <div class="secttl">📖 Chi tiết từng công đoạn <span style="font-weight:600;color:var(--muted);font-size:12px">— bấm để mở</span></div>
+  <div class="acc" id="acc"></div>
 
   <div class="note">⚠ Lưu đồ + phân tích số hóa theo bản gốc Phòng QC DaiDung (An Hạ 2025). Giá trị dung sai/tiêu chí cụ thể: tra module trong app (có trích dẫn điều khoản) hoặc bản gốc tiêu chuẩn + spec dự án. Vị trí SPM/ITP điều chỉnh theo ITP từng dự án.</div>
   <div class="foot">Tác giả: Đậu Thế Mỹ · © 2026 · DaiDung QC Suite</div>
-</div>
-
-<div class="ovl" id="ovl" onclick="if(event.target===this)closeDetail()">
-  <div class="modal" id="modal" role="dialog" aria-modal="true"></div>
 </div>
 
 <script>
 /* Lưu đồ QC An Hạ + phân tích sâu từng công đoạn. Tác giả: Đậu Thế Mỹ. */
 const STEPS = [
   { no:1, name:'Kiểm soát vật tư trước sơ chế', ic:'📦', mod:'../vattu/', modName:'QC Vật tư', qc:true, spm:false, tpi:true, itp:true, rec:'BC Vật tư',
+    tomtat:'Chặn vật liệu sai/không rõ nguồn gốc ngay đầu vào & lập truy xuất.',
     muc_dich:'Đây là “cửa khẩu” đầu tiên của chất lượng: chặn vật liệu sai mác/không rõ nguồn gốc ngay từ đầu vào và thiết lập sợi dây truy xuất xuyên suốt. Làm tốt bước này, mọi bước sau mới có nền móng.',
     vi_sao:'Một tấm thép sai mác hoặc thiếu chứng chỉ lọt vào sản xuất có thể khiến cả lô kết cấu phải làm lại — chi phí gấp hàng chục lần so với 10 phút kiểm tra đầu vào. Mất truy xuất (heat number) thì khi có sự cố không quy được về đâu, và khách/đăng kiểm sẽ loại hồ sơ.',
-    luu_y:['Nhầm mác thép (vd S355 với S275): nhìn giống nhau nhưng cơ tính khác hẳn, chỉ phân biệt qua MTC và dấu mẻ.','MTC không hợp lệ: sai loại (cần 3.1/3.2 theo EN 10204 nhưng chỉ có 2.x), không khớp số mẻ, hoặc bản photo không kiểm soát.','Chiều dày âm vượt dung sai (EN 10029) → thiếu tiết diện chịu lực; tấm cong vênh, gỉ rỗ, tách lớp (lamination) ảnh hưởng hàn.','Mất dấu truy xuất khi cắt một tấm lớn thành nhiều phôi.'],
-    bien_phap:['Đối chiếu MTC với đơn hàng & mác thép yêu cầu; xác nhận đúng loại chứng chỉ (3.1/3.2).','Soi dấu nhận biết trên tấm (số mẻ/heat no., nhà sản xuất) khớp MTC.','Đo chiều dày nhiều điểm (đặc biệt mép), kiểm kích thước & độ phẳng, xem bề mặt theo EN 10163.','Trước khi cắt: chuyển (đóng số chìm/sơn màu) mã truy xuất lên từng phần phôi.','Đạt → dán nhãn & nhập khu “đã kiểm”; không đạt → cách ly, gắn thẻ đỏ.'],
-    sai_lam:['Nhận hàng theo packing list mà không mở MTC đối chiếu số mẻ.','Cắt phôi trước rồi mới nghĩ tới truy xuất → không quy được phôi về tấm gốc.','Chỉ đo chiều dày 1 điểm giữa tấm (mép thường mỏng hơn).'],
-    meo:['Chụp ảnh dấu mẻ + MTC trong cùng khung hình để lưu bằng chứng truy xuất.','Quy ước màu sơn theo mác thép để thợ không lấy nhầm.'],
-    chuan_bi:'Thước, thước kẹp/máy đo dày siêu âm (đã hiệu chuẩn), bảng tra mác thép, đèn soi, bộ số đóng/sơn truy xuất; kho phân vùng “chờ kiểm – đạt – loại”.',
-    tieu_chuan:'EN 10025 (mác thép); EN 10204 (loại MTC); EN 10029 (dung sai chiều dày); EN 10163 (bề mặt); ISO 13920.',
-    tieu_chi:'MTC hợp lệ & khớp mác/số mẻ; chiều dày & kích thước trong dung sai; không khuyết tật bề mặt vượt mức; truy xuất đã chuyển lên phôi.',
+    luu_y:['Nhầm mác thép (vd S355 với S275): nhìn giống nhau nhưng cơ tính khác hẳn.','MTC không hợp lệ: sai loại (cần 3.1/3.2 theo EN 10204), không khớp số mẻ, hoặc bản photo không kiểm soát.','Chiều dày âm vượt dung sai (EN 10029); tấm cong vênh, gỉ rỗ, tách lớp (lamination).','Mất dấu truy xuất khi cắt một tấm lớn thành nhiều phôi.'],
+    bien_phap:['Đối chiếu MTC với đơn hàng & mác thép; xác nhận đúng loại chứng chỉ (3.1/3.2).','Soi dấu nhận biết trên tấm (số mẻ, nhà sản xuất) khớp MTC.','Đo chiều dày nhiều điểm (đặc biệt mép), kiểm kích thước & độ phẳng; xem bề mặt theo EN 10163.','Chuyển mã truy xuất lên từng phần phôi TRƯỚC khi cắt.','Đạt → khu “đã kiểm”; không đạt → cách ly, thẻ đỏ.'],
+    cach_ktra:['1) Mở MTC, đối chiếu mác thép + số mẻ với dấu in trên tấm.','2) Đo chiều dày tại ≥4 điểm gồm các mép; so EN 10029.','3) Đo dài × rộng × đường chéo; kiểm độ phẳng.','4) Quan sát bề mặt (gỉ, rỗ, tách lớp) theo EN 10163.','5) Đóng/sơn mã truy xuất & ghi phiếu trước khi chuyển cắt.'],
+    sai_lam:['Nhận hàng theo packing list mà không mở MTC đối chiếu số mẻ.','Cắt phôi trước rồi mới nghĩ tới truy xuất.','Chỉ đo chiều dày 1 điểm giữa tấm (mép thường mỏng hơn).'],
+    khi_loi:['Cách ly khu “loại”, gắn thẻ đỏ, mở NCR.','Thiếu/sai MTC → giữ hàng, yêu cầu bổ sung/đổi.','Vượt mức → trả hàng hoặc xin nhượng bộ có duyệt kỹ thuật.'],
+    meo:['Chụp ảnh dấu mẻ + MTC trong cùng khung hình để lưu truy xuất.','Quy ước màu sơn theo mác thép để thợ không lấy nhầm.'],
+    tu_kiem:['MTC đúng loại (3.1/3.2) & khớp số mẻ?','Chiều dày mép trong dung sai?','Đã chuyển mã truy xuất lên tấm?'],
+    chuan_bi:'Thước, thước kẹp/máy đo dày siêu âm (hiệu chuẩn), bảng tra mác thép, đèn soi, bộ số đóng/sơn truy xuất; kho phân vùng “chờ kiểm – đạt – loại”.',
+    tieu_chuan:'EN 10025; EN 10204; EN 10029; EN 10163; ISO 13920.',
+    tieu_chi:'MTC hợp lệ & khớp mác/số mẻ; chiều dày & kích thước trong dung sai; không khuyết tật vượt mức; đã chuyển truy xuất.',
     ho_so:'BC Vật tư; BC Truy xuất; bản sao MTC (3.1/3.2).' },
   { no:2, name:'Sơ chế (Cắt, Khoan, Chấn, Vát, Mép)', ic:'✂️', mod:'../soche/', modName:'QC Sơ chế', qc:true, spm:true, tpi:true, itp:true, rec:'BC Truy xuất',
+    tomtat:'Tạo phôi đúng kích thước, mép vát & lỗ; giữ truy xuất sau cắt.',
     muc_dich:'Biến tấm/thanh thô thành phôi đúng kích thước, đúng mép vát, đúng lỗ — “bán thành phẩm” cho các bước ráp-hàn.',
-    vi_sao:'Sai số ở sơ chế sẽ tích lũy qua mọi bước sau. Mép cắt xấu/vát sai góc làm mối hàn không ngấu chân, phải mài & hàn lại; lỗ sai vị trí khiến bu lông không xỏ được khi lắp dựng — sửa ngoài công trường đắt và chậm gấp nhiều lần.',
-    luu_y:['Chất lượng mép cắt nhiệt (độ nhám Rz, độ vuông, rãnh xỉ) chưa đạt cấp theo EXC (ISO 9013).','Sai kích thước do bù mạch cắt (kerf) hoặc co nhiệt.','Vát mép sai góc/độ cùn chân (root face) so với WPS → ảnh hưởng ngấu hàn.','Lỗ sai vị trí/đường kính/ôvan, còn ba-via (EN 1090-2 Bảng 11).','Mất mã truy xuất khi một tấm cắt ra nhiều phôi.'],
-    bien_phap:['So mép cắt với mẫu cấp chất lượng (ISO 9013) phù hợp EXC; mài sửa nếu cần.','Đo kích thước phôi bằng dưỡng/thước, có tính bù co nhiệt.','Kiểm góc vát & root face theo WPS/ISO 9692.','Kiểm vị trí, đường kính, độ ôvan lỗ; làm sạch ba-via.','Chuyển mã truy xuất sang từng phôi ngay sau khi cắt rời.'],
-    sai_lam:['Dùng lại chương trình cắt cũ không cập nhật bù mạch → sai cả loạt.','Bỏ kiểm root face khi vát → thợ hàn “gánh” lỗi.','Khoan lỗ trước khi định vị chuẩn → lệch cụm lỗ.'],
-    meo:['Cắt mẫu thử đầu ca để chuẩn thông số máy trước khi cắt loạt.','Đánh số phôi theo bản vẽ ngay tại bàn cắt.'],
-    chuan_bi:'Dưỡng cắt/khoan, thước, thước góc & dưỡng vát, calip lỗ, mẫu so cấp mép cắt (ISO 9013); chương trình NC đúng phiên bản; phiếu sơ chế.',
-    tieu_chuan:'EN 1090-2 §6.4 & Bảng 11 (lỗ); ISO 9013 (cắt nhiệt); ISO 9692 (vát mép); ISO 13920.',
+    vi_sao:'Sai số ở sơ chế tích lũy qua mọi bước sau. Mép cắt xấu/vát sai góc làm mối hàn không ngấu chân; lỗ sai vị trí khiến bu lông không xỏ được khi lắp dựng — sửa ngoài công trường đắt và chậm gấp nhiều lần.',
+    luu_y:['Mép cắt nhiệt (Rz, độ vuông, rãnh xỉ) chưa đạt cấp theo EXC (ISO 9013).','Sai kích thước do bù mạch cắt (kerf) hoặc co nhiệt.','Vát sai góc/độ cùn chân (root face) so với WPS.','Lỗ sai vị trí/đường kính/ôvan, còn ba-via (EN 1090-2 Bảng 11).'],
+    bien_phap:['So mép cắt với mẫu cấp (ISO 9013) phù hợp EXC; mài sửa nếu cần.','Đo kích thước phôi, tính bù co nhiệt.','Kiểm góc vát & root face theo WPS/ISO 9692.','Kiểm vị trí, đường kính, ôvan lỗ; làm sạch ba-via.','Chuyển mã truy xuất sang từng phôi ngay sau cắt.'],
+    cach_ktra:['1) So mép cắt với mẫu cấp ISO 9013.','2) Đo kích thước phôi bằng thước/dưỡng.','3) Đặt dưỡng vát kiểm góc & root face.','4) Đo vị trí & đường kính lỗ; kiểm ba-via.','5) Xác nhận mã truy xuất trên từng phôi.'],
+    sai_lam:['Dùng lại chương trình cắt cũ không cập nhật bù mạch.','Bỏ kiểm root face khi vát → thợ hàn “gánh” lỗi.','Khoan lỗ trước khi định vị chuẩn.'],
+    khi_loi:['Mép/vát chưa đạt → mài sửa rồi kiểm lại.','Lỗ sai → hàn bù & khoan lại (có duyệt) hoặc loại phôi; mở NCR.','Sai kích thước lớn → loại, cắt phôi mới.'],
+    meo:['Cắt mẫu thử đầu ca để chuẩn thông số trước khi cắt loạt.','Đánh số phôi theo bản vẽ ngay tại bàn cắt.'],
+    tu_kiem:['Mép cắt đạt cấp theo EXC?','Góc vát & root face đúng WPS?','Lỗ đúng vị trí, sạch ba-via?'],
+    chuan_bi:'Dưỡng cắt/khoan, thước, dưỡng vát, calip lỗ, mẫu so cấp mép cắt (ISO 9013); chương trình NC đúng phiên bản.',
+    tieu_chuan:'EN 1090-2 §6.4 & Bảng 11; ISO 9013; ISO 9692; ISO 13920.',
     tieu_chi:'Mép cắt đạt cấp theo EXC; vát đúng WPS; kích thước & lỗ trong dung sai.',
     ho_so:'BC Truy xuất; phiếu kiểm sơ chế.' },
   { no:3, name:'Ráp thô', ic:'🔧', mod:'../fitup/', modName:'QC Fit-up', qc:'flow', spm:false, tpi:'flow', itp:false, rec:null,
+    tomtat:'Gá định vị tạo “bộ xương” cấu kiện đúng hình học trước hàn.',
     muc_dich:'Gá-định vị các chi tiết đúng hình học để tạo “bộ xương” cấu kiện trước khi hàn — quyết định hình dạng cuối cùng.',
     vi_sao:'Gá sai 1 mm ở chân có thể thành lệch hàng chục mm ở đầu cấu kiện dài. Hàn xong mới phát hiện thì phải cắt bỏ mối hàn để sửa — rất tốn kém và làm yếu vật liệu.',
-    luu_y:['Khe hở chân (root gap) & lệch mép (high-low) vượt giới hạn → ngấu hàn kém.','Góc, độ vuông, đường chéo cụm gá sai.','Gá quá cứng gây ứng suất/nứt khi hàn; hàn đính sai vị trí/kích thước.','Hàn đính bằng thợ chưa chứng chỉ hoặc không theo WPS.'],
-    bien_phap:['Kiểm fit-up: root gap, high-low, góc theo AWS D1.1 §5.21/§7.21 & EN 1090-2.','Đo kích thước tổng thể & cả 2 đường chéo cụm gá.','Hàn đính đúng WPS, đủ dài, thợ có chứng chỉ; tránh đính ở vị trí ứng suất cao.','Tính co ngót hợp lý (pre-set/pre-camber khi cần).'],
+    luu_y:['Khe hở chân (root gap) & lệch mép (high-low) vượt giới hạn → ngấu hàn kém.','Góc, độ vuông, đường chéo cụm gá sai.','Gá quá cứng gây ứng suất/nứt khi hàn.','Hàn đính bằng thợ chưa chứng chỉ hoặc không theo WPS.'],
+    bien_phap:['Kiểm fit-up: root gap, high-low, góc theo AWS D1.1 §5.21/§7.21 & EN 1090-2.','Đo kích thước tổng thể & cả 2 đường chéo.','Hàn đính đúng WPS, đủ dài, thợ có chứng chỉ.','Tính co ngót hợp lý (pre-set/pre-camber khi cần).'],
+    cach_ktra:['1) Đo root gap & high-low bằng thước lá tại nhiều điểm.','2) Kiểm góc & độ vuông bằng thước góc.','3) Đo 2 đường chéo cụm gá, so chênh lệch.','4) Kiểm hàn đính: vị trí, chiều dài, không nứt.'],
     sai_lam:['Đo theo 1 cạnh, bỏ đường chéo → cụm thành hình thoi.','Hàn đính “chấm điểm” quá ngắn → bung khi hàn chính.','Không tính co ngót → cấu kiện ngắn lại sau hàn.'],
-    meo:['Luôn đo 2 đường chéo — chênh lệch nhỏ nghĩa là vuông góc tốt.','Vạch đường tim (center line) để gá nhanh & chuẩn.'],
+    khi_loi:['Gap/high-low vượt → tháo gá, chỉnh lại trước khi hàn.','Đường chéo lệch → nắn/chỉnh cụm.','Hàn đính nứt → mài bỏ, đính lại đúng WPS.'],
+    meo:['Luôn đo 2 đường chéo — chênh lệch nhỏ là vuông góc tốt.','Vạch đường tim (center line) để gá nhanh & chuẩn.'],
+    tu_kiem:['Root gap & high-low trong dung sai?','2 đường chéo cân?','Hàn đính đúng WPS, không nứt?'],
     chuan_bi:'Dưỡng gá/jig, bàn map, thước góc, thước lá đo khe hở, thước cuộn (đo đường chéo), bản vẽ shop.',
     tieu_chuan:'AWS D1.1 §5.21/§7.21; EN 1090-2; ISO 13920.',
     tieu_chi:'Root gap/high-low/góc trong dung sai; đường chéo cân; hàn đính đạt.',
     ho_so:'Phiếu fit-up (gộp vào BC Lắp ráp).' },
   { no:4, name:'Hàn thô', ic:'🔥', mod:'../han/', modName:'QC Hàn', qc:'flow', spm:false, tpi:'flow', itp:false, rec:null,
+    tomtat:'Hàn liên kết chính theo WPS — tạo độ bền thực cho kết cấu.',
     muc_dich:'Liên kết các chi tiết bằng mối hàn theo quy trình đã phê duyệt (WPS) — tạo độ bền thực cho kết cấu.',
-    vi_sao:'Hàn là nơi tập trung rủi ro chất lượng lớn nhất: sai thông số/thiếu gia nhiệt → nứt nguội, ngấu kém, giòn mối hàn. Những lỗi này có thể không thấy bằng mắt nhưng gây phá hủy khi chịu tải.',
-    luu_y:['WPS/WPQR không phù hợp vật liệu-chiều dày-vị trí (EN ISO 15614); thợ hàn hết hạn/sai phạm vi (EN ISO 9606).','Thiếu gia nhiệt trước & nhiệt độ giữa lớp → nứt nguội (thép dày, carbon equivalent cao).','Que/dây hàn sai loại hoặc ẩm (chưa sấy) → rỗ khí, ngậm hydro.','Gió/ẩm thổi mất khí bảo vệ; biến dạng & co ngót.'],
-    bien_phap:['Kiểm WPS đang áp dụng đúng mối nối & chứng chỉ thợ còn hạn trước khi cho hàn.','Đo & ghi gia nhiệt trước/interpass bằng nhiệt kế tiếp xúc/phấn nhiệt.','Kiểm chủng loại & bảo quản vật liệu hàn (sấy & giữ nóng que theo nhà sản xuất).','Che chắn gió; theo dõi dòng/điện áp/tốc độ; ngoại quan từng lớp.'],
+    vi_sao:'Hàn là nơi tập trung rủi ro lớn nhất: sai thông số/thiếu gia nhiệt → nứt nguội, ngấu kém, giòn mối hàn. Những lỗi này có thể không thấy bằng mắt nhưng gây phá hủy khi chịu tải.',
+    luu_y:['WPS/WPQR không phù hợp vật liệu-chiều dày-vị trí; thợ hàn hết hạn/sai phạm vi (EN ISO 9606).','Thiếu gia nhiệt trước & nhiệt độ giữa lớp → nứt nguội.','Que/dây hàn sai loại hoặc ẩm (chưa sấy) → rỗ khí.','Gió/ẩm thổi mất khí bảo vệ; biến dạng & co ngót.'],
+    bien_phap:['Kiểm WPS đúng mối nối & chứng chỉ thợ còn hạn trước khi hàn.','Đo & ghi gia nhiệt trước/interpass.','Kiểm chủng loại & bảo quản vật liệu hàn (sấy & giữ nóng que).','Che chắn gió; theo dõi thông số; ngoại quan từng lớp.'],
+    cach_ktra:['1) Trước hàn: xác nhận WPS + thẻ thợ còn hạn.','2) Đo gia nhiệt trước & interpass, ghi lại.','3) Theo dõi dòng/điện áp/tốc độ bám WPS.','4) Ngoại quan từng lớp, làm sạch xỉ trước khi đắp lớp sau.'],
     sai_lam:['“Quen tay” đặt thông số không theo WPS.','Lấy que ra khỏi tủ sấy để cả ca ngoài không khí ẩm.','Bỏ gia nhiệt với thép dày vì “thấy vẫn hàn được”.'],
+    khi_loi:['Lỗi lớp đang hàn → khoét sửa ngay, không đắp chồng lên lỗi.','Sai thông số/thiếu gia nhiệt → dừng, hiệu chỉnh, đánh giá đoạn đã hàn.','Thợ/WPS không hợp lệ → dừng tới khi khắc phục.'],
     meo:['Dán QR mở WPS ngay tại trạm hàn (app có module WPS).','Ghi nhật ký hàn theo thời gian thực, không “điền bù” cuối ca.'],
-    chuan_bi:'WPS/WPQR in tại trạm hàn; máy hàn hiệu chuẩn; nhiệt kế/phấn chỉ nhiệt; tủ sấy & ống giữ nóng que; danh sách thợ còn hạn; lưu lượng kế khí.',
-    tieu_chuan:'EN ISO 15609/15614 (WPS/WPQR); EN ISO 9606 (thợ hàn); ISO 5817; (Mỹ: AWS D1.1).',
+    tu_kiem:['Đang hàn đúng WPS cho mối nối này?','Gia nhiệt đạt & đã ghi?','Vật liệu hàn đúng loại & đã sấy?'],
+    chuan_bi:'WPS/WPQR tại trạm hàn; máy hàn hiệu chuẩn; nhiệt kế/phấn chỉ nhiệt; tủ sấy & ống giữ nóng que; danh sách thợ còn hạn.',
+    tieu_chuan:'EN ISO 15609/15614; EN ISO 9606; ISO 5817; (Mỹ: AWS D1.1).',
     tieu_chi:'Thông số & trình tự theo WPS; gia nhiệt đạt; ngoại quan từng lớp đạt.',
     ho_so:'Nhật ký hàn (BC Hàn); biên bản gia nhiệt nếu yêu cầu.' },
   { no:5, name:'Nắn chỉnh và cưa', ic:'📐', mod:'../hoacong/', modName:'QC Hỏa công', qc:'flow', spm:false, tpi:'flow', itp:false, rec:null,
+    tomtat:'Khử biến dạng sau hàn & cắt kích thước cuối — kiểm soát nhiệt nắn.',
     muc_dich:'Khử biến dạng do hàn (cong, vênh, xoắn) và cắt kích thước cuối — trả cấu kiện về đúng hình học bản vẽ.',
-    vi_sao:'Nắn hỏa công sai nhiệt độ là “con dao hai lưỡi”: sửa được hình nhưng có thể làm thay đổi cơ tính thép (đặc biệt thép tôi-ram Q&T, thép TMCP) — mất độ bền/độ dai mà mắt thường không thấy.',
-    luu_y:['Nhiệt độ nắn hỏa công vượt giới hạn theo loại thép → giảm cơ tính.','Làm nguội sai cách (tôi nước với thép nhạy) → tăng cứng/nứt.','Lạm dụng lực ép/nắn nguội gây nứt.','Sai kích thước khi cưa cuối; độ thẳng/phẳng/xoắn chưa đạt (ISO 13920).'],
-    bien_phap:['Kiểm soát & ghi nhiệt độ nắn bằng phấn chỉ nhiệt/nhiệt kế, không vượt ngưỡng theo mác thép.','Theo quy trình nắn (vị trí, hình đốt, thứ tự) & cách làm nguội đúng.','Đo độ thẳng/phẳng/xoắn sau nắn; đo kích thước sau cưa.','Với thép Q&T/TMCP: tuân thủ giới hạn nhiệt nghiêm ngặt hoặc hỏi kỹ sư vật liệu.'],
+    vi_sao:'Nắn hỏa công sai nhiệt độ là “con dao hai lưỡi”: sửa được hình nhưng có thể làm thay đổi cơ tính thép (đặc biệt thép tôi-ram Q&T, TMCP) — mất độ bền/độ dai mà mắt thường không thấy.',
+    luu_y:['Nhiệt độ nắn vượt giới hạn theo loại thép → giảm cơ tính.','Làm nguội sai cách (tôi nước với thép nhạy) → tăng cứng/nứt.','Lạm dụng lực ép/nắn nguội gây nứt.','Sai kích thước cưa; độ thẳng/phẳng/xoắn chưa đạt (ISO 13920).'],
+    bien_phap:['Kiểm soát & ghi nhiệt độ nắn, không vượt ngưỡng theo mác thép.','Theo quy trình nắn & cách làm nguội đúng.','Đo độ thẳng/phẳng/xoắn sau nắn; đo kích thước sau cưa.','Thép Q&T/TMCP: tuân thủ giới hạn nhiệt nghiêm ngặt.'],
+    cach_ktra:['1) Trước nắn: xác định mác thép & ngưỡng nhiệt cho phép.','2) Trong nắn: liên tục kiểm nhiệt độ bằng phấn chỉ nhiệt/nhiệt kế.','3) Sau nắn: đo độ thẳng/phẳng/xoắn & kích thước sau cưa.','4) Ghi vị trí, số lần & nhiệt độ nắn.'],
     sai_lam:['Đốt “cho nóng đỏ” không kiểm nhiệt độ.','Xịt nước làm nguội nhanh để “kịp tiến độ”.','Nắn xong không đo lại, chuyển bước luôn.'],
-    meo:['Dùng phấn chỉ nhiệt báo đúng ngưỡng để thợ dễ kiểm soát.','Ghi lại vị trí & số lần nắn để theo dõi vùng chịu nhiệt nhiều.'],
+    khi_loi:['Quá nhiệt/nghi đổi cơ tính → đánh giá kỹ thuật (thử cơ tính nếu cần), có thể loại vùng ảnh hưởng.','Chưa đạt độ thẳng → nắn bổ sung trong giới hạn nhiệt.','Sai kích thước cưa → mở NCR, xử lý theo kỹ thuật.'],
+    meo:['Dùng phấn chỉ nhiệt báo đúng ngưỡng để thợ dễ kiểm soát.','Ghi vị trí & số lần nắn để theo dõi vùng chịu nhiệt nhiều.'],
+    tu_kiem:['Nhiệt độ nắn trong ngưỡng cho phép?','Độ thẳng/phẳng/xoắn đạt?','Kích thước sau cưa đúng?'],
     chuan_bi:'Mỏ đốt/thiết bị ép, phấn chỉ nhiệt/nhiệt kế hồng ngoại, thước/dây căng/ni-vô, quy trình nắn theo mác thép.',
-    tieu_chuan:'EN 1090-2 (nắn nhiệt & giới hạn nhiệt độ); ISO 13920 (độ thẳng/phẳng).',
+    tieu_chuan:'EN 1090-2 (nắn nhiệt & giới hạn nhiệt độ); ISO 13920.',
     tieu_chi:'Nhiệt độ nắn trong giới hạn; độ thẳng/phẳng/xoắn & kích thước đạt.',
     ho_so:'Phiếu nắn/kiểm soát nhiệt.' },
   { no:6, name:'Ráp hoàn thiện', ic:'🏗️', mod:'../fitup/', modName:'QC Fit-up', qc:true, spm:true, tpi:'flow', itp:false, rec:'BC Lắp ráp',
+    tomtat:'Lắp đủ chi tiết & lỗ liên kết đúng vị trí — điểm dừng quan trọng.',
     muc_dich:'Lắp đầy đủ chi tiết phụ (sườn gia cường, bản mã, gối, tai treo, lỗ liên kết) đúng vị trí & kích thước tổng thể — hoàn chỉnh hình học trước khi hàn hoàn thiện.',
     vi_sao:'Đây là điểm dừng then chốt (Hold): sau khi hàn hoàn thiện rất khó sửa vị trí chi tiết. Một lỗ liên kết sai vị trí ở đây = không lắp được ngoài công trường.',
     luu_y:['Sai vị trí/hướng chi tiết phụ so với bản vẽ.','Sai kích thước tổng thể, độ vuông, độ vồng (camber) thiết kế.','Sai vị trí/khoảng cách nhóm lỗ liên kết.','Vượt dung sai chế tạo (EN 1090-2 Annex B/D).'],
     bien_phap:['Kiểm dimensional fit-up đầy đủ, đối chiếu từng chi tiết với bản vẽ.','Kiểm vị trí & nhóm lỗ liên kết bằng dưỡng lỗ.','Kiểm độ vồng/camber thiết kế nếu có.','Xác nhận đạt mới cho sang hàn hoàn thiện (điểm dừng SPM).'],
+    cach_ktra:['1) Đối chiếu từng chi tiết phụ với bản vẽ (vị trí, hướng).','2) Đo kích thước tổng thể, độ vuông, đường chéo.','3) Kiểm camber/độ vồng nếu có.','4) Dùng dưỡng kiểm nhóm lỗ liên kết.','5) Ký xác nhận điểm dừng trước khi hàn.'],
     sai_lam:['Lắp chi tiết đối xứng bị ngược chiều (trái/phải).','Bỏ kiểm camber → dầm thẳng đơ hoặc vồng sai.','Tin “mắt thường” thay vì đo với cấu kiện lớn.'],
+    khi_loi:['Chi tiết sai vị trí/ngược chiều → tháo, lắp lại đúng.','Lỗ sai → xử lý có duyệt (hàn bù & khoan lại) hoặc làm lại; mở NCR.','Kích thước vượt dung sai → nắn/chỉnh trước khi hàn.'],
     meo:['In bản vẽ “check sheet”, tích từng chi tiết đã lắp.','Đánh dấu chiều (L/R, top/bottom) để tránh lắp ngược.'],
+    tu_kiem:['Đủ & đúng chi tiết theo bản vẽ?','Lỗ liên kết đúng vị trí?','Kích thước & camber đạt?'],
     chuan_bi:'Bản vẽ shop chi tiết, thước/máy toàn đạc (cấu kiện lớn), dưỡng lỗ, thước góc.',
     tieu_chuan:'EN 1090-2 Annex B/D; ISO 13920.',
     tieu_chi:'Vị trí chi tiết & lỗ đúng; kích thước trong dung sai chế tạo.',
     ho_so:'BC Lắp ráp.' },
   { no:7, name:'Hàn hoàn thiện', ic:'👁', mod:'../han/', modName:'QC Hàn', qc:true, spm:false, tpi:'flow', itp:false, rec:'BC Hàn',
+    tomtat:'Hoàn tất mối hàn + VT 100% & NDT theo EXC, đánh giá ISO 5817.',
     muc_dich:'Hoàn tất toàn bộ mối hàn và kiểm tra đạt cấp chất lượng theo cấp thực hiện (EXC) — chốt độ bền & độ tin cậy của kết cấu.',
     vi_sao:'Khuyết tật hàn (nứt, ngấu kém, rỗ, ngậm xỉ) là nguyên nhân phá hủy hàng đầu. NDT đúng tỷ lệ theo EXC giúp phát hiện lỗi ẩn bên trong mà ngoại quan không thấy.',
-    luu_y:['Mối hàn chưa hoàn tất/đủ kích thước theo WPS & bản vẽ.','Tỷ lệ & phương pháp NDT chưa đúng EXC (EN 1090-2 Bảng 24): VT 100%, MT/PT, UT/RT theo cấp.','Áp sai cấp chấp nhận khuyết tật (ISO 5817 B/C/D) so với EXC.','Sửa lỗi hàn tùy tiện không theo quy trình sửa được duyệt.'],
-    bien_phap:['Ngoại quan (VT) 100% theo ISO 17637 (chân hàn, lồi/lõm, undercut, nứt...).','Lập kế hoạch NDT theo EXC & vị trí mối nối; UT/RT/MT/PT bởi nhân sự ISO 9712.','Đánh giá theo ISO 5817 đúng cấp; thống kê tỷ lệ đạt.','Lỗi → mở NCR, sửa theo quy trình hàn sửa, NDT lại vùng sửa.'],
+    luu_y:['Mối hàn chưa hoàn tất/đủ kích thước theo WPS & bản vẽ.','Tỷ lệ & phương pháp NDT chưa đúng EXC (EN 1090-2 Bảng 24).','Áp sai cấp chấp nhận khuyết tật (ISO 5817 B/C/D) so với EXC.','Sửa lỗi hàn tùy tiện không theo quy trình.'],
+    bien_phap:['Ngoại quan (VT) 100% theo ISO 17637.','Lập kế hoạch NDT theo EXC; UT/RT/MT/PT bởi nhân sự ISO 9712.','Đánh giá theo ISO 5817 đúng cấp; thống kê tỷ lệ đạt.','Lỗi → NCR, sửa theo quy trình hàn sửa, NDT lại vùng sửa.'],
+    cach_ktra:['1) VT 100%: chân hàn, lồi/lõm, undercut, nứt, rỗ.','2) Lập kế hoạch NDT theo EXC; đánh dấu vị trí.','3) UT/RT/MT/PT bởi nhân sự ISO 9712; đọc theo ISO 5817.','4) Thống kê tỷ lệ đạt; lưu phim/ảnh.'],
     sai_lam:['NDT “lấy lệ”, không đủ tỷ lệ/đúng vị trí mối nối quan trọng.','Mài che khuyết tật bề mặt thay vì khoét sửa tận gốc.','Không NDT lại sau khi sửa.'],
+    khi_loi:['Khuyết tật vượt cấp → NCR, khoét sửa theo quy trình hàn sửa.','NDT lại 100% vùng sửa (mở rộng mẫu nếu tỷ lệ lỗi cao).','Lỗi lặp → rà soát WPS/thợ/thông số.'],
     meo:['Lập ma trận mối nối – phương pháp NDT để không bỏ sót.','Chụp ảnh trước/sau khi sửa lỗi để hoàn thiện hồ sơ.'],
-    chuan_bi:'Dụng cụ VT (thước hàn, đèn, kính lúp, thước undercut); thiết bị NDT hiệu chuẩn + nhân sự chứng chỉ; bảng tra cấp ISO 5817 theo EXC; quy trình NDT/hàn sửa.',
-    tieu_chuan:'ISO 5817; ISO 17637 (VT); EN 1090-2 §12 & Bảng 24; ISO 17640 (UT)/17638 (MT)/3452 (PT); ISO 10675 & 23278 (mức chấp nhận).',
+    tu_kiem:['VT 100% đã làm & đạt?','NDT đủ tỷ lệ theo EXC?','Đã đọc theo đúng cấp ISO 5817?'],
+    chuan_bi:'Dụng cụ VT (thước hàn, đèn, kính lúp, thước undercut); thiết bị NDT hiệu chuẩn + nhân sự chứng chỉ; bảng tra cấp ISO 5817 theo EXC.',
+    tieu_chuan:'ISO 5817; ISO 17637; EN 1090-2 §12 & Bảng 24; ISO 17640/17638/3452; ISO 10675/23278.',
     tieu_chi:'VT 100% đạt; NDT đủ tỷ lệ & đạt cấp ISO 5817 theo EXC.',
     ho_so:'BC Hàn; BC Visual hàn; BC NDT (kèm phim/ảnh).' },
   { no:8, name:'Sản phẩm hoàn thiện', ic:'📏', mod:'../qcdim/', modName:'QC Dim', qc:true, spm:true, tpi:true, itp:true, rec:'BC DIM · Visual · NDT',
+    tomtat:'Kiểm tổng thể kích thước/hình học — thường là điểm khách nghiệm thu.',
     muc_dich:'Kiểm tra tổng thể cấu kiện sau hàn: kích thước, hình học, hoàn tất bề mặt — nghiệm thu “sản phẩm trắng” trước khi làm sạch & sơn.',
     vi_sao:'Đây thường là điểm khách/TPI nghiệm thu (Hold/Witness). Sai số hình học tích lũy bộc lộ ở đây; phát hiện muộn (sau sơn) thì sửa rất tốn vì phải phá lớp sơn.',
-    luu_y:['Kích thước tổng thể: chiều dài, chiều cao, độ vồng (camber), độ thẳng, độ vuông, vị trí lỗ chờ.','Vượt dung sai chế tạo/lắp dựng (EN 1090-2 §11 & Annex D; ISO 13920).','NDT/visual chưa hoàn tất; chưa làm sạch xỉ/bắn tóe.','Thiếu/sai chi tiết so với bản vẽ tổng.'],
-    bien_phap:['Đo dimensional đầy đủ; dùng máy tính trong app để so ngưỡng → kết luận Đạt/Không đạt + % vượt; lập biên bản dimensional.','Xác nhận NDT & visual đã hoàn tất, đạt.','Kiểm hoàn tất bề mặt (mài, làm sạch bắn tóe).','Mời TPI/khách nghiệm thu theo ITP; gắn trạng thái nghiệm thu.'],
-    sai_lam:['Đo thiếu điểm (chỉ đo chiều dài, bỏ camber/độ vuông).','Nghiệm thu khi chưa làm sạch bắn tóe → khách bắt lỗi.','Không đối chiếu lại bản vẽ tổng.'],
+    luu_y:['Kích thước tổng thể: dài, cao, camber, độ thẳng, độ vuông, vị trí lỗ chờ.','Vượt dung sai chế tạo/lắp dựng (EN 1090-2 §11 & Annex D; ISO 13920).','NDT/visual chưa hoàn tất; chưa làm sạch bắn tóe.','Thiếu/sai chi tiết so với bản vẽ tổng.'],
+    bien_phap:['Đo dimensional đầy đủ; dùng máy tính trong app để so ngưỡng → Đạt/Không đạt + % vượt.','Xác nhận NDT & visual đã hoàn tất, đạt.','Kiểm hoàn tất bề mặt (mài, làm sạch bắn tóe).','Mời TPI/khách nghiệm thu theo ITP.'],
+    cach_ktra:['1) Đo dài, cao, camber, độ thẳng, độ vuông, vị trí lỗ chờ.','2) Nhập số đo vào máy tính dung sai trong app → kết luận Đạt/Không đạt.','3) Xác nhận NDT/visual hoàn tất; kiểm làm sạch.','4) Lập biên bản dimensional; mời TPI theo ITP.'],
+    sai_lam:['Đo thiếu điểm (chỉ đo chiều dài, bỏ camber/độ vuông).','Nghiệm thu khi chưa làm sạch bắn tóe.','Không đối chiếu lại bản vẽ tổng.'],
+    khi_loi:['Vượt dung sai → nắn/chỉnh rồi đo lại; không thể → NCR + xin nhượng bộ có duyệt.','Thiếu chi tiết → bổ sung & kiểm lại.','Chưa làm sạch → hoàn tất trước khi nghiệm thu.'],
     meo:['Dùng máy tính dung sai trong app để có kết luận Đạt/Không đạt ngay tại chỗ.','Đo khi cấu kiện đã ổn định nhiệt (tránh đo lúc còn nóng).'],
+    tu_kiem:['Mọi kích thước trong dung sai (app báo Đạt)?','NDT/visual đã đạt & đủ?','Đã sạch bắn tóe, sẵn sàng nghiệm thu?'],
     chuan_bi:'Thước/dây căng/máy toàn đạc (cấu kiện lớn), biểu mẫu dimensional, bản vẽ tổng, app máy tính dung sai.',
     tieu_chuan:'EN 1090-2 §11 & Annex D; ISO 13920; ISO 5817.',
     tieu_chi:'Mọi kích thước trong dung sai; NDT/visual đạt; hoàn tất bề mặt.',
     ho_so:'BC DIM; BC Visual hàn; BC NDT.' },
   { no:9, name:'Ráp thử', ic:'🧩', mod:'../rapthu/', modName:'QC Ráp thử', qc:true, spm:false, tpi:true, itp:true, rec:'BC Ráp thử',
+    tomtat:'Lắp thử kiểm khớp nối & thông lỗ bu lông trước khi xuất.',
     muc_dich:'Lắp thử (trial assembly) các cấu kiện thành cụm/đoạn để kiểm khớp nối, thông lỗ bu lông & kích thước lắp — bảo đảm lắp dựng ngoài công trường trơn tru.',
-    vi_sao:'Phát hiện “không khớp” tại xưởng rẻ và nhanh hơn nhiều so với ngoài công trường (nơi cẩu, giàn giáo, nhân công đắt và phụ thuộc thời tiết). Đặc biệt quan trọng với kết cấu nhịp lớn, nút phức tạp.',
-    luu_y:['Lỗ không đối tiếp (không xỏ được bu lông qua các bản nối).','Thiếu/sai match-mark → lắp dựng nhầm vị trí.','Khe hở mối nối lớn; sai kích thước/đường bao cụm lắp.','Lưu ý: ráp thử chỉ xỏ kiểm, KHÔNG siết đủ lực căng (tránh nhầm với liên kết chịu lực).'],
+    vi_sao:'Phát hiện “không khớp” tại xưởng rẻ và nhanh hơn nhiều so với ngoài công trường (nơi cẩu, giàn giáo, nhân công đắt & phụ thuộc thời tiết). Đặc biệt quan trọng với nhịp lớn, nút phức tạp.',
+    luu_y:['Lỗ không đối tiếp (không xỏ được bu lông qua các bản nối).','Thiếu/sai match-mark → lắp dựng nhầm vị trí.','Khe hở mối nối lớn; sai kích thước cụm lắp.','Ráp thử chỉ xỏ kiểm, KHÔNG siết đủ lực căng.'],
     bien_phap:['Xỏ bu lông kiểm thông lỗ toàn mối nối (theo tỷ lệ yêu cầu).','Đánh dấu match-mark rõ ràng cho lắp dựng.','Đo kích thước/đường bao cụm lắp & độ vênh mối nối.','Lập biên bản & sơ đồ lắp.'],
-    sai_lam:['Khoan doa “ăn gian” cho thông lỗ thay vì sửa nguyên nhân lệch.','Match-mark mờ/không hệ thống → đội lắp dựng đoán mò.','Siết chặt bu lông khi ráp thử rồi tháo dùng lại sai cách.'],
+    cach_ktra:['1) Lắp các cấu kiện thành cụm theo bản vẽ.','2) Xỏ bu lông kiểm thông lỗ (theo tỷ lệ yêu cầu).','3) Đo khe hở mối nối & kích thước cụm.','4) Đánh match-mark & lập sơ đồ; chụp ảnh.'],
+    sai_lam:['Khoan doa “ăn gian” cho thông lỗ thay vì sửa nguyên nhân lệch.','Match-mark mờ/không hệ thống.','Siết chặt bu lông khi ráp thử rồi tháo dùng lại sai cách.'],
+    khi_loi:['Lỗ không thông → tìm nguyên nhân lệch, sửa tại nguồn (không doa bừa).','Khe hở/kích thước sai → chỉnh chế tạo trước khi xuất.','Thiếu match-mark → bổ sung trước khi tháo rời.'],
     meo:['Quy ước hệ match-mark thống nhất toàn dự án (theo trục/cao độ).','Chụp ảnh cụm ráp thử kèm match-mark để bàn giao đội lắp dựng.'],
+    tu_kiem:['Bu lông xỏ thông theo tỷ lệ yêu cầu?','Kích thước cụm lắp đạt?','Match-mark đầy đủ & rõ?'],
     chuan_bi:'Bu lông gá đủ cỡ, dưỡng, sơn/đột đánh dấu match-mark, thước, mặt bằng ráp thử, bản vẽ lắp.',
     tieu_chuan:'EN 1090-2; AISC 303 / RCSC; ISO 13920.',
     tieu_chi:'Lỗ thông & khớp theo tỷ lệ yêu cầu; kích thước cụm lắp đạt; match-mark đầy đủ.',
     ho_so:'BC Ráp thử; sơ đồ match-mark.' },
   { no:10, name:'Bắn bi (làm sạch bề mặt)', ic:'⚪', mod:'../son/', modName:'QC Coating', qc:true, spm:false, tpi:true, itp:true, rec:'BC Bắn bi',
+    tomtat:'Làm sạch & tạo nhám bề mặt — nền tảng tuổi thọ lớp sơn/mạ.',
     muc_dich:'Làm sạch bề mặt thép (gỉ, vảy cán, dầu mỡ) và tạo độ nhám neo bám — nền tảng quyết định tuổi thọ lớp sơn/mạ.',
     vi_sao:'70–80% hư hỏng sơn đến từ chuẩn bị bề mặt kém, không phải từ sơn. Bề mặt bẩn/không đủ nhám → sơn bong tróc sớm, gỉ trở lại — làm lại tốn gấp nhiều lần.',
-    luu_y:['Độ sạch chưa đạt (vd Sa 2½ theo ISO 8501-1) — còn vảy cán/gỉ.','Bụi sau bắn bi (ISO 8502-3) làm giảm bám dính.','Độ nhám Rz ngoài khoảng (ISO 8503): thấp thì kém bám, cao thì đỉnh nhám nhô khỏi màng sơn.','Độ ẩm/điểm sương/muối hòa tan (ISO 8502-4/6) gây rộp & gỉ dưới màng.','Để quá lâu sau làm sạch → tái gỉ trước khi sơn.'],
-    bien_phap:['So bề mặt với ảnh chuẩn ISO 8501-1 đạt cấp yêu cầu.','Đo độ nhám (băng replica/máy) trong khoảng quy định.','Đo bụi bằng băng dính (ISO 8502-3).','Kiểm nhiệt độ bề mặt ≥ điểm sương + 3°C; kiểm muối (Bresle) nếu yêu cầu; sơn trong cửa sổ thời gian cho phép.'],
+    luu_y:['Độ sạch chưa đạt (vd Sa 2½ theo ISO 8501-1).','Bụi sau bắn bi (ISO 8502-3) làm giảm bám dính.','Độ nhám Rz ngoài khoảng (ISO 8503).','Độ ẩm/điểm sương/muối (ISO 8502-4/6) gây rộp & gỉ dưới màng.','Để quá lâu sau làm sạch → tái gỉ.'],
+    bien_phap:['So bề mặt với ảnh chuẩn ISO 8501-1.','Đo độ nhám (băng replica/máy) trong khoảng quy định.','Đo bụi bằng băng dính (ISO 8502-3).','Kiểm nhiệt độ bề mặt ≥ điểm sương + 3°C; kiểm muối (Bresle) nếu yêu cầu; sơn trong cửa sổ thời gian.'],
+    cach_ktra:['1) Trước làm sạch: đo nhiệt độ bề mặt & điểm sương.','2) Sau bắn bi: so độ sạch với ảnh chuẩn ISO 8501-1.','3) Đo độ nhám & kiểm bụi.','4) Kiểm muối Bresle nếu yêu cầu; ghi điều kiện môi trường.'],
     sai_lam:['Bắn bi xong để qua đêm mới sơn → tái gỉ.','Bỏ đo điểm sương khi trời ẩm/sáng sớm.','Dùng hạt mài bẩn/lẫn dầu → tái nhiễm bề mặt.'],
+    khi_loi:['Chưa đạt độ sạch/nhám → bắn bi lại.','Tái gỉ do để lâu → làm sạch lại trước khi sơn.','Điều kiện môi trường không đạt → dừng, chờ phù hợp.'],
     meo:['Lập “thẻ điều kiện môi trường” ghi nhiệt độ/độ ẩm/điểm sương từng ca.','Sơn lớp lót càng sớm càng tốt sau khi đạt độ sạch.'],
-    chuan_bi:'Ảnh chuẩn ISO 8501-1, máy/băng đo nhám, băng đo bụi, ẩm kế & nhiệt kế bề mặt, bộ thử muối Bresle (nếu cần), hạt mài sạch & khô.',
-    tieu_chuan:'ISO 8501-1 (độ sạch); ISO 8502-3 (bụi); ISO 8503 (nhám); ISO 8502-4/6 (điểm sương/muối).',
+    tu_kiem:['Độ sạch đạt cấp (vd Sa 2½)?','Độ nhám trong khoảng yêu cầu?','Nhiệt độ bề mặt > điểm sương + 3°C?'],
+    chuan_bi:'Ảnh chuẩn ISO 8501-1, máy/băng đo nhám, băng đo bụi, ẩm kế & nhiệt kế bề mặt, bộ thử muối Bresle (nếu cần), hạt mài sạch.',
+    tieu_chuan:'ISO 8501-1; ISO 8502-3; ISO 8503; ISO 8502-4/6.',
     tieu_chi:'Đạt cấp độ sạch (vd Sa 2½) & độ nhám yêu cầu; bụi/muối/điểm sương trong giới hạn.',
     ho_so:'BC Bắn bi / chuẩn bị bề mặt (kèm điều kiện môi trường).' },
   { no:11, name:'Sơn / Mạ kẽm', ic:'🎨', mod:'../son/', modName:'QC Coating', qc:true, spm:true, tpi:true, itp:true, rec:'BC Mạ kẽm',
+    tomtat:'Tạo lớp bảo vệ đúng hệ & chiều dày (DFT / mạ kẽm).',
     muc_dich:'Tạo lớp bảo vệ chống ăn mòn đúng hệ, đúng chiều dày — bảo đảm tuổi thọ công trình theo môi trường (ISO 12944).',
-    vi_sao:'Chiều dày màng (DFT) sai là lỗi phổ biến nhất: mỏng thì mau gỉ, dày thì nứt/bong & lãng phí. Mạ kẽm thiếu chiều dày → giảm số năm bảo vệ. Sai sót lộ ra sau vài tháng ngoài hiện trường thì sửa rất tốn.',
-    luu_y:['SƠN: DFT từng lớp & tổng (ISO 19840) ngoài khoảng; điều kiện thi công (nhiệt độ/độ ẩm/điểm sương); thời gian khô & overcoat window; bám dính (ISO 2409/4624); khuyết tật (chảy võng, bọt khí, lỗ kim/holiday, da cam).','MẠ KẼM: chiều dày/khối lượng lớp mạ (ISO 1461) thiếu; ngoại quan (giọt, gai, vùng sót); bám dính; biến dạng do nhiệt nhúng.'],
-    bien_phap:['Đo DFT theo ISO 19840 đủ số điểm theo diện tích; đối chiếu hệ sơn (ISO 12944).','Kiểm điều kiện môi trường trước & trong khi sơn; tuân thủ overcoat window.','Kiểm bám dính (cross-cut/pull-off) & dò lỗ kim (holiday) với lớp dày.','Mạ: đo chiều dày nhiều điểm/mẫu theo ISO 1461; kiểm ngoại quan & bám dính.'],
-    sai_lam:['Đo DFT vài điểm rồi suy ra cả mảng (không theo số điểm chuẩn).','Sơn lớp sau khi lớp trước quá hạn overcoat → bong giữa lớp.','Sơn khi độ ẩm cao/điểm sương gần nhiệt bề mặt.'],
+    vi_sao:'Chiều dày màng (DFT) sai là lỗi phổ biến nhất: mỏng thì mau gỉ, dày thì nứt/bong & lãng phí. Mạ kẽm thiếu chiều dày → giảm số năm bảo vệ. Sai sót lộ ra sau vài tháng thì sửa rất tốn.',
+    luu_y:['SƠN: DFT từng lớp & tổng (ISO 19840) ngoài khoảng; điều kiện thi công; overcoat window; bám dính; khuyết tật (chảy võng, bọt, lỗ kim/holiday).','MẠ KẼM: chiều dày/khối lượng lớp mạ (ISO 1461) thiếu; ngoại quan (giọt, gai, vùng sót); bám dính.'],
+    bien_phap:['Đo DFT theo ISO 19840 đủ số điểm theo diện tích; đối chiếu hệ sơn (ISO 12944).','Kiểm điều kiện môi trường trước & trong khi sơn; tuân thủ overcoat window.','Kiểm bám dính (cross-cut/pull-off) & dò holiday với lớp dày.','Mạ: đo chiều dày nhiều điểm theo ISO 1461; kiểm ngoại quan.'],
+    cach_ktra:['1) Trước sơn: kiểm điều kiện môi trường & độ sạch nền.','2) Sau mỗi lớp: đo DFT theo ISO 19840 (đủ số điểm).','3) Kiểm bám dính & dò holiday với lớp dày.','4) Mạ: đo chiều dày nhiều điểm theo ISO 1461.','5) Ghi lô sơn & điều kiện môi trường.'],
+    sai_lam:['Đo DFT vài điểm rồi suy ra cả mảng.','Sơn lớp sau khi lớp trước quá hạn overcoat → bong giữa lớp.','Sơn khi độ ẩm cao/điểm sương gần nhiệt bề mặt.'],
+    khi_loi:['DFT mỏng → sơn dặm thêm; quá dày/khuyết tật → xử lý theo quy trình (mài, sơn lại).','Bám dính kém → cạo bỏ vùng hỏng, làm lại nền & sơn.','Mạ thiếu/lỗi → xử lý theo ISO 1461.'],
     meo:['Hiệu chuẩn máy DFT trên tấm chuẩn đầu mỗi ca.','Ghi điều kiện môi trường + lô sơn (batch) để truy xuất khi có sự cố màng sơn.'],
+    tu_kiem:['DFT từng lớp & tổng đạt?','Bám dính đạt, không lỗ kim?','Điều kiện môi trường đã ghi & đạt?'],
     chuan_bi:'Máy đo DFT (hiệu chuẩn + tấm chuẩn), máy dò holiday, bộ đo bám dính, ẩm kế/nhiệt kế bề mặt, bảng hệ sơn & TDS.',
-    tieu_chuan:'ISO 12944 (hệ sơn theo môi trường); ISO 19840 & ISO 2808 (DFT); ISO 2409/4624 (bám dính); ISO 1461 (mạ kẽm nhúng nóng).',
+    tieu_chuan:'ISO 12944; ISO 19840 & ISO 2808 (DFT); ISO 2409/4624 (bám dính); ISO 1461 (mạ kẽm).',
     tieu_chi:'DFT/khối lượng mạ trong khoảng; bám dính đạt; không khuyết tật vượt mức.',
     ho_so:'BC Sơn (DFT) / BC Mạ kẽm (chiều dày).' },
   { no:12, name:'Đóng gói và xuất hàng', ic:'🚛', mod:'../packing/', modName:'QC Packing', qc:true, spm:false, tpi:true, itp:true, rec:'BC Đóng gói xuất hàng',
+    tomtat:'Bảo vệ & xuất đúng-đủ theo packing list; nhãn & ảnh bàn giao.',
     muc_dich:'Bảo vệ sản phẩm nguyên vẹn đến công trường và xuất đúng-đủ theo danh mục — “gói trọn” chất lượng đã làm ra.',
-    vi_sao:'Sản phẩm hoàn hảo nhưng đóng gói/chằng buộc kém sẽ trầy sơn, móp méo, thất lạc khi vận chuyển — khiếu nại & sửa tại công trường rất tốn. Nhãn/đánh dấu sai gây lắp nhầm, chậm tiến độ.',
-    luu_y:['Tem nhãn/đánh dấu nhận biết (mark no.) sai/thiếu/mờ (ISO 780).','Lớp sơn-mạ bị trầy do thiếu đệm/kê sai điểm.','Chằng buộc (lashing/securing) không an toàn cho vận chuyển.','Sai/khác packing list; sai kích thước-khối lượng kiện; thiếu ảnh hiện trạng bàn giao.'],
-    bien_phap:['Kiểm tem nhãn & mark no. theo bản vẽ/ISO 780.','Kiểm kê & đệm bảo vệ bề mặt sơn-mạ tại điểm tiếp xúc.','Kiểm phương án chằng buộc & điểm nâng (lifting).','Đối chiếu packing list; đo kích thước & cân; chụp ảnh hiện trạng từng kiện.'],
-    sai_lam:['Kê hàng trực tiếp lên thép/đất gây trầy & gỉ.','Mark no. viết tay mờ, rơi rụng khi mưa.','Không chụp ảnh trước khi xuất → tranh chấp hư hỏng khó xử lý.'],
+    vi_sao:'Sản phẩm hoàn hảo nhưng đóng gói/chằng buộc kém sẽ trầy sơn, móp méo, thất lạc khi vận chuyển — khiếu nại & sửa tại công trường rất tốn. Nhãn sai gây lắp nhầm, chậm tiến độ.',
+    luu_y:['Tem nhãn/đánh dấu (mark no.) sai/thiếu/mờ (ISO 780).','Lớp sơn-mạ bị trầy do thiếu đệm/kê sai điểm.','Chằng buộc (lashing) không an toàn cho vận chuyển.','Sai/khác packing list; sai kích thước-khối lượng; thiếu ảnh hiện trạng.'],
+    bien_phap:['Kiểm tem nhãn & mark no. theo bản vẽ/ISO 780.','Kiểm kê & đệm bảo vệ bề mặt sơn-mạ tại điểm tiếp xúc.','Kiểm phương án chằng buộc & điểm nâng (lifting).','Đối chiếu packing list; đo kích thước & cân; chụp ảnh từng kiện.'],
+    cach_ktra:['1) Đối chiếu mark no. từng cấu kiện với packing list & bản vẽ.','2) Kiểm đệm/kê & chằng buộc & điểm nâng.','3) Đo kích thước & cân khối lượng kiện.','4) Chụp ảnh hiện trạng từng kiện trước khi xuất.'],
+    sai_lam:['Kê hàng trực tiếp lên thép/đất gây trầy & gỉ.','Mark no. viết tay mờ, rơi rụng khi mưa.','Không chụp ảnh trước khi xuất.'],
+    khi_loi:['Trầy sơn khi đóng gói → dặm sơn & bổ sung đệm.','Sai/thiếu nhãn → bổ sung trước khi xuất.','Lệch packing list → rà soát, bổ sung/đính chính.'],
     meo:['Đánh mark no. bằng sơn bền + tem kim loại/nhựa kép phòng mất.','Chụp ảnh bộ kiện + packing list cùng khung làm bằng chứng bàn giao.'],
+    tu_kiem:['Mark no. đúng & rõ trên mọi kiện?','Chằng buộc an toàn, có đệm bảo vệ?','Số lượng khớp packing list & đã chụp ảnh?'],
     chuan_bi:'Vật tư đóng gói (gỗ kê, đệm, dây/đai), cân, thước, máy ảnh, packing list, yêu cầu vận chuyển/hợp đồng.',
-    tieu_chuan:'ISO 780 (ký hiệu đóng gói); yêu cầu hợp đồng & quy định vận chuyển.',
+    tieu_chuan:'ISO 780; yêu cầu hợp đồng & quy định vận chuyển.',
     tieu_chi:'Đóng gói & chằng buộc an toàn; nhãn/mark no. đúng & rõ; số lượng khớp packing list.',
     ho_so:'BC Đóng gói xuất hàng; packing list; bộ ảnh hiện trạng.' }
 ];
 const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const liList = arr => '<ul>' + arr.map(x => `<li>${esc(x)}</li>`).join('') + '</ul>';
 
 function build(){
   let h = `<div class="lane"><div class="lanehdr l-prod">SẢN XUẤT<span class="s">12 bước</span></div>` +
-    STEPS.map(s => `<div class="cell step" role="button" tabindex="0" onclick="openDetail(${s.no})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetail(${s.no})}" title="Phân tích QC: ${esc(s.name)}">
-      <span class="no">${s.no}</span><span class="ic">${s.ic}</span>${esc(s.name)}<span class="go">PHÂN TÍCH ▸</span></div>`).join('') + `</div>`;
-  h += `<div class="lane"><div class="lanehdr l-qc">QC NỘI BỘ<span class="s">kiểm tra/nghiệm thu</span></div>` + cells('qc') + `</div>`;
+    STEPS.map(s => `<div class="cell step" role="button" tabindex="0" onclick="goStep(${s.no})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();goStep(${s.no})}" title="Xem phân tích: ${esc(s.name)}">
+      <span class="no">${s.no}</span><span class="ic">${s.ic}</span>${esc(s.name)}<span class="go">XEM ▾</span></div>`).join('') + `</div>`;
+  h += `<div class="lane"><div class="lanehdr l-qc">QC NỘI BỘ<span class="s">kiểm tra</span></div>` + cells('qc') + `</div>`;
   h += `<div class="lane"><div class="lanehdr l-tpi">NGHIỆM THU KH<span class="s">TPI theo ITP</span></div>` + cells('tpi') + `</div>`;
-  h += `<div class="lane"><div class="lanehdr l-rec">HỒ SƠ<span class="s">báo cáo CL</span></div>` +
+  h += `<div class="lane"><div class="lanehdr l-rec">HỒ SƠ<span class="s">báo cáo</span></div>` +
     STEPS.map(s => s.rec ? `<div class="cell rec">📄 ${esc(s.rec)}</div>` : `<div class="empty"></div>`).join('') + `</div>`;
   document.getElementById('chart').innerHTML = h;
 }
@@ -269,36 +344,55 @@ function cells(kind){
   }
   return out;
 }
-function liList(arr){ return '<ul>' + arr.map(x => `<li>${esc(x)}</li>`).join('') + '</ul>'; }
-function openDetail(no){
-  const s = STEPS.find(x => x.no === no); if (!s) return;
+function detailHTML(s){
+  const e = (typeof EXTRA!=='undefined' && EXTRA[s.no]) || {};
   const diem = [ (s.qc===true ? (s.spm?'QC nội bộ 100% (điểm dừng SPM)':'QC nội bộ kiểm tra') : 'QC nội bộ — kiểm soát quá trình'),
                  (s.tpi===true ? 'TPI/khách nghiệm thu theo ITP' : 'TPI — giám sát quá trình') ];
   const tags = `<div class="tags"><span class="tag">QC: ${s.qc===true?(s.spm?'Hold 100%':'Kiểm tra'):'Quá trình'}</span>` +
     (s.spm?`<span class="tag spm">SPM 100%</span>`:'') + (s.itp?`<span class="tag itp">Thư mời ITP</span>`:'') +
     `<span class="tag">${s.tpi===true?'TPI nghiệm thu':'TPI giám sát'}</span></div>`;
-  document.getElementById('modal').innerHTML =
-    `<div class="mhd"><div class="stepno">${s.no}</div><div><div class="mt">${esc(s.ic)} ${esc(s.name)}</div><div class="ms">Công đoạn ${s.no}/12 · ${esc(s.modName)}</div></div><button class="x" onclick="closeDetail()" aria-label="Đóng">✕</button></div>
-    <div class="mbody">
-      <div class="sec"><h4>🎯 Mục đích</h4><p>${esc(s.muc_dich)}</p></div>
-      <div class="sec callout why"><h4>💡 Vì sao quan trọng</h4><p>${esc(s.vi_sao)}</p></div>
-      <div class="sec"><h4>⚠️ Lưu ý / Rủi ro</h4>${liList(s.luu_y)}</div>
-      <div class="sec"><h4>🛠️ Biện pháp kiểm soát</h4>${liList(s.bien_phap)}</div>
-      <div class="sec callout bad"><h4>❌ Sai lầm thường gặp</h4>${liList(s.sai_lam)}</div>
-      <div class="sec"><h4>🧰 Chuẩn bị</h4><p>${esc(s.chuan_bi)}</p></div>
-      <div class="sec"><h4>📚 Tiêu chuẩn áp dụng</h4><p>${esc(s.tieu_chuan)}</p></div>
-      <div class="sec"><h4>✔️ Tiêu chí chấp nhận</h4><p>${esc(s.tieu_chi)}</p></div>
-      <div class="sec"><h4>🛑 Điểm kiểm / dừng</h4>${liList(diem)}${tags}</div>
-      ${s.meo ? `<div class="sec callout tip"><h4>💬 Mẹo hiện trường</h4>${liList(s.meo)}</div>` : ''}
-      <div class="sec"><h4>🗂️ Hồ sơ</h4><p>${esc(s.ho_so)}</p></div>
-      <a class="openmod" href="${esc(s.mod)}">Mở module ${esc(s.modName)} →</a>
-    </div>`;
-  document.getElementById('ovl').classList.add('on');
-  document.body.style.overflow = 'hidden';
+  const sec = (t,html,cls) => `<div class="sec ${cls||''}"><h4>${t}</h4>${html}</div>`;
+  return [
+    sec('🎯 Mục đích', `<p>${esc(s.muc_dich)}</p>`),
+    sec('💡 Vì sao quan trọng', `<p>${esc(s.vi_sao)}</p>`, 'callout why'),
+    sec('⚠️ Lưu ý / Rủi ro', liList(s.luu_y)),
+    sec('🛠️ Biện pháp kiểm soát', liList(s.bien_phap)),
+    s.cach_ktra ? sec('🔬 Cách kiểm tra (từng bước)', liList(s.cach_ktra)) : (e.cach_ktra ? sec('🔬 Cách kiểm tra (từng bước)', liList(e.cach_ktra)) : ''),
+    sec('❌ Sai lầm thường gặp', liList(s.sai_lam), 'callout bad'),
+    (s.khi_loi||e.khi_loi) ? sec('🚦 Khi không đạt → xử lý', liList(s.khi_loi||e.khi_loi), 'callout warn') : '',
+    sec('🧰 Chuẩn bị', `<p>${esc(s.chuan_bi)}</p>`),
+    sec('📚 Tiêu chuẩn áp dụng', `<p>${esc(s.tieu_chuan)}</p>`),
+    sec('✔️ Tiêu chí chấp nhận', `<p>${esc(s.tieu_chi)}</p>`),
+    sec('🛑 Điểm kiểm / dừng', liList(diem)+tags),
+    s.meo ? sec('💬 Mẹo hiện trường', liList(s.meo), 'callout tip') : '',
+    (s.tu_kiem||e.tu_kiem) ? sec('☑️ Tự kiểm nhanh', liList(s.tu_kiem||e.tu_kiem), 'callout chk') : '',
+    sec('🗂️ Hồ sơ', `<p>${esc(s.ho_so)}</p>`),
+    `<a class="openmod" href="${esc(s.mod)}">Mở module ${esc(s.modName)} →</a>`
+  ].join('');
 }
-function closeDetail(){ document.getElementById('ovl').classList.remove('on'); document.body.style.overflow = ''; }
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetail(); });
+function buildAcc(){
+  document.getElementById('acc').innerHTML = STEPS.map(s => `
+    <div class="acc-item" id="acc-${s.no}">
+      <button class="acc-hd" onclick="toggleAcc(${s.no})" aria-expanded="false">
+        <span class="acc-no">${s.no}</span><span class="acc-ic">${s.ic}</span>
+        <span class="acc-nm">${esc(s.name)}<small>${esc(s.tomtat||'')}</small></span><span class="acc-ar">▼</span>
+      </button>
+      <div class="acc-bd" hidden>${detailHTML(s)}</div>
+    </div>`).join('');
+}
+function toggleAcc(no){
+  const it = document.getElementById('acc-'+no); if(!it) return;
+  const bd = it.querySelector('.acc-bd'), hd = it.querySelector('.acc-hd');
+  if (bd.hasAttribute('hidden')){ bd.removeAttribute('hidden'); it.classList.add('open'); hd.setAttribute('aria-expanded','true'); }
+  else { bd.setAttribute('hidden',''); it.classList.remove('open'); hd.setAttribute('aria-expanded','false'); }
+}
+function goStep(no){
+  const it = document.getElementById('acc-'+no); if(!it) return;
+  if (it.querySelector('.acc-bd').hasAttribute('hidden')) toggleAcc(no);
+  it.scrollIntoView({ behavior:'smooth', block:'start' });
+}
 build();
+buildAcc();
 </script>
 <script src="../assistant.js"></script>
 <script src="../ai-fab.js"></script>
