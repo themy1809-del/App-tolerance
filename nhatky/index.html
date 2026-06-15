@@ -45,6 +45,13 @@
   .form input,.form select{padding:9px 11px;border:1px solid var(--line);border-radius:10px;font-size:13.5px;font-family:inherit}
   .form .full{grid-column:1/-1}
   h3{margin:0 0 10px;font-size:14.5px;color:var(--brand)}
+  /* ===== DARK MODE (tự theo máy) ===== */
+  @media (prefers-color-scheme: dark){
+    :root{--bg:#0e1521;--card:#161e2b;--ink:#e6ecf4;--muted:#93a1b3;--line:#28323f;--soft:#1c2733}
+    .nav,.search input,.chip,.rcard,.card,.seccard,.ckphase,.dfcard,.stdcard,.crumb,.modal,.btn.alt,select,.inp{background:#161e2b;color:var(--ink)}
+    .chip{color:#cdd6e0}
+    details>summary,.nav button.on{color:#86b5ef}
+  }
 </style>
 </head>
 <body>

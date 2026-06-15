@@ -105,6 +105,25 @@
   .viz .vizcap{font-size:11px;color:var(--muted);margin-top:5px;font-style:italic}
   .note{font-size:11.5px;color:var(--muted);margin-top:18px;border-top:1px solid var(--line);padding-top:10px}
   .foot{font-size:11px;color:#90a0b3;text-align:center;margin-top:16px}
+  /* ===== DARK MODE (tự theo máy) ===== */
+  @media (prefers-color-scheme: dark){
+    :root{--bg:#0e1521;--ink:#e6ecf4;--muted:#93a1b3;--line:#28323f}
+    .intro{background:#13243a;border-color:#24405f} .intro h3,.intro p,.intro li{color:#bcd3ee}
+    .cta{background:#1c2c44;color:#cfe0f5}
+    .banner,.scroll,summary,.acc-item,.fs-card{background:#161e2b}
+    summary,.banner-ttl,.secttl,.fs-cap b{color:#7fb0ef}
+    .fs-cap{color:#cdd6e0}
+    .acc-nm{color:#e6ecf4} .acc-nm small{color:#93a1b3} .acc-bd{border-top-color:#28323f}
+    .sec p,.sec li{color:#cdd6e0}
+    .viz .vizdg{background:#161e2b}
+    .why{background:#13243a} .why h4{color:#9fc3ee}
+    .bad{background:#2a1614} .bad h4,.bad li{color:#f0a090}
+    .warn{background:#2a2310} .warn h4,.warn li{color:#e8c879}
+    .tip{background:#10241a} .tip h4,.tip li{color:#84caa0}
+    .chk{background:#1a222c} .chk h4,.chk li{color:#aab6c4}
+    .tag{background:#1c2c44;color:#9fc3ee;border-color:#2a3f5f}
+    .note{color:#93a1b3;border-top-color:#28323f}
+  }
 </style>
 </head>
 <body>
