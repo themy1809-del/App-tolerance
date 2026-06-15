@@ -83,6 +83,14 @@
   .tab{display:none}
   .tab.on{display:block;animation:fadein .25s ease}
   @keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  /* ===== DARK MODE (tự theo máy) ===== */
+  @media (prefers-color-scheme: dark){
+    :root{--bg:#0e1521;--card:#161e2b;--ink:#e6ecf4;--muted:#93a1b3;--line:#28323f;--soft:#1c2733}
+    .nav,.search input,.chip,.rcard,.card,.seccard,.ckphase,.dfcard,.symcard,.stdcard,.crumb,.stdpick,.modal,.btn.alt,select,.inp,.inrow input{background:#161e2b;color:var(--ink)}
+    .chip{color:#cdd6e0}
+    .evidence,.symcard svg{background:#1a2330}
+    details>summary,.nav button.on{color:#86b5ef}
+  }
 </style>
 </head>
 <body>
