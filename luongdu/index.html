@@ -109,6 +109,14 @@ h1{font-size:17px;margin:0;font-weight:800;line-height:1.15}
 .real-photo-box{background:#1b2430;border-radius:10px;overflow:hidden;margin-bottom:14px;min-height:200px;position:relative}
 .real-photo-img{width:100%;max-height:420px;object-fit:cover;display:block}
 .real-photo-empty{display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px 20px;background:#f3f3f3;border-radius:10px;text-align:center}
+  /* ===== DARK MODE (tự theo máy) ===== */
+  @media (prefers-color-scheme: dark){
+    :root{--bg:#0e1521;--card:#161e2b;--ink:#e6ecf4;--muted:#93a1b3;--line:#28323f;--soft:#1c2733}
+    .nav,.search input,.chip,.rcard,.card,.seccard,.ckphase,.dfcard,.symcard,.stdcard,.crumb,.stdpick,.modal,.btn.alt,select,.inp,.inrow input{background:#161e2b;color:var(--ink)}
+    .chip{color:#cdd6e0}
+    .gal-thumb,.gal-card{background:#161e2b}
+    details>summary,.nav button.on{color:#86b5ef}
+  }
 </style>
 <link rel="stylesheet" href="../desktop-scale.css?v=6">
 </head>

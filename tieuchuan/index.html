@@ -32,6 +32,14 @@
   .card .us{font-size:11.5px;color:var(--muted);margin-top:5px}
   .card .us a{color:var(--brand);font-weight:700;text-decoration:none}
   .note{background:#fff;border:1px dashed var(--brand2);border-radius:12px;padding:12px 14px;font-size:12.5px;color:#33404e;margin-bottom:14px}
+  /* ===== DARK MODE (tự theo máy) ===== */
+  @media (prefers-color-scheme: dark){
+    :root{--bg:#0e1521;--card:#161e2b;--ink:#e6ecf4;--muted:#93a1b3;--line:#28323f;--soft:#1c2733}
+    .nav,.search input,.chip,.rcard,.card,.seccard,.ckphase,.dfcard,.symcard,.stdcard,.crumb,.stdpick,.modal,.btn.alt,select,.inp,.inrow input{background:#161e2b;color:var(--ink)}
+    .chip{color:#cdd6e0}
+    .evidence,.symcard svg{background:#1a2330}
+    details>summary,.nav button.on{color:#86b5ef}
+  }
 </style>
 </head>
 <body>
