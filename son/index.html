@@ -107,6 +107,13 @@
   .seccard,.dfcard{transition:box-shadow .15s ease}
   .seccard:hover,.dfcard:hover{box-shadow:0 2px 4px rgba(20,45,30,.08),0 10px 28px rgba(20,45,30,.1)}
   .btn:active,button:active{transform:scale(.98)}
+  /* ===== DARK MODE (tự theo máy) ===== */
+  @media (prefers-color-scheme: dark){
+    :root{--bg:#0e1521;--card:#161e2b;--ink:#e6ecf4;--muted:#93a1b3;--line:#28323f;--soft:#15281c}
+    .nav,.seccard,.search input,.chip,.dfcard,.ckphase{background:#161e2b;color:var(--ink)}
+    .chip{color:#cdd6e0}
+    details>summary,.nav button.on{color:#84caa0}
+  }
 </style>
 </head>
 <body>
