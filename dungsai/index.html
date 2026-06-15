@@ -182,6 +182,19 @@
   .hideprint{}
   #report{display:none}
   @media print{ .appbar,.nav,.hideprint,.footer,.detail-pane .dhead{display:none!important} body{background:#fff} #report{display:block!important} #app{display:none!important} }
+
+  /* ===== DARK MODE (tự theo máy) ===== */
+  @media (prefers-color-scheme: dark){
+    :root{--bg:#0e1521;--card:#161e2b;--ink:#e6ecf4;--muted:#93a1b3;--line:#28323f;--soft:#1c2c44;--chip:#1a2330}
+    .nav,.search input,details.more,select,.inp,.rcard,.stdcard,.crumb,.stdpick,.modal,.btn.alt{background:#161e2b;color:var(--ink)}
+    .chip{background:#161e2b;color:#cdd6e0}
+    .region{background:#222c3a;color:#aab6c4}
+    .tagf{color:#aab6c4}
+    details.more>summary{color:#7fb0ef}
+    .rcard.on,.nav button.on{background:#1c2c44}
+    .badge{background:#1c2c44;color:#9fc3ee}
+    .detail-pane::-webkit-scrollbar-thumb{background:#3a4656}
+  }
 </style>
 <link rel="stylesheet" href="../desktop-scale.css?v=1">
 </head>
