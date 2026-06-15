@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="author" content="Đậu Thế Mỹ">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0c447c">
+<title>QC Dung sai lắp dựng — DaiDung QC Suite</title>
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/icon-180.png">
+<style>
+  :root{--bg:#f5f7fa;--card:#fff;--ink:#1b2430;--muted:#5f6b7a;--line:#dfe5ec;
+    --brand:#0c447c;--brand2:#185fa5;--soft:#e6f0fb;--warn:#8a5a00;--warn-soft:#fdf3e2;
+    --r:14px;--sh:0 1px 2px rgba(16,24,38,.05),0 6px 20px rgba(16,24,38,.06)}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.55}
+  .appbar{position:sticky;top:0;z-index:40;background:linear-gradient(180deg,#0c447c,#0a3a6b);color:#fff;
+    padding:max(10px,env(safe-area-inset-top)) 16px 11px;display:flex;align-items:center;gap:11px}
+  .appbar a{color:#fff;text-decoration:none;font-size:19px;font-weight:800;opacity:.9}
+  .appbar h1{font-size:15.5px;margin:0;font-weight:800;letter-spacing:-.2px;line-height:1.15}
+  .appbar .sub{font-size:11px;opacity:.82;font-weight:500}
+  .wrap{max-width:1080px;margin:0 auto;padding:14px 16px 40px}
+  .intro{background:var(--soft);border:1px solid #cfe0f5;border-radius:14px;padding:13px 15px;margin:4px 0 16px}
+  .intro p{margin:0;font-size:13.8px;color:#1c3a63;line-height:1.6}
+  .intro b{color:var(--brand)}
+  .secttl{font-size:14px;font-weight:800;color:var(--brand);margin:20px 2px 9px;display:flex;align-items:center;gap:8px}
+  .grid{display:grid;grid-template-columns:minmax(0,1fr);gap:11px}
+  @media(min-width:760px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:14px 15px}
+  .card h3{margin:0 0 8px;font-size:14.5px;font-weight:800;color:var(--ink);display:flex;align-items:center;gap:7px}
+  .card .ic{font-size:18px}
+  .row{display:flex;gap:8px;font-size:13.3px;padding:5px 0;border-top:1px dashed var(--line);line-height:1.5}
+  .row:first-of-type{border-top:0}
+  .row .k{flex:none;width:78px;font-weight:700;color:var(--muted)}
+  .row .v{flex:1;color:#28323f}
+  .row .v b{color:var(--brand2)}
+  .cite{font-size:11.5px;font-weight:700;color:var(--brand);background:var(--soft);border-radius:6px;padding:2px 7px;display:inline-block;margin:2px 3px 0 0}
+  .note{background:var(--warn-soft);border:1px solid #f0d9a8;border-left:4px solid var(--warn);border-radius:0;padding:11px 14px;font-size:13px;color:#7a4a10;margin:16px 0 0;line-height:1.6}
+  .foot{font-size:11px;color:#90a0b3;text-align:center;margin-top:18px;border-top:1px solid var(--line);padding-top:12px}
+  /* ===== DARK MODE (tự theo máy) ===== */
+  @media (prefers-color-scheme: dark){
+    :root{--bg:#0e1521;--card:#161e2b;--ink:#e6ecf4;--muted:#93a1b3;--line:#28323f;--soft:#1c2c44}
+    .intro{border-color:#24405f} .intro p,.intro b{color:#bcd3ee}
+    .row .v{color:#cdd6e0} .secttl{color:#7fb0ef}
+    .cite{color:#9fc3ee;background:#1c2c44}
+    .note{background:#2a2310;border-color:#5a4a1e;color:#e8c879}
+  }
+</style>
+</head>
+<body>
+<header class="appbar">
+  <a href="../" title="Trang chủ">←</a>
+  <div><h1>QC Dung sai lắp dựng</h1><div class="sub">Erection tolerances · ngoài công trường</div></div>
+</header>
+
+<div class="wrap">
+  <div class="intro">
+    <p><b>Dung sai LẮP DỰNG</b> khác dung sai chế tạo: kiểm cấu kiện sau khi <b>dựng tại công trường</b> — độ thẳng đứng cột, vị trí so với lưới trục, cao độ, độ thẳng hàng tổng thể. Đo bằng <b>máy toàn đạc / thủy bình / dây dọi</b>. Giá trị giới hạn phụ thuộc <b>cấp dung sai & spec dự án</b> — luôn đối chiếu bản gốc tiêu chuẩn + hợp đồng.</p>
+  </div>
+
+  <div class="secttl">🏛️ Cột (Columns)</div>
+  <div class="grid">
+    <div class="card">
+      <h3><span class="ic">📐</span>Độ thẳng đứng cột (plumb)</h3>
+      <div class="row"><span class="k">Tiêu chí</span><span class="v">Lệch đỉnh so với chân theo phương đứng trong giới hạn cho phép mỗi tầng & toàn chiều cao (vd thường gặp <b>≤ h/500</b> mỗi đoạn — xác nhận theo cấp).</span></div>
+      <div class="row"><span class="k">Cách kiểm</span><span class="v">Máy toàn đạc / dây dọi 2 mặt vuông góc; đo tại đỉnh & chân mỗi đoạn cột.</span></div>
+      <div class="row"><span class="k">Điều khoản</span><span class="v"><span class="cite">EN 1090-2 §11 + Annex (erection)</span><span class="cite">AISC 303 §7</span><span class="cite">TCVN 5575</span></span></div>
+      <div class="row"><span class="k">Lưu ý</span><span class="v">Đo khi cột đã cố định tạm ổn định; tránh đo lúc nắng lệch (giãn nhiệt) hoặc còn tải cẩu.</span></div>
+    </div>
+    <div class="card">
+      <h3><span class="ic">🎯</span>Vị trí chân cột (so với lưới trục)</h3>
+      <div class="row"><span class="k">Tiêu chí</span><span class="v">Tâm chân cột lệch so với đường trục thiết kế trong dung sai (vd thường gặp <b>±5 mm</b> — xác nhận spec).</span></div>
+      <div class="row"><span class="k">Cách kiểm</span><span class="v">Toàn đạc bắn tọa độ tim cột, so với lưới trục đã định vị.</span></div>
+      <div class="row"><span class="k">Điều khoản</span><span class="v"><span class="cite">EN 1090-2 §11</span><span class="cite">AISC 303</span></span></div>
+      <div class="row"><span class="k">Lưu ý</span><span class="v">Lưới trục gốc (control line) phải được nghiệm thu trước; sai lưới kéo theo sai toàn bộ.</span></div>
+    </div>
+    <div class="card">
+      <h3><span class="ic">📏</span>Cao độ gối / mặt base</h3>
+      <div class="row"><span class="k">Tiêu chí</span><span class="v">Cao độ mặt tựa / đỉnh base plate đúng thiết kế trong dung sai (vd <b>±5 mm</b>); chiều dày vữa grout đạt yêu cầu.</span></div>
+      <div class="row"><span class="k">Cách kiểm</span><span class="v">Thủy bình/toàn đạc; kiểm độ phẳng tiếp xúc & grout (không rỗng).</span></div>
+      <div class="row"><span class="k">Điều khoản</span><span class="v"><span class="cite">EN 1090-2 §5.6 (gối/grout)</span><span class="cite">AISC 303</span></span></div>
+    </div>
+    <div class="card">
+      <h3><span class="ic">🔩</span>Bu lông chờ (anchor bolts)</h3>
+      <div class="row"><span class="k">Tiêu chí</span><span class="v">Vị trí nhóm bu lông chờ, khoảng cách, độ nhô & độ thẳng trong dung sai định vị (tra bảng tiêu chuẩn/spec).</span></div>
+      <div class="row"><span class="k">Cách kiểm</span><span class="v">Dưỡng định vị, thước; kiểm trước khi đổ bê tông & trước khi dựng cột.</span></div>
+      <div class="row"><span class="k">Điều khoản</span><span class="v"><span class="cite">EN 1090-2 §11</span><span class="cite">AISC 303 / ACI</span></span></div>
+      <div class="row"><span class="k">Lưu ý</span><span class="v">Đây là điểm dừng quan trọng: sai bu lông chờ → không lắp được chân cột, sửa rất tốn.</span></div>
+    </div>
+  </div>
+
+  <div class="secttl">🏗️ Dầm, sàn & tổng thể</div>
+  <div class="grid">
+    <div class="card">
+      <h3><span class="ic">↔️</span>Vị trí & cao độ dầm</h3>
+      <div class="row"><span class="k">Tiêu chí</span><span class="v">Cao độ & vị trí dầm/console đúng thiết kế trong dung sai; độ võng/độ vồng phù hợp.</span></div>
+      <div class="row"><span class="k">Cách kiểm</span><span class="v">Toàn đạc/thủy bình tại các nút; so cao độ hai đầu & giữa nhịp.</span></div>
+      <div class="row"><span class="k">Điều khoản</span><span class="v"><span class="cite">EN 1090-2 §11</span><span class="cite">AISC 303</span></span></div>
+    </div>
+    <div class="card">
+      <h3><span class="ic">📦</span>Độ thẳng hàng & độ vuông tổng thể</h3>
+      <div class="row"><span class="k">Tiêu chí</span><span class="v">Lệch toàn nhà (thẳng hàng, đường chéo mặt bằng, độ nghiêng tổng) trong dung sai lắp dựng tổng thể.</span></div>
+      <div class="row"><span class="k">Cách kiểm</span><span class="v">Đo đường chéo mặt bằng; toàn đạc kiểm độ nghiêng & thẳng hàng các trục.</span></div>
+      <div class="row"><span class="k">Điều khoản</span><span class="v"><span class="cite">EN 1090-2 §11 + Annex</span><span class="cite">AISC 303 §7</span></span></div>
+    </div>
+    <div class="card">
+      <h3><span class="ic">🔗</span>Mối nối lắp dựng (bolt/hàn)</h3>
+      <div class="row"><span class="k">Tiêu chí</span><span class="v">Khe hở mối nối, đối tiếp lỗ, siết bu lông CĐC đạt preload; mối hàn hiện trường đạt VT/NDT.</span></div>
+      <div class="row"><span class="k">Cách kiểm</span><span class="v">Thước lá đo khe; kiểm siết (turn-of-nut/DTI); VT mối hàn hiện trường.</span></div>
+      <div class="row"><span class="k">Điều khoản</span><span class="v"><span class="cite">EN 1090-2</span><span class="cite">RCSC / AISC</span><span class="cite">ISO 5817</span></span></div>
+    </div>
+    <div class="card">
+      <h3><span class="ic">🛡️</span>Sau lắp dựng</h3>
+      <div class="row"><span class="k">Tiêu chí</span><span class="v">Dặm sơn vùng trầy/hàn hiện trường; siết & đánh dấu bu lông; biên bản nghiệm thu lắp dựng + hồ sơ toàn đạc.</span></div>
+      <div class="row"><span class="k">Cách kiểm</span><span class="v">Kiểm trực quan lớp phủ; đối chiếu nhật ký siết; lập biên bản dimensional lắp dựng.</span></div>
+      <div class="row"><span class="k">Điều khoản</span><span class="v"><span class="cite">EN 1090-2</span><span class="cite">ISO 12944 (dặm sơn)</span></span></div>
+    </div>
+  </div>
+
+  <div class="note">⚠ <b>Giá trị giới hạn cụ thể</b> (mm) phụ thuộc <b>cấp dung sai (essential/functional), loại kết cấu và spec dự án/hợp đồng</b>. Module này nêu <b>tiêu chí cần kiểm + nơi tra</b>; số chính xác phải đối chiếu bản gốc <b>EN 1090-2:2018+A1 §11 & Annex B/D · AISC 303 · TCVN 5575</b> và yêu cầu kỹ thuật dự án trước khi kết luận Đạt/Không đạt.</div>
+  <div class="foot">Tác giả: Đậu Thế Mỹ · © 2026 · DaiDung QC Suite</div>
+</div>
+<script src="../assistant.js"></script>
+<script src="../ai-fab.js"></script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="author" content="Đậu Thế Mỹ">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#37474f">
+<title>Bu lông cường độ cao — DaiDung QC Suite</title>
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/icon-180.png">
+<style>
+  :root{--bg:#f4f5f6;--card:#fff;--ink:#1b2430;--muted:#5f6b7a;--line:#dde3e6;
+    --brand:#37474f;--brand2:#546e7a;--soft:#eceff1;--warn:#8a5a00;--warn-soft:#fdf3e2;
+    --r:14px;--sh:0 1px 2px rgba(16,24,38,.05),0 6px 20px rgba(16,24,38,.06)}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.55}
+  .appbar{position:sticky;top:0;z-index:40;background:linear-gradient(180deg,#37474f,#263238);color:#fff;
+    padding:max(10px,env(safe-area-inset-top)) 16px 11px;display:flex;align-items:center;gap:11px}
+  .appbar a{color:#fff;text-decoration:none;font-size:19px;font-weight:800;opacity:.9}
+  .appbar h1{font-size:15.5px;margin:0;font-weight:800;letter-spacing:-.2px;line-height:1.15}
+  .appbar .sub{font-size:11px;opacity:.82;font-weight:500}
+  .wrap{max-width:1080px;margin:0 auto;padding:14px 16px 40px}
+  .intro{background:var(--soft);border:1px solid #cfd8dc;border-radius:14px;padding:13px 15px;margin:4px 0 16px}
+  .intro p{margin:0;font-size:13.8px;color:#37474f;line-height:1.6}
+  .intro b{color:#263238}
+  .secttl{font-size:14px;font-weight:800;color:var(--brand);margin:20px 2px 9px;display:flex;align-items:center;gap:8px}
+  .grid{display:grid;grid-template-columns:minmax(0,1fr);gap:11px}
+  @media(min-width:760px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:14px 15px}
+  .card h3{margin:0 0 8px;font-size:14.5px;font-weight:800;color:var(--ink);display:flex;align-items:center;gap:7px}
+  .row{display:flex;gap:8px;font-size:13.3px;padding:5px 0;border-top:1px dashed var(--line);line-height:1.5}
+  .row:first-of-type{border-top:0}
+  .row .k{flex:none;width:84px;font-weight:700;color:var(--muted)}
+  .row .v{flex:1;color:#28323f}
+  .row .v b{color:var(--brand2)}
+  .cite{font-size:11.5px;font-weight:700;color:#37474f;background:var(--soft);border-radius:6px;padding:2px 7px;display:inline-block;margin:2px 3px 0 0}
+  .note{background:var(--warn-soft);border:1px solid #f0d9a8;border-left:4px solid var(--warn);border-radius:0;padding:11px 14px;font-size:13px;color:#7a4a10;margin:16px 0 0;line-height:1.6}
+  .foot{font-size:11px;color:#90a0b3;text-align:center;margin-top:18px;border-top:1px solid var(--line);padding-top:12px}
+  @media (prefers-color-scheme: dark){
+    :root{--bg:#0e1521;--card:#161e2b;--ink:#e6ecf4;--muted:#93a1b3;--line:#28323f;--soft:#222c33}
+    .intro{border-color:#33414a} .intro p,.intro b{color:#c4ced4}
+    .row .v{color:#cdd6e0} .secttl{color:#9fb2bd}
+    .cite{color:#bcc9d1;background:#222c33}
+    .note{background:#2a2310;border-color:#5a4a1e;color:#e8c879}
+  }
+</style>
+</head>
+<body>
+<header class="appbar">
+  <a href="../" title="Trang chủ">←</a>
+  <div><h1>Bu lông cường độ cao (CĐC)</h1><div class="sub">Preload · Turn-of-nut · DTI · TC bolt · RCSC/EN 1090-2</div></div>
+</header>
+
+<div class="wrap">
+  <div class="intro">
+    <p><b>Liên kết bu lông CĐC</b> (8.8/10.9) có 2 trạng thái: <b>siết chặt khít (snug-tight)</b> hoặc <b>siết tạo lực căng (preloaded)</b>. Liên kết chịu ma sát / chịu mỏi / chống tuột phải <b>preload</b>. Lực căng & phương pháp theo <b>RCSC / AISC</b> hoặc <b>EN 1090-2</b> — giá trị cụ thể theo cấp bu lông, đường kính & spec dự án.</p>
+  </div>
+
+  <div class="secttl">🔧 Phương pháp tạo lực căng (preload)</div>
+  <div class="grid">
+    <div class="card">
+      <h3>🔩 Turn-of-nut (xoay góc)</h3>
+      <div class="row"><span class="k">Cách làm</span><span class="v">Đạt snug-tight → đánh dấu → xoay thêm <b>góc quy định</b> (theo chiều dài/đường kính bu lông).</span></div>
+      <div class="row"><span class="k">Kiểm tra</span><span class="v">Quan sát match-mark đã xoay đủ góc; phổ biến & tin cậy.</span></div>
+      <div class="row"><span class="k">Điều khoản</span><span class="v"><span class="cite">RCSC</span><span class="cite">EN 1090-2 (combined method)</span></span></div>
+    </div>
+    <div class="card">
+      <h3>🪛 Calibrated wrench (mô-men)</h3>
+      <div class="row"><span class="k">Cách làm</span><span class="v">Siết tới <b>mô-men hiệu chuẩn</b> tương ứng lực căng yêu cầu; hiệu chuẩn cờ-lê đầu ca.</span></div>
+      <div class="row"><span class="k">Lưu ý</span><span class="v">Mô-men nhạy với bôi trơn/bề mặt ren → phải hiệu chuẩn theo lô bu lông thực tế.</span></div>
+      <div class="row"><span class="k">Điều khoản</span><span class="v"><span class="cite">RCSC</span><span class="cite">EN 1090-2 (torque method)</span></span></div>
+    </div>
+    <div class="card">
+      <h3>⭕ DTI — vòng đệm chỉ thị</h3>
+      <div class="row"><span class="k">Cách làm</span><span class="v">Vòng đệm có vấu; siết tới khi khe vấu khép đạt → đo bằng <b>thước lá</b> số khe còn lại.</span></div>
+      <div class="row"><span class="k">Kiểm tra</span><span class="v">Trực quan + thước lá; nhanh, dễ nghiệm thu.</span></div>
+      <div class="row"><span class="k">Điều khoản</span><span class="v"><span class="cite">ASTM F959</span><span class="cite">RCSC</span></span></div>
+    </div>
+    <div class="card">
+      <h3>🔃 TC / HRC bolt (đầu giật)</h3>
+      <div class="row"><span class="k">Cách làm</span><span class="v">Bu lông có đầu giật (spline); súng chuyên dụng siết tới khi <b>giật đứt đầu</b> = đạt lực.</span></div>
+      <div class="row"><span class="k">Kiểm tra</span><span class="v">Xác nhận đầu spline đã đứt trên toàn liên kết.</span></div>
+      <div class="row"><span class="k">Điều khoản</span><span class="v"><span class="cite">ASTM F3125 (F1852/F2280)</span><span class="cite">EN 14399-10 (HRC)</span></span></div>
+    </div>
+  </div>
+
+  <div class="secttl">📋 Trình tự, bề mặt & nghiệm thu</div>
+  <div class="grid">
+    <div class="card">
+      <h3>📐 Snug-tight & trình tự siết</h3>
+      <div class="row"><span class="k">Snug-tight</span><span class="v">Các bản tiếp xúc khít chắc (đủ chặt bằng cờ-lê thường / vài nhịp súng) — là <b>điểm xuất phát</b> trước preload.</span></div>
+      <div class="row"><span class="k">Trình tự</span><span class="v">Siết từ <b>vùng cứng ra mép</b>, theo vòng; có thể cần 2 lượt để các bu lông giữ đủ lực.</span></div>
+      <div class="row"><span class="k">Điều khoản</span><span class="v"><span class="cite">RCSC</span><span class="cite">EN 1090-2</span></span></div>
+    </div>
+    <div class="card">
+      <h3>🧱 Bề mặt ma sát (faying / slip)</h3>
+      <div class="row"><span class="k">Tiêu chí</span><span class="v">Liên kết chịu ma sát: bề mặt đạt <b>hệ số ma sát (slip class)</b> theo lớp phủ — sạch, không dầu, không sơn sai loại.</span></div>
+      <div class="row"><span class="k">Lưu ý</span><span class="v">Sơn lọt vào mặt ma sát → giảm hệ số trượt → mất khả năng chịu lực thiết kế.</span></div>
+      <div class="row"><span class="k">Điều khoản</span><span class="v"><span class="cite">EN 1090-2 (slip factor)</span><span class="cite">RCSC §3</span></span></div>
+    </div>
+    <div class="card">
+      <h3>✔️ Nghiệm thu & hồ sơ</h3>
+      <div class="row"><span class="k">Kiểm tra</span><span class="v">Xác nhận phương pháp đúng, đủ vòng đệm/long đen cứng, match-mark/đầu giật/DTI đạt; ghi nhật ký siết.</span></div>
+      <div class="row"><span class="k">Khi lỗi</span><span class="v">Thiếu lực/sai trình tự → siết lại theo quy trình; bu lông đã quá tải/hư → thay mới (không tái dùng bu lông preload đã siết).</span></div>
+      <div class="row"><span class="k">Điều khoản</span><span class="v"><span class="cite">RCSC</span><span class="cite">EN 1090-2</span><span class="cite">AISC 303</span></span></div>
+    </div>
+    <div class="card">
+      <h3>⚠️ Lưu ý an toàn lực</h3>
+      <div class="row"><span class="k">Lực căng</span><span class="v">Lực preload tối thiểu theo <b>cấp & đường kính</b> bu lông (8.8/10.9; M16…M36) — <b>tra bảng RCSC/EN 1090-2</b>, không ước lượng.</span></div>
+      <div class="row"><span class="k">Bôi trơn</span><span class="v">Dùng đúng tổ hợp bu lông–đai ốc–long đen được chứng nhận theo lô (k-class) cho phương pháp mô-men.</span></div>
+    </div>
+  </div>
+
+  <div class="note">⚠ <b>Giá trị lực căng / mô-men / góc xoay</b> phụ thuộc <b>cấp bu lông (8.8/10.9), đường kính, tổ hợp & lớp bôi trơn</b>. Module nêu phương pháp & cách nghiệm thu; <b>tra bảng gốc RCSC (AISC) hoặc EN 1090-2 + chứng nhận lô bu lông</b> để lấy số chính xác trước khi siết & nghiệm thu.</div>
+  <div class="foot">Tác giả: Đậu Thế Mỹ · © 2026 · DaiDung QC Suite</div>
+</div>
+<script src="../assistant.js"></script>
+<script src="../ai-fab.js"></script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="author" content="Đậu Thế Mỹ">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0c447c">
+<title>NDT chi tiết — DaiDung QC Suite</title>
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/icon-180.png">
+<style>
+  :root{--bg:#f5f7fa;--card:#fff;--ink:#1b2430;--muted:#5f6b7a;--line:#dfe5ec;
+    --brand:#0c447c;--brand2:#185fa5;--soft:#e6f0fb;--warn:#8a5a00;--warn-soft:#fdf3e2;
+    --r:14px;--sh:0 1px 2px rgba(16,24,38,.05),0 6px 20px rgba(16,24,38,.06)}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.55}
+  .appbar{position:sticky;top:0;z-index:40;background:linear-gradient(180deg,#0c447c,#0a3a6b);color:#fff;
+    padding:max(10px,env(safe-area-inset-top)) 16px 11px;display:flex;align-items:center;gap:11px}
+  .appbar a{color:#fff;text-decoration:none;font-size:19px;font-weight:800;opacity:.9}
+  .appbar h1{font-size:15.5px;margin:0;font-weight:800;letter-spacing:-.2px;line-height:1.15}
+  .appbar .sub{font-size:11px;opacity:.82;font-weight:500}
+  .wrap{max-width:1080px;margin:0 auto;padding:14px 16px 40px}
+  .intro{background:var(--soft);border:1px solid #cfe0f5;border-radius:14px;padding:13px 15px;margin:4px 0 16px}
+  .intro p{margin:0;font-size:13.8px;color:#1c3a63;line-height:1.6}
+  .intro b{color:var(--brand)}
+  .secttl{font-size:14px;font-weight:800;color:var(--brand);margin:20px 2px 9px;display:flex;align-items:center;gap:8px}
+  .grid{display:grid;grid-template-columns:minmax(0,1fr);gap:11px}
+  @media(min-width:760px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:14px 15px}
+  .card h3{margin:0 0 8px;font-size:14.5px;font-weight:800;color:var(--ink);display:flex;align-items:center;gap:7px}
+  .tag{font-size:10.5px;font-weight:800;color:#fff;background:var(--brand2);border-radius:6px;padding:2px 7px;margin-left:auto}
+  .row{display:flex;gap:8px;font-size:13.3px;padding:5px 0;border-top:1px dashed var(--line);line-height:1.5}
+  .row:first-of-type{border-top:0}
+  .row .k{flex:none;width:84px;font-weight:700;color:var(--muted)}
+  .row .v{flex:1;color:#28323f}
+  .cite{font-size:11.5px;font-weight:700;color:var(--brand);background:var(--soft);border-radius:6px;padding:2px 7px;display:inline-block;margin:2px 3px 0 0}
+  .note{background:var(--warn-soft);border:1px solid #f0d9a8;border-left:4px solid var(--warn);border-radius:0;padding:11px 14px;font-size:13px;color:#7a4a10;margin:16px 0 0;line-height:1.6}
+  .foot{font-size:11px;color:#90a0b3;text-align:center;margin-top:18px;border-top:1px solid var(--line);padding-top:12px}
+  @media (prefers-color-scheme: dark){
+    :root{--bg:#0e1521;--card:#161e2b;--ink:#e6ecf4;--muted:#93a1b3;--line:#28323f;--soft:#1c2c44}
+    .intro{border-color:#24405f} .intro p,.intro b{color:#bcd3ee}
+    .row .v{color:#cdd6e0} .secttl{color:#7fb0ef}
+    .cite{color:#9fc3ee;background:#1c2c44}
+    .note{background:#2a2310;border-color:#5a4a1e;color:#e8c879}
+  }
+</style>
+</head>
+<body>
+<header class="appbar">
+  <a href="../" title="Trang chủ">←</a>
+  <div><h1>NDT — Kiểm tra không phá hủy</h1><div class="sub">VT · UT · RT · MT · PT · tiêu chí chấp nhận</div></div>
+</header>
+
+<div class="wrap">
+  <div class="intro">
+    <p><b>NDT</b> phát hiện khuyết tật mà mắt thường không thấy. <b>Chọn phương pháp & tỷ lệ kiểm theo cấp thực hiện EXC</b> (EN 1090-2 §12, Bảng 24); <b>đánh giá theo cấp chất lượng</b> tương ứng (thường ISO 5817 cấp B/C/D). Nhân sự NDT phải có chứng chỉ <b>ISO 9712</b>. Cấp chấp nhận cụ thể theo EXC & spec dự án.</p>
+  </div>
+
+  <div class="secttl">🔬 Phương pháp & tiêu chí chấp nhận</div>
+  <div class="grid">
+    <div class="card">
+      <h3>👁 VT — Ngoại quan<span class="tag">100%</span></h3>
+      <div class="row"><span class="k">Phát hiện</span><span class="v">Khuyết tật bề mặt: nứt, undercut, lồi/lõm, rỗ hở, bắn tóe, lệch mép, chân hàn.</span></div>
+      <div class="row"><span class="k">Tiêu chí</span><span class="v">Đạt cấp <b>ISO 5817</b> (B/C/D) theo EXC; VT thường <b>100% mối hàn</b>.</span></div>
+      <div class="row"><span class="k">Điều khoản</span><span class="v"><span class="cite">ISO 17637</span><span class="cite">ISO 5817</span></span></div>
+    </div>
+    <div class="card">
+      <h3>📡 UT — Siêu âm<span class="tag">trong lòng</span></h3>
+      <div class="row"><span class="k">Phát hiện</span><span class="v">Khuyết tật bên trong mối hàn ngấu hoàn toàn (nứt, không ngấu, ngậm xỉ) — tốt cho mối T, thép dày.</span></div>
+      <div class="row"><span class="k">Tiêu chí</span><span class="v">Mức chấp nhận theo <b>ISO 11666</b> (tương ứng cấp chất lượng); kỹ thuật theo ISO 17640.</span></div>
+      <div class="row"><span class="k">Điều khoản</span><span class="v"><span class="cite">ISO 17640</span><span class="cite">ISO 11666</span></span></div>
+    </div>
+    <div class="card">
+      <h3>🎞️ RT — Chụp phim<span class="tag">trong lòng</span></h3>
+      <div class="row"><span class="k">Phát hiện</span><span class="v">Khuyết tật thể tích bên trong (rỗ khí, ngậm xỉ, không ngấu) — lưu phim làm bằng chứng.</span></div>
+      <div class="row"><span class="k">Tiêu chí</span><span class="v">Mức chấp nhận theo <b>ISO 10675-1</b>; kỹ thuật chụp theo ISO 17636.</span></div>
+      <div class="row"><span class="k">Điều khoản</span><span class="v"><span class="cite">ISO 17636</span><span class="cite">ISO 10675-1</span></span></div>
+    </div>
+    <div class="card">
+      <h3>🧲 MT — Bột từ<span class="tag">bề mặt/cận</span></h3>
+      <div class="row"><span class="k">Phát hiện</span><span class="v">Nứt bề mặt & ngay dưới bề mặt trên vật liệu nhiễm từ (thép cacbon).</span></div>
+      <div class="row"><span class="k">Tiêu chí</span><span class="v">Mức chấp nhận theo <b>ISO 23278</b>; kỹ thuật theo ISO 17638.</span></div>
+      <div class="row"><span class="k">Điều khoản</span><span class="v"><span class="cite">ISO 17638</span><span class="cite">ISO 23278</span></span></div>
+    </div>
+    <div class="card">
+      <h3>💧 PT — Thẩm thấu<span class="tag">bề mặt hở</span></h3>
+      <div class="row"><span class="k">Phát hiện</span><span class="v">Khuyết tật hở ra bề mặt — dùng cho thép không nhiễm từ (inox) hoặc khi không dùng được MT.</span></div>
+      <div class="row"><span class="k">Tiêu chí</span><span class="v">Mức chấp nhận theo <b>ISO 23277</b>; kỹ thuật theo ISO 3452-1.</span></div>
+      <div class="row"><span class="k">Điều khoản</span><span class="v"><span class="cite">ISO 3452-1</span><span class="cite">ISO 23277</span></span></div>
+    </div>
+    <div class="card">
+      <h3>📋 Kế hoạch & nhân sự</h3>
+      <div class="row"><span class="k">Tỷ lệ</span><span class="v">Phương pháp & % kiểm theo <b>EXC</b> (EN 1090-2 §12 + Bảng 24); ưu tiên mối nối quan trọng.</span></div>
+      <div class="row"><span class="k">Nhân sự</span><span class="v">Có chứng chỉ <b>ISO 9712</b> đúng phương pháp & cấp; thiết bị hiệu chuẩn.</span></div>
+      <div class="row"><span class="k">Khi lỗi</span><span class="v">Vượt cấp → NCR, khoét sửa theo quy trình hàn sửa, <b>NDT lại</b> vùng sửa (mở rộng mẫu nếu tỷ lệ lỗi cao).</span></div>
+      <div class="row"><span class="k">Điều khoản</span><span class="v"><span class="cite">EN 1090-2 §12 & Bảng 24</span><span class="cite">ISO 9712</span></span></div>
+    </div>
+  </div>
+
+  <div class="note">⚠ <b>Cấp chấp nhận</b> (ISO 5817 B/C/D) và <b>tỷ lệ NDT</b> phụ thuộc <b>EXC của dự án</b> — đối chiếu EN 1090-2 §12 + Bảng 24, ISO 5817 và spec/hợp đồng trước khi kết luận. Mức chấp nhận chỉ thị (ISO 11666/10675-1/23277/23278) gắn với cấp chất lượng tương ứng.</div>
+  <div class="foot">Tác giả: Đậu Thế Mỹ · © 2026 · DaiDung QC Suite</div>
+</div>
+<script src="../assistant.js"></script>
+<script src="../ai-fab.js"></script>
+</body>
+</html>
