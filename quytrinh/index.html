@@ -443,7 +443,7 @@ try{
     var bh = '<div class="flowstrip">';
     for (var k=1;k<=12;k++){
       bh += '<div class="fs-item"><div class="fs-card" role="button" tabindex="0" onclick="goStep('+k+')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();goStep('+k+')}" title="Xem bước '+k+'">'
-          + '<img src="images/buoc-'+k+'.jpg" alt="Bước '+k+'" loading="lazy">'
+          + '<img src="images/thumb/buoc-'+k+'.jpg" alt="Bước '+k+'" loading="lazy">'
           + '<div class="fs-cap"><b>Bước '+k+'</b>'+SHORT[k-1]+'</div></div></div>';
       if (k<12) bh += '<div class="fs-arrow">→</div>';
     }
