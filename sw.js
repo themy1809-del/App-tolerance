@@ -1,35 +1,49 @@
-/* Launcher service worker — v3
-   FIX: chỉ xoá cache CỦA LAUNCHER (launcher-*). Trước đây xoá mọi cache
-   → phá cache offline của các module con (dungsai/wps/vattu/luongdu/han/son). */
-const CACHE = "launcher-v13";
+/* DaiDung QC Suite - Service Worker (NETWORK-FIRST, whole app)
+   Author: Dau The My.
+   Online: always fetch fresh from network (no stale), also store cache.
+   Offline: fall back to cached version (real offline for all pages + images).
+   Update: new SW activates immediately + clears ALL old caches.
+   Skips: POST (AI calls) and cross-origin requests (proxy qc-ai). */
+const CACHE = 'daidung-qc-v2026-06-14b';
 
-self.addEventListener("install", e => {
-  // Không pre-cache — load tươi mỗi lần để tránh kẹt phiên bản cũ
+self.addEventListener('install', function () {
   self.skipWaiting();
 });
 
-self.addEventListener("activate", e => {
-  e.waitUntil((async () => {
-    // Chỉ xoá cache launcher cũ + cache tolerance đời đầu (tol-cache-v1..v3 trước khi tách SW)
+self.addEventListener('activate', function (e) {
+  e.waitUntil((async function () {
     const keys = await caches.keys();
-    await Promise.all(keys
-      .filter(k => k !== CACHE && (k.startsWith("launcher-") || /^tol-cache-v[1-3]$/.test(k)))
-      .map(k => caches.delete(k)));
+    await Promise.all(keys.filter(function (k) { return k !== CACHE; }).map(function (k) { return caches.delete(k); }));
     await self.clients.claim();
   })());
 });
 
-self.addEventListener("fetch", e => {
-  if (e.request.method !== "GET") return;
-  const u = new URL(e.request.url);
-  // Để sub-apps tự xử (chúng có SW riêng)
-  if (['/dungsai/', '/wps/', '/vattu/', '/luongdu/', '/han/', '/son/', '/bulong/', '/packing/', '/fitup/', '/soche/', '/qcdim/', '/hoacong/', '/pbb/', '/fabstation/', '/pbbfab/', '/evapco/', '/itp/'].some(p => u.pathname.includes(p))) return;
-  // Network-first cho launcher để luôn lấy bản mới
-  e.respondWith(
-    fetch(e.request).then(r => {
-      const cp = r.clone();
-      caches.open(CACHE).then(c => c.put(e.request, cp));
-      return r;
-    }).catch(() => caches.match(e.request))
-  );
+self.addEventListener('fetch', function (e) {
+  const req = e.request;
+  if (req.method !== 'GET') return;
+  let url;
+  try { url = new URL(req.url); } catch (_) { return; }
+  if (url.origin !== self.location.origin) return;
+  e.respondWith((async function () {
+    try {
+      const fresh = await fetch(req);
+      if (fresh && fresh.status === 200 && fresh.type === 'basic') {
+        const cache = await caches.open(CACHE);
+        cache.put(req, fresh.clone()).catch(function () {});
+      }
+      return fresh;
+    } catch (err) {
+      const cached = await caches.match(req);
+      if (cached) return cached;
+      if (req.mode === 'navigate') {
+        const home = (await caches.match('./')) || (await caches.match('index.html'));
+        if (home) return home;
+      }
+      throw err;
+    }
+  })());
+});
+
+self.addEventListener('message', function (e) {
+  if (e.data === 'skipWaiting') self.skipWaiting();
 });
