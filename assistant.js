@@ -7,15 +7,22 @@
    Tầng 2 (tùy chọn): gọi AI qua API nếu người dùng đã lưu API key.
    ============================================================================ */
 
-/* ===================== CỔNG ĐĂNG NHẬP (chặn toàn app) =====================
-   Người dùng nhập Họ tên + SĐT + Mã (mỗi người 1 mã do quản trị cấp).
-   Mã được kiểm tra ở Worker (/login) — không lộ trong mã nguồn. Đăng nhập
-   thành công sẽ lưu máy (localStorage), chỉ phải nhập 1 lần / 1 thiết bị.
-   Tác giả: Đậu Thế Mỹ. */
+/* ===================== CỔNG ĐĂNG NHẬP (Tên + SĐT) =====================
+   Người dùng nhập Họ tên + SĐT để vào app. Lưu máy → chỉ nhập 1 lần / thiết bị.
+   Mỗi ngày app gửi 1 "ping" (kèm Tên+SĐT đã lưu) để theo dõi hoạt động —
+   KHÔNG hỏi đăng nhập lại. Tác giả: Đậu Thế Mỹ. */
 (function () {
   var KEY = 'dd_login_v1';
   var PROXY = 'https://qc-ai.themy1809.workers.dev';
-  try { var s = JSON.parse(localStorage.getItem(KEY) || 'null'); if (s && s.ok && s.phone) return; } catch (e) {}
+  function pingDaily(s) {
+    try {
+      var today = new Date().toISOString().slice(0, 10);
+      if (localStorage.getItem('dd_ping') === today) return;
+      localStorage.setItem('dd_ping', today);
+      fetch(PROXY + '/login', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name: s.name, phone: s.phone }) }).catch(function () {});
+    } catch (e) {}
+  }
+  try { var s = JSON.parse(localStorage.getItem(KEY) || 'null'); if (s && s.ok && s.phone) { pingDaily(s); return; } } catch (e) {}
 
   function gate() {
     if (document.getElementById('ddGate')) return;
@@ -49,33 +56,31 @@
       + '<div class="err" id="ddErr"></div>'
       + '<div class="f"><label>Họ và tên</label><input id="ddName" autocomplete="name" placeholder="Nguyễn Văn A"></div>'
       + '<div class="f"><label>Số điện thoại</label><input id="ddPhone" inputmode="tel" autocomplete="tel" placeholder="09xx xxx xxx"></div>'
-      + '<div class="f"><label>Mã đăng nhập</label><input id="ddCode" inputmode="numeric" placeholder="Mã do quản trị cấp"></div>'
       + '<button id="ddBtn">Vào ứng dụng</button>'
-      + '<p class="note">Mã do quản trị viên cấp riêng cho bạn · Chỉ cần nhập 1 lần trên thiết bị này.</p>'
+      + '<p class="note">Chỉ cần nhập 1 lần trên thiết bị này.</p>'
       + '</div>';
     document.body.appendChild(box);
     document.documentElement.style.overflow = 'hidden';
 
     var nameEl = box.querySelector('#ddName'), phoneEl = box.querySelector('#ddPhone'),
-        codeEl = box.querySelector('#ddCode'), btn = box.querySelector('#ddBtn'), err = box.querySelector('#ddErr');
+        btn = box.querySelector('#ddBtn'), err = box.querySelector('#ddErr');
     function showErr(m) { err.textContent = m; err.style.display = 'block'; }
     function submit() {
-      var name = nameEl.value.trim(), phone = phoneEl.value.trim(), code = codeEl.value.trim();
+      var name = nameEl.value.trim(), phone = phoneEl.value.trim();
       err.style.display = 'none';
       if (name.length < 2) return showErr('Vui lòng nhập họ tên.');
       if (phone.replace(/\D/g, '').length < 9) return showErr('Số điện thoại chưa hợp lệ.');
-      if (!code) return showErr('Vui lòng nhập mã đăng nhập.');
-      btn.disabled = true; var old = btn.textContent; btn.textContent = 'Đang kiểm tra…';
-      fetch(PROXY + '/login', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name: name, phone: phone, code: code }) })
+      btn.disabled = true; var old = btn.textContent; btn.textContent = 'Đang vào…';
+      fetch(PROXY + '/login', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name: name, phone: phone }) })
         .then(function (r) { return r.json().catch(function () { return {}; }); })
         .then(function (j) {
           if (j && j.ok) {
-            try { localStorage.setItem(KEY, JSON.stringify({ ok: true, name: name, phone: phone, code: code, ts: Date.now() })); } catch (e) {}
+            try { localStorage.setItem(KEY, JSON.stringify({ ok: true, name: name, phone: phone, ts: Date.now() })); localStorage.setItem('dd_ping', new Date().toISOString().slice(0, 10)); } catch (e) {}
             document.documentElement.style.overflow = '';
             box.remove();
           } else {
             btn.disabled = false; btn.textContent = old;
-            showErr((j && j.error) || 'Mã không đúng. Vui lòng kiểm tra lại.');
+            showErr((j && j.error) || 'Có lỗi, vui lòng thử lại.');
           }
         })
         .catch(function () { btn.disabled = false; btn.textContent = old; showErr('Lỗi kết nối. Kiểm tra mạng rồi thử lại.'); });

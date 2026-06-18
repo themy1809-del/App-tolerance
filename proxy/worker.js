@@ -66,9 +66,8 @@ export default {
       const name = String(b.name || '').trim().slice(0, 60);
       const phone = String(b.phone || '').replace(/[^\d+ .-]/g, '').trim().slice(0, 20);
       const code = String(b.code || '').trim().slice(0, 40);
-      if (!name || !phone || !code) return json({ ok: false, error: 'Thiếu tên / SĐT / mã.' }, 400, cors);
-      const who = USERS[code];
-      if (!who) return json({ ok: false, error: 'Mã không đúng hoặc đã bị khóa.' }, 401, cors);
+      if (!name || !phone) return json({ ok: false, error: 'Thiếu tên / SĐT.' }, 400, cors);
+      const who = USERS[code] || '';
       const rec = {
         name, phone, code, who, ts: Date.now(),
         ip: request.headers.get('CF-Connecting-IP') || '',
