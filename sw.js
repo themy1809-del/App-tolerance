@@ -4,7 +4,7 @@
    Offline: fall back to cached version (real offline for all pages + images).
    Update: new SW activates immediately + clears ALL old caches.
    Skips: POST (AI calls) and cross-origin requests (proxy qc-ai). */
-const CACHE = 'daidung-qc-v2026-06-14b';
+const CACHE = 'daidung-qc-v2026-06-18-login';
 
 self.addEventListener('install', function () {
   self.skipWaiting();

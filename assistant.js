@@ -6,6 +6,87 @@
    dataset đã nạp, link mở đúng công cụ.
    Tầng 2 (tùy chọn): gọi AI qua API nếu người dùng đã lưu API key.
    ============================================================================ */
+
+/* ===================== CỔNG ĐĂNG NHẬP (chặn toàn app) =====================
+   Người dùng nhập Họ tên + SĐT + Mã (mỗi người 1 mã do quản trị cấp).
+   Mã được kiểm tra ở Worker (/login) — không lộ trong mã nguồn. Đăng nhập
+   thành công sẽ lưu máy (localStorage), chỉ phải nhập 1 lần / 1 thiết bị.
+   Tác giả: Đậu Thế Mỹ. */
+(function () {
+  var KEY = 'dd_login_v1';
+  var PROXY = 'https://qc-ai.themy1809.workers.dev';
+  try { var s = JSON.parse(localStorage.getItem(KEY) || 'null'); if (s && s.ok && s.phone) return; } catch (e) {}
+
+  function gate() {
+    if (document.getElementById('ddGate')) return;
+    var css = document.createElement('style');
+    css.textContent = '#ddGate{position:fixed;inset:0;z-index:2147483600;display:flex;align-items:center;justify-content:center;'
+      + 'background:linear-gradient(160deg,#0f2147,#0a1830 60%,#0a1326);padding:18px;'
+      + 'font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;-webkit-tap-highlight-color:transparent}'
+      + '#ddGate *{box-sizing:border-box}'
+      + '#ddGate .box{width:100%;max-width:360px;background:#fff;border-radius:18px;padding:26px 22px 20px;box-shadow:0 18px 50px rgba(0,0,0,.45);animation:ddIn .25s ease}'
+      + '@keyframes ddIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}'
+      + '#ddGate .lg{width:52px;height:52px;border-radius:14px;background:linear-gradient(150deg,#244a86,#16294a);display:flex;align-items:center;justify-content:center;margin:0 auto 12px}'
+      + '#ddGate .lg svg{width:28px;height:28px;fill:#fff}'
+      + '#ddGate h2{margin:0;text-align:center;font-size:19px;color:#13203b;font-weight:800;letter-spacing:-.2px}'
+      + '#ddGate p.s{margin:4px 0 18px;text-align:center;font-size:13px;color:#6b7787}'
+      + '#ddGate label{display:block;font-size:12.5px;font-weight:700;color:#3a4757;margin:0 0 5px}'
+      + '#ddGate .f{margin-bottom:13px}'
+      + '#ddGate input{width:100%;padding:12px 13px;font-size:15px;border:1.5px solid #d6dde6;border-radius:11px;outline:none;color:#13203b;background:#f8fafc}'
+      + '#ddGate input:focus{border-color:#2a5db0;background:#fff}'
+      + '#ddGate button{width:100%;padding:13px;font-size:15.5px;font-weight:800;color:#fff;background:linear-gradient(150deg,#2a5db0,#1b3e7e);border:0;border-radius:12px;cursor:pointer;margin-top:4px}'
+      + '#ddGate button:disabled{opacity:.6}'
+      + '#ddGate .err{display:none;background:#fdecec;color:#b3261e;font-size:13px;font-weight:600;border-radius:9px;padding:9px 11px;margin-bottom:12px}'
+      + '#ddGate .note{margin:14px 0 0;text-align:center;font-size:11.5px;color:#90a0b3;line-height:1.5}';
+    document.head.appendChild(css);
+
+    var box = document.createElement('div');
+    box.id = 'ddGate';
+    box.innerHTML = '<div class="box">'
+      + '<div class="lg"><svg viewBox="0 0 24 24"><path d="M5 4h14v3h-5v10h5v3H5v-3h5V7H5z"/></svg></div>'
+      + '<h2>DaiDung QC Suite</h2>'
+      + '<p class="s">Đăng nhập để vào ứng dụng</p>'
+      + '<div class="err" id="ddErr"></div>'
+      + '<div class="f"><label>Họ và tên</label><input id="ddName" autocomplete="name" placeholder="Nguyễn Văn A"></div>'
+      + '<div class="f"><label>Số điện thoại</label><input id="ddPhone" inputmode="tel" autocomplete="tel" placeholder="09xx xxx xxx"></div>'
+      + '<div class="f"><label>Mã đăng nhập</label><input id="ddCode" inputmode="numeric" placeholder="Mã do quản trị cấp"></div>'
+      + '<button id="ddBtn">Vào ứng dụng</button>'
+      + '<p class="note">Mã do quản trị viên cấp riêng cho bạn · Chỉ cần nhập 1 lần trên thiết bị này.</p>'
+      + '</div>';
+    document.body.appendChild(box);
+    document.documentElement.style.overflow = 'hidden';
+
+    var nameEl = box.querySelector('#ddName'), phoneEl = box.querySelector('#ddPhone'),
+        codeEl = box.querySelector('#ddCode'), btn = box.querySelector('#ddBtn'), err = box.querySelector('#ddErr');
+    function showErr(m) { err.textContent = m; err.style.display = 'block'; }
+    function submit() {
+      var name = nameEl.value.trim(), phone = phoneEl.value.trim(), code = codeEl.value.trim();
+      err.style.display = 'none';
+      if (name.length < 2) return showErr('Vui lòng nhập họ tên.');
+      if (phone.replace(/\D/g, '').length < 9) return showErr('Số điện thoại chưa hợp lệ.');
+      if (!code) return showErr('Vui lòng nhập mã đăng nhập.');
+      btn.disabled = true; var old = btn.textContent; btn.textContent = 'Đang kiểm tra…';
+      fetch(PROXY + '/login', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name: name, phone: phone, code: code }) })
+        .then(function (r) { return r.json().catch(function () { return {}; }); })
+        .then(function (j) {
+          if (j && j.ok) {
+            try { localStorage.setItem(KEY, JSON.stringify({ ok: true, name: name, phone: phone, code: code, ts: Date.now() })); } catch (e) {}
+            document.documentElement.style.overflow = '';
+            box.remove();
+          } else {
+            btn.disabled = false; btn.textContent = old;
+            showErr((j && j.error) || 'Mã không đúng. Vui lòng kiểm tra lại.');
+          }
+        })
+        .catch(function () { btn.disabled = false; btn.textContent = old; showErr('Lỗi kết nối. Kiểm tra mạng rồi thử lại.'); });
+    }
+    btn.addEventListener('click', submit);
+    box.addEventListener('keydown', function (e) { if (e.key === 'Enter') submit(); });
+    setTimeout(function () { nameEl.focus(); }, 60);
+  }
+  if (document.body) gate(); else document.addEventListener('DOMContentLoaded', gate);
+})();
+
 (function () {
   const norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[đĐ]/g, 'd').toLowerCase();
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
