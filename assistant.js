@@ -19,7 +19,7 @@
       var today = new Date().toISOString().slice(0, 10);
       if (localStorage.getItem('dd_ping') === today) return;
       localStorage.setItem('dd_ping', today);
-      fetch(PROXY + '/login', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name: s.name, phone: s.phone }) }).catch(function () {});
+      fetch(PROXY + '/login', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name: s.name, phone: s.phone, code: '247365' }) }).catch(function () {});
     } catch (e) {}
   }
   try { var s = JSON.parse(localStorage.getItem(KEY) || 'null'); if (s && s.ok && s.phone) { pingDaily(s); return; } } catch (e) {}
@@ -70,20 +70,12 @@
       err.style.display = 'none';
       if (name.length < 2) return showErr('Vui lòng nhập họ tên.');
       if (phone.replace(/\D/g, '').length < 9) return showErr('Số điện thoại chưa hợp lệ.');
-      btn.disabled = true; var old = btn.textContent; btn.textContent = 'Đang vào…';
-      fetch(PROXY + '/login', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name: name, phone: phone }) })
-        .then(function (r) { return r.json().catch(function () { return {}; }); })
-        .then(function (j) {
-          if (j && j.ok) {
-            try { localStorage.setItem(KEY, JSON.stringify({ ok: true, name: name, phone: phone, ts: Date.now() })); localStorage.setItem('dd_ping', new Date().toISOString().slice(0, 10)); } catch (e) {}
-            document.documentElement.style.overflow = '';
-            box.remove();
-          } else {
-            btn.disabled = false; btn.textContent = old;
-            showErr((j && j.error) || 'Có lỗi, vui lòng thử lại.');
-          }
-        })
-        .catch(function () { btn.disabled = false; btn.textContent = old; showErr('Lỗi kết nối. Kiểm tra mạng rồi thử lại.'); });
+      // Lưu phiên + vào app NGAY (không chặn theo phản hồi server) — chỉ để thống kê, không khoá ai.
+      try { localStorage.setItem(KEY, JSON.stringify({ ok: true, name: name, phone: phone, ts: Date.now() })); localStorage.setItem('dd_ping', new Date().toISOString().slice(0, 10)); } catch (e) {}
+      // Ghi nhật ký ở nền (kèm mã 247365 để Worker hiện tại chấp nhận & ghi log).
+      fetch(PROXY + '/login', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name: name, phone: phone, code: '247365' }) }).catch(function () {});
+      document.documentElement.style.overflow = '';
+      box.remove();
     }
     btn.addEventListener('click', submit);
     box.addEventListener('keydown', function (e) { if (e.key === 'Enter') submit(); });
