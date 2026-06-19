@@ -92,6 +92,24 @@
   if (document.body) gate(); else document.addEventListener('DOMContentLoaded', gate);
 })();
 
+/* ===== APP TỰ CẬP NHẬT: có bản mới → tự nạp lại (không kẹt bản cũ) ===== */
+(function () {
+  if (!('serviceWorker' in navigator)) return;
+  var hadController = !!navigator.serviceWorker.controller;
+  var reloaded = false;
+  navigator.serviceWorker.addEventListener('controllerchange', function () {
+    if (reloaded || !hadController) return;   // bỏ qua lần cài đặt đầu tiên
+    reloaded = true;
+    location.reload();
+  });
+  function check() {
+    try { navigator.serviceWorker.getRegistration().then(function (r) { if (r) r.update(); }).catch(function () {}); } catch (e) {}
+  }
+  navigator.serviceWorker.ready.then(check).catch(function () {});
+  setInterval(check, 30 * 60 * 1000);                                  // tự kiểm tra mỗi 30 phút
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) check(); }); // và khi mở lại app
+})();
+
 (function () {
   const norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[đĐ]/g, 'd').toLowerCase();
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
