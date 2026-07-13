@@ -505,12 +505,28 @@
       if (this.PROXY_URL) {
         /* content-type text/plain → request "đơn giản", KHÔNG kích hoạt preflight CORS
            (chạy được cả Cloudflare Worker lẫn Google Apps Script). Body vẫn là JSON. */
-        const res = await fetch(this.PROXY_URL, {
+        const call = () => fetch(this.PROXY_URL, {
           method: 'POST', headers: { 'content-type': 'text/plain;charset=UTF-8' },
           body: JSON.stringify({ q: q, ctx: ctxText || '' })
         });
+        let res;
+        try { res = await call(); }
+        catch (e) { throw new Error('Không kết nối được máy chủ AI (kiểm tra mạng). Thử lại sau.'); }
+        /* Nghẽn tạm thời (quá tải/quota) → tự thử lại 1 lần sau 1,5s */
+        if ([429, 500, 502, 503, 504].includes(res.status)) {
+          await new Promise(function (r) { setTimeout(r, 1500); });
+          try { res = await call(); } catch (e) {}
+        }
         let j = {}; try { j = await res.json(); } catch (e) {}
-        if (!res.ok || j.error) throw new Error(j.error || ('Proxy AI ' + res.status));
+        if (!res.ok || (j && j.error)) {
+          const raw = String((j && j.error) || ('Proxy AI ' + res.status));
+          let msg = raw;
+          if (/AI_KEY/i.test(raw)) msg = 'AI chung chưa sẵn sàng: máy chủ chưa cấu hình khoá AI (quản trị cần đặt Secret AI_KEY cho Worker).';
+          else if (res.status === 429 || /quota|rate|limit|429|exhaust/i.test(raw)) msg = 'AI đang quá nhiều lượt (khoá dùng chung bị giới hạn) — thử lại sau 1–2 phút.';
+          else if (res.status === 403 || /origin/i.test(raw)) msg = 'Tên miền chưa được cấp phép gọi AI (quản trị cần thêm origin vào Worker).';
+          else if (res.status >= 500) msg = 'Máy chủ AI đang trục trặc, thử lại sau 1–2 phút (không phải lỗi máy bạn).';
+          throw new Error(msg);
+        }
         return j.text || '(proxy không trả nội dung)';
       }
       throw new Error('Chưa cấu hình AI: máy này chưa có key riêng và app chưa gắn proxy.');

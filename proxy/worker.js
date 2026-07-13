@@ -85,7 +85,7 @@ export default {
     }
 
     /* ---------- AI PROXY (mặc định, POST /) ---------- */
-    if (request.method === 'GET') return json({ ok: true, msg: 'Proxy AI đang chạy. Gửi POST {q, ctx}.' }, 200, cors);
+    if (request.method === 'GET') return json({ ok: true, hasKey: !!(env && env.AI_KEY), msg: 'Proxy AI đang chạy. Gửi POST {q, ctx}.' }, 200, cors);
     if (request.method !== 'POST') return json({ error: 'Chỉ nhận POST' }, 405, cors);
     if (!ok) return json({ error: 'Origin không được phép: ' + (origin || '(trống)') }, 403, cors);
 
