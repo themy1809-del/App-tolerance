@@ -5,7 +5,7 @@
      mạng chậm thì rơi về bản đã lưu (không treo).
    - Đổi phiên bản CACHE mỗi lần phát hành: activate sẽ xoá cache cũ → tài nguyên tải mới.
    - Bỏ qua: POST (gọi AI) và request khác origin (proxy qc-ai). */
-const CACHE = 'daidung-qc-v2026-07-13-ai';
+const CACHE = 'daidung-qc-v2026-08-30-bienphap';
 const ASSET = /\.(?:js|css|jpg|jpeg|png|webp|gif|svg|ico|woff2?|ttf|json|webmanifest)(?:\?|$)/i;
 
 self.addEventListener('install', function () {

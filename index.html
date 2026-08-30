@@ -242,6 +242,34 @@
         <div class="mds">4 tầng · 12 bước · QC nội bộ · TPI/ITP · hồ sơ — bấm bước để mở module</div>
       </div><span class="go">→</span>
     </a>
+    <a class="mcard m-vt" href="bienphap/#nmah">
+      <div class="mic"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><path d="M9 12h7M9 15.5h7M9 9h3"/></svg></div>
+      <div class="mbody">
+        <div class="mtt">Quy trình Kiểm soát Vật tư &amp; QC Sơ chế</div>
+        <div class="mds">32 slide · QC nội bộ NMAH · truy xuất nguồn gốc 3 mức · PDF</div>
+      </div><span class="go">→</span>
+    </a>
+    <a class="mcard m-pk" href="bienphap/#evapco">
+      <div class="mic"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><path d="M9 12h7M9 15.5h7M9 9h3"/></svg></div>
+      <div class="mbody">
+        <div class="mtt">Biện pháp Thi công &amp; QLCL — EVAPCO</div>
+        <div class="mds">67 slide · JOB 241089 · 6 họ cấu kiện · ITP dự án · PDF</div>
+      </div><span class="go">→</span>
+    </a>
+    <a class="mcard m-han" href="bienphap/#dlt900">
+      <div class="mic"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><path d="M9 12h7M9 15.5h7M9 9h3"/></svg></div>
+      <div class="mbody">
+        <div class="mtt">Biện pháp Gia công &amp; KSCL — Cầu DLT900</div>
+        <div class="mds">105 slide · 11 công đoạn · hàn/NDT/dung sai/sơn · PDF</div>
+      </div><span class="go">→</span>
+    </a>
+    <a class="mcard" style="--ac:#5f4ab7;--ac-soft:#efecfa" href="bienphap/">
+      <div class="mic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 9v11"/></svg></div>
+      <div class="mbody">
+        <div class="mtt">📘 Tất cả tài liệu Biện pháp &amp; Quy trình</div>
+        <div class="mds">204 slide · tìm theo từ khoá · xem online · tải PDF đầy đủ</div>
+      </div><span class="go">→</span>
+    </a>
   </div>
 
   <div class="tabs">
@@ -636,6 +664,14 @@ async function gsBuild() {
   } } catch(e){}
   try { (window.WPS_DB && WPS_DB.items || []).forEach(r =>
     add('🔥 WPS', 'wps/?id=' + encodeURIComponent(r.id), r.id, (r.process || '') + ' · ' + (r.base_metal || '').slice(0, 50), (r.position || '') + ' ' + (r.filler || ''))); } catch(e){}
+  /* Biện pháp & Quy trình — 204 slide từ 3 bộ tài liệu dự án */
+  try {
+    const BP_META = { nmah:'QC Vật tư & Sơ chế — NMAH', evapco:'Biện pháp QLCL — EVAPCO 241089', dlt900:'Biện pháp KSCL — Cầu DLT900' };
+    const bp = await fetch('bienphap/slides.json').then(r => r.ok ? r.json() : null).catch(() => null);
+    if (bp) Object.keys(bp).forEach(k => (bp[k] || []).forEach(s =>
+      add('📘 Biện pháp', 'bienphap/#' + k + '-' + s.n, s.t,
+          BP_META[k] + ' · slide ' + s.n + (s.s ? ' · ' + s.s : ''), s.x)));
+  } catch(e){}
   GS_IDX = idx; GS_LOADING = false;
   gsRun();
 }
